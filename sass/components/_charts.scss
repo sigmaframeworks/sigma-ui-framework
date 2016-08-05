@@ -1,0 +1,53 @@
+// UI Chart
+// @description :
+// @author      : Adarsh Pastakia
+// @copyright   : 2016 Sigma Frameworks
+// @license     : MIT
+
+.ui-chart {
+    &.ui-stretch {
+        @include flex-column();
+        flex: 1 1 0;
+
+        .ui-chart-body {
+            flex: 1 1 0;
+        }
+    }
+
+    .ui-chart-body {
+        @include flex-column();
+
+        .ui-chart-canvas {
+            flex: 1 1 0;
+        }
+    }
+
+    // AmChart Overrides
+    .amcharts-export-fallback {
+        img {
+            max-width     : 100%;
+            pointer-events: auto;
+            position      : absolute;
+            top           : 0;
+            z-index       : 0;
+        }
+
+        textarea {
+            overflow: auto;
+            padding : 60px 10px 10px;
+        }
+
+        .amcharts-export-fallback-message {
+            position        : absolute;
+            padding         : 15px 10px;
+            right           : 40px;
+            width           : auto;
+            background-color: #fff;
+        }
+    }
+
+    .amcharts-chart-div > a {
+        display: none !important;
+    }
+
+}

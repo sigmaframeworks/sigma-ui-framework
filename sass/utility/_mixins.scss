@@ -1,0 +1,91 @@
+// UI Mixins
+// @description :
+// @author      : Adarsh Pastakia
+// @copyright   : 2016 Sigma Frameworks
+// @license     : MIT
+
+@mixin sticky() {
+    position: -webkit-sticky;
+    //position : -moz-sticky;
+    //position : -ms-sticky;
+    position: sticky;
+}
+@mixin scroll() {
+    overflow                  : auto;
+    -webkit-overflow-scrolling: touch;
+}
+@mixin blur($value: 5px) {
+    -webkit-filter : blur($value);
+    -moz-filter : blur($value);
+    -ms-filter : blur($value);
+    -o-filter : blur($value);
+    filter : blur($value);
+}
+@mixin backdrop-blur($value: 5px) {
+    -webkit-backdrop-filter : blur($value);
+    -moz-backdrop-filter : blur($value);
+    -ms-backdrop-filter : blur($value);
+    -o-backdrop-filter : blur($value);
+    backdrop-filter : blur($value);
+}
+@mixin size($width: auto, $height: auto) {
+    width : $width;
+    height: $height;
+}
+@mixin text-truncate() {
+    overflow     : hidden;
+    text-overflow: ellipsis;
+    white-space  : nowrap;
+}
+@mixin padding($dir, $size) {
+    -webkit-padding-#{$dir}: $size;
+    -moz-padding-#{$dir}   : $size;
+    -ms-padding-#{$dir}    : $size;
+    -o-padding-#{$dir}     : $size;
+    padding-#{$dir}        : $size;
+}
+@mixin margin($dir, $size) {
+    -webkit-margin-#{$dir}: $size;
+    -moz-margin-#{$dir}   : $size;
+    -ms-margin-#{$dir}    : $size;
+    -o-margin-#{$dir}     : $size;
+    margin-#{$dir}        : $size;
+}
+@mixin border($dir, $val...) {
+    -webkit-border-#{$dir}: $val;
+    -moz-border-#{$dir}   : $val;
+    -ms-border-#{$dir}    : $val;
+    -o-border-#{$dir}     : $val;
+    border-#{$dir}        : $val;
+}
+@mixin borderEx($dir, $prop, $val) {
+    -webkit-border-#{$dir}-#{$prop}: $val;
+    -moz-border-#{$dir}-#{$prop}   : $val;
+    -ms-border-#{$dir}-#{$prop}    : $val;
+    -o-border-#{$dir}-#{$prop}     : $val;
+    border-#{$dir}-#{$prop}        : $val;
+}
+@mixin flex-row($align:center, $justify: flex-start, $wrap:true) {
+     @include flexbox(( display:flex, flex-direction:row, align-items:$align, justify-content: $justify, flex-wrap: if($wrap, wrap, nowrap) ));
+}
+@mixin flex-column($align:stretch, $justify: flex-start) {
+     @include flexbox(( display:flex, flex-direction:column, align-items:$align, justify-content: $justify, flex-wrap: nowrap ));
+}
+@mixin position($pos:absolute,$l:null,$r:null,$t:null,$b:null) {
+    position: $pos;
+    @if $l {
+        left: $l;
+    }
+    @if $r {
+        right: $r;
+    }
+    @if $t {
+        top: $t;
+    }
+    @if $b {
+        bottom: $b;
+    }
+}
+@function contrast($color, $dark: $black, $light: $white) {
+     @return contrast-color($color, $dark, $light);
+}

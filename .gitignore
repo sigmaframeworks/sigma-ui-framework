@@ -24,7 +24,10 @@ coverage
 .lock-wscript
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
-build/Release
+build/
+dist/
+deploy/
+typings/
 
 # Dependency directories
 node_modules
@@ -32,6 +35,9 @@ jspm_packages
 
 # Optional npm cache directory
 .npm
+.sass-cache
 
 # Optional REPL history
 .node_repl_history
+
+.DS_Store

@@ -1,0 +1,175 @@
+// UI Button
+// @description :
+// @author      : Adarsh Pastakia
+// @copyright   : 2016 Sigma Frameworks
+// @license     : MIT
+
+@mixin button-style($pre, $bg, $text) {
+    &.ui-button-#{$pre} {
+        color       : $text;
+        border-color: darken($bg, 5%);
+        background  : $bg;
+    }
+}
+
+.ui-button-control {
+    display       : inline-block;
+    position      : relative;
+
+    pointer-events: none;
+
+    &.ui-dropdown > .ui-button:after {
+        font-family: 'Framework';
+        font-size  : .7em;
+        content    : $font-ui-arrow-down;
+    }
+}
+
+.ui-button {
+    font-size     : 1.1em;
+    font-weight   : $font-weight-normal;
+
+    display       : inline-block;
+
+    margin        : .2em;
+    padding       : $base-padding;
+
+    text-align    : center;
+    pointer-events: all;
+
+    border        : 1px solid $base-border-color;
+    border-radius : $base-border-radius;
+    @include box-shadow(2px 2px 4px 0 $base-shadow-color);
+    @include button-style(default, $button-default-bg, $button-default-text);
+    @include button-style(secondary, $button-secondary-bg, $button-secondary-text);
+    @include button-style(primary, $button-primary-bg, $button-primary-text);
+    @include button-style(info, $button-info-bg, $button-info-text);
+    @include button-style(danger, $button-danger-bg, $button-danger-text);
+    @include button-style(success, $button-success-bg, $button-success-text);
+    @include button-style(warning, $button-warning-bg, $button-warning-text);
+
+    &.ui-button-large {
+        font-size: 1.4em;
+    }
+
+    &.ui-button-small {
+        font-size: .9em;
+
+        padding  : .2em;
+    }
+
+    &.ui-button-square {
+        padding: .25em;
+    }
+
+    &.ui-button-round {
+        border-radius: 1em;
+    }
+
+    &.ui-icon-top > span {
+        display   : block;
+
+        width     : 100%;
+        margin    : .2em 0;
+
+        text-align: center;
+    }
+
+    &:not([disabled]):not(.ui-checked):focus,
+    &:not([disabled]):not(.ui-checked):hover {
+        @include box-shadow(0 2px 2px 0 rgba($white, .6) inset, 0 -2px 2px 0 rgba($white, .6) inset, 2px 2px 4px 0 $base-shadow-color);
+    }
+
+    &:not([disabled]):not(.ui-checked):active {
+        @include box-shadow(0 0 2px $base-shadow-color inset);
+    }
+
+    &[disabled] {
+        opacity: .5;
+
+         &,
+        > span {
+            cursor        : not-allowed;
+            pointer-events: none;
+        }
+    }
+
+    span {
+        margin        : 0 .2em;
+
+        vertical-align: baseline;
+    }
+}
+
+.ui-button-bar .ui-button {
+    @include box-shadow(0 0 1px 0 $base-shadow-color);
+
+    &:not([disabled]):not(.ui-checked):not(.ui-active):focus,
+    &:not([disabled]):not(.ui-checked):not(.ui-active):hover {
+        z-index: 5;
+        @include box-shadow(0 2px 2px 0 rgba($white, .6) inset, 0 -2px 2px 0 rgba($white, .6) inset, 0 0 3px 0 $base-shadow-color);
+    }
+
+    &:not([disabled]):not(.ui-checked):not(.ui-active):active {
+        @include box-shadow(0 0 2px $base-shadow-color inset);
+    }
+}
+
+.ui-button-group {
+    margin        : .2em;
+
+    pointer-events: none;
+    @include flexbox(( display:inline-flex, flex-direction:row, flex-wrap:nowrap ));
+
+    .ui-button-control .ui-button,
+    > .ui-button {
+        margin: 0;
+        @include flex(0 0 auto);
+    }
+
+    .ui-button-control:not(:first-child) .ui-button,
+    > .ui-button:not(:first-child) {
+        @include border-left-radius(0);
+    }
+
+    .ui-button-control:not(:last-child) .ui-button,
+    > .ui-button:not(:last-child) {
+        @include border-right-radius(0);
+    }
+
+    &.ui-button-group-primary .ui-button.ui-checked {
+        color     : $button-primary-text;
+        background: $button-primary-bg;
+    }
+
+    &.ui-button-group-secondary .ui-button.ui-checked {
+        color     : $button-secondary-text;
+        background: $button-secondary-bg;
+    }
+
+    &.ui-button-group-info .ui-button.ui-checked {
+        color     : $button-info-text;
+        background: $button-info-bg;
+    }
+
+    &.ui-button-group-danger .ui-button.ui-checked {
+        color     : $button-danger-text;
+        background: $button-danger-bg;
+    }
+
+    &.ui-button-group-success .ui-button.ui-checked {
+        color     : $button-success-text;
+        background: $button-success-bg;
+    }
+
+    &.ui-button-group-warning .ui-button.ui-checked {
+        color     : $button-warning-text;
+        background: $button-warning-bg;
+    }
+}
+
+[dir='rtl'] {
+    .ui-button-group {
+        @include flex-direction(row-reverse);
+    }
+}

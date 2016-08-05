@@ -1,0 +1,15 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016 Sigma Frameworks
+// @license     : MIT
+-->
+<template class="ui-panel ui-chart">
+  <div class="ui-header">
+    <h5>
+      <span class="${icon}" if.bind="icon"></span>${chartTitle}</h5>
+    <slot></slot>
+  </div>
+  <div class="ui-panel-body ui-chart-body" css.bind="{'min-height':height+'px'}">
+    <div ref="__canvas" class="ui-chart-canvas" css.bind="{width:'100%', 'height':'100%'}" dir="ltr"></div>
+  </div>
+</template>

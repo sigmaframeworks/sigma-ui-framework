@@ -1,0 +1,723 @@
+// FileIcons Font
+// @description :
+// @author      : Adarsh Pastakia
+// @copyright   : 2016 Sigma Frameworks
+// @license     : MIT
+
+/*
+Flaticon icon font: Flaticon
+Creation date: 13/03/2016 12:28
+*/
+@include font-face( 'FileIcons', inline_font_files('files/flaticon.woff', woff, 'files/flaticon.ttf', ttf, 'files/flaticon.svg', svg ), ('files/flaticon.eot'), normal, normal );
+
+[class*=" fi-file-"]:after,
+[class*=" fi-file-"]:before,
+[class^="fi-file-"]:after,
+[class^="fi-file-"]:before {
+    font-family: FileIcons;
+    font-style : normal;
+}
+
+.fi-file-3dm:before {
+    content: '\e000';
+}
+
+.fi-file-3ds:before {
+    content: '\e001';
+}
+
+.fi-file-3g2:before {
+    content: '\e002';
+}
+
+.fi-file-3gp:before {
+    content: '\e003';
+}
+
+.fi-file-7z:before {
+    content: '\e004';
+}
+
+.fi-file-aac:before {
+    content: '\e005';
+}
+
+.fi-file-aif:before {
+    content: '\e006';
+}
+
+.fi-file-ai:before {
+    content: '\e007';
+}
+
+.fi-file-apk:before {
+    content: '\e008';
+}
+
+.fi-file-app:before {
+    content: '\e009';
+}
+
+.fi-file-asf:before {
+    content: '\e00a';
+}
+
+.fi-file-asp:before {
+    content: '\e00b';
+}
+
+.fi-file-aspx:before {
+    content: '\e00c';
+}
+
+.fi-file-asx:before {
+    content: '\e00d';
+}
+
+.fi-file-avi:before {
+    content: '\e00e';
+}
+
+.fi-file-bak:before {
+    content: '\e00f';
+}
+
+.fi-file-bat:before {
+    content: '\e010';
+}
+
+.fi-file-bin:before {
+    content: '\e011';
+}
+
+.fi-file-bmp:before {
+    content: '\e012';
+}
+
+.fi-file-cab:before {
+    content: '\e013';
+}
+
+.fi-file-cad:before {
+    content: '\e014';
+}
+
+.fi-file-cdr:before {
+    content: '\e015';
+}
+
+.fi-file-cer:before {
+    content: '\e016';
+}
+
+.fi-file-cfg:before {
+    content: '\e017';
+}
+
+.fi-file-cfm:before {
+    content: '\e018';
+}
+
+.fi-file-cgi:before {
+    content: '\e019';
+}
+
+.fi-file-class:before {
+    content: '\e01a';
+}
+
+.fi-file-com:before {
+    content: '\e01b';
+}
+
+.fi-file-cpl:before {
+    content: '\e01c';
+}
+
+.fi-file-cpp:before {
+    content: '\e01d';
+}
+
+.fi-file-crx:before {
+    content: '\e01e';
+}
+
+.fi-file-csr:before {
+    content: '\e01f';
+}
+
+.fi-file-css:before {
+    content: '\e020';
+}
+
+.fi-file-csv:before {
+    content: '\e021';
+}
+
+.fi-file-cue:before {
+    content: '\e022';
+}
+
+.fi-file-cur:before {
+    content: '\e023';
+}
+
+.fi-file-dat:before {
+    content: '\e024';
+}
+
+.fi-file-db:before {
+    content: '\e025';
+}
+
+.fi-file-dbf:before {
+    content: '\e026';
+}
+
+.fi-file-dds:before {
+    content: '\e027';
+}
+
+.fi-file-dem:before {
+    content: '\e028';
+}
+
+.fi-file-dll:before {
+    content: '\e029';
+}
+
+.fi-file-dmg:before {
+    content: '\e02a';
+}
+
+.fi-file-dmp:before {
+    content: '\e02b';
+}
+
+.fi-file-doc:before {
+    content: '\e02c';
+}
+
+.fi-file-docx:before {
+    content: '\e02d';
+}
+
+.fi-file-drv:before {
+    content: '\e02e';
+}
+
+.fi-file-dtd:before {
+    content: '\e02f';
+}
+
+.fi-file-dwg:before {
+    content: '\e030';
+}
+
+.fi-file-dxf:before {
+    content: '\e031';
+}
+
+.fi-file-elf:before {
+    content: '\e032';
+}
+
+.fi-file-eps:before {
+    content: '\e033';
+}
+
+.fi-file-eps:before {
+    content: '\e034';
+}
+
+.fi-file-exe:before {
+    content: '\e035';
+}
+
+.fi-file-fla:before {
+    content: '\e036';
+}
+
+.fi-file-flash10:before {
+    content: '\e037';
+}
+
+.fi-file-flv:before {
+    content: '\e038';
+}
+
+.fi-file-fnt:before {
+    content: '\e039';
+}
+
+.fi-file-fon:before {
+    content: '\e03a';
+}
+
+.fi-file-gam:before {
+    content: '\e03b';
+}
+
+.fi-file-gbr:before {
+    content: '\e03c';
+}
+
+.fi-file-ged:before {
+    content: '\e03d';
+}
+
+.fi-file-gif:before {
+    content: '\e03e';
+}
+
+.fi-file-gpx:before {
+    content: '\e03f';
+}
+
+.fi-file-gzip:before {
+    content: '\e040';
+}
+
+.fi-file-gz:before {
+    content: '\e041';
+}
+
+.fi-file-hqz:before {
+    content: '\e042';
+}
+
+.fi-file-html:before {
+    content: '\e043';
+}
+
+.fi-file-ibooks:before {
+    content: '\e044';
+}
+
+.fi-file-icns:before {
+    content: '\e045';
+}
+
+.fi-file-ico:before {
+    content: '\e046';
+}
+
+.fi-file-ics:before {
+    content: '\e047';
+}
+
+.fi-file-iff:before {
+    content: '\e048';
+}
+
+.fi-file-indd:before {
+    content: '\e049';
+}
+
+.fi-file-iso:before {
+    content: '\e04a';
+}
+
+.fi-file-iso:before {
+    content: '\e04b';
+}
+
+.fi-file-jar:before {
+    content: '\e04c';
+}
+
+.fi-file-jpg:before {
+    content: '\e04d';
+}
+
+.fi-file-js:before {
+    content: '\e04e';
+}
+
+.fi-file-jsp:before {
+    content: '\e04f';
+}
+
+.fi-file-key:before {
+    content: '\e050';
+}
+
+.fi-file-kml:before {
+    content: '\e051';
+}
+
+.fi-file-kmz:before {
+    content: '\e052';
+}
+
+.fi-file-lnk:before {
+    content: '\e053';
+}
+
+.fi-file-log:before {
+    content: '\e054';
+}
+
+.fi-file-lua:before {
+    content: '\e055';
+}
+
+.fi-file-m3u:before {
+    content: '\e056';
+}
+
+.fi-file-m4a:before {
+    content: '\e057';
+}
+
+.fi-file-m4v:before {
+    content: '\e058';
+}
+
+.fi-file-macho:before {
+    content: '\e059';
+}
+
+.fi-file-max:before {
+    content: '\e05a';
+}
+
+.fi-file-mdb:before {
+    content: '\e05b';
+}
+
+.fi-file-mdf:before {
+    content: '\e05c';
+}
+
+.fi-file-mid:before {
+    content: '\e05d';
+}
+
+.fi-file-mim:before {
+    content: '\e05e';
+}
+
+.fi-file-mov:before {
+    content: '\e05f';
+}
+
+.fi-file-mp3:before {
+    content: '\e060';
+}
+
+.fi-file-mp4:before {
+    content: '\e061';
+}
+
+.fi-file-mpa:before {
+    content: '\e062';
+}
+
+.fi-file-mpg:before {
+    content: '\e063';
+}
+
+.fi-file-msg:before {
+    content: '\e064';
+}
+
+.fi-file-msi:before {
+    content: '\e065';
+}
+
+.fi-file-nes:before {
+    content: '\e066';
+}
+
+.fi-file-object:before {
+    content: '\e067';
+}
+
+.fi-file-odb:before {
+    content: '\e068';
+}
+
+.fi-file-odc:before {
+    content: '\e069';
+}
+
+.fi-file-odf:before {
+    content: '\e06a';
+}
+
+.fi-file-odg:before {
+    content: '\e06b';
+}
+
+.fi-file-odi:before {
+    content: '\e06c';
+}
+
+.fi-file-odp:before {
+    content: '\e06d';
+}
+
+.fi-file-ods:before {
+    content: '\e06e';
+}
+
+.fi-file-odt:before {
+    content: '\e06f';
+}
+
+.fi-file-odt:before {
+    content: '\e070';
+}
+
+.fi-file-odx:before {
+    content: '\e071';
+}
+
+.fi-file-ogg:before {
+    content: '\e072';
+}
+
+.fi-file-otf:before {
+    content: '\e073';
+}
+
+.fi-file-otf:before {
+    content: '\e074';
+}
+
+.fi-file-pages:before {
+    content: '\e075';
+}
+
+.fi-file-pct:before {
+    content: '\e076';
+}
+
+.fi-file-pdb:before {
+    content: '\e077';
+}
+
+.fi-file-pdf:before {
+    content: '\e078';
+}
+
+.fi-file-pif:before {
+    content: '\e079';
+}
+
+.fi-file-pkg:before {
+    content: '\e07a';
+}
+
+.fi-file-pl:before {
+    content: '\e07b';
+}
+
+.fi-file-png:before {
+    content: '\e07c';
+}
+
+.fi-file-pps:before {
+    content: '\e07d';
+}
+
+.fi-file-ppt:before {
+    content: '\e07e';
+}
+
+.fi-file-pptx:before {
+    content: '\e07f';
+}
+
+.fi-file-psd:before {
+    content: '\e080';
+}
+
+.fi-file-ps:before {
+    content: '\e081';
+}
+
+.fi-file-pub:before {
+    content: '\e082';
+}
+
+.fi-file-python:before {
+    content: '\e083';
+}
+
+.fi-file-rar:before {
+    content: '\e084';
+}
+
+.fi-file-ra:before {
+    content: '\e085';
+}
+
+.fi-file-raw:before {
+    content: '\e086';
+}
+
+.fi-file-rm:before {
+    content: '\e087';
+}
+
+.fi-file-rom:before {
+    content: '\e088';
+}
+
+.fi-file-rpm:before {
+    content: '\e089';
+}
+
+.fi-file-rss:before {
+    content: '\e08a';
+}
+
+.fi-file-rtf:before {
+    content: '\e08b';
+}
+
+.fi-file-sav:before {
+    content: '\e08c';
+}
+
+.fi-file-sdf:before {
+    content: '\e08d';
+}
+
+.fi-file-sitx:before {
+    content: '\e08e';
+}
+
+.fi-file-sql:before {
+    content: '\e08f';
+}
+
+.fi-file-sql:before {
+    content: '\e090';
+}
+
+.fi-file-srt:before {
+    content: '\e091';
+}
+
+.fi-file-svg:before {
+    content: '\e092';
+}
+
+.fi-file-swf:before {
+    content: '\e093';
+}
+
+.fi-file-sys:before {
+    content: '\e094';
+}
+
+.fi-file-tar:before {
+    content: '\e095';
+}
+
+.fi-file-tex:before {
+    content: '\e096';
+}
+
+.fi-file-tga:before {
+    content: '\e097';
+}
+
+.fi-file-thm:before {
+    content: '\e098';
+}
+
+.fi-file-tiff:before {
+    content: '\e099';
+}
+
+.fi-file-tmp:before {
+    content: '\e09a';
+}
+
+.fi-file-torrent:before {
+    content: '\e09b';
+}
+
+.fi-file-ttf:before {
+    content: '\e09c';
+}
+
+.fi-file-txt:before {
+    content: '\e09d';
+}
+
+.fi-file-uue:before {
+    content: '\e09e';
+}
+
+.fi-file-vb:before {
+    content: '\e09f';
+}
+
+.fi-file-vcd:before {
+    content: '\e0a0';
+}
+
+.fi-file-vcf:before {
+    content: '\e0a1';
+}
+
+.fi-file-vob:before {
+    content: '\e0a2';
+}
+
+.fi-file-wav:before {
+    content: '\e0a3';
+}
+
+.fi-file-wma:before {
+    content: '\e0a4';
+}
+
+.fi-file-wmv:before {
+    content: '\e0a5';
+}
+
+.fi-file-wpd:before {
+    content: '\e0a6';
+}
+
+.fi-file-wps:before {
+    content: '\e0a7';
+}
+
+.fi-file-wsf:before {
+    content: '\e0a8';
+}
+
+.fi-file-xhtml:before {
+    content: '\e0a9';
+}
+
+.fi-file-xlr:before {
+    content: '\e0aa';
+}
+
+.fi-file-xls:before {
+    content: '\e0ab';
+}
+
+.fi-file-xlsx:before {
+    content: '\e0ac';
+}
+
+.fi-file-xml:before {
+    content: '\e0ad';
+}
+
+.fi-file-yuv:before {
+    content: '\e0ae';
+}
+
+.fi-file-zip:before {
+    content: '\e0af';
+}

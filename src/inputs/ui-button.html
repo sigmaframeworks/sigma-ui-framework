@@ -1,0 +1,14 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016 Sigma Frameworks
+// @license     : MIT
+-->
+<template class="ui-button-control">
+	<button class="ui-button ui-button-${theme}" ref="__button" click.trigger="fireClick($event)" data-value.bind="value">
+		<span class.bind="icon" if.bind="icon"></span>
+		<span innerhtml.bind="label" if.bind="label"></span>
+	</button>
+	<ui-menu floating menu.bind="menu" ref="__menuEl">
+		<slot></slot>
+	</ui-menu>
+</template>

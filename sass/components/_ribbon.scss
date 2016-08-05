@@ -1,0 +1,187 @@
+// UI Ribbon
+// @description :
+// @author      : Adarsh Pastakia
+// @copyright   : 2016 Sigma Frameworks
+// @license     : MIT
+
+.ui-ribbon-wrapper
+{
+    z-index: $z-index-ribbon;
+
+    overflow: hidden;
+
+    pointer-events: none;
+
+    @include position(absolute, null);
+    @include size(8em, 8em);
+
+    &.ui-tr
+    {
+        top: -1px;
+        right: -1px;
+        .ui-ribbon
+        {
+            top: 25%;
+
+            @include transform(rotate(45deg));
+        }
+    }
+    &.ui-tl
+    {
+        top: -1px;
+        left: -1px;
+        .ui-ribbon
+        {
+            top: 25%;
+            left: -25%;
+
+            @include transform(rotate(-45deg));
+        }
+    }
+    &.ui-br
+    {
+        right: -1px;
+        bottom: -1px;
+        .ui-ribbon
+        {
+            top: 55%;
+            left: 5%;
+
+            @include transform(rotate(-45deg));
+        }
+    }
+    &.ui-bl
+    {
+        bottom: -1px;
+        left: -1px;
+        .ui-ribbon
+        {
+            top: 55%;
+            left: -25%;
+
+            @include transform(rotate(45deg));
+        }
+    }
+
+    .ui-ribbon
+    {
+        font-size: .85em;
+
+        position: relative;
+
+        width: 125%;
+        padding: .2em .5em;
+
+        text-align: center;
+        text-transform: uppercase;
+
+        color: $base-text;
+        border:
+        {
+            width: 1px 0;
+
+            color: $base-border-color;
+
+            style: solid;
+        }
+        background-color: $base-bg;
+        text-shadow: 0 1px 0 rgba($wg-8, .5);
+
+        @include transform-origin(center center 0);
+        @include box-shadow(0 0 8px 2px $base-shadow-color);
+
+        &.ui-ribbon-primary
+        {
+            color: $primary-text;
+            border-color: darken($primary, 20%);
+            background-color: $primary;
+        }
+
+        &.ui-ribbon-success
+        {
+            color: $button-success-text;
+            border-color: darken($success, 20%);
+            background-color: $success;
+        }
+
+        &.ui-ribbon-warning
+        {
+            color: $button-warning-text;
+            border-color: darken($warning, 20%);
+            background-color: $warning;
+        }
+
+        &.ui-ribbon-info
+        {
+            color: $button-info-text;
+            border-color: darken($info, 20%);
+            background-color: $info;
+        }
+
+        &.ui-ribbon-danger
+        {
+            color: $button-danger-text;
+            border-color: darken($danger, 20%);
+            background-color: $danger;
+        }
+    }
+}
+
+[dir='rtl']
+{
+    .ui-ribbon-wrapper
+    {
+        top: auto;
+        right: auto;
+        bottom: auto;
+        left: auto;
+
+        &.ui-tl
+        {
+            top: -1px;
+            right: -1px;
+            .ui-ribbon
+            {
+                top: 25%;
+                right: -25%;
+
+                @include transform(rotate(45deg));
+            }
+        }
+        &.ui-tr
+        {
+            top: -1px;
+            left: -1px;
+            .ui-ribbon
+            {
+                top: 25%;
+
+                @include transform(rotate(-45deg));
+            }
+        }
+        &.ui-bl
+        {
+            right: -1px;
+            bottom: -1px;
+            .ui-ribbon
+            {
+                top: 55%;
+                right: -25%;
+
+                @include transform(rotate(-45deg));
+            }
+        }
+        &.ui-br
+        {
+            bottom: -1px;
+            left: -1px;
+            .ui-ribbon
+            {
+                top: 55%;
+                right: 5%;
+
+                @include transform(rotate(45deg));
+            }
+        }
+    }
+}

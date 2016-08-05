@@ -1,0 +1,543 @@
+// GlyphIcon Font
+// @description :
+// @author      : Adarsh Pastakia
+// @copyright   : 2016 Sigma Frameworks
+// @license     : MIT
+
+/*
+Flaticon icon font: Flaticon
+Creation date: 13/03/2016 12:28
+*/
+@include font-face( 'Framework', inline_font_files('glyphs/Flaticon.woff', woff, 'glyphs/Flaticon.ttf', ttf, 'glyphs/Flaticon.svg', svg ), ('glyphs/Flaticon.eot'), normal, normal );
+
+.fi-ui {
+	font-size: 1em;
+}
+
+.fi-ui:before,
+[class*=' fi-ui-']:before,
+[class^='fi-ui-']:before {
+	font-family            : 'Framework';
+	font-weight            : normal;
+	font-style             : normal;
+	font-variant           : normal;
+	line-height            : 1;
+	display                : inline-block;
+	text-decoration        : inherit;
+	text-transform         : none;
+	text-rendering         : optimizeLegibility;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing : antialiased;
+	font-smoothing         : antialiased;
+}
+
+.fi-ui-arrow-down:before {
+	content: '\f100';
+}
+
+.fi-ui-arrow-left:before {
+	content: '\f101';
+}
+
+.fi-ui-arrow-right:before {
+	content: '\f102';
+}
+
+.fi-ui-arrow-signin:before {
+	content: '\f103';
+}
+
+.fi-ui-arrow-signout:before {
+	content: '\f104';
+}
+
+.fi-ui-arrow-up:before {
+	content: '\f105';
+}
+
+.fi-ui-bar-light:before {
+	content: '\f106';
+}
+
+.fi-ui-bar-thick:before {
+	content: '\f107';
+}
+
+.fi-ui-bar-thin:before {
+	content: '\f108';
+}
+
+.fi-ui-bold:before {
+	content: '\f109';
+}
+
+.fi-ui-box-signin:before {
+	content: '\f10a';
+}
+
+.fi-ui-box-signout:before {
+	content: '\f10b';
+}
+
+.fi-ui-calendar:before {
+	content: '\f10c';
+}
+
+.fi-ui-calendar-alt:before {
+	content: '\f10d';
+}
+
+.fi-ui-calendar-black:before {
+	content: '\f10e';
+}
+
+.fi-ui-calendar-white:before {
+	content: '\f10f';
+}
+
+.fi-ui-check-off:before {
+	content: '\f110';
+}
+
+.fi-ui-check-on:before {
+	content: '\f111';
+}
+
+.fi-ui-circle-add:before {
+	content: '\f112';
+}
+
+.fi-ui-circle-close:before {
+	content: '\f113';
+}
+
+.fi-ui-circle-down:before {
+	content: '\f114';
+}
+
+.fi-ui-circle-left:before {
+	content: '\f115';
+}
+
+.fi-ui-circle-remove:before {
+	content: '\f116';
+}
+
+.fi-ui-circle-right:before {
+	content: '\f117';
+}
+
+.fi-ui-circle-up:before {
+	content: '\f118';
+}
+
+.fi-ui-close-light:before {
+	content: '\f119';
+}
+
+.fi-ui-close-thick:before {
+	content: '\f11a';
+}
+
+.fi-ui-close-thin:before {
+	content: '\f11b';
+}
+
+.fi-ui-cog-black:before {
+	content: '\f11c';
+}
+
+.fi-ui-cog-white:before {
+	content: '\f11d';
+}
+
+.fi-ui-delete-black:before {
+	content: '\f11e';
+}
+
+.fi-ui-delete-thick:before {
+	content: '\f11f';
+}
+
+.fi-ui-delete-white:before {
+	content: '\f120';
+}
+
+.fi-ui-dialog-close:before {
+	content: '\f121';
+}
+
+.fi-ui-dialog-maximize:before {
+	content: '\f122';
+}
+
+.fi-ui-dialog-minimize:before {
+	content: '\f123';
+}
+
+.fi-ui-dialog-resize:before {
+	content: '\f124';
+}
+
+.fi-ui-dialog-restore:before {
+	content: '\f125';
+}
+
+.fi-ui-edit-black:before {
+	content: '\f126';
+}
+
+.fi-ui-edit-light:before {
+	content: '\f127';
+}
+
+.fi-ui-edit-thick:before {
+	content: '\f128';
+}
+
+.fi-ui-edit-thin:before {
+	content: '\f129';
+}
+
+.fi-ui-error-black:before {
+	content: '\f12a';
+}
+
+.fi-ui-error-exclaim:before {
+	content: '\f12b';
+}
+
+.fi-ui-error-white:before {
+	content: '\f12c';
+}
+
+.fi-ui-exclaim-alt:before {
+	content: '\f12d';
+}
+
+.fi-ui-exclaim-black:before {
+	content: '\f12e';
+}
+
+.fi-ui-exclaim-white:before {
+	content: '\f12f';
+}
+
+.fi-ui-external:before {
+	content: '\f130';
+}
+
+.fi-ui-external-thin:before {
+	content: '\f131';
+}
+
+.fi-ui-help-black:before {
+	content: '\f132';
+}
+
+.fi-ui-help-white:before {
+	content: '\f133';
+}
+
+.fi-ui-image:before {
+	content: '\f134';
+}
+
+.fi-ui-info-black:before {
+	content: '\f135';
+}
+
+.fi-ui-info-white:before {
+	content: '\f136';
+}
+
+.fi-ui-italic:before {
+	content: '\f137';
+}
+
+.fi-ui-key-black:before {
+	content: '\f138';
+}
+
+.fi-ui-key-white:before {
+	content: '\f139';
+}
+
+.fi-ui-language:before {
+	content: '\f13a';
+}
+
+.fi-ui-link:before {
+	content: '\f13b';
+}
+
+.fi-ui-list-bullet:before {
+	content: '\f13c';
+}
+
+.fi-ui-list-numbered:before {
+	content: '\f13d';
+}
+
+.fi-ui-overflow-menu:before {
+	content: '\f13e';
+}
+
+.fi-ui-overflow-menu-alt:before {
+	content: '\f13f';
+}
+
+.fi-ui-overflow-menu-bar:before {
+	content: '\f140';
+}
+
+.fi-ui-page:before {
+	content: '\f141';
+}
+
+.fi-ui-page-first-black:before {
+	content: '\f142';
+}
+
+.fi-ui-page-first-line:before {
+	content: '\f143';
+}
+
+.fi-ui-page-first-white:before {
+	content: '\f144';
+}
+
+.fi-ui-page-last-black:before {
+	content: '\f145';
+}
+
+.fi-ui-page-last-line:before {
+	content: '\f146';
+}
+
+.fi-ui-page-last-white:before {
+	content: '\f147';
+}
+
+.fi-ui-page-light:before {
+	content: '\f148';
+}
+
+.fi-ui-page-next-black:before {
+	content: '\f149';
+}
+
+.fi-ui-page-next-line:before {
+	content: '\f14a';
+}
+
+.fi-ui-page-next-white:before {
+	content: '\f14b';
+}
+
+.fi-ui-page-prev-black:before {
+	content: '\f14c';
+}
+
+.fi-ui-page-prev-line:before {
+	content: '\f14d';
+}
+
+.fi-ui-page-prev-white:before {
+	content: '\f14e';
+}
+
+.fi-ui-panel-expand:before {
+	content: '\f14f';
+}
+
+.fi-ui-panel-restore:before {
+	content: '\f150';
+}
+
+.fi-ui-preview-light:before {
+	content: '\f151';
+}
+
+.fi-ui-preview-thick:before {
+	content: '\f152';
+}
+
+.fi-ui-preview-thin:before {
+	content: '\f153';
+}
+
+.fi-ui-radio-off:before {
+	content: '\f154';
+}
+
+.fi-ui-radio-on:before {
+	content: '\f155';
+}
+
+.fi-ui-refresh:before {
+	content: '\f156';
+}
+
+.fi-ui-refresh-alt:before {
+	content: '\f157';
+}
+
+.fi-ui-search:before {
+	content: '\f158';
+}
+
+.fi-ui-search-black:before {
+	content: '\f159';
+}
+
+.fi-ui-sort:before {
+	content: '\f15a';
+}
+
+.fi-ui-sort-asc:before {
+	content: '\f15b';
+}
+
+.fi-ui-sort-desc:before {
+	content: '\f15c';
+}
+
+.fi-ui-square-collapse:before {
+	content: '\f15d';
+}
+
+.fi-ui-square-expand:before {
+	content: '\f15e';
+}
+
+.fi-ui-strikethrough:before {
+	content: '\f15f';
+}
+
+.fi-ui-tree-check-off:before {
+	content: '\f160';
+}
+
+.fi-ui-tree-check-on:before {
+	content: '\f161';
+}
+
+.fi-ui-tree-check-partial:before {
+	content: '\f162';
+}
+
+.fi-ui-underline:before {
+	content: '\f163';
+}
+
+.fi-ui-upload-black:before {
+	content: '\f164';
+}
+
+.fi-ui-upload-white:before {
+	content: '\f165';
+}
+
+$font-ui-arrow-down: '\f100';
+$font-ui-arrow-left: '\f101';
+$font-ui-arrow-right: '\f102';
+$font-ui-arrow-signin: '\f103';
+$font-ui-arrow-signout: '\f104';
+$font-ui-arrow-up: '\f105';
+$font-ui-bar-light: '\f106';
+$font-ui-bar-thick: '\f107';
+$font-ui-bar-thin: '\f108';
+$font-ui-bold: '\f109';
+$font-ui-box-signin: '\f10a';
+$font-ui-box-signout: '\f10b';
+$font-ui-calendar: '\f10c';
+$font-ui-calendar-alt: '\f10d';
+$font-ui-calendar-black: '\f10e';
+$font-ui-calendar-white: '\f10f';
+$font-ui-check-off: '\f110';
+$font-ui-check-on: '\f111';
+$font-ui-circle-add: '\f112';
+$font-ui-circle-close: '\f113';
+$font-ui-circle-down: '\f114';
+$font-ui-circle-left: '\f115';
+$font-ui-circle-remove: '\f116';
+$font-ui-circle-right: '\f117';
+$font-ui-circle-up: '\f118';
+$font-ui-close-light: '\f119';
+$font-ui-close-thick: '\f11a';
+$font-ui-close-thin: '\f11b';
+$font-ui-cog-black: '\f11c';
+$font-ui-cog-white: '\f11d';
+$font-ui-delete-black: '\f11e';
+$font-ui-delete-thick: '\f11f';
+$font-ui-delete-white: '\f120';
+$font-ui-dialog-close: '\f121';
+$font-ui-dialog-maximize: '\f122';
+$font-ui-dialog-minimize: '\f123';
+$font-ui-dialog-resize: '\f124';
+$font-ui-dialog-restore: '\f125';
+$font-ui-edit-black: '\f126';
+$font-ui-edit-light: '\f127';
+$font-ui-edit-thick: '\f128';
+$font-ui-edit-thin: '\f129';
+$font-ui-error-black: '\f12a';
+$font-ui-error-exclaim: '\f12b';
+$font-ui-error-white: '\f12c';
+$font-ui-exclaim-alt: '\f12d';
+$font-ui-exclaim-black: '\f12e';
+$font-ui-exclaim-white: '\f12f';
+$font-ui-external: '\f130';
+$font-ui-external-thin: '\f131';
+$font-ui-help-black: '\f132';
+$font-ui-help-white: '\f133';
+$font-ui-image: '\f134';
+$font-ui-info-black: '\f135';
+$font-ui-info-white: '\f136';
+$font-ui-italic: '\f137';
+$font-ui-key-black: '\f138';
+$font-ui-key-white: '\f139';
+$font-ui-language: '\f13a';
+$font-ui-link: '\f13b';
+$font-ui-list-bullet: '\f13c';
+$font-ui-list-numbered: '\f13d';
+$font-ui-overflow-menu: '\f13e';
+$font-ui-overflow-menu-alt: '\f13f';
+$font-ui-overflow-menu-bar: '\f140';
+$font-ui-page: '\f141';
+$font-ui-page-first-black: '\f142';
+$font-ui-page-first-line: '\f143';
+$font-ui-page-first-white: '\f144';
+$font-ui-page-last-black: '\f145';
+$font-ui-page-last-line: '\f146';
+$font-ui-page-last-white: '\f147';
+$font-ui-page-light: '\f148';
+$font-ui-page-next-black: '\f149';
+$font-ui-page-next-line: '\f14a';
+$font-ui-page-next-white: '\f14b';
+$font-ui-page-prev-black: '\f14c';
+$font-ui-page-prev-line: '\f14d';
+$font-ui-page-prev-white: '\f14e';
+$font-ui-panel-expand: '\f14f';
+$font-ui-panel-restore: '\f150';
+$font-ui-preview-light: '\f151';
+$font-ui-preview-thick: '\f152';
+$font-ui-preview-thin: '\f153';
+$font-ui-radio-off: '\f154';
+$font-ui-radio-on: '\f155';
+$font-ui-refresh: '\f156';
+$font-ui-refresh-alt: '\f157';
+$font-ui-search: '\f158';
+$font-ui-search-black: '\f159';
+$font-ui-sort: '\f15a';
+$font-ui-sort-asc: '\f15b';
+$font-ui-sort-desc: '\f15c';
+$font-ui-square-collapse: '\f15d';
+$font-ui-square-expand: '\f15e';
+$font-ui-strikethrough: '\f15f';
+$font-ui-tree-check-off: '\f160';
+$font-ui-tree-check-on: '\f161';
+$font-ui-tree-check-partial: '\f162';
+$font-ui-underline: '\f163';
+$font-ui-upload-black: '\f164';
+$font-ui-upload-white: '\f165';

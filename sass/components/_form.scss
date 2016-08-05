@@ -1,0 +1,63 @@
+// UI Form
+// @description :
+// @author      : Adarsh Pastakia
+// @copyright   : 2016 Sigma Frameworks
+// @license     : MIT
+
+.ui-form {
+    &,
+    .ui-fieldset > fieldset {
+        > .ui-row > .ui-column {
+            min-width: 20em;
+            @include flex(1 1 20em);
+        }
+    }
+
+    .ui-fieldset {
+        > fieldset {
+            border       : 1px solid $base-border-color;
+            border-radius: $base-border-radius;
+            padding      : .5em;
+            margin       : .3em 0;
+            min-height   : 2em;
+            @include transition(max-height .5s);
+
+            legend {
+                padding  : 0 .5em;
+                color    : rgba($input-text, .7);
+                font-size: .9em;
+            }
+        }
+
+        .ui-disabled > fieldset {
+            overflow  : hidden;
+            max-height: 0;
+        }
+    }
+}
+
+.ui-login {
+    margin-top      : -3em;
+    padding         : .5em 1em;
+
+    border          : 1px solid $base-border-color;
+    border-radius   : $base-border-radius;
+    background-color: $base-bg;
+    @include flex(0 0 20em);
+    @include box-shadow(0 0 10px 0 $base-shadow-color);
+
+    h4 {
+        font-size  : 5em;
+
+        text-align : center;
+
+        color      : $primary;
+        text-shadow: 1px 1px 1px $base-bg, 1px 1px 2px #333, -1px -1px 1px contrast($base-bg, #ccc, #333);
+    }
+
+    .ui-login-error {
+        color        : contrast($danger);
+        border-radius: $base-border-radius;
+        background   : $danger;
+    }
+}

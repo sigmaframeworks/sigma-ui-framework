@@ -1,0 +1,242 @@
+// UI Page
+// @description :
+// @author      : Adarsh Pastakia
+// @copyright   : 2016 Sigma Frameworks
+// @license     : MIT
+
+.ui-page {
+    position: relative;
+    @include flex-column();
+    @include position(absolute, 0, 0, 0, 0);
+
+    > .ui-page-title {
+        font            : {
+            size   : 1.1em;
+            variant: small-caps;
+            weight : $font-weight-normal;
+        }
+        padding         : .2em 1em;
+        text-align      : center;
+        color           : $page-title-text;
+        background-color: $page-title-bg;
+        @include flex(0 0 auto);
+    }
+
+    .ui-page-body {
+        @include flex-column();
+        @include flex(1 1 0);
+    }
+}
+
+.ui-section {
+    position: relative;
+    overflow: hidden;
+    @include flex(1 1 0);
+
+    &.ui-section-row {
+        @include flex-row($align: stretch, $wrap : false);
+    }
+
+    &.ui-section-column {
+        @include flex-column($align: stretch);
+    }
+}
+
+.ui-content {
+    position: relative;
+
+    &.ui-auto-fit {
+        @include flex(0 0 auto);
+    }
+
+    &:not(.ui-auto-fit) {
+        @include flex(1 1 0);
+    }
+
+    &:not(.ui-scroll) {
+        @include flex-column($align: stretch);
+    }
+}
+
+.ui-sidebar {
+    position        : relative;
+    color           : $sidebar-text;
+    background-color: $sidebar-bg;
+    overflow        : hidden;
+    @include flex(0 0 auto);
+    @include transition(width 0.5s);
+    @include flex-column();
+
+    &:first-child {
+        @include border(end, 1px solid $base-border-color);
+    }
+
+    &:last-child {
+        @include border(start, 1px solid $base-border-color);
+    }
+
+    .ui-sidebar-collapse {
+        position  : absolute;
+        top       : 0;
+        right     : 0;
+        width     : 2em;
+        height    : 2em;
+        padding   : .5em;
+        background: $secondary;
+    }
+
+    .ui-sidebar-content {
+        @include flex(1 1 0);
+        // @include scroll();
+    }
+
+    &.collapse {
+        width   : 2em !important;
+        overflow: visible;
+
+        .ui-sidebar-content {
+            position        : absolute;
+            top             : 0;
+            left            : -20em;
+            width           : 20em;
+            bottom          : 0;
+            z-index         : $z-index-floating;
+            background-color: rgba($sidebar-bg, 1);
+            @include transition(left 0.5s, right 0.5s);
+        }
+
+        .ui-sidebar-collapse span:before {
+            content: $font-ui-arrow-right;
+        }
+    }
+
+    &.overlay {
+        .ui-sidebar-content {
+            left: 2em;
+            @include box-shadow(2px 0 2px 0 $cg-5);
+        }
+    }
+}
+
+.ui-divider {
+    display         : block;
+    min-width       : 1px;
+    min-height      : 1px;
+    margin          : .15em;
+    border          : {
+        width: 0 1px 1px 0;
+        color: rgba($white, .3);
+        style: solid;
+    }
+    background-color: rgba($black, .3);
+    @include flex(0 0 1px);
+}
+
+.ui-toolbar {
+    z-index   : 2;
+    padding   : .1em .5em;
+    color     : $toolbar-text;
+    border    : {
+        width: 1px 0;
+        color: $base-border-color;
+        style: solid;
+    }
+    background: $toolbar-bg;
+    @include flex(0 0 auto);
+    @include flex-row(center, flex-end, true);
+    @include box-shadow(0 0 1px 0 $base-shadow-color);
+
+    .ui-button {
+        @include box-shadow(0 0 2px 0 $base-shadow-color);
+    }
+
+    .ui-divider {
+        height: 1.8em;
+    }
+
+    .ui-input-group {
+        @include flex(0 0 20em);
+        margin: 0 5px;
+
+        .ui-label {
+            @include flex(0 0 8em);
+        }
+
+        .ui-control-wrapper {
+            @include flex(0 0 12em);
+        }
+    }
+}
+
+.ui-statsbar {
+    z-index   : 1;
+    color     : $statsbar-text;
+    border    : {
+        width: 1px 0;
+        color: $base-border-color;
+        style: solid;
+    }
+    background: $statsbar-bg;
+    @include flex(0 0 auto);
+    @include flex-row(stretch, flex-end, true);
+    @include box-shadow(0 0 1px 0 $base-shadow-color);
+
+    .ui-stat {
+        padding   : .5em 1.2em;
+        text-align: center;
+        @include flex(1 1 0);
+        @include border(start, 1px solid rgba($white, .3));
+        @include border(end, 1px solid rgba($black, .3));
+        @include flex-row(center, center, false);
+
+        &:last-child {
+            @include border(end, none);
+        }
+
+        &:first-child {
+            @include border(start, none);
+        }
+
+        div,
+        span {
+            margin: 0 .2em;
+            @include flex(0 0 auto);
+        }
+
+        span {
+            font-size: 2.5em;
+        }
+
+        h1 {
+            font-weight: bold;
+        }
+
+        h6 {
+            text-transform: uppercase;
+            color         : $statsbar-label;
+        }
+    }
+}
+
+[dir='rtl'] {
+    .ui-sidebar {
+        .ui-sidebar-collapse {
+            left : 0;
+            right: auto;
+        }
+
+        &.collapse {
+            .ui-sidebar-content {
+                left : auto;
+                right: -20em;
+            }
+        }
+
+        &.overlay {
+            .ui-sidebar-content {
+                right: 2em;
+                @include box-shadow(-2px 0 2px 0 $cg-5);
+            }
+        }
+    }
+}

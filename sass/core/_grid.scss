@@ -1,0 +1,98 @@
+/**
+ *	UI Framework Responsive Grid
+ *	@author 	Adarsh Pastakia
+ *	@company	HMC
+ *  @copyright 	2015-2016, Adarsh Pastakia
+ **/
+@mixin grid-columns($prefix, $size) {
+     @media only screen and (min-width : $size){
+        @for $i from 1 through 12 {
+            > .ui-col-#{$prefix}-#{$i} {
+                @include flex(1 0 (($i/12)*100%));
+            }
+        }
+    }
+}
+
+.ui-row {
+    @include flex-row(flex-start);
+    @include grid-columns(xs, $grid-xs-min);
+    @include grid-columns(sm, $grid-sm-min);
+    @include grid-columns(md, $grid-md-min);
+    @include grid-columns(lg, $grid-lg-min);
+    @include grid-columns(xl, $grid-xl-min);
+}
+
+.ui-column-row {
+    @include flex-column();
+}
+
+.ui-column-row,
+.ui-row {
+    &.ui-align-top {
+        @include align-items(flex-start);
+    }
+
+    &.ui-align-middle {
+        @include align-items(center);
+    }
+
+    &.ui-align-bottom {
+        @include align-items(flex-end);
+    }
+
+    &.ui-align-stretch {
+        @include align-items(stretch);
+    }
+
+    &.ui-align-start {
+        @include justify-content(flex-start);
+    }
+
+    &.ui-align-center {
+        @include justify-content(center);
+    }
+
+    &.ui-align-end {
+        @include justify-content(flex-end);
+    }
+
+    &.ui-align-spaced {
+        @include justify-content(space-around);
+    }
+}
+
+.ui-column {
+    &:not(.ui-column-row) {
+        display: block;
+    }
+    @include flex(0 0 100%);
+
+    &.ui-align-top {
+        @include align-self(flex-start);
+    }
+
+    &.ui-align-middle {
+        @include align-self(center);
+    }
+
+    &.ui-align-bottom {
+        @include align-self(flex-end);
+    }
+
+    &.ui-align-stretch {
+        @include align-self(stretch);
+    }
+}
+
+.ui-col-auto {
+    @include flex(0 0 auto);
+}
+
+.ui-col-fill {
+    @include flex(1 1 0);
+}
+
+.ui-col-full {
+    @include flex(1 1 100%);
+}

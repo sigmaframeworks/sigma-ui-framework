@@ -1,0 +1,112 @@
+// UI Markdown Editor
+// @description :
+// @author      : Adarsh Pastakia
+// @copyright   : 2016 Sigma Frameworks
+// @license     : MIT
+
+.ui-markdown-editor {
+    .ui-ribbon-wrapper {
+        @include scale(.5,.5);
+        @include transform-origin(100% 0 0);
+    }
+
+    .ui-markdown-tools {
+        padding   : 0;
+        border    : {
+            width: 1px 1px 0;
+            color: $input-border;
+            style: solid;
+        }
+        background: $toolbar-bg;
+        @include flex-row($wrap: wrap);
+        @include border-top-radius($base-border-radius);
+
+        .ui-divider {
+            height: 1em;
+        }
+    }
+
+    .ui-input-control {
+        position: relative;
+
+        .ui-input {
+            border-radius: 0 !important;
+        }
+    }
+
+    &.ui-full-view {
+        margin: 0;
+        @include flex(1 1 0);
+        @include align-items(stretch);
+        @include flex-direction(column);
+
+        .ui-label {
+            display: none;
+        }
+
+        .ui-control-wrapper {
+            @include flex-column();
+
+            .ui-input-help {
+                border-width: 0;
+            }
+
+            .ui-markdown-tools {
+                border-width: 0;
+            }
+
+            .ui-input-control {
+                position: relative;
+                @include flex(1 1 0);
+
+                .ui-input {
+                    resize      : none;
+                    border-width: 1px 0;
+                    @include position(absolute, 0, 0, 0, 0);
+                }
+            }
+        }
+    }
+
+    &.ui-side-view {
+        .ui-markdown-preview {
+            position: relative !important;
+            display : block !important;
+            @include flex(1 1 0);
+        }
+    }
+}
+
+.ui-markdown-help,
+.ui-markdown-preview {
+    z-index         : 1;
+    @include scroll();
+    padding         : .5em 1em;
+    color           : $input-text;
+    border          : none;
+    background-color: $input-bg;
+    @include position(absolute, 0, 0, 0, 0);
+    @include box-shadow(0 0 .2em 0 $base-shadow-color inset);
+
+    ~ .ui-close {
+        font-size: 1.5em;
+        z-index  : 9;
+        opacity  : .3;
+        color    : $base-text;
+        @include position(absolute, $t: 0, $r : 0);
+
+        &:hover {
+            opacity: .6;
+        }
+    }
+
+    &[dir='rtl']:not(.ui-hide) ~ .ui-close {
+        @include position(absolute, $t: 0, $l : 0);
+    }
+}
+
+.ui-json-editor {
+    .ui-input-group .ui-label {
+        @include flex-basis(15em);
+    }
+}

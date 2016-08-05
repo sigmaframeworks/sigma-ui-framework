@@ -1,0 +1,52 @@
+@import "compass/css3";
+//
+// IF THESE FONTS ARE CHANGED MAKE SURE TO UPDATE RELEVANT VARIABLES
+// $font-family-input
+@import url( '//fonts.googleapis.com/css?family=Lato');
+// $font-family-sans-serif
+@import url( '//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,800italic,400,300,600,800');
+// $font-family-serif
+@import url( '//fonts.googleapis.com/css?family=Source+Code+Pro');
+
+// Optional CSS and Fonts
+@import "utility/flags";
+// END:Optional
+
+// IMPORT OVERRIDE VARIABLES HERE
+// @import "app-vars";
+
+// App Theme Defaults
+@import "framework!";
+
+// INCLUDE APP SPECIFIC STYLES HERE
+.color-map {
+    display      : inline-block;
+    border-radius: 2em;
+    box-shadow   : 0 0 5px 1px $wg-6;
+    margin       : .25em .5em;
+    @include size(4em, 4em);
+
+    &.primary {
+        background: $primary;
+    }
+
+    &.secondary {
+        background: $secondary;
+    }
+
+    &.info {
+        background: $info;
+    }
+
+    &.danger {
+        background: $danger;
+    }
+
+    &.success {
+        background: $success;
+    }
+
+    &.warning {
+        background: $warning;
+    }
+}
