@@ -1,0 +1,21 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016 Sigma Frameworks
+// @license     : MIT
+-->
+<template class="ui-input-group ui-file-input">
+    <label class="ui-label" ref="__label">
+        <span><slot></slot></span>
+    </label>
+    <div class="ui-control-wrapper">
+        <div class="ui-file-drop-zone ${__dragging?'dragging':''}" ref="__dropZone" click.trigger="__input.click()" dragover.trigger="__dragEnter($event)" dragleave.trigger="__dragExit($event)" drop.trigger="__drop($event)">
+            <span><i class="fi-ui-upload-white"></i> Drop files here or click to browse</span>
+        </div>
+        <input type="file" ref="__input" class="ui-file-input-el" change.trigger="__fileChoose()" />
+        <div class="ui-file-process"></div>
+        <div class="ui-file-list">
+            <p repeat.for="file of __files">
+                <button click.trigger="__remove($index)"><i class="fi-ui-circle-remove ui-text-danger"></i></button> <i class="fi-file-${file.ext}"></i> ${file.name} (<span innerhtml.bind="file.size | number:'0.00b'"></span>)</p>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,18 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016 Sigma Frameworks
+// @license     : MIT
+-->
+<template class="ui-list ui-reorder">
+  <div class="ui-list-group">
+    <div model.bind="opt" repeat.for="opt of list & oneTime" class="ui-list-item" data-value="${$index}" mousedown.trigger="startDrag(opt, $event)">
+      <span class="ui-icon fi-ui-bar-thin"></span>
+      <span class="ui-text ui-col-fill" innerhtml.bind="opt[displayProperty] || opt"></span>
+    </div>
+
+    <div class="ui-list-item ui-ghost" if.bind="ghostModel" ref="__ghostEl" css.bind="{top:__top+'px'}">
+      <span class="ui-icon fi-ui-bar-thin"></span>
+      <span class="ui-text ui-col-fill" innerhtml.bind="ghostModel[displayProperty] || ghostModel"></span>
+    </div>
+  </div>
+</template>

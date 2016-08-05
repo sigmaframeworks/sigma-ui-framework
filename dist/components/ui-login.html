@@ -1,0 +1,40 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016 Sigma Frameworks
+// @license     : MIT
+-->
+<template>
+	<div ref="__temp">
+		<slot></slot>
+	</div>
+	<ui-page ref="__page">
+		<ui-row class="ui-col-fill ui-align-center ui-align-middle">
+			<ui-form submit.trigger="doLogin()" busy.bind="appState.IsHttpInUse" class="ui-login">
+
+				<div class="ui-login-content" ref="__content">
+				</div>
+				<hr/>
+				<div>
+					<p class="ui-login-error ui-text-center" if.bind="error" innerhtml.bind="error"></p>
+				</div>
+				<ui-input clear required label-top email value.bind="model.username & validate" placeholder="user@clubhotel.com">Username
+				</ui-input>
+				<ui-input clear required label-top password value.bind="model.password & validate" placeholder="password">Password
+				</ui-input>
+
+				<ui-checkbox checkbox class="ui-stretch" checked.bind="model.remember">Remember Me
+				</ui-checkbox>
+
+				<div class="ui-text-end">
+					<ui-button primary click.trigger="doLogin()" label="Login"></ui-button>
+				</div>
+				<br/>
+				<hr/>
+				<p class="ui-font-small ui-text-center ui-text-muted">This app is designed to run on desktop and tablets
+				</p>
+
+				<p class="ui-font-small ui-text-center ui-text-muted">Version ${appState.AppConfig.Version}</p>
+			</ui-form>
+		</ui-row>
+	</ui-page>
+</template>

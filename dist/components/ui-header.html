@@ -1,0 +1,18 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016 Sigma Frameworks
+// @license     : MIT
+-->
+<template class="ui-header">
+	<h5>
+		<span class="${icon}" if.bind="icon"></span>
+		<slot></slot>
+	</h5>
+	<button class="ui-header-button ui-collapse" show.bind="collapse" click.trigger="fireCollapse()">
+		<span class="fi-ui"></span></button>
+	<button class="ui-header-button ui-expand" show.bind="expand" click.trigger="fireExpand()">
+		<span class="fi-ui"></span></button>
+	<button class="ui-header-button ui-close" show.bind="close" click.trigger="fireClose()">
+		<span class="fi-ui"></span>
+	</button>
+</template>

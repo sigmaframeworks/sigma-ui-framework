@@ -1,0 +1,11 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016 Sigma Frameworks
+// @license     : MIT
+-->
+<template class="ui-page" role="page">
+	<div class="ui-page-title" if.bind="pageTitle" innerhtml.bind="pageTitle" role="heading"></div>
+	<div class="ui-page-body" ref="__body">
+		<slot></slot>
+	</div>
+</template>
