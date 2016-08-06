@@ -6,11 +6,12 @@
 <template role="main" class="ui-viewport" click.delegate="__hideMenu($event)">
 	<header class="ui-app-header">
 		<!-- Menu handle -->
-		<button class="ui-app-menu-handle" if.bind="showMenu && appState.IsAuthenticated" click.trigger="__showMenu($event)">
+		<button class="ui-app-menu-handle" if.bind="router && showMenu && appState.IsAuthenticated" click.trigger="__showMenu($event)">
 			<span class="fi-ui-bar-light"></span>
 		</button>
 		<!-- App Logo -->
-		<div class="ui-app-logo" show.bind="icon" css.bind="{'background-image':'url('+icon+')'}"></div>
+		<div class="ui-app-logo" if.bind="icon" css.bind="{'background-image':'url('+icon+')'}"></div>
+		<div class="ui-app-logo ${iconClass}" if.bind="iconClass"></div>
 		<!-- App Title -->
 		<h1 class="ui-app-title">
 			<a href="#/">

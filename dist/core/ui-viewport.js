@@ -14,6 +14,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../utils/u
             this.element = element;
             this.appState = appState;
             this.icon = '';
+            this.iconClass = '';
             this.subtitle = '';
             this.copyright = '';
             this.showMenu = true;
@@ -65,6 +66,10 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../utils/u
             aurelia_framework_1.bindable(), 
             __metadata('design:type', String)
         ], UIViewport.prototype, "icon", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', String)
+        ], UIViewport.prototype, "iconClass", void 0);
         __decorate([
             aurelia_framework_1.bindable(), 
             __metadata('design:type', String)

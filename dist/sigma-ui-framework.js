@@ -41,17 +41,37 @@ define(["require", "exports", "./utils/ui-constants", "./utils/ui-utils", "./uti
             smartypants: false
         });
         var Configure = {
-            setTitle: function (t) {
+            title: function (t) {
                 ui_constants_1.UIConstants.App.Title = t;
                 return Configure;
             },
-            setVersion: function (t) {
+            version: function (t) {
                 ui_constants_1.UIConstants.App.Version = t;
+                return Configure;
+            },
+            appKey: function (t) {
+                ui_constants_1.UIConstants.App.Key = t;
+                return Configure;
+            },
+            apiUrl: function (t) {
+                ui_constants_1.UIConstants.Http.BaseUrl = t;
+                return Configure;
+            },
+            apiHeaders: function (t) {
+                ui_constants_1.UIConstants.Http.Headers = t;
+                return Configure;
+            },
+            addAuthHeader: function (t) {
+                ui_constants_1.UIConstants.Http.AuthorizationHeader = t;
                 return Configure;
             },
             loadCharts: function () {
                 aurelia.globalResources('./components/ui-chart');
                 ui_utils_1.UIChartStatic.init();
+                return Configure;
+            },
+            languages: function (l) {
+                ui_constants_1.UIConstants.Languages = l;
                 return Configure;
             }
         };

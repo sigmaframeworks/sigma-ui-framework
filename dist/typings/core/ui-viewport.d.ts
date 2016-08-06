@@ -10,6 +10,7 @@ export declare class UIViewport {
      */
     router: Router;
     icon: string;
+    iconClass: string;
     subtitle: string;
     copyright: string;
     showMenu: boolean;

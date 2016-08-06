@@ -17,7 +17,7 @@ function getArgs() {
 }
 
 gulp.task('changelog', function() {
-    return gulp.src('./CHANGELOG.md', {
+    return gulp.src('./docs/CHANGELOG.md', {
             buffer: false
         }).pipe(conventionalChangelog({
             preset: 'angular'
