@@ -22,7 +22,7 @@ gulp.task('changelog', function() {
         }).pipe(conventionalChangelog({
             preset: 'angular'
         }))
-        .pipe(gulp.dest('./'));
+        .pipe(gulp.dest('./docs'));
 });
 
 gulp.task('bump-version', function() {

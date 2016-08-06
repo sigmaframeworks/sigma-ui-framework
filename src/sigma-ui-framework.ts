@@ -68,17 +68,37 @@ export function configure(aurelia: FrameworkConfiguration, configCallback) {
 	});
 
 	var Configure = {
-		setTitle: (t) => {
+		title: (t) => {
 			UIConstants.App.Title = t;
 			return Configure;
 		},
-		setVersion: (t) => {
+		version: (t) => {
 			UIConstants.App.Version = t;
+			return Configure;
+		},
+		appKey: (t) => {
+			UIConstants.App.Key = t;
+			return Configure;
+		},
+		apiUrl: (t) => {
+			UIConstants.Http.BaseUrl = t;
+			return Configure;
+		},
+		apiHeaders: (t) => {
+			UIConstants.Http.Headers = t;
+			return Configure;
+		},
+		addAuthHeader: (t) => {
+			UIConstants.Http.AuthorizationHeader = t;
 			return Configure;
 		},
 		loadCharts: () => {
 			aurelia.globalResources('./components/ui-chart');
 			UIChartStatic.init();
+			return Configure;
+		},
+		languages: (l) => {
+			UIConstants.Languages = l;
 			return Configure;
 		}
 	}

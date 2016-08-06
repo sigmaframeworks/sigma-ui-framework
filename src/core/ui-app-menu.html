@@ -6,7 +6,8 @@
 <template click.trigger="onClick($event)">
 	<div if.bind="appState.IsAuthenticated" class="ui-auth-info">
 		<div class="ui-text-center ui-pad-all">
-			<div class="ui-app-logo" if.bind="router.options.showLogo"></div>
+			<div class="ui-app-logo" if.bind="router.options.showLogo && icon" css.bind="{'background-image':'url('+icon+')'}"></div>
+			<div class="ui-app-logo ${iconClass}" if.bind="router.options.showLogo && iconClass"></div>
 		</div>
 		<p>Logged in as ${appState.Username}</p>
 

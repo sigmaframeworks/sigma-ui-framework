@@ -23,6 +23,8 @@ export class UIViewport {
 	@bindable()
 	icon: string = '';
 	@bindable()
+	iconClass: string = '';
+	@bindable()
 	subtitle: string = '';
 	@bindable()
 	copyright: string = '';
