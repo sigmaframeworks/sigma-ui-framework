@@ -14,7 +14,7 @@ export class UITabPanel {
 	private __tabButtons;
 	private __selectedTab;
 
-	//@children({selector: '.ui-tab-content'})
+	@children('.ui-tab-body ui-tab')
 	tabs = [];
 
 	@bindable
@@ -27,46 +27,15 @@ export class UITabPanel {
 	}
 
 	attached() {
-		_.forEach(this.element.querySelectorAll('ui-tab'),
-			t => this.tabs.push(t.au.controller.viewModel));
 		this.activeTabChanged(this.activeTab);
 	}
 
-	itemsChanged(mutations) {
-		// if (this.items.length > 0) {
-		// 	if (!this.selectedItem || this.items.indexOf(this.selectedItem) === -1) {
-		// 		this.selectItem(this.items[0]);
-		// 	}
-		// }
-	}
 
 	activeTabChanged(newValue) {
 		if (this.__selectedTab) this.__selectedTab.isSelected = false;
 		if (this.tabs[newValue]) {
 			(this.__selectedTab = this.tabs[newValue]).isSelected = true;
 		}
-		// if (this.tabs[newValue]) {
-		// 	try {
-		// 		let active;
-		// 		if ((active = this.__tabButtons.querySelector('.ui-active')) !== null) {
-		// 			active.classList
-		// 				  .remove('ui-active');
-		// 		}
-		// 		if ((active = this.__tabs.querySelector('.ui-active')) !== null) {
-		// 			active.classList
-		// 				  .remove('ui-active');
-		// 		}
-		// 	} catch (e) {
-		// 	}
-		//
-		// 	this.__tabButtons
-		// 		.querySelector(`[data-index="${newValue}"]`)
-		// 		.classList
-		// 		.add('ui-active');
-		// 	this.tabs[newValue]
-		// 		.classList
-		// 		.add('ui-active');
-		// }
 	}
 }
 

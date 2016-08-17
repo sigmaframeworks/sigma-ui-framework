@@ -5,7 +5,7 @@
 // @license     : MIT
 
 
-import {customElement, bindable} from "aurelia-framework";
+import {customElement, bindable, children} from "aurelia-framework";
 import {Router} from "aurelia-router";
 import {UIEvent} from "../utils/ui-event";
 import {UIApplication} from "../utils/ui-application";
@@ -18,33 +18,34 @@ export class UIMenu {
 	 */
 	@bindable()
 	router: Router;
-	/**
-	 * @property    menu
-	 * @type        Array of links
-	 */
-	@bindable()
-	menu: Array<any> = [];
 
-	private __temp;
+	@children('.ui-hidden menu,.ui-hidden divider,.ui-hidden section')
+	children: Array<any> = [];
+
+	menu = [];
+	hideTitle = false;
 
 	constructor(public element: Element, public appState: UIApplication) {
 		if (element.hasAttribute('floating')) element.classList.add('ui-floating');
+		this.hideTitle = element.hasAttribute('hide-title');
 	}
 
-	attached() {
-		for (var i = 0, c = (<HTMLElement>this.__temp).children; i < c.length; i++) {
+	childrenChanged(newValue) {
+		this.menu = [];
+		for (var i = 0, c = this.children; i < c.length; i++) {
 			if (c[i].tagName.toLowerCase() === 'menu') {
 				this.menu.push({
 					id: c[i].getAttribute('id'),
 					text: c[i].textContent,
 					icon: c[i].getAttribute('icon'),
+					disabled: isTrue(c[i].getAttribute('disabled')),
+					isActive: isTrue(c[i].getAttribute('active')),
 					href: c[i].getAttribute('href') || 'javascript:;',
 				});
 			}
 			if (c[i].tagName.toLowerCase() === 'section') this.menu.push(c[i].textContent);
 			if (c[i].tagName.toLowerCase() === 'divider') this.menu.push('-');
 		}
-		this.__temp.remove();
 	}
 
 	isActive(route) {
@@ -60,7 +61,7 @@ export class UIMenu {
 		$event.cancelBubble = true;
 		this.element.classList.remove('show');
 		let link = getParentByClass($event.target, 'ui-menu-link', 'ui-menu');
-		if (link !== null) UIEvent.fireEvent('menuclick', this.element, link.dataset['id']);
+		if (link !== null) UIEvent.fireEvent('menuclick', this.element, { id: link.dataset['id'], text: link.dataset['text'] });
 		return true;
 	}
 }

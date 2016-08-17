@@ -4,7 +4,7 @@
 // @license     : MIT
 -->
 <template class="ui-menu" click.trigger="onClick($event)">
-	<p class="ui-menu-title" if.bind=" router.title">${router.title}</p>
+	<p class="ui-menu-title" if.bind="!hideTitle && router.title">${router.title}</p>
 	<div repeat.for="route of router.navigation">
 		<hr if.bind="route.settings.sectionStart"/>
 		<p class="ui-menu-section" if.bind="route.settings.sectionTitle">${route.settings.sectionTitle}</p>
@@ -16,9 +16,9 @@
 	<div repeat.for="link of menu">
 		<hr if.bind="link==='-'"/>
 		<p class="ui-menu-section" if.bind="link.length && link!=='-'">${link}</p>
-		<a if.bind="link.text" class="ui-menu-link ${link.isActive ? 'ui-active' : ''}" data-id="${link.id}" href.bind="link.href || 'javascript:;'">
-			<span class="ui-icon ${link.icon}"></span>&nbsp;${link.text}</a>
+		<a if.bind="link.text" class="ui-menu-link ${link.isActive ? 'ui-active' : ''}" data-disabled="${link.disabled}" data-id="${link.id}" data-text="${link.text}" href.bind="link.href || 'javascript:;'">
+			<span class="ui-icon ${link.icon}" if.bind="link.icon"></span>&nbsp;${link.text}</a>
 	</div>
 
-	<div ref="__temp"><slot></slot></div>
+	<div class="ui-hidden" style="height:0;"><slot></slot></div>
 </template>
