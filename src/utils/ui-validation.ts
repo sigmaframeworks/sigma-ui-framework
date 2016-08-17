@@ -80,14 +80,14 @@ export class UIValidationRenderer {
 // Custom ValidationRules
 
 const validator = new Validator();
-validate.validators.map = function(map: Map<string, any>) {
+validate.validators.map = function(map: Map<string, any>, options) {
 	const errors = []
 	map.forEach((v, k) => {
 		if (validator.validateObject(v).length > 0) errors.push(k);
 	});
 	// Unfortunately details are lost, but Aurelia's controller will evaluate and display them on the binding as well.
 	// This is only really useful for your `validate()` call when saving.
-	return errors.length > 0 ? `${errors.join(',')} has invalid values` : null;
+	return errors.length > 0 ? `${errors.join(',')} ` + (options.message || options.notValid || this.notValid || 'has invalid values') : null;
 }
 
 function mapRule(config) {
@@ -97,10 +97,10 @@ export function validatemap(targetOrConfig?, key?, descriptor?) {
 	return base(targetOrConfig, key, descriptor, mapRule);
 }
 
-validate.validators.phone = function(val: string) {
+validate.validators.phone = function(val: string, options) {
 	// Unfortunately details are lost, but Aurelia's controller will evaluate and display them on the binding as well.
 	// This is only really useful for your `validate()` call when saving.
-	return !PhoneLib.isValid(val) ? `Invalid phone number` : null;
+	return !PhoneLib.isValid(val) ? options.message || options.notValid || this.notValid || "is not a valid phone number" : null;
 }
 
 function phoneRule(config) {

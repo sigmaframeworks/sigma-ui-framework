@@ -13,7 +13,7 @@ export class MarkdownValueConverter {
 	}
 }
 
-export class CodeHighlightValueConverter {
+export class HighlightValueConverter {
 	toView(value: string) {
 		return UIFormat.mdHilight(value || '');
 	}

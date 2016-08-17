@@ -3711,6 +3711,7 @@ hr {
   flex: 1 0 auto;
 }
 .ui-viewport .ui-app-header .ui-app-title a {
+  display: inline-block;
   color: #fcfcfa;
 }
 .ui-viewport .ui-app-header .ui-app-title span.nosub {
@@ -4671,7 +4672,7 @@ hr {
   color: rgba(77, 77, 73, 0.7);
   font-size: .9em;
 }
-.ui-form .ui-fieldset .ui-disabled > fieldset {
+.ui-form .ui-fieldset.ui-disabled > fieldset {
   overflow: hidden;
   max-height: 0;
 }

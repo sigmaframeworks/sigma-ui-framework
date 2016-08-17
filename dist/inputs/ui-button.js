@@ -18,8 +18,8 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             this.icon = '';
             this.theme = 'default';
             this.disabled = false;
-            this.menu = [];
-            this.__hasMenu = true;
+            this.__hasMenu = false;
+            this.__isDropdown = false;
         }
         UIButton.prototype.bind = function () {
             if (this.element.hasAttribute('primary'))
@@ -38,20 +38,17 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
                 this.__size = 'small';
             if (this.element.hasAttribute('large'))
                 this.__size = 'large';
+            this.__hasMenu = this.element.hasAttribute('menu');
+            this.__hasMenu = this.__useMenuLabel = this.element.hasAttribute('dropdown');
             this.disabled = isTrue(this.disabled);
         };
         UIButton.prototype.attached = function () {
-            var _this = this;
             if (this.element.hasAttribute('top'))
                 this.__button.classList.add('ui-icon-top');
             if (this.element.hasAttribute('round'))
                 this.__button.classList.add('ui-button-round');
             if (this.element.hasAttribute('square'))
                 this.__button.classList.add('ui-button-square');
-            setTimeout(function () {
-                if (_this.__menuEl.children.length > 0)
-                    _this.element.classList.add('ui-dropdown');
-            }, 200);
             this.__button.classList.add("ui-button-" + this.__size);
             this.disable();
         };
@@ -82,6 +79,13 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
                 ui_event_1.UIEvent.fireEvent('click', this.element, this);
             }
         };
+        UIButton.prototype.menuClicked = function ($event) {
+            var menu = document.querySelector('.ui-floating.show');
+            if (menu)
+                menu.classList.remove('show');
+            if (this.__hasMenu && this.__useMenuLabel)
+                this.label = $event.detail.text;
+        };
         __decorate([
             aurelia_framework_1.bindable(), 
             __metadata('design:type', String)
@@ -102,10 +106,6 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Boolean)
         ], UIButton.prototype, "disabled", void 0);
-        __decorate([
-            aurelia_framework_1.bindable(), 
-            __metadata('design:type', Object)
-        ], UIButton.prototype, "menu", void 0);
         UIButton = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-button'), 

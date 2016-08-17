@@ -90,6 +90,10 @@ export class UIInputGroup {
 			this.__input2.oninput = (evt) => this.valueSecond = this.formatter(evt);
 			this.__input2.onkeypress = (evt) => this.keyPress(evt);
 			this.__input2.onchange = (evt: any) => evt.detail = this;
+
+			this.__input.onblur = evt => {
+				UIEvent.fireEvent('blur', this.element, 'blurring');
+			};
 		}
 	}
 

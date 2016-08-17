@@ -86,7 +86,7 @@ export class UISidebar {
 	bind() {
 		// TODO: Add collapse functionality
 		this.collapsible = this.element.hasAttribute('collapsible');
-		if (!this.collapsible && this.element.hasAttribute('scroll')) this.__content.classList.add('ui-scroll');
+		if (this.element.hasAttribute('scroll')) this.__content.classList.add('ui-scroll');
 	}
 
 	private __close;

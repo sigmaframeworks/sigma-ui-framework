@@ -1,7 +1,7 @@
 export declare class MarkdownValueConverter {
     toView(value: string): string;
 }
-export declare class CodeHighlightValueConverter {
+export declare class HighlightValueConverter {
     toView(value: string): string;
 }
 export declare class DateValueConverter {

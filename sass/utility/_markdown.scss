@@ -117,7 +117,7 @@
             font-size  : .7em;
             position   : absolute;
             top        : 0;
-            right      : 1.5em;
+            right      : 0;
             padding    : .2em .7em;
             color      : #f0f0f0;
             background : #6a6a6a;
@@ -130,10 +130,14 @@
             background: #01786f;
         }
 
-        &.lang-javascript:after,
-        &.lang-typescript:after {
+        &.lang-javascript:after {
             content   : 'JavaScript';
             background: #e6735c;
+        }
+
+        &.lang-typescript:after {
+            content   : 'TypeScript';
+            background: #1971A3;
         }
 
         &.lang-scss:after {

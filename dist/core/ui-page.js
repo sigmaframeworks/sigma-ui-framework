@@ -80,7 +80,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "../util
         }
         UISidebar.prototype.bind = function () {
             this.collapsible = this.element.hasAttribute('collapsible');
-            if (!this.collapsible && this.element.hasAttribute('scroll'))
+            if (this.element.hasAttribute('scroll'))
                 this.__content.classList.add('ui-scroll');
         };
         UISidebar.prototype.attached = function () {

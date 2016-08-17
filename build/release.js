@@ -33,6 +33,6 @@ gulp.task('bump-version', function() {
         .pipe(gulp.dest('./'));
 });
 
-gulp.task('release', gulp.series('build-ts', 'bump-version', 'changelog', function(done) {
+gulp.task('release', gulp.series('sass', 'build-ts', 'bump-version', 'changelog', function(done) {
     done();
 }));

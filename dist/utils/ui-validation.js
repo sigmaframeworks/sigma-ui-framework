@@ -60,13 +60,13 @@ define(["require", "exports", "aurelia-framework", 'aurelia-validation', "aureli
     }());
     exports.UIValidationRenderer = UIValidationRenderer;
     var validator = new aurelia_validatejs_1.Validator();
-    validate.validators.map = function (map) {
+    validate.validators.map = function (map, options) {
         var errors = [];
         map.forEach(function (v, k) {
             if (validator.validateObject(v).length > 0)
                 errors.push(k);
         });
-        return errors.length > 0 ? errors.join(',') + " has invalid values" : null;
+        return errors.length > 0 ? (errors.join(',') + " ") + (options.message || options.notValid || this.notValid || 'has invalid values') : null;
     };
     function mapRule(config) {
         return new aurelia_validatejs_1.ValidationRule('map', config);
@@ -75,8 +75,8 @@ define(["require", "exports", "aurelia-framework", 'aurelia-validation', "aureli
         return aurelia_validatejs_1.base(targetOrConfig, key, descriptor, mapRule);
     }
     exports.validatemap = validatemap;
-    validate.validators.phone = function (val) {
-        return !PhoneLib.isValid(val) ? "Invalid phone number" : null;
+    validate.validators.phone = function (val, options) {
+        return !PhoneLib.isValid(val) ? options.message || options.notValid || this.notValid || "is not a valid phone number" : null;
     };
     function phoneRule(config) {
         return new aurelia_validatejs_1.ValidationRule('phone', config);

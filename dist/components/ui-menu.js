@@ -13,17 +13,20 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../utils/u
         function UIMenu(element, appState) {
             this.element = element;
             this.appState = appState;
+            this.children = [];
             this.menu = [];
             if (element.hasAttribute('floating'))
                 element.classList.add('ui-floating');
         }
-        UIMenu.prototype.attached = function () {
-            for (var i = 0, c = this.__temp.children; i < c.length; i++) {
+        UIMenu.prototype.childrenChanged = function (newValue) {
+            this.menu = [];
+            for (var i = 0, c = this.children; i < c.length; i++) {
                 if (c[i].tagName.toLowerCase() === 'menu') {
                     this.menu.push({
                         id: c[i].getAttribute('id'),
                         text: c[i].textContent,
                         icon: c[i].getAttribute('icon'),
+                        isActive: c[i].getAttribute('active') == "true",
                         href: c[i].getAttribute('href') || 'javascript:;',
                     });
                 }
@@ -32,7 +35,6 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../utils/u
                 if (c[i].tagName.toLowerCase() === 'divider')
                     this.menu.push('-');
             }
-            this.__temp.remove();
         };
         UIMenu.prototype.isActive = function (route) {
             return route.isActive || route.href == location.hash ||
@@ -47,7 +49,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../utils/u
             this.element.classList.remove('show');
             var link = getParentByClass($event.target, 'ui-menu-link', 'ui-menu');
             if (link !== null)
-                ui_event_1.UIEvent.fireEvent('menuclick', this.element, link.dataset['id']);
+                ui_event_1.UIEvent.fireEvent('menuclick', this.element, { id: link.dataset['id'], text: link.dataset['text'] });
             return true;
         };
         __decorate([
@@ -55,9 +57,9 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../utils/u
             __metadata('design:type', aurelia_router_1.Router)
         ], UIMenu.prototype, "router", void 0);
         __decorate([
-            aurelia_framework_1.bindable(), 
+            aurelia_framework_1.children('.ui-hidden menu,.ui-hidden divider,.ui-hidden section'), 
             __metadata('design:type', Array)
-        ], UIMenu.prototype, "menu", void 0);
+        ], UIMenu.prototype, "children", void 0);
         UIMenu = __decorate([
             aurelia_framework_1.customElement('ui-menu'), 
             __metadata('design:paramtypes', [Element, ui_application_1.UIApplication])

@@ -27,8 +27,12 @@ export class UILogin {
 	@bindable
 	busy: boolean = false;
 
+	__rowLayout = false;
+
 	constructor(public element: Element, public appState: UIApplication, public controller: ValidationController) {
 		this.model = new LoginModel();
+
+		this.__rowLayout = element.hasAttribute('row-layout');
 	}
 
 	attached() {
@@ -60,9 +64,6 @@ export class LoginModel extends UIModel {
 	@required
 	@length({ minimum: 4 })
 	password: string = '';
-
-	@required
-	tempInput: string = '';
 
 	remember: boolean = false;
 

@@ -1,6 +1,7 @@
 // Global methods
 declare var __seed;
 declare var Constants;
+declare var hljs;
 
 declare function isTrue(b: any): boolean;
 declare function isEmpty(a: any): boolean;
@@ -12,6 +13,21 @@ declare function escape(v: string): string;
 declare function unescape(v: string): string;
 
 declare function TextComplete(el, strategies, options);
+
+declare interface UIConfig {
+	title(t: string): UIConfig;
+	version(t: string): UIConfig;
+	appKey(t: string): UIConfig;
+
+	apiUrl(t: string): UIConfig;
+	apiHeaders(t: any): UIConfig;
+	addAuthHeader(t: boolean): UIConfig;
+
+	loadCharts(): UIConfig;
+
+	languages(l: Array<any>): UIConfig;
+}
+
 
 declare interface ICountry {
 	continent: string;

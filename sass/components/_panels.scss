@@ -107,6 +107,10 @@
 		&.ui-chart-body {
 			max-height: inherit;
 		}
+
+		&.ui-flexed {
+			@include flex-column();
+		}
 	}
 
 	&.ui-collapse {

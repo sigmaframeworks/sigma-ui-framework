@@ -8,14 +8,10 @@ export declare class UIMenu {
      * @type        Aurelia Router
      */
     router: Router;
-    /**
-     * @property    menu
-     * @type        Array of links
-     */
-    menu: Array<any>;
-    private __temp;
+    children: Array<any>;
+    menu: any[];
     constructor(element: Element, appState: UIApplication);
-    attached(): void;
+    childrenChanged(newValue: any): void;
     isActive(route: any): any;
     onClick($event: any): boolean;
 }

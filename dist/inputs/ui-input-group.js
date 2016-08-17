@@ -73,6 +73,9 @@ define(["require", "exports", "../utils/ui-event"], function (require, exports, 
                 this.__input2.oninput = function (evt) { return _this.valueSecond = _this.formatter(evt); };
                 this.__input2.onkeypress = function (evt) { return _this.keyPress(evt); };
                 this.__input2.onchange = function (evt) { return evt.detail = _this; };
+                this.__input.onblur = function (evt) {
+                    ui_event_1.UIEvent.fireEvent('blur', _this.element, 'blurring');
+                };
             }
         };
         UIInputGroup.prototype.focus = function () {

@@ -9,15 +9,15 @@ define(["require", "exports", "./ui-formatters", "./ui-utils"], function (requir
         return MarkdownValueConverter;
     }());
     exports.MarkdownValueConverter = MarkdownValueConverter;
-    var CodeHighlightValueConverter = (function () {
-        function CodeHighlightValueConverter() {
+    var HighlightValueConverter = (function () {
+        function HighlightValueConverter() {
         }
-        CodeHighlightValueConverter.prototype.toView = function (value) {
+        HighlightValueConverter.prototype.toView = function (value) {
             return ui_formatters_1.UIFormat.mdHilight(value || '');
         };
-        return CodeHighlightValueConverter;
+        return HighlightValueConverter;
     }());
-    exports.CodeHighlightValueConverter = CodeHighlightValueConverter;
+    exports.HighlightValueConverter = HighlightValueConverter;
     var DateValueConverter = (function () {
         function DateValueConverter() {
         }

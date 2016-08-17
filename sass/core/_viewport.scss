@@ -32,7 +32,8 @@
             @include flex(1 0 auto);
 
             a {
-                color: $app-header-text;
+                display: inline-block;
+                color  : $app-header-text;
             }
 
             span.nosub {

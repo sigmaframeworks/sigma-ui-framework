@@ -29,7 +29,7 @@
             }
         }
 
-        .ui-disabled > fieldset {
+        &.ui-disabled > fieldset {
             overflow  : hidden;
             max-height: 0;
         }

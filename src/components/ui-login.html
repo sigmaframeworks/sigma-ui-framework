@@ -8,33 +8,34 @@
 		<slot></slot>
 	</div>
 	<ui-page ref="__page">
-		<ui-row class="ui-col-fill ui-align-center ui-align-middle">
-			<ui-form submit.trigger="doLogin()" busy.bind="appState.IsHttpInUse" class="ui-login">
+		<ui-row class="ui-col-fill ui-align-center ui-align-middle ${__rowLayout?'':'ui-column-row'}">
+			<ui-column auto>
+				<div class="ui-login-content" ref="__content"></div>
+			</ui-column>
+			<ui-column auto>
+				<ui-form submit.trigger="doLogin()" busy.bind="appState.IsHttpInUse" class="ui-login">
+					<div>
+						<p class="ui-login-error ui-text-center" if.bind="error" innerhtml.bind="error"></p>
+					</div>
+					<ui-input clear required label-top email value.bind="model.username & validate" placeholder="user@domain.com" t="login.username">Username
+					</ui-input>
+					<ui-input clear required label-top password value.bind="model.password & validate" placeholder="password" t="login.password">Password
+					</ui-input>
 
-				<div class="ui-login-content" ref="__content">
-				</div>
+					<ui-checkbox checkbox class="ui-stretch" checked.bind="model.remember" t="login.remember">Remember Me
+					</ui-checkbox>
+
+					<div class="ui-text-end">
+						<ui-button primary click.trigger="doLogin()" label="Login" t="[label]login.button"></ui-button>
+					</div>
+				</ui-form>
+			</ui-column>
+			<ui-column full>
 				<hr/>
-				<div>
-					<p class="ui-login-error ui-text-center" if.bind="error" innerhtml.bind="error"></p>
-				</div>
-				<ui-input clear required label-top email value.bind="model.username & validate" placeholder="user@clubhotel.com">Username
-				</ui-input>
-				<ui-input clear required label-top password value.bind="model.password & validate" placeholder="password">Password
-				</ui-input>
+				<p class="ui-font-small ui-text-center ui-text-muted" t="login_message">This app is designed to run on desktop and tablets</p>
 
-				<ui-checkbox checkbox class="ui-stretch" checked.bind="model.remember">Remember Me
-				</ui-checkbox>
-
-				<div class="ui-text-end">
-					<ui-button primary click.trigger="doLogin()" label="Login"></ui-button>
-				</div>
-				<br/>
-				<hr/>
-				<p class="ui-font-small ui-text-center ui-text-muted">This app is designed to run on desktop and tablets
-				</p>
-
-				<p class="ui-font-small ui-text-center ui-text-muted">Version ${appState.AppConfig.Version}</p>
-			</ui-form>
+				<p class="ui-font-small ui-text-center ui-text-muted" t="version" t-params.bind="appState.AppConfig">Version ${appState.AppConfig.Version}</p>
+			</ui-column>
 		</ui-row>
 	</ui-page>
 </template>

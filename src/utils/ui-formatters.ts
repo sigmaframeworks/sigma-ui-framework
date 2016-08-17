@@ -12,7 +12,10 @@ export module UIFormat {
 	}
 
 	export function mdHilight(md) {
-		return kramed(md || '', {
+		return kramed(md, {
+			highlight: function(code) {
+				return hljs ? hljs.highlightAuto(code).value : code;
+			}
 		});
 	}
 

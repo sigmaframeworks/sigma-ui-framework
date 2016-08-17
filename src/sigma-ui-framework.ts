@@ -57,7 +57,7 @@ export function configure(aurelia: FrameworkConfiguration, configCallback) {
 	aurelia.globalResources('./utils/ui-converters');
 
 	kramed.setOptions({
-		renderer: new kramed.Renderer(),
+		renderer: null,
 		gfm: true,
 		tables: true,
 		breaks: true,

@@ -7,7 +7,11 @@ define(["require", "exports", "./ui-utils"], function (require, exports, ui_util
         }
         UIFormat.toHTML = toHTML;
         function mdHilight(md) {
-            return ui_utils_1.kramed(md || '', {});
+            return ui_utils_1.kramed(md, {
+                highlight: function (code) {
+                    return require('highlight.js').highlightAuto(code).value;
+                }
+            });
         }
         UIFormat.mdHilight = mdHilight;
         function date(dt, ft) {

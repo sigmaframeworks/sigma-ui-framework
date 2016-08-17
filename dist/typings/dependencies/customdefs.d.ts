@@ -13,6 +13,21 @@ declare function unescape(v: string): string;
 
 declare function TextComplete(el, strategies, options);
 
+declare interface UIConfig {
+	title(t: string): UIConfig;
+	version(t: string): UIConfig;
+	appKey(t: string): UIConfig;
+
+	apiUrl(t: string): UIConfig;
+	apiHeaders(t: any): UIConfig;
+	addAuthHeader(t: boolean): UIConfig;
+
+	loadCharts(): UIConfig;
+
+	languages(l: Array<any>): UIConfig;
+}
+
+
 declare interface ICountry {
 	continent: string;
 	iso3: string;

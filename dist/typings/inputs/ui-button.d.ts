@@ -27,15 +27,17 @@ export declare class UIButton {
      * @type        string
      */
     disabled: boolean;
-    menu: any;
-    private __hasMenu;
     private __menuEl;
+    private __useMenuLabel;
+    private __hasMenu;
+    private __isDropdown;
     constructor(element: Element);
     bind(): void;
     attached(): void;
     disable(disabled?: any): void;
     disabledChanged(newValue: any): void;
     fireClick($event: any): boolean;
+    menuClicked($event: any): void;
 }
 export declare class UIButtonGroup {
     element: Element;
