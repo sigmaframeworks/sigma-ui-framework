@@ -4,7 +4,7 @@
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
 
-import {autoinject, customElement, bindable, bindingMode, inlineView} from "aurelia-framework";
+import {autoinject, customElement, bindable, bindingMode, inlineView, children} from "aurelia-framework";
 import {UIEvent} from "../utils/ui-event";
 import {_} from "../utils/ui-utils";
 
@@ -45,11 +45,10 @@ export class UIButton {
 	@bindable()
 	disabled: boolean = false;
 
-	@bindable()
-	menu: any = [];
-
-	private __hasMenu = true;
 	private __menuEl;
+	private __useMenuLabel;
+	private __hasMenu = false;
+	private __isDropdown = false;
 
 	constructor(public element: Element) {
 		// let content = <HTMLElement>this.element.querySelector('au-content');
@@ -84,6 +83,9 @@ export class UIButton {
 		if (this.element.hasAttribute('small')) this.__size = 'small';
 		if (this.element.hasAttribute('large')) this.__size = 'large';
 
+		this.__hasMenu = this.element.hasAttribute('menu');
+		this.__hasMenu = this.__useMenuLabel = this.element.hasAttribute('dropdown');
+
 		this.disabled = isTrue(this.disabled);
 	}
 
@@ -92,10 +94,10 @@ export class UIButton {
 		if (this.element.hasAttribute('round')) this.__button.classList.add('ui-button-round');
 		if (this.element.hasAttribute('square')) this.__button.classList.add('ui-button-square');
 
-		setTimeout(() => {
-			if (this.__menuEl.children.length > 0)
-				this.element.classList.add('ui-dropdown');
-		}, 200);
+		// setTimeout(() => {
+		// 	if (this.__menuEl.children.length > 0)
+		// 		this.element.classList.add('ui-dropdown');
+		// }, 200);
 		this.__button.classList.add(`ui-button-${this.__size}`);
 		this.disable();
 	}
@@ -126,6 +128,13 @@ export class UIButton {
 		} else {
 			UIEvent.fireEvent('click', this.element, this);
 		}
+	}
+
+	menuClicked($event) {
+		let menu = document.querySelector('.ui-floating.show');
+		if (menu) menu.classList.remove('show');
+
+		if (this.__hasMenu && this.__useMenuLabel) this.label = $event.detail.text;
 	}
 }
 
