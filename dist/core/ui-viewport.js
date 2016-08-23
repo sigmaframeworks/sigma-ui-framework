@@ -20,8 +20,10 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../utils/u
             this.showMenu = true;
             this.showOptions = true;
             this.showTaskbar = true;
+            this.hideLogout = false;
             ui_utils_1.UIUtils.container(container);
             this.appState.info(this.constructor.name, "UIViewport Created");
+            this.hideLogout = element.hasAttribute('hide-logout');
             if (element.hasAttribute('menu-end'))
                 element.classList.add('ui-menu-end');
             if (!element.hasAttribute('menu-start'))

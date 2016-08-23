@@ -6,6 +6,12 @@
 
 .ui-markdown {
     line-height: 1.3;
+    position: relative;
+
+    .ui-btn-copy {
+      @include position(absolute, $t:20px, $r:0);
+      z-index: 5;
+    }
 
     em {
         font-style: italic;

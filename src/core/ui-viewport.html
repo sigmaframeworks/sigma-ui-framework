@@ -21,7 +21,7 @@
 		</h1>
 		<div class="ui-app-header-options" show.bind="showOptions">
 			<slot></slot>
-			<ui-button primary icon="fi-ui-arrow-signout" if.bind="appState.IsAuthenticated" click.trigger="logout()"></ui-button>
+			<ui-button primary icon="fi-ui-arrow-signout" if.bind="appState.IsAuthenticated && !hideLogout" click.trigger="logout()"></ui-button>
 		</div>
 	</header>
 	<router-view role="region" class="ui-viewport-body"></router-view>

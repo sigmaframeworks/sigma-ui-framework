@@ -11,6 +11,7 @@ export declare class UILogin {
     __content: any;
     error: string;
     busy: boolean;
+    __rowLayout: boolean;
     constructor(element: Element, appState: UIApplication, controller: ValidationController);
     attached(): void;
     doLogin(): void;
@@ -19,7 +20,6 @@ export declare class UILogin {
 export declare class LoginModel extends UIModel {
     username: string;
     password: string;
-    tempInput: string;
     remember: boolean;
     appState: UIApplication;
     constructor();

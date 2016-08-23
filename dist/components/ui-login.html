@@ -3,38 +3,34 @@
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
 -->
-<template>
-	<div ref="__temp">
-		<slot></slot>
-	</div>
-	<ui-page ref="__page">
-		<ui-row class="ui-col-fill ui-align-center ui-align-middle">
-			<ui-form submit.trigger="doLogin()" busy.bind="appState.IsHttpInUse" class="ui-login">
+<template class="ui-login">
+		<div class="ui-login-body ${__rowLayout?'ui-row-layout':'ui-column-layout'}">
+			<div class="ui-col-auto">
+				<div class="ui-login-content" ref="__content"><slot></slot></div>
+			</div>
+			<div class="ui-col-fill">
+				<ui-form submit.trigger="doLogin()" busy.bind="appState.IsHttpInUse" class="">
+					<div>
+						<p class="ui-login-error ui-text-center" if.bind="error" innerhtml.bind="error"></p>
+					</div>
+					<ui-input clear required label-top email value.bind="model.username & validate" placeholder="user@domain.com">Username
+					</ui-input>
+					<ui-input clear required label-top password value.bind="model.password & validate" placeholder="password">Password
+					</ui-input>
 
-				<div class="ui-login-content" ref="__content">
-				</div>
+					<ui-checkbox checkbox class="ui-stretch" checked.bind="model.remember">Remember Me
+					</ui-checkbox>
+
+					<div class="ui-text-end">
+						<ui-button primary click.trigger="doLogin()" label="Login" t="[label]login.button"></ui-button>
+					</div>
+				</ui-form>
+			</div>
+			<div class="${__rowLayout?'ui-col-full':'ui-col-auto'}">
 				<hr/>
-				<div>
-					<p class="ui-login-error ui-text-center" if.bind="error" innerhtml.bind="error"></p>
-				</div>
-				<ui-input clear required label-top email value.bind="model.username & validate" placeholder="user@clubhotel.com">Username
-				</ui-input>
-				<ui-input clear required label-top password value.bind="model.password & validate" placeholder="password">Password
-				</ui-input>
+				<p class="ui-font-small ui-text-center ui-text-muted" t="login_message">This app is designed to run on desktop and tablets</p>
 
-				<ui-checkbox checkbox class="ui-stretch" checked.bind="model.remember">Remember Me
-				</ui-checkbox>
-
-				<div class="ui-text-end">
-					<ui-button primary click.trigger="doLogin()" label="Login"></ui-button>
-				</div>
-				<br/>
-				<hr/>
-				<p class="ui-font-small ui-text-center ui-text-muted">This app is designed to run on desktop and tablets
-				</p>
-
-				<p class="ui-font-small ui-text-center ui-text-muted">Version ${appState.AppConfig.Version}</p>
-			</ui-form>
-		</ui-row>
-	</ui-page>
+				<p class="ui-font-small ui-text-center ui-text-muted" t="version" t-params.bind="appState.AppConfig">Version ${appState.AppConfig.Version}</p>
+			</div>
+		</div>
 </template>

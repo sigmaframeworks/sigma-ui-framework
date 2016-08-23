@@ -8,7 +8,7 @@
 		<span class.bind="icon" if.bind="icon"></span>
 		<span innerhtml.bind="label" if.bind="label"></span>
 	</button>
-	<ui-menu floating ref="__menuEl" menuclick.trigger="menuClicked($event)">
+	<ui-menu floating view-model.ref="__menuEl" menuclick.trigger="menuClicked($event)">
 		<slot></slot>
 	</ui-menu>
 </template>

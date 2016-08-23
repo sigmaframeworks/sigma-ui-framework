@@ -88,6 +88,20 @@ export class UIApplication {
 		this.__authToken = v;
 	}
 
+	private __sharedState = {};
+	shared(key, value: any = '§') {
+		if (value === '§') {
+			return this.__sharedState[key];
+		}
+		else if (value === null) {
+			delete this.__sharedState[key];
+		}
+		else {
+			this.__sharedState[key] = value;
+		}
+		return null;
+	}
+
 	/** Session State **/
 	session(key, value: any = '§') {
 		if (window.sessionStorage) {

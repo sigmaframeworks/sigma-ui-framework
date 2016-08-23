@@ -16,6 +16,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-util
             this.HttpConfig = ui_constants_1.UIConstants.Http;
             this.IsHttpInUse = false;
             this.IsAuthenticated = false;
+            this.__sharedState = {};
             this.__logger = aurelia_logging_1.getLogger('UIApplication');
             this.__logger.info('Initialized');
             Object.assign(this.AppConfig, ui_constants_1.UIConstants.App);
@@ -80,6 +81,19 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-util
             enumerable: true,
             configurable: true
         });
+        UIApplication.prototype.shared = function (key, value) {
+            if (value === void 0) { value = '§'; }
+            if (value === '§') {
+                return this.__sharedState[key];
+            }
+            else if (value === null) {
+                delete this.__sharedState[key];
+            }
+            else {
+                this.__sharedState[key] = value;
+            }
+            return null;
+        };
         UIApplication.prototype.session = function (key, value) {
             if (value === void 0) { value = '§'; }
             if (window.sessionStorage) {

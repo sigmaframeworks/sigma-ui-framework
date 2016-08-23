@@ -48,7 +48,7 @@ $shadow: $input-inner-shadow;
         text-align: end;
 
         color     : $input-label;
-        @include flex(0 0 10em);
+        @include flex(0 0 $input-label-width);
 
         > span {
             position: relative;

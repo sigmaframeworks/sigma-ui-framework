@@ -24,12 +24,14 @@ export declare class UIDataGrid {
     dataList: any[];
     summaryRow: boolean;
     emptyText: string;
+    colChilds: any[];
     private allowSelect;
     private __dataListChangeSubscriber;
     constructor(element: Element, signaler: BindingSignaler, bindingEngine: BindingEngine);
     bind(): void;
     unbind(): void;
     attached(): void;
+    colChildsChanged(newValue: any): void;
     dataListChanged(newValue: any): void;
     isLastLocked(locked: any, index: any): boolean;
     linkClicked($event: any, col: any, model: any): boolean;

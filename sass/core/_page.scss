@@ -5,7 +5,6 @@
 // @license     : MIT
 
 .ui-page {
-    position: relative;
     @include flex-column();
     @include position(absolute, 0, 0, 0, 0);
 
@@ -39,6 +38,11 @@
 
     &.ui-section-column {
         @include flex-column($align: stretch);
+    }
+
+    router-view {
+      @include flex(1 1 0);
+      @include flex-column($align: stretch);
     }
 }
 
@@ -79,9 +83,9 @@
         position  : absolute;
         top       : 0;
         right     : 0;
-        width     : 2em;
+        width     : 1em;
         height    : 2em;
-        padding   : .5em;
+        padding   : .5em .1em;
         z-index   : 5;
         background: $secondary;
     }
@@ -106,8 +110,12 @@
             @include transition(left 0.5s, right 0.5s);
         }
 
-        .ui-sidebar-collapse span:before {
+        .ui-sidebar-collapse {
+          width: 2em;
+          padding: .5em;
+          span:before {
             content: $font-ui-arrow-right;
+          }
         }
     }
 

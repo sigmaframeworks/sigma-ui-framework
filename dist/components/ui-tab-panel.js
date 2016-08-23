@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "aurelia-framework", "../utils/ui-utils"], function (require, exports, aurelia_framework_1, ui_utils_1) {
+define(["require", "exports", "aurelia-framework"], function (require, exports, aurelia_framework_1) {
     "use strict";
     var UITabPanel = (function () {
         function UITabPanel(element) {
@@ -18,11 +18,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils"], functio
         UITabPanel.prototype.bind = function () {
         };
         UITabPanel.prototype.attached = function () {
-            var _this = this;
-            ui_utils_1._.forEach(this.element.querySelectorAll('ui-tab'), function (t) { return _this.tabs.push(t.au.controller.viewModel); });
             this.activeTabChanged(this.activeTab);
-        };
-        UITabPanel.prototype.itemsChanged = function (mutations) {
         };
         UITabPanel.prototype.activeTabChanged = function (newValue) {
             if (this.__selectedTab)
@@ -31,6 +27,10 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils"], functio
                 (this.__selectedTab = this.tabs[newValue]).isSelected = true;
             }
         };
+        __decorate([
+            aurelia_framework_1.children('.ui-tab-body ui-tab'), 
+            __metadata('design:type', Object)
+        ], UITabPanel.prototype, "tabs", void 0);
         __decorate([
             aurelia_framework_1.bindable, 
             __metadata('design:type', Object)

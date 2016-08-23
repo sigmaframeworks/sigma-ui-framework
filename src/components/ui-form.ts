@@ -4,7 +4,7 @@
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
 
-import {autoinject, customElement, bindable, inlineView} from "aurelia-framework";
+import {autoinject, customElement, bindable, inlineView, bindingMode} from "aurelia-framework";
 import {UIEvent} from "../utils/ui-event";
 import {_, UIUtils} from "../utils/ui-utils";
 
@@ -17,6 +17,7 @@ export class UIForm {
 	private __form: HTMLElement;
 
 	constructor(public element: Element) {
+		if (!this.element.hasAttribute('auto-grid')) this.element.classList.add('two-column');
 	}
 
 	attached() {
@@ -53,7 +54,7 @@ export class UIForm {
 export class UIFieldset {
 	@bindable()
 	label: string = '';
-	@bindable()
+	@bindable({ defaultBindingMode: bindingMode.twoWay })
 	enabled: boolean = true;
 
 	private checkbox = false;

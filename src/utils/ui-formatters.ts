@@ -13,8 +13,14 @@ export module UIFormat {
 
 	export function mdHilight(md) {
 		return kramed(md, {
-			highlight: function(code) {
-				return hljs ? hljs.highlightAuto(code).value : code;
+			highlight: function(code, type) {
+				if (hljs) {
+					hljs.configure({
+						useBR: true,
+						tabReplace: '    '
+					});
+				}
+				return hljs ? hljs.highlightAuto(type, code).value : code;
 			}
 		});
 	}

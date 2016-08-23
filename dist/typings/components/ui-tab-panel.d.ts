@@ -8,7 +8,6 @@ export declare class UITabPanel {
     constructor(element: Element);
     bind(): void;
     attached(): void;
-    itemsChanged(mutations: any): void;
     activeTabChanged(newValue: any): void;
 }
 export declare class UITab {

@@ -1,8 +1,10 @@
 import { Logger } from "aurelia-logging";
+import { ValidationRules } from "aurelia-validation";
 import { UIHttpService } from "./ui-http-service";
 export declare class UIModel {
     logger: Logger;
     httpClient: UIHttpService;
+    validator: ValidationRules;
     private __original;
     private __observers;
     constructor();

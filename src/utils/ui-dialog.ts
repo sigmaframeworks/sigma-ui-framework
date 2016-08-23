@@ -65,11 +65,9 @@ export class UIDialogService {
 						if (canActivate) {
 							return this.compositionEngine.createController(instruction)
 								.then(controller => {
-									this.__invokeLifecycle(viewModel, 'activate', model);
 									controller.automate();
 
 									let view = this.__createDialog(controller.viewModel);
-									this.__invokeLifecycle(viewModel, 'bind', model);
 
 									let childSlot: any = new ViewSlot(view['fragment'].querySelector('.ui-dialog'), true);
 									childSlot.add(controller.view);
@@ -81,8 +79,6 @@ export class UIDialogService {
 									slot.attached();
 
 									this.__initDialog(controller.viewModel);
-
-									this.__invokeLifecycle(viewModel, 'attached', null);
 								});
 						}
 					});
@@ -170,7 +166,6 @@ export class UIDialogService {
 						this.__setNextActive();
 					}
 
-					this.__invokeLifecycle(dialog, 'detached', null);
 					this.__invokeLifecycle(dialog, 'unbind', null);
 					this.__invokeLifecycle(dialog, 'deactivate', null);
 				}

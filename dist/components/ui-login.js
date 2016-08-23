@@ -20,7 +20,9 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             this.appState = appState;
             this.controller = controller;
             this.busy = false;
+            this.__rowLayout = false;
             this.model = new LoginModel();
+            this.__rowLayout = element.hasAttribute('row-layout');
         }
         UILogin.prototype.attached = function () {
             if (this.model.remember === true)
@@ -61,7 +63,6 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             _super.call(this);
             this.username = '';
             this.password = '';
-            this.tempInput = '';
             this.remember = false;
             var _u, _p;
             this.appState = ui_utils_1.UIUtils.lazy(ui_application_1.UIApplication);
@@ -87,10 +88,6 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             aurelia_validatejs_1.length({ minimum: 4 }), 
             __metadata('design:type', String)
         ], LoginModel.prototype, "password", void 0);
-        __decorate([
-            aurelia_validatejs_1.required, 
-            __metadata('design:type', String)
-        ], LoginModel.prototype, "tempInput", void 0);
         LoginModel = __decorate([
             aurelia_framework_1.transient(),
             aurelia_framework_1.autoinject(), 

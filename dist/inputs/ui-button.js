@@ -43,13 +43,15 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             this.disabled = isTrue(this.disabled);
         };
         UIButton.prototype.attached = function () {
-            if (this.element.hasAttribute('top'))
+            if (this.element.hasAttribute('icon-top'))
                 this.__button.classList.add('ui-icon-top');
             if (this.element.hasAttribute('round'))
                 this.__button.classList.add('ui-button-round');
             if (this.element.hasAttribute('square'))
                 this.__button.classList.add('ui-button-square');
             this.__button.classList.add("ui-button-" + this.__size);
+            if (this.value)
+                this.valueChanged(this.value);
             this.disable();
         };
         UIButton.prototype.disable = function (disabled) {
@@ -64,6 +66,13 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             this.disabled = isTrue(newValue);
             this.disable();
         };
+        UIButton.prototype.valueChanged = function (newValue) {
+            if (this.__hasMenu && this.__useMenuLabel) {
+                var menu = ui_utils_1._.find(this.__menuEl.menu, 'id', newValue);
+                if (menu)
+                    this.label = menu.text;
+            }
+        };
         UIButton.prototype.fireClick = function ($event) {
             var menu = document.querySelector('.ui-floating.show');
             if (menu)
@@ -73,7 +82,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             if (this.disabled === true)
                 return false;
             if (this.__hasMenu) {
-                this.__menuEl.classList.add('show');
+                this.__menuEl.element.classList.add('show');
             }
             else {
                 ui_event_1.UIEvent.fireEvent('click', this.element, this);

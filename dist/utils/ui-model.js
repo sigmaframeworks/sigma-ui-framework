@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-http-service", "./ui-utils"], function (require, exports, aurelia_framework_1, aurelia_logging_1, ui_http_service_1, ui_utils_1) {
+define(["require", "exports", "aurelia-framework", "aurelia-logging", "aurelia-validation", "./ui-http-service", "./ui-utils"], function (require, exports, aurelia_framework_1, aurelia_logging_1, aurelia_validation_1, ui_http_service_1, ui_utils_1) {
     "use strict";
     var UIModel = (function () {
         function UIModel() {
@@ -16,6 +16,11 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-http
                 'httpClient': {
                     value: ui_utils_1.UIUtils.lazy(ui_http_service_1.UIHttpService),
                     writable: false,
+                    enumerable: false
+                },
+                'validator': {
+                    value: null,
+                    writable: true,
                     enumerable: false
                 },
                 'logger': {
@@ -34,6 +39,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-http
                     enumerable: false
                 }
             });
+            this.validator = aurelia_validation_1.ValidationRules.on(this);
             this.logger.info("Model Initialized");
         }
         UIModel.prototype.get = function () {

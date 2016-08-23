@@ -50,10 +50,8 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
                     if (canActivate) {
                         return _this.compositionEngine.createController(instruction)
                             .then(function (controller) {
-                            _this.__invokeLifecycle(viewModel, 'activate', model);
                             controller.automate();
                             var view = _this.__createDialog(controller.viewModel);
-                            _this.__invokeLifecycle(viewModel, 'bind', model);
                             var childSlot = new aurelia_framework_2.ViewSlot(view['fragment'].querySelector('.ui-dialog'), true);
                             childSlot.add(controller.view);
                             childSlot.viewModel = controller.viewModel;
@@ -62,7 +60,6 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
                             slot.add(view);
                             slot.attached();
                             _this.__initDialog(controller.viewModel);
-                            _this.__invokeLifecycle(viewModel, 'attached', null);
                         });
                     }
                 });
@@ -135,7 +132,6 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
                         dialog.__taskButton.remove();
                         _this.__setNextActive();
                     }
-                    _this.__invokeLifecycle(dialog, 'detached', null);
                     _this.__invokeLifecycle(dialog, 'unbind', null);
                     _this.__invokeLifecycle(dialog, 'deactivate', null);
                 }

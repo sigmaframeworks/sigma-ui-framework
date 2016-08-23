@@ -12,6 +12,8 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
     var UIForm = (function () {
         function UIForm(element) {
             this.element = element;
+            if (!this.element.hasAttribute('auto-grid'))
+                this.element.classList.add('two-column');
         }
         UIForm.prototype.attached = function () {
             var _this = this;
@@ -71,7 +73,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             __metadata('design:type', String)
         ], UIFieldset.prototype, "label", void 0);
         __decorate([
-            aurelia_framework_1.bindable(), 
+            aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }), 
             __metadata('design:type', Boolean)
         ], UIFieldset.prototype, "enabled", void 0);
         UIFieldset = __decorate([

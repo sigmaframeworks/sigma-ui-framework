@@ -8,8 +8,14 @@ define(["require", "exports", "./ui-utils"], function (require, exports, ui_util
         UIFormat.toHTML = toHTML;
         function mdHilight(md) {
             return ui_utils_1.kramed(md, {
-                highlight: function (code) {
-                    return require('highlight.js').highlightAuto(code).value;
+                highlight: function (code, type) {
+                    if (hljs) {
+                        hljs.configure({
+                            useBR: true,
+                            tabReplace: '    '
+                        });
+                    }
+                    return hljs ? hljs.highlightAuto(type, code).value : code;
                 }
             });
         }

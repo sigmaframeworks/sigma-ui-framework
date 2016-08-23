@@ -6,7 +6,7 @@
 
 import {transient} from "aurelia-framework";
 import {getLogger, Logger} from "aurelia-logging";
-import {ValidationController} from "aurelia-validation";
+import {ValidationRules} from "aurelia-validation";
 import {UIHttpService} from "./ui-http-service";
 import {_, UIUtils} from "./ui-utils";
 
@@ -14,6 +14,8 @@ import {_, UIUtils} from "./ui-utils";
 export class UIModel {
 	public logger: Logger;
 	public httpClient: UIHttpService;
+
+	public validator: ValidationRules;
 
 	private __original: any;
 	private __observers;
@@ -24,6 +26,11 @@ export class UIModel {
 			'httpClient': {
 				value: UIUtils.lazy(UIHttpService),
 				writable: false,
+				enumerable: false
+			},
+			'validator': {
+				value: null,
+				writable: true,
 				enumerable: false
 			},
 			'logger': {
@@ -42,6 +49,7 @@ export class UIModel {
 				enumerable: false
 			}
 		});
+		this.validator = ValidationRules.on(this);
 		this.logger.info("Model Initialized");
 	}
 

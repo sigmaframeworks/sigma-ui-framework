@@ -24,8 +24,9 @@ coverage
 .lock-wscript
 
 # Dependency directories
-node_modules
-jspm_packages
+/node_modules
+/jspm_packages
+/typings
 
 # Optional npm cache directory
 .npm

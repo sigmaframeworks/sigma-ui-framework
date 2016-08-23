@@ -4,7 +4,7 @@
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
 
-import {autoinject, customElement, bindable, useView, bindingMode, inlineView, BindingEngine} from "aurelia-framework";
+import {autoinject, customElement, bindable, useView, bindingMode, children, inlineView, BindingEngine} from "aurelia-framework";
 import {BindingSignaler} from "aurelia-templating-resources";
 import {UIFormat} from "../utils/ui-formatters";
 import {UIEvent} from "../utils/ui-event";
@@ -42,6 +42,8 @@ export class UIDataGrid {
 	summaryRow = false;
 	@bindable()
 	emptyText = '';
+	@children('.ui-hide ui-data-column')
+	colChilds = []
 
 	private allowSelect = false;
 
@@ -77,8 +79,30 @@ export class UIDataGrid {
 	}
 
 	attached() {
+		// let cols = [];
+		// _.forEach(this.__columns.children, c => {
+		// 	cols.push(c['columnDef']);
+		// });
+		//
+		// this.columns = _.orderBy(cols, ['__locked'], ['desc']);
+		//
+		// this.__columnsLocked = _.filter(cols, ['__locked', true]);
+		// this.__columnsList = _.filter(cols, ['__locked', false]);
+
+		// var w = 0;
+		// _.forEach(this.__columnsList, (c: any) => {
+		// 	c.edge = w;
+		// 	w += parseInt(c.width || 250);
+		// 	// return c.__locked;
+		// });
+		// this.__table.width = w;
+
+		this.__doSort(this.dataList);
+	}
+
+	colChildsChanged(newValue) {
 		let cols = [];
-		_.forEach(this.__columns.children, c => {
+		_.forEach(this.colChilds, c => {
 			cols.push(c['columnDef']);
 		});
 
@@ -86,16 +110,6 @@ export class UIDataGrid {
 
 		this.__columnsLocked = _.filter(cols, ['__locked', true]);
 		this.__columnsList = _.filter(cols, ['__locked', false]);
-
-		var w = 0;
-		_.forEach(this.__columnsList, (c: any) => {
-			c.edge = w;
-			w += parseInt(c.width || 250);
-			// return c.__locked;
-		});
-		this.__table.width = w;
-
-		this.__doSort(this.dataList);
 
 	}
 
@@ -347,37 +361,37 @@ export class UIDataGrid {
 @customElement('ui-data-column')
 @inlineView('<template><slot></slot></template>')
 export class UIDataColumn {
-	@bindable
+	@bindable()
 	dataId: string;
-	@bindable
+	@bindable()
 	dataSort: string;
 
-	@bindable
+	@bindable()
 	format: string;
-	@bindable
+	@bindable()
 	symbol: string;
-	@bindable
+	@bindable()
 	summary: string;
-	@bindable
+	@bindable()
 	labels: any;
 
-	@bindable
+	@bindable()
 	value: any;
-	@bindable
+	@bindable()
 	button: any;
-	@bindable
+	@bindable()
 	display: any;
 
-	@bindable
+	@bindable()
 	buttonTitle: string = '';
-	@bindable
+	@bindable()
 	buttonIcon: string = '';
-	@bindable
+	@bindable()
 	buttonTheme: string = '';
-	@bindable
+	@bindable()
 	buttonMenu: Array<any>;
 
-	@bindable
+	@bindable()
 	class: string = '';
 
 	@bindable({ defaultBindingMode: bindingMode.oneTime })

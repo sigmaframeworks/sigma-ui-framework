@@ -180,15 +180,18 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "../util
         function UIMdView(element) {
             this.element = element;
             this.type = 'html';
-            if (element.hasAttribute('ts'))
-                this.type = 'typescript';
         }
         UIMdView.prototype.attached = function () {
-            this.element.innerHTML = ui_formatters_1.UIFormat.mdHilight('```' + this.type + '\n' + this.element.textContent.replace(/^\s{8,8}/gm, '') + '```');
+            this.__code = this.__md.textContent;
+            this.__md.innerHTML = ui_formatters_1.UIFormat.mdHilight('```' + this.type + '' + this.__md.textContent + '```');
         };
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UIMdView.prototype, "type", void 0);
         UIMdView = __decorate([
             aurelia_framework_1.customElement('ui-md-view'),
-            aurelia_framework_1.inlineView('<template class="ui-markdown"><slot></slot></template>'), 
+            aurelia_framework_1.inlineView('<template class="ui-markdown"><button class="ui-btn-copy" data-clipboard-text.bind="__code" ref="__copy">Copy</button><div ref="__md"><slot></slot></div></template>'), 
             __metadata('design:paramtypes', [Element])
         ], UIMdView);
         return UIMdView;

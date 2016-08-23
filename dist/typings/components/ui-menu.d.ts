@@ -10,6 +10,7 @@ export declare class UIMenu {
     router: Router;
     children: Array<any>;
     menu: any[];
+    hideTitle: boolean;
     constructor(element: Element, appState: UIApplication);
     childrenChanged(newValue: any): void;
     isActive(route: any): any;

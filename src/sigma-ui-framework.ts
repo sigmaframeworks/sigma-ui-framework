@@ -57,14 +57,23 @@ export function configure(aurelia: FrameworkConfiguration, configCallback) {
 	aurelia.globalResources('./utils/ui-converters');
 
 	kramed.setOptions({
-		renderer: null,
 		gfm: true,
 		tables: true,
 		breaks: true,
 		pedantic: false,
 		sanitize: false,
 		smartLists: true,
-		smartypants: false
+		smartypants: false,
+		highlight: function(code, type) {
+			if (hljs) {
+				hljs.configure({
+					useBR: true,
+					tabReplace: '    '
+				});
+				return hljs.highlightAuto(code).value;
+			}
+			return code;
+		}
 	});
 
 	var Configure = {

@@ -31,14 +31,23 @@ define(["require", "exports", "./utils/ui-constants", "./utils/ui-utils", "./uti
         aurelia.globalResources('./inputs/ui-list');
         aurelia.globalResources('./utils/ui-converters');
         ui_utils_1.kramed.setOptions({
-            renderer: new ui_utils_1.kramed.Renderer(),
             gfm: true,
             tables: true,
             breaks: true,
             pedantic: false,
             sanitize: false,
             smartLists: true,
-            smartypants: false
+            smartypants: false,
+            highlight: function (code, type) {
+                if (hljs) {
+                    hljs.configure({
+                        useBR: true,
+                        tabReplace: '    '
+                    });
+                    return hljs.highlightAuto(code).value;
+                }
+                return code;
+            }
         });
         var Configure = {
             title: function (t) {

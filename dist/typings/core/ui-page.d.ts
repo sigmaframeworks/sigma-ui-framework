@@ -52,7 +52,10 @@ export declare class UIStat {
 }
 export declare class UIMdView {
     element: Element;
-    private type;
+    type: string;
+    __md: any;
+    __code: any;
+    __copy: any;
     constructor(element: Element);
     attached(): void;
 }

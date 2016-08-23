@@ -16,6 +16,7 @@ export declare class UIViewport {
     showMenu: boolean;
     showOptions: boolean;
     showTaskbar: boolean;
+    hideLogout: boolean;
     constructor(element: Element, appState: UIApplication, container: Container);
     bind(): void;
     isActive(route: any): any;

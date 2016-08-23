@@ -19,7 +19,6 @@ export class UIViewport {
 	@bindable()
 	router: Router;
 
-
 	@bindable()
 	icon: string = '';
 	@bindable()
@@ -35,9 +34,13 @@ export class UIViewport {
 	@bindable()
 	showTaskbar: boolean = true;
 
+	hideLogout = false;
+
 	constructor(public element: Element, public appState: UIApplication, container: Container) {
 		UIUtils.container(container);
 		this.appState.info(this.constructor.name, "UIViewport Created");
+
+		this.hideLogout = element.hasAttribute('hide-logout');
 		if (element.hasAttribute('menu-end')) element.classList.add('ui-menu-end');
 		if (!element.hasAttribute('menu-start')) element.classList.add('ui-menu-start');
 	}

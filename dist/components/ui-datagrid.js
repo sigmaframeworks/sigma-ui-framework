@@ -22,6 +22,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
             this.dataList = [];
             this.summaryRow = false;
             this.emptyText = '';
+            this.colChilds = [];
             this.allowSelect = false;
             this.__isResizing = false;
             this.__startX = 0;
@@ -43,20 +44,16 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
             this.__dataListChangeSubscriber.dispose();
         };
         UIDataGrid.prototype.attached = function () {
+            this.__doSort(this.dataList);
+        };
+        UIDataGrid.prototype.colChildsChanged = function (newValue) {
             var cols = [];
-            ui_utils_1._.forEach(this.__columns.children, function (c) {
+            ui_utils_1._.forEach(this.colChilds, function (c) {
                 cols.push(c['columnDef']);
             });
             this.columns = ui_utils_1._.orderBy(cols, ['__locked'], ['desc']);
             this.__columnsLocked = ui_utils_1._.filter(cols, ['__locked', true]);
             this.__columnsList = ui_utils_1._.filter(cols, ['__locked', false]);
-            var w = 0;
-            ui_utils_1._.forEach(this.__columnsList, function (c) {
-                c.edge = w;
-                w += parseInt(c.width || 250);
-            });
-            this.__table.width = w;
-            this.__doSort(this.dataList);
         };
         UIDataGrid.prototype.dataListChanged = function (newValue) {
             this.__table.style.tableLayout = 'auto';
@@ -276,6 +273,10 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
         ], UIDataGrid.prototype, "emptyText", void 0);
+        __decorate([
+            aurelia_framework_1.children('.ui-hide ui-data-column'), 
+            __metadata('design:type', Object)
+        ], UIDataGrid.prototype, "colChilds", void 0);
         UIDataGrid = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-datagrid'), 
@@ -371,59 +372,59 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
             this.__title = this.element.textContent;
         };
         __decorate([
-            aurelia_framework_1.bindable, 
+            aurelia_framework_1.bindable(), 
             __metadata('design:type', String)
         ], UIDataColumn.prototype, "dataId", void 0);
         __decorate([
-            aurelia_framework_1.bindable, 
+            aurelia_framework_1.bindable(), 
             __metadata('design:type', String)
         ], UIDataColumn.prototype, "dataSort", void 0);
         __decorate([
-            aurelia_framework_1.bindable, 
+            aurelia_framework_1.bindable(), 
             __metadata('design:type', String)
         ], UIDataColumn.prototype, "format", void 0);
         __decorate([
-            aurelia_framework_1.bindable, 
+            aurelia_framework_1.bindable(), 
             __metadata('design:type', String)
         ], UIDataColumn.prototype, "symbol", void 0);
         __decorate([
-            aurelia_framework_1.bindable, 
+            aurelia_framework_1.bindable(), 
             __metadata('design:type', String)
         ], UIDataColumn.prototype, "summary", void 0);
         __decorate([
-            aurelia_framework_1.bindable, 
+            aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
         ], UIDataColumn.prototype, "labels", void 0);
         __decorate([
-            aurelia_framework_1.bindable, 
+            aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
         ], UIDataColumn.prototype, "value", void 0);
         __decorate([
-            aurelia_framework_1.bindable, 
+            aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
         ], UIDataColumn.prototype, "button", void 0);
         __decorate([
-            aurelia_framework_1.bindable, 
+            aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
         ], UIDataColumn.prototype, "display", void 0);
         __decorate([
-            aurelia_framework_1.bindable, 
+            aurelia_framework_1.bindable(), 
             __metadata('design:type', String)
         ], UIDataColumn.prototype, "buttonTitle", void 0);
         __decorate([
-            aurelia_framework_1.bindable, 
+            aurelia_framework_1.bindable(), 
             __metadata('design:type', String)
         ], UIDataColumn.prototype, "buttonIcon", void 0);
         __decorate([
-            aurelia_framework_1.bindable, 
+            aurelia_framework_1.bindable(), 
             __metadata('design:type', String)
         ], UIDataColumn.prototype, "buttonTheme", void 0);
         __decorate([
-            aurelia_framework_1.bindable, 
+            aurelia_framework_1.bindable(), 
             __metadata('design:type', Array)
         ], UIDataColumn.prototype, "buttonMenu", void 0);
         __decorate([
-            aurelia_framework_1.bindable, 
+            aurelia_framework_1.bindable(), 
             __metadata('design:type', String)
         ], UIDataColumn.prototype, "class", void 0);
         __decorate([

@@ -146,14 +146,19 @@ export class UIStat {
 }
 
 @customElement('ui-md-view')
-@inlineView('<template class="ui-markdown"><slot></slot></template>')
+@inlineView('<template class="ui-markdown"><button class="ui-btn-copy" data-clipboard-text.bind="__code" ref="__copy">Copy</button><div ref="__md"><slot></slot></div></template>')
 export class UIMdView {
-	private type = 'html';
+	@bindable()
+	type = 'html';
+
+	__md;
+	__code;
+	__copy;
 	constructor(public element: Element) {
-		if (element.hasAttribute('ts')) this.type = 'typescript';
 	}
 
 	attached() {
-		this.element.innerHTML = UIFormat.mdHilight('```' + this.type + '\n' + this.element.textContent.replace(/^\s{8,8}/gm, '') + '```');
+		this.__code = this.__md.textContent;
+		this.__md.innerHTML = UIFormat.mdHilight('```' + this.type + '' + this.__md.textContent + '```');
 	}
 }

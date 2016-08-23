@@ -15,8 +15,10 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../utils/u
             this.appState = appState;
             this.children = [];
             this.menu = [];
+            this.hideTitle = false;
             if (element.hasAttribute('floating'))
                 element.classList.add('ui-floating');
+            this.hideTitle = element.hasAttribute('hide-title');
         }
         UIMenu.prototype.childrenChanged = function (newValue) {
             this.menu = [];
@@ -26,7 +28,8 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../utils/u
                         id: c[i].getAttribute('id'),
                         text: c[i].textContent,
                         icon: c[i].getAttribute('icon'),
-                        isActive: c[i].getAttribute('active') == "true",
+                        disabled: isTrue(c[i].getAttribute('disabled')),
+                        isActive: isTrue(c[i].getAttribute('active')),
                         href: c[i].getAttribute('href') || 'javascript:;',
                     });
                 }

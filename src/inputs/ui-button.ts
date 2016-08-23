@@ -90,7 +90,7 @@ export class UIButton {
 	}
 
 	attached() {
-		if (this.element.hasAttribute('top')) this.__button.classList.add('ui-icon-top');
+		if (this.element.hasAttribute('icon-top')) this.__button.classList.add('ui-icon-top');
 		if (this.element.hasAttribute('round')) this.__button.classList.add('ui-button-round');
 		if (this.element.hasAttribute('square')) this.__button.classList.add('ui-button-square');
 
@@ -99,6 +99,8 @@ export class UIButton {
 		// 		this.element.classList.add('ui-dropdown');
 		// }, 200);
 		this.__button.classList.add(`ui-button-${this.__size}`);
+
+		if (this.value) this.valueChanged(this.value);
 		this.disable();
 	}
 
@@ -116,6 +118,13 @@ export class UIButton {
 		this.disable();
 	}
 
+	valueChanged(newValue) {
+		if (this.__hasMenu && this.__useMenuLabel) {
+			let menu: any = _.find(this.__menuEl.menu, 'id', newValue);
+			if (menu) this.label = menu.text;
+		}
+	}
+
 	fireClick($event) {
 		let menu = document.querySelector('.ui-floating.show');
 		if (menu) menu.classList.remove('show');
@@ -124,7 +133,7 @@ export class UIButton {
 		$event.cancelBubble = true;
 		if (this.disabled === true) return false;
 		if (this.__hasMenu) {
-			this.__menuEl.classList.add('show');
+			this.__menuEl.element.classList.add('show');
 		} else {
 			UIEvent.fireEvent('click', this.element, this);
 		}
