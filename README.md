@@ -1,5 +1,5 @@
-> ### Sigma UI Framework
-> A bespoke UI Framework for building desktop business applications
+### [Documentation](http://sigmaframeworks.io/docs/framework)
+### [Demo](http://demo.sigmaframeworks.io/)
 
 ----
 
@@ -10,40 +10,40 @@
 
 * `src/main.ts` Main aurelia entry point
 
-```ts
-export function configure(aurelia) {
-  aurelia.use
-    .plugin('aurelia-validation')
-    .plugin('aurelia-validatejs')
-    .plugin('sigma-ui-framework', function(config) {
-      config
-        .title(string)
-        .version(string)
-        .appKey(string)
+  ```ts
+  export function configure(aurelia) {
+    aurelia.use
+      .plugin('aurelia-validation')
+      .plugin('aurelia-validatejs')
+      .plugin('sigma-ui-framework', function(config) {
+        config
+          .title(string)
+          .version(string)
+          .appKey(string)
 
-        .apiUrl(url)
-        .apiHeaders(object)
-        // Send authorization header with every request
-        .addAuthHeader(bool)
+          .apiUrl(url)
+          .apiHeaders(object)
+          // Send authorization header with every request
+          .addAuthHeader(bool)
 
-        .loadCharts()
-        .languages(array<{id, name}>)
-    });
+          .loadCharts()
+          .languages(array<{id, name}>)
+      });
 
-  aurelia.start()
-  	.then(() => aurelia.setRoot())
-  	.then(() => {
-  		var splash = window.document.querySelector('.ui-splash');
-  		splash.classList.add('animate');
-  		setTimeout(() => {
-  			splash.parentElement.removeChild(splash);
-  		}, 1000);
-  	})
-  	.catch(e => {
-  		console.log(e);
-  	});
-}
-```
+    aurelia.start()
+    	.then(() => aurelia.setRoot())
+    	.then(() => {
+    		var splash = window.document.querySelector('.ui-splash');
+    		splash.classList.add('animate');
+    		setTimeout(() => {
+    			splash.parentElement.removeChild(splash);
+    		}, 1000);
+    	})
+    	.catch(e => {
+    		console.log(e);
+    	});
+  }
+  ```
 
 * To use internationalization
 
