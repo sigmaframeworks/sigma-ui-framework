@@ -4,25 +4,20 @@
 // @license     : MIT
 -->
 <template class="ui-pager ui-button-group ui-button-bar">
-	<button class="ui-button ui-button-default ui-button-square"
-			disabled.bind="current==1" click.trigger="fireChange(0)">
-		<span class="fi-ui-pager-first"></span>
-	</button>
-	<button class="ui-button ui-button-default ui-button-square"
-			disabled.bind="current==1" click.trigger="fireChange(-1)">
-		<span class="fi-ui-pager-prev"></span>
-	</button>
-	<div class="ui-button ui-page-input">
-		<input class="ui-input ui-text-center" size="3" value.bind="current"
-			   keypress.trigger="keyCheck($event)"/>
-		<span> of 5</span>
-	</div>
-	<button class="ui-button ui-button-default ui-button-square"
-			disabled.bind="current===total" click.trigger="fireChange(1)">
-		<span class="fi-ui-pager-next"></span>
-	</button>
-	<button class="ui-button ui-button-default ui-button-square"
-			disabled.bind="current===total" click.trigger="fireChange(2)">
-		<span class="fi-ui-pager-last"></span>
-	</button>
+    <button class="ui-button ui-button-default ui-button-square" disabled.bind="current==1" click.trigger="fireChange(0)">
+        <span class="fi-ui-pager-first"></span>
+    </button>
+    <button class="ui-button ui-button-default ui-button-square" disabled.bind="current==1" click.trigger="fireChange(-1)">
+        <span class="fi-ui-pager-prev"></span>
+    </button>
+    <div class="ui-button ui-page-input">
+        <input class="ui-input ui-text-center" size="3" value.bind="current" keypress.trigger="keyCheck($event)" />
+        <span> of 5</span>
+    </div>
+    <button class="ui-button ui-button-default ui-button-square" disabled.bind="current===total" click.trigger="fireChange(1)">
+        <span class="fi-ui-pager-next"></span>
+    </button>
+    <button class="ui-button ui-button-default ui-button-square" disabled.bind="current===total" click.trigger="fireChange(2)">
+        <span class="fi-ui-pager-last"></span>
+    </button>
 </template>

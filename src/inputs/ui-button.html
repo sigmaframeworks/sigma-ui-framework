@@ -4,11 +4,11 @@
 // @license     : MIT
 -->
 <template class="ui-button-control ${__hasMenu?'ui-dropdown':''}">
-	<button class="ui-button ui-button-${theme}" ref="__button" click.trigger="fireClick($event)" data-value.bind="value">
-		<span class.bind="icon" if.bind="icon"></span>
-		<span innerhtml.bind="label" if.bind="label"></span>
-	</button>
-	<ui-menu floating view-model.ref="__menuEl" menuclick.trigger="menuClicked($event)">
-		<slot></slot>
-	</ui-menu>
+    <button class="ui-button ui-button-${theme}" ref="__button" click.trigger="fireClick($event)" data-value.bind="value">
+        <span class.bind="icon" if.bind="icon"></span>
+        <span innerhtml.bind="label" if.bind="label"></span>
+    </button>
+    <ui-menu floating view-model.ref="__menuEl" menuclick.trigger="menuClicked($event)">
+        <slot></slot>
+    </ui-menu>
 </template>

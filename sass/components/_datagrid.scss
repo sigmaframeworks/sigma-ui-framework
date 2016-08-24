@@ -63,8 +63,8 @@
                 border-right: 1px solid $base-border-color !important;
             }
 
-             > table > tfoot,
-            > table > thead {
+             > table > thead,
+            > table > tfoot {
                 z-index: 20;
                 @include sticky();
             }
@@ -96,8 +96,8 @@
                     tr:last-child {
                         height: 100%;
 
-                         > td > div,
-                        > td {
+                         > td,
+                        > td > div {
                             height     : 100%;
                             padding    : 0;
                             line-height: 0;

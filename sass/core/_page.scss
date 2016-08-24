@@ -41,8 +41,8 @@
     }
 
     router-view {
-      @include flex(1 1 0);
-      @include flex-column($align: stretch);
+        @include flex(1 1 0);
+        @include flex-column($align: stretch);
     }
 }
 
@@ -111,11 +111,12 @@
         }
 
         .ui-sidebar-collapse {
-          width: 2em;
-          padding: .5em;
-          span:before {
-            content: $font-ui-arrow-right;
-          }
+            width  : 2em;
+            padding: .5em;
+
+            span:before {
+                content: $font-ui-arrow-right;
+            }
         }
     }
 

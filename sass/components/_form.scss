@@ -5,77 +5,77 @@
 // @license     : MIT
 
 .ui-form {
-  &,
-  .ui-fieldset > fieldset {
-    > .ui-row > .ui-column {
-      min-width: 20em;
-      @include flex(1 1 20em);
-    }
-  }
-
-  .ui-fieldset {
-    > fieldset {
-      border       : 1px solid $base-border-color;
-      border-radius: $base-border-radius;
-      padding      : .5em;
-      margin       : .3em 0;
-      min-height   : 2em;
-      @include transition(max-height .5s);
-
-      legend {
-        padding  : 0 .5em;
-        color    : rgba($input-text, .7);
-        font-size: .9em;
-      }
+    &,
+    .ui-fieldset > fieldset {
+        > .ui-row > .ui-column {
+            min-width: 20em;
+            @include flex(1 1 20em);
+        }
     }
 
-    &.ui-disabled > fieldset {
-      overflow  : hidden;
-      max-height: 0;
+    .ui-fieldset {
+        > fieldset {
+            border       : 1px solid $base-border-color;
+            border-radius: $base-border-radius;
+            padding      : .5em;
+            margin       : .3em 0;
+            min-height   : 2em;
+            @include transition(max-height .5s);
+
+            legend {
+                padding  : 0 .5em;
+                color    : rgba($input-text, .7);
+                font-size: .9em;
+            }
+        }
+
+        &.ui-disabled > fieldset {
+            overflow  : hidden;
+            max-height: 0;
+        }
     }
-  }
 }
 
 .ui-login {
-  @include flex-row(center, center);
+    @include flex-row(center, center);
 
-  .ui-login-body {
-    border          : 1px solid $base-border-color;
-    border-radius   : $base-border-radius;
-    background-color: $base-bg;
-    @include box-shadow(0 0 10px 0 $base-shadow-color);
+    .ui-login-body {
+        border          : 1px solid $base-border-color;
+        border-radius   : $base-border-radius;
+        background-color: $base-bg;
+        @include box-shadow(0 0 10px 0 $base-shadow-color);
 
-    > div {
-      padding: .5em 1em;
+        > div {
+            padding: .5em 1em;
+        }
+
+        h4 {
+            font-size  : 5em;
+
+            text-align : center;
+
+            color      : $primary;
+            text-shadow: 1px 1px 1px $base-bg, 1px 1px 2px #333, -1px -1px 1px contrast($base-bg, #ccc, #333);
+        }
+
+        .ui-login-error {
+            color        : contrast($danger);
+            border-radius: $base-border-radius;
+            background   : $danger;
+        }
+
+        &.ui-row-layout {
+            @include flex-row(center, center);
+            @include flex(0 0 40em);
+
+            > div:first-child {
+                border-right: 1px solid rgba($base-border-color, .5);
+            }
+        }
+
+        &.ui-column-layout {
+            @include flex-column(stretch, center);
+            @include flex(0 0 20em);
+        }
     }
-
-    h4 {
-      font-size  : 5em;
-
-      text-align : center;
-
-      color      : $primary;
-      text-shadow: 1px 1px 1px $base-bg, 1px 1px 2px #333, -1px -1px 1px contrast($base-bg, #ccc, #333);
-    }
-
-    .ui-login-error {
-      color        : contrast($danger);
-      border-radius: $base-border-radius;
-      background   : $danger;
-    }
-
-    &.ui-row-layout {
-      @include flex-row(center, center);
-      @include flex(0 0 40em);
-
-      > div:first-child {
-        border-right: 1px solid rgba($base-border-color, .5);
-      }
-    }
-
-    &.ui-column-layout {
-      @include flex-column(stretch, center);
-      @include flex(0 0 20em);
-    }
-  }
 }

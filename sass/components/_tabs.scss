@@ -4,89 +4,78 @@
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
 
-.ui-tab-panel
-{
+.ui-tab-panel {
     position: absolute;
-    top: 0;
-    bottom: 0;
+    top     : 0;
+    bottom  : 0;
 
-    width: 100%;
-
+    width   : 100%;
     @include flex-column();
 
-    .ui-tab-header
-    {
-        overflow: visible;
+    .ui-tab-header {
+        overflow     : visible;
 
-        min-height: 2.5em;
+        min-height   : 2.5em;
 
         border-bottom: 1px solid $primary;
-
         @include flex(0 0 auto);
         @include flex-row($align: flex-end, $justify : flex-start);
 
-        .ui-tab
-        {
+        .ui-tab {
             font-weight: $font-weight-normal;
 
-            display: inline-block;
+            display    : inline-block;
 
-            max-width: 10em;
+            max-width  : 10em;
             margin-left: .5em;
-            padding: .3em .75em;
+            padding    : .3em .75em;
 
-            text-align: center;
+            text-align : center;
 
-            color: $tab-text;
-            border:
-            {
+            color      : $tab-text;
+            border     : {
                 width: .3em 1px 0;
 
                 color: $tab-border;
 
                 style: solid;
             }
-            background: $tab-bg;
-
+            background : $tab-bg;
             @include flex(0 0 auto);
             @include text-truncate();
             @include border-top-radius($base-border-radius);
 
-            &:hover
-            {
-                padding: .4em .75em;
+            &:hover {
+                padding         : .4em .75em;
 
                 border-top-color: rgba($tab-active-border, .65);
             }
-            &.ui-active
-            {
-                font-weight: $font-weight-strong;
+
+            &.ui-active {
+                font-weight  : $font-weight-strong;
 
                 margin-bottom: -1px;
-                padding: .5em .75em;
+                padding      : .5em .75em;
 
-                color: $tab-active-text;
-                border-color: $tab-active-border;
-                background: $tab-active-bg;
+                color        : $tab-active-text;
+                border-color : $tab-active-border;
+                background   : $tab-active-bg;
             }
         }
     }
 
-    .ui-tab-body
-    {
+    .ui-tab-body {
         position: relative;
-
         @include flex(1 1 0);
-        .ui-tab-content
-        {
+
+        .ui-tab-content {
             position: absolute;
-            top: 0;
-            bottom: 0;
+            top     : 0;
+            bottom  : 0;
 
-            width: 100%;
+            width   : 100%;
 
-            &:not(.ui-active)
-            {
+            &:not(.ui-active) {
                 display: none;
             }
         }

@@ -3,7 +3,6 @@
 // @author      : Adarsh Pastakia
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
-
 @mixin button-style($pre, $bg, $text) {
     &.ui-button-#{$pre} {
         color       : $text;
@@ -87,8 +86,8 @@
     &[disabled] {
         opacity: .5;
 
-         &,
-        > span {
+         > span,
+        & {
             cursor        : not-allowed;
             pointer-events: none;
         }
@@ -121,19 +120,19 @@
     pointer-events: none;
     @include flexbox(( display:inline-flex, flex-direction:row, flex-wrap:nowrap ));
 
-    .ui-button-control .ui-button,
-    > .ui-button {
+     > .ui-button,
+    .ui-button-control .ui-button {
         margin: 0;
         @include flex(0 0 auto);
     }
 
-    .ui-button-control:not(:first-child) .ui-button,
-    > .ui-button:not(:first-child) {
+     > .ui-button:not(:first-child),
+    .ui-button-control:not(:first-child) .ui-button {
         @include border-left-radius(0);
     }
 
-    .ui-button-control:not(:last-child) .ui-button,
-    > .ui-button:not(:last-child) {
+     > .ui-button:not(:last-child),
+    .ui-button-control:not(:last-child) .ui-button {
         @include border-right-radius(0);
     }
 

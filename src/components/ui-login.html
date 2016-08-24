@@ -4,33 +4,35 @@
 // @license     : MIT
 -->
 <template class="ui-login">
-		<div class="ui-login-body ${__rowLayout?'ui-row-layout':'ui-column-layout'}">
-			<div class="ui-col-auto">
-				<div class="ui-login-content" ref="__content"><slot></slot></div>
-			</div>
-			<div class="ui-col-fill">
-				<ui-form submit.trigger="doLogin()" busy.bind="appState.IsHttpInUse" class="">
-					<div>
-						<p class="ui-login-error ui-text-center" if.bind="error" innerhtml.bind="error"></p>
-					</div>
-					<ui-input clear required label-top email value.bind="model.username & validate" placeholder="user@domain.com">Username
-					</ui-input>
-					<ui-input clear required label-top password value.bind="model.password & validate" placeholder="password">Password
-					</ui-input>
+    <div class="ui-login-body ${__rowLayout?'ui-row-layout':'ui-column-layout'}">
+        <div class="ui-col-auto">
+            <div class="ui-login-content" ref="__content">
+                <slot></slot>
+            </div>
+        </div>
+        <div class="ui-col-fill">
+            <ui-form submit.trigger="doLogin()" busy.bind="appState.IsHttpInUse" class="">
+                <div>
+                    <p class="ui-login-error ui-text-center" if.bind="error" innerhtml.bind="error"></p>
+                </div>
+                <ui-input clear required label-top email value.bind="model.username & validate" placeholder="user@domain.com">Username
+                </ui-input>
+                <ui-input clear required label-top password value.bind="model.password & validate" placeholder="password">Password
+                </ui-input>
 
-					<ui-checkbox checkbox class="ui-stretch" checked.bind="model.remember">Remember Me
-					</ui-checkbox>
+                <ui-checkbox checkbox class="ui-stretch" checked.bind="model.remember">Remember Me
+                </ui-checkbox>
 
-					<div class="ui-text-end">
-						<ui-button primary click.trigger="doLogin()" label="Login" t="[label]login.button"></ui-button>
-					</div>
-				</ui-form>
-			</div>
-			<div class="${__rowLayout?'ui-col-full':'ui-col-auto'}">
-				<hr/>
-				<p class="ui-font-small ui-text-center ui-text-muted" t="login_message">This app is designed to run on desktop and tablets</p>
+                <div class="ui-text-end">
+                    <ui-button primary click.trigger="doLogin()" label="Login" t="[label]login.button"></ui-button>
+                </div>
+            </ui-form>
+        </div>
+        <div class="${__rowLayout?'ui-col-full':'ui-col-auto'}">
+            <hr/>
+            <p class="ui-font-small ui-text-center ui-text-muted" t="login_message">This app is designed to run on desktop and tablets</p>
 
-				<p class="ui-font-small ui-text-center ui-text-muted" t="version" t-params.bind="appState.AppConfig">Version ${appState.AppConfig.Version}</p>
-			</div>
-		</div>
+            <p class="ui-font-small ui-text-center ui-text-muted" t="version" t-params.bind="appState.AppConfig">Version ${appState.AppConfig.Version}</p>
+        </div>
+    </div>
 </template>

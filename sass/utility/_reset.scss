@@ -3,74 +3,64 @@
 // @author      : Adarsh Pastakia
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
-
 @import 'compass/reset';
 
+dd,
+dl,
+dt,
 h1,
 h2,
 h3,
 h4,
 h5,
 h6,
-p,
-ul,
 ol,
-dt,
-dd,
-dl
-{
+p,
+ul {
     position: initial;
 
-    margin: 0;
-    padding: .3em 0;
+    margin  : 0;
+    padding : .3em 0;
 }
 
 div,
-template
-{
+template {
     position: initial;
 
-    display: block;
+    display : block;
 }
 
-p
-{
+p {
     line-height: 1.5;
 }
 
-textarea
-{
+textarea {
     resize: vertical;
 }
 
 input,
-textarea
-{
+textarea {
     outline: none !important;
 }
 
 input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button
-{
-    margin: 0;
+input[type=number]::-webkit-outer-spin-button {
+    margin            : 0;
 
     -webkit-appearance: none;
 }
 
-input[type=number]
-{
+input[type=number] {
     -moz-appearance: textfield;
 }
 
-img
-{
+img {
     pointer-events: none;
 
-    border: none !important;
+    border        : none !important;
 }
 
-button
-{
-    border: none;
+button {
+    border    : none;
     background: none;
 }

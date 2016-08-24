@@ -5,6 +5,7 @@
 // @license     : MIT
 
 $shadow: $input-inner-shadow;
+
 .ui-input {
     font-size : 1em;
 
@@ -217,13 +218,13 @@ $shadow: $input-inner-shadow;
                 }
             }
 
-             > .ui-input-wrapper:first-child > .ui-input,
-            .ui-addon:first-child {
+            .ui-addon:first-child,
+            > .ui-input-wrapper:first-child > .ui-input {
                 @include border-left-radius($base-border-radius);
             }
 
-             > .ui-input-wrapper:last-child > .ui-input,
-            .ui-addon:last-child {
+            .ui-addon:last-child,
+            > .ui-input-wrapper:last-child > .ui-input {
                 @include border-right-radius($base-border-radius);
             }
         }
@@ -320,14 +321,14 @@ $shadow: $input-inner-shadow;
 
         .ui-control-wrapper {
             > .ui-input-control {
-                 > .ui-input-wrapper:first-child > .ui-input,
-                .ui-addon:first-child {
+                .ui-addon:first-child,
+                > .ui-input-wrapper:first-child > .ui-input {
                     @include border-left-radius(0);
                     @include border-right-radius($base-border-radius);
                 }
 
-                 > .ui-input-wrapper:last-child > .ui-input,
-                .ui-addon:last-child {
+                .ui-addon:last-child,
+                > .ui-input-wrapper:last-child > .ui-input {
                     @include border-right-radius(0);
                     @include border-left-radius($base-border-radius);
                 }
@@ -339,8 +340,8 @@ $shadow: $input-inner-shadow;
             }
 
             > .ui-input-control:not(:last-child) {
-                 > .ui-addon,
-                > .ui-input {
+                 > .ui-input,
+                > .ui-addon {
                     @include border-bottom-radius(0);
                 }
             }

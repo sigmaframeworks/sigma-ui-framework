@@ -10,27 +10,27 @@ import {inlineView, customElement, bindable} from "aurelia-framework";
 @inlineView('<template><slot></slot></template>')
 export class UIRow {
 
-	constructor(public element: Element) {
-	}
+    constructor(public element: Element) {
+    }
 
-	bind() {
-		if (this.element.hasAttribute('column')) {
-			this.element.classList.add('ui-column-row');
-		}
-		else {
-			this.element.classList.add('ui-row');
-		}
+    bind() {
+        if (this.element.hasAttribute('column')) {
+            this.element.classList.add('ui-column-row');
+        }
+        else {
+            this.element.classList.add('ui-row');
+        }
 
-		if (this.element.hasAttribute('start')) this.element.classList.add('ui-align-start');
-		if (this.element.hasAttribute('end')) this.element.classList.add('ui-align-end');
-		if (this.element.hasAttribute('center')) this.element.classList.add('ui-align-center');
-		if (this.element.hasAttribute('spaced')) this.element.classList.add('ui-align-spaced');
+        if (this.element.hasAttribute('start')) this.element.classList.add('ui-align-start');
+        if (this.element.hasAttribute('end')) this.element.classList.add('ui-align-end');
+        if (this.element.hasAttribute('center')) this.element.classList.add('ui-align-center');
+        if (this.element.hasAttribute('spaced')) this.element.classList.add('ui-align-spaced');
 
-		if (this.element.hasAttribute('top')) this.element.classList.add('ui-align-top');
-		if (this.element.hasAttribute('bottom')) this.element.classList.add('ui-align-bottom');
-		if (this.element.hasAttribute('middle')) this.element.classList.add('ui-align-middle');
-		if (this.element.hasAttribute('stretch')) this.element.classList.add('ui-align-stretch');
-	}
+        if (this.element.hasAttribute('top')) this.element.classList.add('ui-align-top');
+        if (this.element.hasAttribute('bottom')) this.element.classList.add('ui-align-bottom');
+        if (this.element.hasAttribute('middle')) this.element.classList.add('ui-align-middle');
+        if (this.element.hasAttribute('stretch')) this.element.classList.add('ui-align-stretch');
+    }
 }
 
 
@@ -38,35 +38,35 @@ export class UIRow {
 @inlineView(`<template class="ui-column" css.bind="{'flex-basis': width}"><slot></slot></template>`)
 export class UIColumn {
 
-	@bindable()
-	size: string = '';
-	@bindable()
-	width: string = 'none';
+    @bindable()
+    size: string = '';
+    @bindable()
+    width: string = 'none';
 
-	constructor(public element: Element) {
-	}
+    constructor(public element: Element) {
+    }
 
-	bind() {
-		if (this.element.hasAttribute('fill')) {
-			this.element.classList.add('ui-col-fill');
-		}
-		else if (this.element.hasAttribute('full')) {
-			this.element.classList.add('ui-col-full');
-		}
-		else if (isEmpty(this.size)) {
-			this.element.classList.add('ui-col-auto');
-		}
+    bind() {
+        if (this.element.hasAttribute('fill')) {
+            this.element.classList.add('ui-col-fill');
+        }
+        else if (this.element.hasAttribute('full')) {
+            this.element.classList.add('ui-col-full');
+        }
+        else if (isEmpty(this.size)) {
+            this.element.classList.add('ui-col-auto');
+        }
 
-		if (this.element.hasAttribute('padded')) this.element.classList.add('ui-pad-all');
+        if (this.element.hasAttribute('padded')) this.element.classList.add('ui-pad-all');
 
-		for (var size of this.size.split(' ')) {
-			this.element.classList.add(`ui-col-${size}`);
-		}
+        for (var size of this.size.split(' ')) {
+            this.element.classList.add(`ui-col-${size}`);
+        }
 
-		if (this.element.hasAttribute('top')) this.element.classList.add('ui-align-top');
-		if (this.element.hasAttribute('bottom')) this.element.classList.add('ui-align-bottom');
-		if (this.element.hasAttribute('middle')) this.element.classList.add('ui-align-middle');
-		if (this.element.hasAttribute('stretch')) this.element.classList.add('ui-align-stretch');
-		if (this.element.hasAttribute('flex')) this.element.classList.add('ui-column-row');
-	}
+        if (this.element.hasAttribute('top')) this.element.classList.add('ui-align-top');
+        if (this.element.hasAttribute('bottom')) this.element.classList.add('ui-align-bottom');
+        if (this.element.hasAttribute('middle')) this.element.classList.add('ui-align-middle');
+        if (this.element.hasAttribute('stretch')) this.element.classList.add('ui-align-stretch');
+        if (this.element.hasAttribute('flex')) this.element.classList.add('ui-column-row');
+    }
 }
