@@ -4,7 +4,7 @@
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
 
-import {autoinject, customElement, bindable, useView, bindingMode} from "aurelia-framework";
+import {autoinject, customElement, bindable, useView, bindingMode, TaskQueue} from "aurelia-framework";
 import {UIEvent} from "../utils/ui-event";
 import {_, UIUtils} from "../utils/ui-utils";
 
@@ -151,12 +151,12 @@ export class UIOptionGroup {
     @bindable({ defaultBindingMode: bindingMode.twoWay })
     value: string;
 
-    constructor(public element: Element) {
+    constructor(public element: Element, public taskQueue: TaskQueue) {
     }
 
     attached() {
         // Need to iterate to all inputs to set the name
-        setTimeout(() => {
+        this.taskQueue.queueMicroTask(() => {
             let radios = this.element.querySelectorAll('.ui-radio .ui-option-input');
             _.forEach(radios, (b: HTMLInputElement) => {
                 b.setAttribute('name', this.name || this.__name);
@@ -165,7 +165,7 @@ export class UIOptionGroup {
                     b.checked = true;
                 }
             });
-        }, 200);
+        });
         if (this.element.hasAttribute('required')) this.__label.classList.add('ui-required');
     }
 

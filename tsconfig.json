@@ -26,7 +26,6 @@
     "./src/**/*.ts",
     "./typings/index.d.ts",
     "!./dist/**/*.ts",
-    "!./node_modules/**/*.ts",
     "./node_modules/aurelia-*/**/*.d.ts"
   ],
   "atom": {

@@ -4,12 +4,13 @@
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
 
-import {customElement, bindable, inlineView} from "aurelia-framework";
+import {customElement, bindable, inlineView, autoinject, TaskQueue} from "aurelia-framework";
 import {Router} from "aurelia-router";
 import {UIUtils} from "../utils/ui-utils";
 import {UIEvent} from "../utils/ui-event";
 import {UIFormat} from "../utils/ui-formatters";
 
+@autoinject()
 @customElement('ui-page')
 export class UIPage {
     private __body;
@@ -31,6 +32,7 @@ export class UIPage {
     }
 }
 
+@autoinject()
 @customElement('ui-section')
 @inlineView('<template class="ui-section"><slot></slot></template>')
 export class UISection {
@@ -48,6 +50,7 @@ export class UISection {
     }
 }
 
+@autoinject()
 @customElement('ui-content')
 @inlineView('<template class="ui-content"><slot></slot></template>')
 export class UIContent {
@@ -66,6 +69,7 @@ export class UIContent {
     }
 }
 
+@autoinject()
 @customElement('ui-sidebar')
 @inlineView(`<template class="ui-sidebar" role="sidebar" css.bind="{'width':width}" click.trigger="showOverlay()">
 <div class="ui-sidebar-collapse" if.bind="collapsible" click.trigger="toggleCollapse($event)"><span class="fi-ui-arrow-left"></span></div>
@@ -116,11 +120,13 @@ export class UISidebar {
     }
 }
 
+@autoinject()
 @customElement('ui-divider')
 @inlineView('<template class="ui-divider" role="separator"><slot></slot></template>')
 export class UIDivider {
 }
 
+@autoinject()
 @customElement('ui-toolbar')
 @inlineView(`<template class="ui-toolbar ui-button-bar" role="toolbar" enterpressed.trigger="fireSubmit()"><slot></slot></template>`)
 export class UIToolbar {
@@ -131,11 +137,13 @@ export class UIToolbar {
     }
 }
 
+@autoinject()
 @customElement('ui-statsbar')
 @inlineView(`<template class="ui-statsbar"><slot></slot></template>`)
 export class UIStatsbar {
 }
 
+@autoinject()
 @customElement('ui-stat')
 @inlineView('<template class="ui-stat"><span class="${icon}" if.bind="icon"></span><div><h1>${value}</h1><h6><slot></slot></h6></div></template>')
 export class UIStat {
@@ -143,22 +151,4 @@ export class UIStat {
     value;
     @bindable()
     icon;
-}
-
-@customElement('ui-md-view')
-@inlineView('<template class="ui-markdown"><button class="ui-btn-copy" data-clipboard-text.bind="__code" ref="__copy">Copy</button><div ref="__md"><slot></slot></div></template>')
-export class UIMdView {
-    @bindable()
-    type = 'html';
-
-    __md;
-    __code;
-    __copy;
-    constructor(public element: Element) {
-    }
-
-    attached() {
-        this.__code = this.__md.textContent;
-        this.__md.innerHTML = UIFormat.mdHilight('```' + this.type + '' + this.__md.textContent + '```');
-    }
 }

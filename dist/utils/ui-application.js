@@ -22,14 +22,14 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-util
             Object.assign(this.AppConfig, ui_constants_1.UIConstants.App);
             Object.assign(this.HttpConfig, ui_constants_1.UIConstants.Http);
         }
-        UIApplication.prototype.navigate = function (hash) {
+        UIApplication.prototype.navigate = function (hash, options) {
             this.__logger.info("navigate::" + hash);
-            this.router.navigate(hash);
+            this.router.navigate(hash, options);
         };
-        UIApplication.prototype.navigateTo = function (route, params) {
+        UIApplication.prototype.navigateTo = function (route, params, options) {
             if (params === void 0) { params = {}; }
             this.__logger.info("navigateTo::" + route);
-            this.router.navigateToRoute(route, params);
+            this.router.navigateToRoute(route, params, options);
         };
         Object.defineProperty(UIApplication.prototype, "Username", {
             get: function () {
@@ -187,8 +187,8 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-util
         UIApplication.prototype.confirm = function (config) {
             if (typeof config === 'string')
                 config = { message: config };
-            config.yesLabel = config.button || "Yes";
-            config.noLabel = config.button || "No";
+            config.yesLabel = config.yesLabel || "Yes";
+            config.noLabel = config.noLabel || "No";
             return ui_utils_1.UIUtils.confirm(config);
         };
         UIApplication = __decorate([

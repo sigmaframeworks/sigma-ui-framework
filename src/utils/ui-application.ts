@@ -31,14 +31,14 @@ export class UIApplication {
         Object.assign(this.HttpConfig, UIConstants.Http);
     }
 
-    navigate(hash) {
+    navigate(hash, options?) {
         this.__logger.info("navigate::" + hash);
-        this.router.navigate(hash);
+        this.router.navigate(hash, options);
     }
 
-    navigateTo(route, params = {}) {
+    navigateTo(route, params = {}, options?) {
         this.__logger.info("navigateTo::" + route);
-        this.router.navigateToRoute(route, params);
+        this.router.navigateToRoute(route, params, options);
     }
 
     /** App Constants **/
@@ -186,8 +186,8 @@ export class UIApplication {
     }
     confirm(config) {
         if (typeof config === 'string') config = { message: config };
-        config.yesLabel = config.button || "Yes";
-        config.noLabel = config.button || "No";
+        config.yesLabel = config.yesLabel || "Yes";
+        config.noLabel = config.noLabel || "No";
         return UIUtils.confirm(config);
     }
 }

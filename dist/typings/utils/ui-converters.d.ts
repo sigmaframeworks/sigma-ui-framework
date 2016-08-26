@@ -1,9 +1,6 @@
 export declare class MarkdownValueConverter {
     toView(value: string): string;
 }
-export declare class HighlightValueConverter {
-    toView(value: string): string;
-}
 export declare class DateValueConverter {
     toView(value: string, format?: string): any;
 }
@@ -38,6 +35,9 @@ export declare class IsArrayValueConverter {
     toView(value: any): any;
 }
 export declare class IsObjectValueConverter {
+    toView(value: any): any;
+}
+export declare class IsEmptyValueConverter {
     toView(value: any): any;
 }
 export declare class IsTrueValueConverter {

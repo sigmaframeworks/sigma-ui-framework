@@ -16,5 +16,5 @@ export { UIModel } from "./utils/ui-model";
 export { UIDialogService, UIDialog } from "./utils/ui-dialog";
 export { UITreeModel } from "./utils/ui-tree-models";
 export { UIHttpService } from "./utils/ui-http-service";
-export { UIValidationRenderer, validatemap, validatephone } from "./utils/ui-validation";
+export { UIValidationRenderer } from "./utils/ui-validation";
 export { UIChartStatic, UIUtils, _, moment, numeral, kramed } from "./utils/ui-utils";

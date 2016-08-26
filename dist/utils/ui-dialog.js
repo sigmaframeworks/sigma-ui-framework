@@ -208,7 +208,7 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
             this.dialogContainer.classList.add('ui-dragging');
         };
         UIDialogService.prototype.moveEnd = function () {
-            if (!this.__isDragging) {
+            if (!this.__isDragging || this.__dialog == null) {
                 return;
             }
             this.__dialog.classList.remove('ui-dragging');
@@ -222,10 +222,10 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
             }
             var x = ($event.x || $event.clientX) - this.__startX;
             var y = ($event.y || $event.clientY) - this.__startY;
-            var t = parseInt(this.__dialog.style.top);
-            var l = parseInt(this.__dialog.style.left);
-            var w = parseInt(this.__dialog.style.width);
-            var h = parseInt(this.__dialog.style.height);
+            var t = convertToPx(this.__dialog.style.top, this.__dialog);
+            var l = convertToPx(this.__dialog.style.left, this.__dialog);
+            var w = convertToPx(this.__dialog.style.width, this.__dialog);
+            var h = convertToPx(this.__dialog.style.height, this.__dialog);
             var pw = this.dialogContainer.offsetWidth;
             var ph = this.dialogContainer.offsetHeight;
             if (!this.__isResizing) {

@@ -122,15 +122,16 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
     }(UIOption));
     exports.UIRadio = UIRadio;
     var UIOptionGroup = (function () {
-        function UIOptionGroup(element) {
+        function UIOptionGroup(element, taskQueue) {
             this.element = element;
+            this.taskQueue = taskQueue;
             this.__name = "auf-" + __seed++;
             this.label = '';
             this.name = '';
         }
         UIOptionGroup.prototype.attached = function () {
             var _this = this;
-            setTimeout(function () {
+            this.taskQueue.queueMicroTask(function () {
                 var radios = _this.element.querySelectorAll('.ui-radio .ui-option-input');
                 ui_utils_1._.forEach(radios, function (b) {
                     b.setAttribute('name', _this.name || _this.__name);
@@ -139,7 +140,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
                         b.checked = true;
                     }
                 });
-            }, 200);
+            });
             if (this.element.hasAttribute('required'))
                 this.__label.classList.add('ui-required');
         };
@@ -175,7 +176,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
         UIOptionGroup = __decorate([
             aurelia_framework_1.useView('./ui-option-group.html'),
             aurelia_framework_1.customElement('ui-option-group'), 
-            __metadata('design:paramtypes', [Element])
+            __metadata('design:paramtypes', [Element, aurelia_framework_1.TaskQueue])
         ], UIOptionGroup);
         return UIOptionGroup;
     }());

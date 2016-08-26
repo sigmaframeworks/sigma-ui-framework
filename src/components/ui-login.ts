@@ -9,18 +9,14 @@ import {UIEvent} from "../utils/ui-event";
 import {UIUtils} from "../utils/ui-utils";
 import {UIModel} from "../utils/ui-model";
 import {UIApplication} from "../utils/ui-application";
-import {required, email, length, ValidationRules} from "aurelia-validatejs";
-import {ValidationController} from "aurelia-validation";
+import {ValidationRules} from "aurelia-validation";
 
-//@inject(Element, UIApplication, NewInstance.of(ValidationController))
 @autoinject
 @customElement('ui-login')
 export class UILogin {
     model: LoginModel;
 
     __page;
-    __temp;
-    __content;
 
     @bindable
     error: string;
@@ -29,7 +25,7 @@ export class UILogin {
 
     __rowLayout = false;
 
-    constructor(public element: Element, public appState: UIApplication, public controller: ValidationController) {
+    constructor(public element: Element, public appState: UIApplication) {
         this.model = new LoginModel();
 
         this.__rowLayout = element.hasAttribute('row-layout');
@@ -37,15 +33,16 @@ export class UILogin {
 
     attached() {
         if (this.model.remember === true) this.doLogin();
-
-        this.__content.appendChild(this.__temp);
     }
 
     doLogin() {
-        if (this.controller.validate().length == 0) {
-            this.error = '';
-            UIEvent.fireEvent('login', this.element, this.model);
-        }
+        this.model.validate()
+            .then(e => {
+                if (e.length == 0) {
+                    this.error = '';
+                    UIEvent.fireEvent('login', this.element, this.model);
+                }
+            });
     }
 
     toast(config) {
@@ -58,11 +55,7 @@ export class UILogin {
 @transient()
 @autoinject()
 export class LoginModel extends UIModel {
-    @required
-    @email
     username: string = '';
-    @required
-    @length({ minimum: 4 })
     password: string = '';
 
     remember: boolean = false;
@@ -81,6 +74,13 @@ export class LoginModel extends UIModel {
             this.password = _p;
             this.remember = true;
         }
+
+        ValidationRules
+            .ensure((model: LoginModel) => model.username)
+            .required()
+            .ensure(model => model.password)
+            .required()
+            .on(LoginModel);
     }
 
     save() {

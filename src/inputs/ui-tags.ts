@@ -4,7 +4,7 @@
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
 
-import {customElement, bindable, bindingMode, autoinject} from "aurelia-framework";
+import {customElement, bindable, bindingMode, autoinject, TaskQueue} from "aurelia-framework";
 import {UIListBehaviour} from "./ui-listing";
 import {_, UIUtils} from "../utils/ui-utils";
 import {UIEvent} from "../utils/ui-event";
@@ -20,7 +20,7 @@ export class UITags extends UIListBehaviour {
     __tags = [];
     __onlyAvailable = true;
 
-    constructor(element: Element) {
+    constructor(element: Element, public taskQueue: TaskQueue) {
         super(element);
     }
 
@@ -155,7 +155,7 @@ export class UITags extends UIListBehaviour {
 
     attached() {
         super.attached();
-        setTimeout(() => this.valueChanged(this.value), 500);
+        this.taskQueue.queueMicroTask(() => this.valueChanged(this.value));
     }
 
     detached() {

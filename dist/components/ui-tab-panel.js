@@ -17,7 +17,7 @@ define(["require", "exports", "aurelia-framework"], function (require, exports, 
         }
         UITabPanel.prototype.bind = function () {
         };
-        UITabPanel.prototype.attached = function () {
+        UITabPanel.prototype.tabsChanged = function () {
             this.activeTabChanged(this.activeTab);
         };
         UITabPanel.prototype.activeTabChanged = function (newValue) {
@@ -32,7 +32,7 @@ define(["require", "exports", "aurelia-framework"], function (require, exports, 
             __metadata('design:type', Object)
         ], UITabPanel.prototype, "tabs", void 0);
         __decorate([
-            aurelia_framework_1.bindable, 
+            aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }), 
             __metadata('design:type', Object)
         ], UITabPanel.prototype, "activeTab", void 0);
         UITabPanel = __decorate([

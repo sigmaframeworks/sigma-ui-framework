@@ -6,20 +6,6 @@ define(["require", "exports", "./ui-utils"], function (require, exports, ui_util
             return ui_utils_1.kramed(md);
         }
         UIFormat.toHTML = toHTML;
-        function mdHilight(md) {
-            return ui_utils_1.kramed(md, {
-                highlight: function (code, type) {
-                    if (hljs) {
-                        hljs.configure({
-                            useBR: true,
-                            tabReplace: '    '
-                        });
-                    }
-                    return hljs ? hljs.highlightAuto(type, code).value : code;
-                }
-            });
-        }
-        UIFormat.mdHilight = mdHilight;
         function date(dt, ft) {
             if (ft === void 0) { ft = 'DD MMM YYYY hh:mm A'; }
             var x;

@@ -9,7 +9,7 @@
     position   : relative;
 
     .ui-btn-copy {
-        @include position(absolute, $t:20px, $r:0);
+        @include position(absolute, $t:25px, $r:5px);
         z-index: 5;
     }
 
@@ -33,7 +33,19 @@
         text-decoration: underline;
     }
 
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    li,
+    p {
+        margin: .5em 0 .2em;
+    }
+
     ul {
+        margin    : 0 1em;
         list-style: {
             position: inside;
             type    : disc;
@@ -50,6 +62,7 @@
     }
 
     ol {
+        margin    : 0 1em;
         list-style: {
             position: inside;
             type    : decimal;
@@ -149,6 +162,11 @@
         &.lang-scss:after {
             content   : 'SCSS';
             background: #008080;
+        }
+
+        &.lang-json:after {
+            content   : 'JSON';
+            background: #9F81B9;
         }
     }
 }

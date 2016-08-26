@@ -11,20 +11,6 @@ export module UIFormat {
         return kramed(md);
     }
 
-    export function mdHilight(md) {
-        return kramed(md, {
-            highlight: function(code, type) {
-                if (hljs) {
-                    hljs.configure({
-                        useBR: true,
-                        tabReplace: '    '
-                    });
-                }
-                return hljs ? hljs.highlightAuto(type, code).value : code;
-            }
-        });
-    }
-
     // Dates
     export function date(dt: any, ft: string = 'DD MMM YYYY hh:mm A') {
         let x;

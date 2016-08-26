@@ -16,8 +16,9 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
     "use strict";
     var UITags = (function (_super) {
         __extends(UITags, _super);
-        function UITags(element) {
+        function UITags(element, taskQueue) {
             _super.call(this, element);
+            this.taskQueue = taskQueue;
             this.__tags = [];
             this.__onlyAvailable = true;
             this.value = '';
@@ -41,7 +42,7 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
         UITags.prototype.attached = function () {
             var _this = this;
             _super.prototype.attached.call(this);
-            setTimeout(function () { return _this.valueChanged(_this.value); }, 500);
+            this.taskQueue.queueMicroTask(function () { return _this.valueChanged(_this.value); });
         };
         UITags.prototype.detached = function () {
         };
@@ -221,7 +222,7 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
         UITags = __decorate([
             aurelia_framework_1.autoinject,
             aurelia_framework_1.customElement('ui-tags'), 
-            __metadata('design:paramtypes', [Element])
+            __metadata('design:paramtypes', [Element, aurelia_framework_1.TaskQueue])
         ], UITags);
         return UITags;
     }(ui_listing_1.UIListBehaviour));

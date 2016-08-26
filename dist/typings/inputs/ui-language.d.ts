@@ -19,7 +19,7 @@ export declare class UILanguage extends UIInputGroup {
      * @property    value
      * @type        string
      */
-    language: string;
+    value: string;
     /**
      * @property    languages
      * @type        array | map
@@ -31,9 +31,9 @@ export declare class UILanguage extends UIInputGroup {
      */
     disabled: boolean;
     attached(): void;
-    languageChanged(newValue: any): string;
+    valueChanged(newValue: any): string;
+    formatter(evt: any): void;
     languagesChanged(newValue: any): void;
-    formatter(): any;
     __add(lang: any): void;
     __select(lang: any): void;
     __remove(lang: any): void;

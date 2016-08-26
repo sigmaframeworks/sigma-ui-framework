@@ -100,7 +100,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             __metadata('design:type', String)
         ], UIButton.prototype, "label", void 0);
         __decorate([
-            aurelia_framework_1.bindable(), 
+            aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }), 
             __metadata('design:type', String)
         ], UIButton.prototype, "value", void 0);
         __decorate([
@@ -124,8 +124,9 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
     }());
     exports.UIButton = UIButton;
     var UIButtonGroup = (function () {
-        function UIButtonGroup(element) {
+        function UIButtonGroup(element, taskQueue) {
             this.element = element;
+            this.taskQueue = taskQueue;
             this.__size = 'normal';
             this.__theme = 'default';
             this.__extraClass = '';
@@ -170,13 +171,13 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             });
             if (this.toggle !== false) {
                 if (!isEmpty(this.value)) {
-                    setTimeout(function () {
+                    this.taskQueue.queueMicroTask(function () {
                         ui_utils_1._.forEach((_this.value + '').split(','), function (v) {
                             var opt = _this.element.querySelector(".ui-button[data-value=\"" + v + "\"]");
                             if (opt)
                                 opt.classList.add('ui-checked');
                         });
-                    }, 10);
+                    });
                 }
             }
         };
@@ -251,7 +252,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-button-group'),
             aurelia_framework_1.inlineView('<template class="ui-button-group" click.delegate="fireChange($event)"><slot></slot></template>'), 
-            __metadata('design:paramtypes', [Element])
+            __metadata('design:paramtypes', [Element, aurelia_framework_1.TaskQueue])
         ], UIButtonGroup);
         return UIButtonGroup;
     }());

@@ -1,8 +1,10 @@
+import { TaskQueue } from "aurelia-framework";
 export declare class UIForm {
     element: Element;
+    taskQueue: TaskQueue;
     busy: boolean;
     private __form;
-    constructor(element: Element);
+    constructor(element: Element, taskQueue: TaskQueue);
     attached(): void;
     busyChanged(newValue: any): void;
     fireSubmit(): void;

@@ -50,12 +50,3 @@ export declare class UIStat {
     value: any;
     icon: any;
 }
-export declare class UIMdView {
-    element: Element;
-    type: string;
-    __md: any;
-    __code: any;
-    __copy: any;
-    constructor(element: Element);
-    attached(): void;
-}

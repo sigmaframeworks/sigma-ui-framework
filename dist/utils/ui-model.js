@@ -18,8 +18,8 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "aurelia-v
                     writable: false,
                     enumerable: false
                 },
-                'validator': {
-                    value: null,
+                'controller': {
+                    value: ui_utils_1.UIUtils.lazy(aurelia_validation_1.ValidationControllerFactory).createForCurrentScope(),
                     writable: true,
                     enumerable: false
                 },
@@ -39,7 +39,6 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "aurelia-v
                     enumerable: false
                 }
             });
-            this.validator = aurelia_validation_1.ValidationRules.on(this);
             this.logger.info("Model Initialized");
         }
         UIModel.prototype.get = function () {
@@ -76,6 +75,9 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "aurelia-v
                 this.__observers.pop()
                     .dispose();
             }
+        };
+        UIModel.prototype.validate = function () {
+            return this.controller.validate();
         };
         UIModel.prototype.deserialize = function (json) {
             var _this = this;

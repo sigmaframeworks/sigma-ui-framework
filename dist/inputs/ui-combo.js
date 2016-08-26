@@ -16,8 +16,9 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
     "use strict";
     var UIComboBox = (function (_super) {
         __extends(UIComboBox, _super);
-        function UIComboBox(element) {
+        function UIComboBox(element, taskQueue) {
             _super.call(this, element);
+            this.taskQueue = taskQueue;
             this.value = '';
             this.checked = false;
             this.disabled = false;
@@ -38,7 +39,7 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
         UIComboBox.prototype.attached = function () {
             var _this = this;
             _super.prototype.attached.call(this);
-            setTimeout(function () { return _this.valueChanged(_this.value); }, 500);
+            this.taskQueue.queueMicroTask(function () { return _this.valueChanged(_this.value); });
         };
         UIComboBox.prototype.detached = function () {
         };
@@ -192,7 +193,7 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
         UIComboBox = __decorate([
             aurelia_framework_1.autoinject,
             aurelia_framework_1.customElement('ui-combo'), 
-            __metadata('design:paramtypes', [Element])
+            __metadata('design:paramtypes', [Element, aurelia_framework_1.TaskQueue])
         ], UIComboBox);
         return UIComboBox;
     }(ui_listing_1.UIListBehaviour));

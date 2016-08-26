@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "../utils/ui-event", "../utils/ui-formatters"], function (require, exports, aurelia_framework_1, ui_utils_1, ui_event_1, ui_formatters_1) {
+define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "../utils/ui-event"], function (require, exports, aurelia_framework_1, ui_utils_1, ui_event_1) {
     "use strict";
     var UIPage = (function () {
         function UIPage(element) {
@@ -24,6 +24,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "../util
             __metadata('design:type', String)
         ], UIPage.prototype, "pageTitle", void 0);
         UIPage = __decorate([
+            aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-page'), 
             __metadata('design:paramtypes', [Element])
         ], UIPage);
@@ -43,6 +44,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "../util
             }
         };
         UISection = __decorate([
+            aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-section'),
             aurelia_framework_1.inlineView('<template class="ui-section"><slot></slot></template>'), 
             __metadata('design:paramtypes', [Element])
@@ -65,6 +67,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "../util
                 this.element.classList.add('ui-pad-all');
         };
         UIContent = __decorate([
+            aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-content'),
             aurelia_framework_1.inlineView('<template class="ui-content"><slot></slot></template>'), 
             __metadata('design:paramtypes', [Element])
@@ -113,6 +116,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "../util
             __metadata('design:type', String)
         ], UISidebar.prototype, "width", void 0);
         UISidebar = __decorate([
+            aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-sidebar'),
             aurelia_framework_1.inlineView("<template class=\"ui-sidebar\" role=\"sidebar\" css.bind=\"{'width':width}\" click.trigger=\"showOverlay()\">\n<div class=\"ui-sidebar-collapse\" if.bind=\"collapsible\" click.trigger=\"toggleCollapse($event)\"><span class=\"fi-ui-arrow-left\"></span></div>\n<div class=\"ui-sidebar-content\" ref=\"__content\"><slot></slot></div></template>"), 
             __metadata('design:paramtypes', [Element])
@@ -124,6 +128,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "../util
         function UIDivider() {
         }
         UIDivider = __decorate([
+            aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-divider'),
             aurelia_framework_1.inlineView('<template class="ui-divider" role="separator"><slot></slot></template>'), 
             __metadata('design:paramtypes', [])
@@ -139,6 +144,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "../util
             ui_event_1.UIEvent.fireEvent('submit', this.element, this);
         };
         UIToolbar = __decorate([
+            aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-toolbar'),
             aurelia_framework_1.inlineView("<template class=\"ui-toolbar ui-button-bar\" role=\"toolbar\" enterpressed.trigger=\"fireSubmit()\"><slot></slot></template>"), 
             __metadata('design:paramtypes', [Element])
@@ -150,6 +156,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "../util
         function UIStatsbar() {
         }
         UIStatsbar = __decorate([
+            aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-statsbar'),
             aurelia_framework_1.inlineView("<template class=\"ui-statsbar\"><slot></slot></template>"), 
             __metadata('design:paramtypes', [])
@@ -169,6 +176,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "../util
             __metadata('design:type', Object)
         ], UIStat.prototype, "icon", void 0);
         UIStat = __decorate([
+            aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-stat'),
             aurelia_framework_1.inlineView('<template class="ui-stat"><span class="${icon}" if.bind="icon"></span><div><h1>${value}</h1><h6><slot></slot></h6></div></template>'), 
             __metadata('design:paramtypes', [])
@@ -176,25 +184,4 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "../util
         return UIStat;
     }());
     exports.UIStat = UIStat;
-    var UIMdView = (function () {
-        function UIMdView(element) {
-            this.element = element;
-            this.type = 'html';
-        }
-        UIMdView.prototype.attached = function () {
-            this.__code = this.__md.textContent;
-            this.__md.innerHTML = ui_formatters_1.UIFormat.mdHilight('```' + this.type + '' + this.__md.textContent + '```');
-        };
-        __decorate([
-            aurelia_framework_1.bindable(), 
-            __metadata('design:type', Object)
-        ], UIMdView.prototype, "type", void 0);
-        UIMdView = __decorate([
-            aurelia_framework_1.customElement('ui-md-view'),
-            aurelia_framework_1.inlineView('<template class="ui-markdown"><button class="ui-btn-copy" data-clipboard-text.bind="__code" ref="__copy">Copy</button><div ref="__md"><slot></slot></div></template>'), 
-            __metadata('design:paramtypes', [Element])
-        ], UIMdView);
-        return UIMdView;
-    }());
-    exports.UIMdView = UIMdView;
 });

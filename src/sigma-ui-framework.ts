@@ -16,6 +16,7 @@ import {UIConstants} from "./utils/ui-constants";
 import {UIChartStatic, kramed} from "./utils/ui-utils";
 import {UIApplication} from "./utils/ui-application";
 import {UIValidationRenderer} from "./utils/ui-validation";
+import {ValidationRules, RenderInstruction, ValidationError} from "aurelia-validation";
 
 export function configure(aurelia: FrameworkConfiguration, configCallback) {
     aurelia.container.registerHandler('ui-validator', container => container.get(UIValidationRenderer));
@@ -76,6 +77,20 @@ export function configure(aurelia: FrameworkConfiguration, configCallback) {
         }
     });
 
+    ValidationRules
+        .customRule('phone', (value, obj) => PhoneLib.isValid(value), '\${$displayName } is not a valid phone number.');
+    ValidationRules
+        .customRule('map', (map, obj, config) => {
+            let promises = [];
+            if (map instanceof Map) {
+                map.forEach((model, key) => {
+                    promises.push(model.validate()
+                        .catch(e => config.langs.push(key)));
+                });
+            }
+            return Promise.all(promises);
+        }, '\${$config.langs.join(",")} contain invalid values', config => (config || { langs: [] }));
+
     var Configure = {
         title: (t) => {
             UIConstants.App.Title = t;
@@ -130,5 +145,5 @@ export {UIModel} from "./utils/ui-model";
 export {UIDialogService, UIDialog} from "./utils/ui-dialog";
 export {UITreeModel} from "./utils/ui-tree-models";
 export {UIHttpService} from "./utils/ui-http-service";
-export {UIValidationRenderer, validatemap, validatephone} from "./utils/ui-validation";
+export {UIValidationRenderer} from "./utils/ui-validation";
 export {UIChartStatic, UIUtils, _, moment, numeral, kramed} from "./utils/ui-utils";

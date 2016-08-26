@@ -41,6 +41,7 @@
     }
 
     router-view {
+        position: relative;
         @include flex(1 1 0);
         @include flex-column($align: stretch);
     }

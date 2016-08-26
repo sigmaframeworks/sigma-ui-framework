@@ -4,7 +4,7 @@
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
 
-import {autoinject, customElement, bindable, bindingMode, inlineView, children} from "aurelia-framework";
+import {autoinject, customElement, bindable, bindingMode, inlineView, children, TaskQueue} from "aurelia-framework";
 import {UIEvent} from "../utils/ui-event";
 import {_} from "../utils/ui-utils";
 
@@ -24,7 +24,7 @@ export class UIButton {
 	 * @property    value
 	 * @type        string
 	 */
-    @bindable()
+    @bindable({ defaultBindingMode: bindingMode.twoWay })
     value: string = '';
 	/**
 	   * @property    icon
@@ -94,10 +94,6 @@ export class UIButton {
         if (this.element.hasAttribute('round')) this.__button.classList.add('ui-button-round');
         if (this.element.hasAttribute('square')) this.__button.classList.add('ui-button-square');
 
-        // setTimeout(() => {
-        // 	if (this.__menuEl.children.length > 0)
-        // 		this.element.classList.add('ui-dropdown');
-        // }, 200);
         this.__button.classList.add(`ui-button-${this.__size}`);
 
         if (this.value) this.valueChanged(this.value);
@@ -174,7 +170,7 @@ export class UIButtonGroup {
     @bindable({ defaultBindingMode: bindingMode.twoWay })
     value: string;
 
-    constructor(public element: Element) {
+    constructor(public element: Element, public taskQueue: TaskQueue) {
     }
 
     bind() {
@@ -212,12 +208,12 @@ export class UIButtonGroup {
 
         if (this.toggle !== false) {
             if (!isEmpty(this.value)) {
-                setTimeout(() => {
+                this.taskQueue.queueMicroTask(() => {
                     _.forEach((this.value + '').split(','), v => {
                         let opt = this.element.querySelector(`.ui-button[data-value="${v}"]`);
                         if (opt) opt.classList.add('ui-checked');
                     });
-                }, 10);
+                });
             }
         }
     }

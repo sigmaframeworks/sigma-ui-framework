@@ -1,3 +1,4 @@
+import { TaskQueue } from "aurelia-framework";
 export declare class UIButton {
     element: Element;
     private __button;
@@ -42,6 +43,7 @@ export declare class UIButton {
 }
 export declare class UIButtonGroup {
     element: Element;
+    taskQueue: TaskQueue;
     private __size;
     private __theme;
     private __extraClass;
@@ -60,7 +62,7 @@ export declare class UIButtonGroup {
      * @type        string
      */
     value: string;
-    constructor(element: Element);
+    constructor(element: Element, taskQueue: TaskQueue);
     bind(): void;
     attached(): void;
     disable(disabled?: any): void;

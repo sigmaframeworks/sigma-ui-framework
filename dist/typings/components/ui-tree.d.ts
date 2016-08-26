@@ -1,7 +1,8 @@
-import { BindingEngine } from "aurelia-framework";
+import { BindingEngine, TaskQueue } from "aurelia-framework";
 import { UITreeModel, UITreeOptions } from "../utils/ui-tree-models";
 export declare class UITree {
     element: Element;
+    taskQueue: TaskQueue;
     private root;
     private searchText;
     private selectedNode;
@@ -11,7 +12,7 @@ export declare class UITree {
     value: any;
     model: any[];
     options: UITreeOptions;
-    constructor(element: Element, observer: BindingEngine);
+    constructor(element: Element, taskQueue: TaskQueue, observer: BindingEngine);
     private bind();
     private attached();
     private detached();

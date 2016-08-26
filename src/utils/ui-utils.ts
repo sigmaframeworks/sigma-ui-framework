@@ -215,10 +215,10 @@ export module UIUtils {
         toast.classList.add(opt.theme);
         if (!isEmpty(opt.extraClass)) toast.classList.add(opt.extraClass);
         toast.innerHTML = `<div class="ui-toast-wrapper">
-			<span class="ui-icon ${opt.icon}"></span>
-			<p class="ui-message">${opt.message}</p>
-			<span class="ui-close">&times;</span>
-		</div>`;
+    			<span class="ui-icon ${opt.icon}"></span>
+    			<p class="ui-message">${opt.message}</p>
+    			<span class="ui-close">&times;</span>
+    		</div>`;
 
         container.appendChild(toast);
         if (opt.autoHide) tmr = setTimeout(() => __removeToast(toast), 5000);

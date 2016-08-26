@@ -1,11 +1,13 @@
+import { TaskQueue } from "aurelia-framework";
 import { UIListBehaviour } from "./ui-listing";
 export declare class UITags extends UIListBehaviour {
+    taskQueue: TaskQueue;
     __tagInput: any;
     __ignoreChange: any;
     __subscribeSearch: any;
     __tags: any[];
     __onlyAvailable: boolean;
-    constructor(element: Element);
+    constructor(element: Element, taskQueue: TaskQueue);
     /**
      * @property    value
      * @type        string

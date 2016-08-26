@@ -15,8 +15,8 @@ export declare class UIApplication {
     IsHttpInUse: boolean;
     IsAuthenticated: boolean;
     constructor(router: Router);
-    navigate(hash: any): void;
-    navigateTo(route: any, params?: {}): void;
+    navigate(hash: any, options?: any): void;
+    navigateTo(route: any, params?: {}, options?: any): void;
     /** App Constants **/
     private __username;
     private __userGroup;

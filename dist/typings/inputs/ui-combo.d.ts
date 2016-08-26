@@ -1,6 +1,8 @@
+import { TaskQueue } from "aurelia-framework";
 import { UIListBehaviour } from "./ui-listing";
 export declare class UIComboBox extends UIListBehaviour {
-    constructor(element: Element);
+    taskQueue: TaskQueue;
+    constructor(element: Element, taskQueue: TaskQueue);
     /**
      * @property    value
      * @type        string

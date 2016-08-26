@@ -4,7 +4,7 @@
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
 
-import {autoinject, bindable, useView, computedFrom, customElement, bindingMode, BindingEngine} from "aurelia-framework";
+import {autoinject, bindable, useView, computedFrom, customElement, bindingMode, BindingEngine, TaskQueue} from "aurelia-framework";
 import {UITreeModel, UITreeOptions} from "../utils/ui-tree-models";
 import {_, UIUtils} from "../utils/ui-utils";
 import {UIEvent} from "../utils/ui-event";
@@ -27,7 +27,7 @@ export class UITree {
     @bindable()
     options: UITreeOptions = new UITreeOptions();
 
-    constructor(public element: Element, observer: BindingEngine) {
+    constructor(public element: Element, public taskQueue: TaskQueue, observer: BindingEngine) {
         var self = this;
         this.__subscribeSelect = UIEvent.subscribe('tree-select', v => self.__itemSelect(v));
         this.__subscribeChecked = UIEvent.subscribe('tree-checked', v => self.__itemChecked(v));
@@ -48,10 +48,10 @@ export class UITree {
     }
 
     private attached() {
-        setTimeout(() => {
+        this.taskQueue.queueMicroTask(() => {
             let x;
             if ((x = this.element.querySelector('.ui-active')) !== null) x.scrollIntoView();
-        }, 200);
+        });
     }
 
     private detached() {
@@ -87,15 +87,6 @@ export class UITree {
     }
 
     private valueChanged(newValue) {
-        // if (this.selectedNode) {
-        // 	this.selectedNode.active = false;
-        // }
-        // this.selectedNode = _.find(_['flatMapDeep'](this.root.children, 'children'), ['id', newValue]);
-        // if (this.selectedNode) this.selectedNode.active = true;
-        // setTimeout(() => {
-        // 	let x;
-        // 	if ((x = this.element.querySelector('.ui-active')) !== null) x.scrollIntoView();
-        // }, 200);
     }
 
     private __searchTextChanged(newValue) {
@@ -124,9 +115,6 @@ export class UITree {
             var match = rx.test(UIUtils.getAscii(n.name));
             if (!_.isEmpty(value) && match) {
                 n.parent.expanded = true;
-				/*n.name            = n.name.replace(rx, b=> {
-				 return `<b>${b}</b>`
-				 });*/
                 let start = UIUtils.getAscii(n.name)
                     .search(rx);
                 let name = n.name.substr(0, start + value.length) + '</b>' + n.name.substr(start + value.length);

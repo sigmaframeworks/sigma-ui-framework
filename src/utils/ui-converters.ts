@@ -13,12 +13,6 @@ export class MarkdownValueConverter {
     }
 }
 
-export class HighlightValueConverter {
-    toView(value: string) {
-        return UIFormat.mdHilight(value || '');
-    }
-}
-
 // Dates
 export class DateValueConverter {
     toView(value: string, format?: string) {
@@ -86,6 +80,11 @@ export class IsArrayValueConverter {
 export class IsObjectValueConverter {
     toView(value: any) {
         return _.isObject(value);
+    }
+}
+export class IsEmptyValueConverter {
+    toView(value: any) {
+        return _.isEmpty(value);
     }
 }
 export class IsTrueValueConverter {

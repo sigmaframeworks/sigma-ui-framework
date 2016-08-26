@@ -1,8 +1,7 @@
+import { RenderInstruction, ValidationError } from "aurelia-validation";
 export declare class UIValidationRenderer {
-    boundaryElement: Element;
-    constructor(boundaryElement: Element);
-    render(error: any, target: any): void;
-    unrender(error: any, target: any): void;
+    constructor();
+    render(instruction: RenderInstruction): void;
+    add(element: Element, error: ValidationError): void;
+    remove(element: Element, error: ValidationError): void;
 }
-export declare function validatemap(targetOrConfig?: any, key?: any, descriptor?: any): any;
-export declare function validatephone(targetOrConfig?: any, key?: any, descriptor?: any): any;

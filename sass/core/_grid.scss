@@ -8,7 +8,7 @@
      @media only screen and (min-width : $size){
         @for $i from 1 through 12 {
             > .ui-col-#{$prefix}-#{$i} {
-                @include flex(1 0 (($i/12)*100%));
+                @include flex(0 0 (($i/12)*100%));
             }
         }
     }

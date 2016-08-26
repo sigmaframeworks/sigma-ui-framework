@@ -1,3 +1,4 @@
+import { TaskQueue } from "aurelia-framework";
 export declare class UIOption {
     element: Element;
     protected __id: string;
@@ -50,6 +51,7 @@ export declare class UIRadio extends UIOption {
 }
 export declare class UIOptionGroup {
     element: Element;
+    taskQueue: TaskQueue;
     private __label;
     private __name;
     /**
@@ -67,7 +69,7 @@ export declare class UIOptionGroup {
      * @type        string
      */
     value: string;
-    constructor(element: Element);
+    constructor(element: Element, taskQueue: TaskQueue);
     attached(): void;
     valueChanged(newValue: any): void;
     checkChanged($event: any): void;

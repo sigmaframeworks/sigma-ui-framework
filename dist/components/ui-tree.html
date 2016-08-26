@@ -5,17 +5,14 @@
 -->
 <template class="ui-tree-panel">
 
-	<div class="ui-search">
-		<ui-input class="ui-auto" type="search" label-hide placeholder="Search..." clear
-				  prefix-icon='fi-ui-search' value.bind="searchText & debounce:200"></ui-input>
-	</div>
+    <div class="ui-search">
+        <ui-input class="ui-auto" type="search" label-hide placeholder="Search..." clear prefix-icon='fi-ui-search' value.bind="searchText & debounce:200"></ui-input>
+    </div>
 
-	<div class="ui-tree-level">
+    <div class="ui-tree-level">
 
-		<tree-node repeat.for="child of root.children | sort:'name'"
-				   node.bind="child"
-				   options.bind="options"></tree-node>
+        <tree-node repeat.for="child of root.children | sort:'name'" node.bind="child" options.bind="options"></tree-node>
 
-	</div>
+    </div>
 
 </template>

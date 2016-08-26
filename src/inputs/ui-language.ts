@@ -31,7 +31,7 @@ export class UILanguage extends UIInputGroup {
 	 * @type        string
 	 */
     @bindable({ defaultBindingMode: bindingMode.twoWay })
-    language: string = '';
+    value: string = '';
 	/**
 	 * @property    languages
 	 * @type        array | map
@@ -48,13 +48,16 @@ export class UILanguage extends UIInputGroup {
     attached() {
         super.attached();
         this.languagesChanged(this.languages);
-        this.languageChanged(this.language);
+        this.valueChanged(this.value);
     }
 
-    languageChanged(newValue) {
+    valueChanged(newValue) {
         if (newValue === null) return this.__value = '';
-        let l: any = _.find(this.__languages, ['id', newValue]) || null;
+        let l: any = _.find(this.__languages, 'id', newValue) || null;
         this.__value = l === null ? '' : l.name;
+    }
+
+    formatter(evt) {
     }
 
     languagesChanged(newValue) {
@@ -70,28 +73,25 @@ export class UILanguage extends UIInputGroup {
         this.__available = a;
     }
 
-    formatter() {
-        return this.value;
-    }
-
     __add(lang) {
-        this.__languages.push(_.remove(this.__available, ['id', lang.id])[0]);
+        this.__languages.push(_.remove(this.__available, 'id', lang.id)[0]);
         UIEvent.fireEvent('add', this.element, lang.id);
         this.__select(lang);
         this.__focus = false;
     }
 
     __select(lang) {
-        this.language = lang.id;
+        this.value = lang.id;
+        this.__value = lang.name;
         UIEvent.fireEvent('select', this.element, lang.id);
         this.__focus = false;
     }
 
     __remove(lang) {
-        this.__available.push(_.remove(this.__languages, ['id', lang.id])[0]);
+        this.__available.push(_.remove(this.__languages, 'id', lang.id)[0]);
         if (this.__languages == null) this.__languages = [];
         UIEvent.fireEvent('delete', this.element, lang.id);
-        this.__select(this.__languages[0] || { id: '' });
+        if (this.value == lang.id) this.__select(this.__languages[0] || { id: '' });
         this.__focus = false;
     }
 }

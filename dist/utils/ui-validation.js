@@ -7,17 +7,31 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "aurelia-framework", 'aurelia-validation', "aurelia-validatejs"], function (require, exports, aurelia_framework_1, aurelia_validation_1, aurelia_validatejs_1) {
+define(["require", "exports", "aurelia-framework"], function (require, exports, aurelia_framework_1) {
     "use strict";
     var UIValidationRenderer = (function () {
-        function UIValidationRenderer(boundaryElement) {
-            this.boundaryElement = boundaryElement;
+        function UIValidationRenderer() {
         }
-        UIValidationRenderer.prototype.render = function (error, target) {
-            if (!target || !(this.boundaryElement === target || this.boundaryElement.contains(target))) {
-                return;
+        UIValidationRenderer.prototype.render = function (instruction) {
+            for (var _i = 0, _a = instruction.unrender; _i < _a.length; _i++) {
+                var _b = _a[_i], error = _b.error, elements = _b.elements;
+                for (var _c = 0, elements_1 = elements; _c < elements_1.length; _c++) {
+                    var element = elements_1[_c];
+                    this.remove(element, error);
+                }
             }
-            var formGroup = getParentByClass(target, 'ui-input-group');
+            for (var _d = 0, _e = instruction.render; _d < _e.length; _d++) {
+                var _f = _e[_d], error = _f.error, elements = _f.elements;
+                for (var _g = 0, elements_2 = elements; _g < elements_2.length; _g++) {
+                    var element = elements_2[_g];
+                    this.add(element, error);
+                }
+            }
+        };
+        UIValidationRenderer.prototype.add = function (element, error) {
+            var formGroup = getParentByClass(element, 'ui-input-group');
+            if (!formGroup)
+                return;
             var isDual = formGroup.isDual;
             formGroup.classList.add('ui-invalid');
             formGroup.classList.remove('ui-valid');
@@ -28,23 +42,25 @@ define(["require", "exports", "aurelia-framework", 'aurelia-validation', "aureli
                 helpBlock = aurelia_framework_1.DOM.createElement('div');
                 helpBlock.classList.add('ui-input-help');
                 helpBlock.classList.add('ui-input-error');
-                helpBlock.prop = error.message;
+                helpBlock.errorId = error.id;
                 formGroup.appendChild(helpBlock);
             }
             helpBlock.error = error;
             helpBlock.textContent = error ? error.message : 'Invalid';
         };
-        UIValidationRenderer.prototype.unrender = function (error, target) {
-            if (!target || !(this.boundaryElement === target || this.boundaryElement.contains(target))) {
+        UIValidationRenderer.prototype.remove = function (element, error) {
+            var formGroup = getParentByClass(element, 'ui-input-group');
+            if (!formGroup)
                 return;
-            }
-            var formGroup = getParentByClass(target, 'ui-input-group');
             var messages = formGroup.querySelectorAll('.ui-input-error');
             var i = messages.length;
             while (i--) {
                 var message = messages[i];
-                message.error = null;
-                message.remove();
+                if (message.errorId == error.id) {
+                    message.remove();
+                    break;
+                    ;
+                }
             }
             if (formGroup.querySelectorAll('.ui-input-error').length == 0) {
                 formGroup.classList.remove('ui-invalid');
@@ -52,37 +68,10 @@ define(["require", "exports", "aurelia-framework", 'aurelia-validation', "aureli
             }
         };
         UIValidationRenderer = __decorate([
-            aurelia_framework_1.autoinject,
-            aurelia_validation_1.validationRenderer, 
-            __metadata('design:paramtypes', [Element])
+            aurelia_framework_1.autoinject, 
+            __metadata('design:paramtypes', [])
         ], UIValidationRenderer);
         return UIValidationRenderer;
     }());
     exports.UIValidationRenderer = UIValidationRenderer;
-    var validator = new aurelia_validatejs_1.Validator();
-    validate.validators.map = function (map, options) {
-        var errors = [];
-        map.forEach(function (v, k) {
-            if (validator.validateObject(v).length > 0)
-                errors.push(k);
-        });
-        return errors.length > 0 ? (errors.join(',') + " ") + (options.message || options.notValid || this.notValid || 'has invalid values') : null;
-    };
-    function mapRule(config) {
-        return new aurelia_validatejs_1.ValidationRule('map', config);
-    }
-    function validatemap(targetOrConfig, key, descriptor) {
-        return aurelia_validatejs_1.base(targetOrConfig, key, descriptor, mapRule);
-    }
-    exports.validatemap = validatemap;
-    validate.validators.phone = function (val, options) {
-        return !PhoneLib.isValid(val) ? options.message || options.notValid || this.notValid || "is not a valid phone number" : null;
-    };
-    function phoneRule(config) {
-        return new aurelia_validatejs_1.ValidationRule('phone', config);
-    }
-    function validatephone(targetOrConfig, key, descriptor) {
-        return aurelia_validatejs_1.base(targetOrConfig, key, descriptor, phoneRule);
-    }
-    exports.validatephone = validatephone;
 });

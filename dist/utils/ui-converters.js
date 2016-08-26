@@ -9,15 +9,6 @@ define(["require", "exports", "./ui-formatters", "./ui-utils"], function (requir
         return MarkdownValueConverter;
     }());
     exports.MarkdownValueConverter = MarkdownValueConverter;
-    var HighlightValueConverter = (function () {
-        function HighlightValueConverter() {
-        }
-        HighlightValueConverter.prototype.toView = function (value) {
-            return ui_formatters_1.UIFormat.mdHilight(value || '');
-        };
-        return HighlightValueConverter;
-    }());
-    exports.HighlightValueConverter = HighlightValueConverter;
     var DateValueConverter = (function () {
         function DateValueConverter() {
         }
@@ -128,6 +119,15 @@ define(["require", "exports", "./ui-formatters", "./ui-utils"], function (requir
         return IsObjectValueConverter;
     }());
     exports.IsObjectValueConverter = IsObjectValueConverter;
+    var IsEmptyValueConverter = (function () {
+        function IsEmptyValueConverter() {
+        }
+        IsEmptyValueConverter.prototype.toView = function (value) {
+            return ui_utils_1._.isEmpty(value);
+        };
+        return IsEmptyValueConverter;
+    }());
+    exports.IsEmptyValueConverter = IsEmptyValueConverter;
     var IsTrueValueConverter = (function () {
         function IsTrueValueConverter() {
         }

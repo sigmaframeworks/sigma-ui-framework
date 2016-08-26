@@ -4,7 +4,7 @@
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
 
-import {autoinject, customElement, bindable, inlineView, children} from "aurelia-framework";
+import {autoinject, customElement, bindable, bindingMode, inlineView, children} from "aurelia-framework";
 import {_} from "../utils/ui-utils";
 
 @autoinject()
@@ -17,7 +17,7 @@ export class UITabPanel {
     @children('.ui-tab-body ui-tab')
     tabs = [];
 
-    @bindable
+    @bindable({ defaultBindingMode: bindingMode.twoWay })
     activeTab = 0;
 
     constructor(public element: Element) {
@@ -26,10 +26,9 @@ export class UITabPanel {
     bind() {
     }
 
-    attached() {
-        this.activeTabChanged(this.activeTab);
+    tabsChanged() {
+        this.activeTabChanged(this.activeTab)
     }
-
 
     activeTabChanged(newValue) {
         if (this.__selectedTab) this.__selectedTab.isSelected = false;
@@ -55,4 +54,6 @@ export class UITab {
         if (this.element.hasAttribute('padded')) this.element.classList.add('ui-pad-all');
         if (this.element.hasAttribute('flex')) this.element.classList.add('ui-column-row');
     }
+}
+
 }

@@ -339,33 +339,33 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
             if (this.__button = !(isEmpty(this.buttonIcon) && isEmpty(this.buttonTitle) && !this.element.hasAttribute('button')))
                 this.__align = 'center';
             if (!this.width && !isEmpty(this.buttonIcon) && isEmpty(this.buttonTitle)) {
-                this.width = 36;
+                this.width = convertToPx("2.5em", this.element);
             }
             else if (this.__type == 'date') {
-                this.width = 150;
+                this.width = convertToPx("10em", this.element);
                 this.__align = 'center';
             }
             else if (this.__type == 'datetime') {
-                this.width = 180;
+                this.width = convertToPx("12em", this.element);
                 this.__align = 'center';
             }
             else if (this.__type == 'exrate') {
-                this.width = 100;
+                this.width = convertToPx("6em", this.element);
                 this.__align = 'end';
             }
             else if (this.__type == 'fromnow') {
-                this.width = 120;
+                this.width = convertToPx("10em", this.element);
             }
             else if (this.__type == 'number') {
-                this.width = 120;
+                this.width = convertToPx("8em", this.element);
                 this.__align = 'end';
             }
             else if (this.__type == 'currency') {
-                this.width = 120;
+                this.width = convertToPx("8em", this.element);
                 this.__align = 'end';
             }
             else {
-                this.width = this.width || this.minWidth || 250;
+                this.width = convertToPx(this.width || this.minWidth || 250, this.element);
             }
         };
         UIDataColumn.prototype.attached = function () {
