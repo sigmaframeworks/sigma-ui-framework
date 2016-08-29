@@ -145,8 +145,8 @@ $shadow: $input-inner-shadow;
 
                 .ui-error-tooltip {
                     font-size    : .75em;
-                    color        : $danger;
-                    background   : $floral-white;
+                    color        : $input-error-tooltip-text;
+                    background   : $input-error-tooltip-bg;
                     position     : absolute;
                     display      : none;
                     z-index      : 20;

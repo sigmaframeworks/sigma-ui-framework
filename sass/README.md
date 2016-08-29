@@ -168,6 +168,10 @@ $input-addon-text
 
 $input-button-bg
 $input-button-text
+
+
+$input-error-tooltip-bg
+$input-error-tooltip-text
 ```
 
 ### DATE INPUT

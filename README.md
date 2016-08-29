@@ -14,7 +14,6 @@
   export function configure(aurelia) {
     aurelia.use
       .plugin('aurelia-validation')
-      .plugin('aurelia-validatejs')
       .plugin('sigma-ui-framework', function(config) {
         config
           .title(string)
