@@ -27,6 +27,8 @@ export class UIInputGroup {
     protected readonly = false;
     protected disabled = false;
 
+    protected __errorIcon;
+
 	/**
 	 * valid acceptable character list for all unicode supported languages
 	 */
@@ -91,10 +93,12 @@ export class UIInputGroup {
             this.__input2.onkeypress = (evt) => this.keyPress(evt);
             this.__input2.onchange = (evt: any) => evt.detail = this;
 
-            this.__input.onblur = evt => {
+            this.__input2.onblur = evt => {
                 UIEvent.fireEvent('blur', this.element, 'blurring');
             };
         }
+
+        this.element['errorIcon'] = this.__errorIcon;
     }
 
     focus() {

@@ -9,9 +9,9 @@ import {UIEvent} from "../utils/ui-event";
 import {UIUtils} from "../utils/ui-utils";
 import {UIModel} from "../utils/ui-model";
 import {UIApplication} from "../utils/ui-application";
-import {ValidationRules} from "aurelia-validation";
+import {ValidationRules, ValidationController} from "aurelia-validation";
 
-@autoinject
+@inject(Element, UIApplication, NewInstance.of(ValidationController))
 @customElement('ui-login')
 export class UILogin {
     model: LoginModel;
@@ -25,9 +25,8 @@ export class UILogin {
 
     __rowLayout = false;
 
-    constructor(public element: Element, public appState: UIApplication) {
+    constructor(public element: Element, public appState: UIApplication, public controller: ValidationController) {
         this.model = new LoginModel();
-
         this.__rowLayout = element.hasAttribute('row-layout');
     }
 
@@ -36,11 +35,11 @@ export class UILogin {
     }
 
     doLogin() {
-        this.model.validate()
+        this.controller.validate()
             .then(e => {
                 if (e.length == 0) {
                     this.error = '';
-                    UIEvent.fireEvent('login', this.element, this.model);
+                    UIEvent.queueTask(() => UIEvent.fireEvent('login', this.element, this.model));
                 }
             });
     }
@@ -78,6 +77,7 @@ export class LoginModel extends UIModel {
         ValidationRules
             .ensure((model: LoginModel) => model.username)
             .required()
+            .email()
             .ensure(model => model.password)
             .required()
             .on(LoginModel);

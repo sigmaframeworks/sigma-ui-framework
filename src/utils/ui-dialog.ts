@@ -36,7 +36,7 @@ export class UIDialogService {
         private compositionEngine: CompositionEngine) {
     }
 
-    show(vm, model) {
+    show(vm, model?) {
         if (!this.dialogContainer) {
             this.dialogContainer = document.body.querySelector('.ui-viewport .ui-dialog-container');
 
@@ -352,7 +352,7 @@ export class UIDialog {
         this.__current.height = this.height || this.__current.height;
     }
 
-    close($event) {
+    close($event?) {
         if ($event) $event.cancelBubble = true;
         UIEvent.fireEvent('close', this.__dialogWrapper, this);
     }

@@ -1,5 +1,8 @@
 {
   "dependencies": {
-    "lodash": "registry:npm/lodash#4.0.0+20160723033700"
+  },
+  "globalDependencies": {
+    "lodash": "registry:dt/lodash#4.14.0+20160817155621",
+    "numeraljs": "registry:dt/numeraljs#0.0.0+20160316155526"
   }
 }

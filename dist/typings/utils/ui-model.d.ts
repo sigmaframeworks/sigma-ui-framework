@@ -1,10 +1,8 @@
 import { Logger } from "aurelia-logging";
-import { ValidationController } from "aurelia-validation";
 import { UIHttpService } from "./ui-http-service";
 export declare class UIModel {
     logger: Logger;
     httpClient: UIHttpService;
-    controller: ValidationController;
     private __original;
     private __observers;
     constructor();
@@ -13,7 +11,6 @@ export declare class UIModel {
     put(...rest: any[]): void;
     delete(...rest: any[]): void;
     dispose(): void;
-    validate(): Promise<any>;
     deserialize(json: any): void;
     serialize(): {};
     __serializeObject(o: any): {};

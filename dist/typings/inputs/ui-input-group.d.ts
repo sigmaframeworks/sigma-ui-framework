@@ -17,6 +17,7 @@ export declare class UIInputGroup {
     protected checked: boolean;
     protected readonly: boolean;
     protected disabled: boolean;
+    protected __errorIcon: any;
     /**
      * valid acceptable character list for all unicode supported languages
      */

@@ -53,7 +53,7 @@ export class UILanguage extends UIInputGroup {
 
     valueChanged(newValue) {
         if (newValue === null) return this.__value = '';
-        let l: any = _.find(this.__languages, 'id', newValue) || null;
+        let l: any = _.find(this.__languages, { 'id': newValue }) || null;
         this.__value = l === null ? '' : l.name;
     }
 
@@ -74,7 +74,7 @@ export class UILanguage extends UIInputGroup {
     }
 
     __add(lang) {
-        this.__languages.push(_.remove(this.__available, 'id', lang.id)[0]);
+        this.__languages.push(_.remove(this.__available, { 'id': lang.id })[0]);
         UIEvent.fireEvent('add', this.element, lang.id);
         this.__select(lang);
         this.__focus = false;
@@ -88,7 +88,7 @@ export class UILanguage extends UIInputGroup {
     }
 
     __remove(lang) {
-        this.__available.push(_.remove(this.__languages, 'id', lang.id)[0]);
+        this.__available.push(_.remove(this.__languages, { 'id': lang.id })[0]);
         if (this.__languages == null) this.__languages = [];
         UIEvent.fireEvent('delete', this.element, lang.id);
         if (this.value == lang.id) this.__select(this.__languages[0] || { id: '' });

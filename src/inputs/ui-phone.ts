@@ -158,7 +158,9 @@ export class UIPhone extends UIInputGroup {
         }
         this.processValue();
         setTimeout(() => {
-            this.__input.selectionStart = this.__input.selectionEnd = start;
+            let x = 0;
+            if (this.__value.length > 0) x = this.__value.length - this.__value.substr(0, start).replace(/[^\d]/g, '').length;
+            this.__input.selectionStart = this.__input.selectionEnd = start + x;
             this.ignoreUpdate = false;
         }, 50);
     }

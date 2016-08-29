@@ -5,12 +5,11 @@
 -->
 <template class="ui-input-group ui-date-input">
     <label class="ui-label" ref="__label" for="${__id}">
-        <span>
-			<slot></slot>
-		</span>
+        <span><slot></slot></span>
     </label>
     <div class="ui-control-wrapper">
         <div class="ui-input-control">
+            <div class="ui-input-invalid fi-ui-exclaim-white" ref="__errorIcon"></div>
             <div class="ui-addon ui-date-addon" click.trigger="__input.focus()">
                 <span class="fi-ui-calendar"></span>
                 <span class="date">${__today}</span>
@@ -45,7 +44,4 @@
         </div>
         <div if.bind="helpText" innerhtml.bind="helpText" class="ui-input-help"></div>
     </div>
-</template>
->
-</div>
 </template>

@@ -68,7 +68,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
         };
         UIButton.prototype.valueChanged = function (newValue) {
             if (this.__hasMenu && this.__useMenuLabel) {
-                var menu = ui_utils_1._.find(this.__menuEl.menu, 'id', newValue);
+                var menu = ui_utils_1._.find(this.__menuEl.menu, { 'id': newValue });
                 if (menu)
                     this.label = menu.text;
             }

@@ -88,6 +88,20 @@ export class UIApplication {
         this.__authToken = v;
     }
 
+    login(authUser, authToken?) {
+        this.AuthUser = this.Username = authUser;
+        this.AuthToken = authToken;
+        this.IsAuthenticated = true;
+        this.navigateTo('');
+    }
+    logout() {
+        this.AuthUser = null;
+        this.AuthToken = null;
+        this.persist('AppPassword', null);
+        this.IsAuthenticated = false;
+        this.navigateTo('login');
+    }
+
     private __sharedState = {};
     shared(key, value: any = '§') {
         if (value === '§') {

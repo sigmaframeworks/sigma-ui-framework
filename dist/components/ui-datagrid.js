@@ -21,7 +21,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
             this.defaultOrder = 'asc';
             this.dataList = [];
             this.summaryRow = false;
-            this.emptyText = '';
+            this.emptyText = '&nbsp;';
             this.colChilds = [];
             this.allowSelect = false;
             this.__isResizing = false;
@@ -47,13 +47,9 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
             this.__doSort(this.dataList);
         };
         UIDataGrid.prototype.colChildsChanged = function (newValue) {
-            var cols = [];
-            ui_utils_1._.forEach(this.colChilds, function (c) {
-                cols.push(c['columnDef']);
-            });
-            this.columns = ui_utils_1._.orderBy(cols, ['__locked'], ['desc']);
-            this.__columnsLocked = ui_utils_1._.filter(cols, ['__locked', true]);
-            this.__columnsList = ui_utils_1._.filter(cols, ['__locked', false]);
+            this.columns = ui_utils_1._.orderBy(this.colChilds, ['__locked'], ['desc']);
+            this.__columnsLocked = ui_utils_1._.filter(this.colChilds, ['__locked', true]);
+            this.__columnsList = ui_utils_1._.filter(this.colChilds, ['__locked', false]);
         };
         UIDataGrid.prototype.dataListChanged = function (newValue) {
             this.__table.style.tableLayout = 'auto';
@@ -365,7 +361,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
                 this.__align = 'end';
             }
             else {
-                this.width = convertToPx(this.width || this.minWidth || 250, this.element);
+                this.width = convertToPx(this.width || this.minWidth || '250px', this.element);
             }
         };
         UIDataColumn.prototype.attached = function () {

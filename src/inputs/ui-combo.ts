@@ -119,7 +119,7 @@ export class UIComboBox extends UIListBehaviour {
 	 * @type        string
 	 */
     @bindable()
-    displayProperty: any = 'name';
+    displayProperty: any = 'text';
 	/**
 	 * @property    icon-property
 	 * @type        string

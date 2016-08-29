@@ -55,5 +55,3 @@ export class UITab {
         if (this.element.hasAttribute('flex')) this.element.classList.add('ui-column-row');
     }
 }
-
-}

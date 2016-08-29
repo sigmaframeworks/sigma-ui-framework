@@ -1,6 +1,6 @@
 {
   "name": "sigma-ui-framework",
-  "version": "0.0.1-beta.8",
+  "version": "0.0.1-beta.2",
   "description": "A bespoke UI Framework for building desktop business applications",
   "keywords": [
     "ui-framework",
@@ -36,7 +36,7 @@
       "aurelia-fetch-client": "^1.0.0",
       "aurelia-event-aggregator": "^1.0.0",
       "aurelia-templating-resources": "^1.0.0",
-      "aurelia-validation": "^0.11.0"
+      "aurelia-validation": "^0.12.0"
     },
     "dependencies": {
       "amcharts": "github:amcharts/amcharts3@^3.20.9",
@@ -68,7 +68,7 @@
     "aurelia-metadata": "^1.0.0",
     "aurelia-router": "^1.0.0",
     "aurelia-templating-resources": "^1.0.0",
-    "aurelia-validation": "github:jdanyow/validation-prototype",
+    "aurelia-validation": "^0.12.0",
     "fabric": "^1.6.3",
     "kramed": "^0.5.6",
     "lodash": "^4.5.1",

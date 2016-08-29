@@ -116,7 +116,7 @@ export class UIButton {
 
     valueChanged(newValue) {
         if (this.__hasMenu && this.__useMenuLabel) {
-            let menu: any = _.find(this.__menuEl.menu, 'id', newValue);
+            let menu: any = _.find(this.__menuEl.menu, { 'id': newValue });
             if (menu) this.label = menu.text;
         }
     }

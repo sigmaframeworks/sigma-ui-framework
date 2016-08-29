@@ -1,14 +1,16 @@
 import { UIModel } from "../utils/ui-model";
 import { UIApplication } from "../utils/ui-application";
+import { ValidationController } from "aurelia-validation";
 export declare class UILogin {
     element: Element;
     appState: UIApplication;
+    controller: ValidationController;
     model: LoginModel;
     __page: any;
     error: string;
     busy: boolean;
     __rowLayout: boolean;
-    constructor(element: Element, appState: UIApplication);
+    constructor(element: Element, appState: UIApplication, controller: ValidationController);
     attached(): void;
     doLogin(): void;
     toast(config: any): void;

@@ -78,7 +78,13 @@ export function configure(aurelia: FrameworkConfiguration, configCallback) {
     });
 
     ValidationRules
-        .customRule('phone', (value, obj) => PhoneLib.isValid(value), '\${$displayName } is not a valid phone number.');
+        .customRule('phone', (value, obj) => value === null || value === undefined || PhoneLib.isValid(value), '\${$displayName } is not a valid phone number.');
+    ValidationRules
+        .customRule('integer', (value, obj, min, max) => value === null || value === undefined || Number.isInteger(value) && value >= (min || Number.MIN_VALUE) && value <= (max || Number.MAX_VALUE),
+        '\${$displayName} must be an integer value between \${$config.min || "MIN_VALUE"} and \${$config.max || "MAX_VALUE"}.', (min, max) => ({ min, max }));
+    ValidationRules
+        .customRule('decimal', (value, obj, min, max) => value === null || value === undefined || Math.floor(value % 1) === 0 && value >= (min || Number.MIN_VALUE) && value <= (max || Number.MAX_VALUE),
+        '\${$displayName} must be a decimal value between \${$config.min || "MIN_VALUE"} and \${$config.max || "MAX_VALUE"}.', (min, max) => ({ min, max }));
     ValidationRules
         .customRule('map', (map, obj, config) => {
             let promises = [];

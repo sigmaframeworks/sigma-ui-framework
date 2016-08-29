@@ -28,6 +28,7 @@ export declare class UIApplication {
     UserGroupLabel: any;
     AuthUser: any;
     AuthToken: any;
+    logout(): void;
     private __sharedState;
     shared(key: any, value?: any): any;
     /** Session State **/

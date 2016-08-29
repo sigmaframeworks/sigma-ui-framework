@@ -25,6 +25,7 @@
                 <tbody>
                     <tr if.bind="__data.length==0">
                         <td colspan="${columns.length+1}" class="ui-empty-text">
+                          <h3 class="ui-text-muted">&nbsp;</h3>
                         </td>
                     </tr>
                     <tr mouseover.trigger="__focusRow=$index" mouseout.trigger="__focusRow=-1" repeat.for="model of __data" class="${allowSelect?'ui-datagrid-row':''} ${__focusRow==$index?'focus':''}" click.delegate="rowSelect(model)">

@@ -27,7 +27,7 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
             this.dir = '';
             this.options = [];
             this.valueProperty = 'id';
-            this.displayProperty = 'name';
+            this.displayProperty = 'text';
             this.iconProperty = '';
             this.iconClass = '';
             this.emptyText = 'No Results Found...';

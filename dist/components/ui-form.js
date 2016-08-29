@@ -47,7 +47,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             __metadata('design:type', Boolean)
         ], UIForm.prototype, "busy", void 0);
         UIForm = __decorate([
-            aurelia_framework_1.autoinject,
+            aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-form'), 
             __metadata('design:paramtypes', [Element, aurelia_framework_1.TaskQueue])
         ], UIForm);

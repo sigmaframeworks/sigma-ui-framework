@@ -9,6 +9,7 @@ define(["require", "exports", "./ui-utils", "aurelia-framework", "aurelia-event-
         UIEvent.fireEvent = fireEvent;
         var __ea;
         var __ob;
+        var __tq;
         function broadcast(event, data) {
             if (!__ea) {
                 __ea = ui_utils_1.UIUtils.lazy(aurelia_event_aggregator_1.EventAggregator);
@@ -30,5 +31,12 @@ define(["require", "exports", "./ui-utils", "aurelia-framework", "aurelia-event-
             return __ea.subscribe(event, callback);
         }
         UIEvent.subscribe = subscribe;
+        function queueTask(fn) {
+            if (!__tq) {
+                __tq = ui_utils_1.UIUtils.lazy(aurelia_framework_1.TaskQueue);
+            }
+            __tq.queueMicroTask(fn);
+        }
+        UIEvent.queueTask = queueTask;
     })(UIEvent = exports.UIEvent || (exports.UIEvent = {}));
 });

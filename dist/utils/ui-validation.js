@@ -35,36 +35,29 @@ define(["require", "exports", "aurelia-framework"], function (require, exports, 
             var isDual = formGroup.isDual;
             formGroup.classList.add('ui-invalid');
             formGroup.classList.remove('ui-valid');
-            if (formGroup.lastElementChild !== null)
-                formGroup = formGroup.lastElementChild;
-            var helpBlock;
-            if (!helpBlock) {
-                helpBlock = aurelia_framework_1.DOM.createElement('div');
-                helpBlock.classList.add('ui-input-help');
-                helpBlock.classList.add('ui-input-error');
-                helpBlock.errorId = error.id;
-                formGroup.appendChild(helpBlock);
+            if (formGroup.errorIcon) {
+                var errs = (formGroup.errorIcon.errors = formGroup.errorIcon.errors || []);
+                errs.push(error);
             }
-            helpBlock.error = error;
-            helpBlock.textContent = error ? error.message : 'Invalid';
         };
         UIValidationRenderer.prototype.remove = function (element, error) {
             var formGroup = getParentByClass(element, 'ui-input-group');
             if (!formGroup)
                 return;
-            var messages = formGroup.querySelectorAll('.ui-input-error');
-            var i = messages.length;
-            while (i--) {
-                var message = messages[i];
-                if (message.errorId == error.id) {
-                    message.remove();
-                    break;
-                    ;
+            if (formGroup.errorIcon) {
+                var errs = formGroup.errorIcon.errors || [];
+                var i = errs.length;
+                while (i--) {
+                    var message = errs[i];
+                    if (message.id == error.id) {
+                        errs.splice(i, 1);
+                        break;
+                    }
                 }
-            }
-            if (formGroup.querySelectorAll('.ui-input-error').length == 0) {
-                formGroup.classList.remove('ui-invalid');
-                formGroup.classList.add('ui-valid');
+                if (errs.length == 0) {
+                    formGroup.classList.remove('ui-invalid');
+                    formGroup.classList.add('ui-valid');
+                }
             }
         };
         UIValidationRenderer = __decorate([

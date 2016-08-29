@@ -80,7 +80,7 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group"], function
             }
             evt.target.value = val;
             setTimeout(function () { return evt.target.selectionStart = evt.target.selectionEnd = start; }, 10);
-            return val;
+            return (this.__format == 'number' || this.__format == 'decimal') ? parseFloat(val) : val;
         };
         __decorate([
             aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }), 

@@ -183,6 +183,6 @@ export class UIInputDual extends UIInputGroup {
         }
         evt.target.value = val;
         setTimeout(() => evt.target.selectionStart = evt.target.selectionEnd = start, 10);
-        return val;
+        return (this.__format == 'number' || this.__format == 'decimal') ? parseFloat(val) : val;
     }
 }

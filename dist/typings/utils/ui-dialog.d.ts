@@ -9,7 +9,7 @@ export declare class UIDialogService {
     private __active;
     private __windows;
     constructor(compiler: ViewCompiler, container: Container, resources: ViewResources, compositionEngine: CompositionEngine);
-    show(vm: any, model: any): Promise<any>;
+    show(vm: any, model?: any): Promise<any>;
     private __createDialog(vm);
     private __getViewModel(instruction);
     private __invokeLifecycle(instance, name, model);
@@ -51,7 +51,7 @@ export declare class UIDialog {
     resize: boolean;
     maximize: boolean;
     bind(): void;
-    close($event: any): void;
+    close($event?: any): void;
     focus(): void;
     expand($event: any): void;
     collapse($event: any): void;

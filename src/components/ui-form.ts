@@ -8,7 +8,7 @@ import {autoinject, customElement, bindable, inlineView, bindingMode, TaskQueue}
 import {UIEvent} from "../utils/ui-event";
 import {_, UIUtils} from "../utils/ui-utils";
 
-@autoinject
+@autoinject()
 @customElement('ui-form')
 export class UIForm {
     @bindable

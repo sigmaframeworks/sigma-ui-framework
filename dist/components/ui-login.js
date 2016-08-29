@@ -15,9 +15,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../utils/ui-utils", "../utils/ui-model", "../utils/ui-application", "aurelia-validation"], function (require, exports, aurelia_framework_1, ui_event_1, ui_utils_1, ui_model_1, ui_application_1, aurelia_validation_1) {
     "use strict";
     var UILogin = (function () {
-        function UILogin(element, appState) {
+        function UILogin(element, appState, controller) {
             this.element = element;
             this.appState = appState;
+            this.controller = controller;
             this.busy = false;
             this.__rowLayout = false;
             this.model = new LoginModel();
@@ -29,11 +30,11 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
         };
         UILogin.prototype.doLogin = function () {
             var _this = this;
-            this.model.validate()
+            this.controller.validate()
                 .then(function (e) {
                 if (e.length == 0) {
                     _this.error = '';
-                    ui_event_1.UIEvent.fireEvent('login', _this.element, _this.model);
+                    ui_event_1.UIEvent.queueTask(function () { return ui_event_1.UIEvent.fireEvent('login', _this.element, _this.model); });
                 }
             });
         };
@@ -52,11 +53,12 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             __metadata('design:type', Boolean)
         ], UILogin.prototype, "busy", void 0);
         UILogin = __decorate([
-            aurelia_framework_1.autoinject,
+            aurelia_framework_1.inject(Element, ui_application_1.UIApplication, aurelia_framework_1.NewInstance.of(aurelia_validation_1.ValidationController)),
             aurelia_framework_1.customElement('ui-login'), 
-            __metadata('design:paramtypes', [Element, ui_application_1.UIApplication])
+            __metadata('design:paramtypes', [Element, ui_application_1.UIApplication, (typeof (_a = typeof aurelia_validation_1.ValidationController !== 'undefined' && aurelia_validation_1.ValidationController) === 'function' && _a) || Object])
         ], UILogin);
         return UILogin;
+        var _a;
     }());
     exports.UILogin = UILogin;
     var LoginModel = (function (_super) {
@@ -78,6 +80,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             aurelia_validation_1.ValidationRules
                 .ensure(function (model) { return model.username; })
                 .required()
+                .email()
                 .ensure(function (model) { return model.password; })
                 .required()
                 .on(LoginModel);

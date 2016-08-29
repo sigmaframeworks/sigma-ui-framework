@@ -94,7 +94,10 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
             }
             this.processValue();
             setTimeout(function () {
-                _this.__input.selectionStart = _this.__input.selectionEnd = start;
+                var x = 0;
+                if (_this.__value.length > 0)
+                    x = _this.__value.length - _this.__value.substr(0, start).replace(/[^\d]/g, '').length;
+                _this.__input.selectionStart = _this.__input.selectionEnd = start + x;
                 _this.ignoreUpdate = false;
             }, 50);
         };

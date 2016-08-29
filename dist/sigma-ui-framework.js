@@ -50,7 +50,11 @@ define(["require", "exports", "./utils/ui-constants", "./utils/ui-utils", "./uti
             }
         });
         aurelia_validation_1.ValidationRules
-            .customRule('phone', function (value, obj) { return PhoneLib.isValid(value); }, '\${$displayName } is not a valid phone number.');
+            .customRule('phone', function (value, obj) { return value === null || value === undefined || PhoneLib.isValid(value); }, '\${$displayName } is not a valid phone number.');
+        aurelia_validation_1.ValidationRules
+            .customRule('integer', function (value, obj, min, max) { return value === null || value === undefined || Number.isInteger(value) && value >= (min || Number.MIN_VALUE) && value <= (max || Number.MAX_VALUE); }, '\${$displayName} must be an integer value between \${$config.min || "MIN_VALUE"} and \${$config.max || "MAX_VALUE"}.', function (min, max) { return ({ min: min, max: max }); });
+        aurelia_validation_1.ValidationRules
+            .customRule('decimal', function (value, obj, min, max) { return value === null || value === undefined || Math.floor(value % 1) === 0 && value >= (min || Number.MIN_VALUE) && value <= (max || Number.MAX_VALUE); }, '\${$displayName} must be a decimal value between \${$config.min || "MIN_VALUE"} and \${$config.max || "MAX_VALUE"}.', function (min, max) { return ({ min: min, max: max }); });
         aurelia_validation_1.ValidationRules
             .customRule('map', function (map, obj, config) {
             var promises = [];

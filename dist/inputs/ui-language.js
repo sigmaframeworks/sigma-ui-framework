@@ -30,7 +30,7 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
         UILanguage.prototype.valueChanged = function (newValue) {
             if (newValue === null)
                 return this.__value = '';
-            var l = ui_utils_1._.find(this.__languages, 'id', newValue) || null;
+            var l = ui_utils_1._.find(this.__languages, { 'id': newValue }) || null;
             this.__value = l === null ? '' : l.name;
         };
         UILanguage.prototype.formatter = function (evt) {
@@ -52,7 +52,7 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
             this.__available = a;
         };
         UILanguage.prototype.__add = function (lang) {
-            this.__languages.push(ui_utils_1._.remove(this.__available, 'id', lang.id)[0]);
+            this.__languages.push(ui_utils_1._.remove(this.__available, { 'id': lang.id })[0]);
             ui_event_1.UIEvent.fireEvent('add', this.element, lang.id);
             this.__select(lang);
             this.__focus = false;
@@ -64,7 +64,7 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
             this.__focus = false;
         };
         UILanguage.prototype.__remove = function (lang) {
-            this.__available.push(ui_utils_1._.remove(this.__languages, 'id', lang.id)[0]);
+            this.__available.push(ui_utils_1._.remove(this.__languages, { 'id': lang.id })[0]);
             if (this.__languages == null)
                 this.__languages = [];
             ui_event_1.UIEvent.fireEvent('delete', this.element, lang.id);

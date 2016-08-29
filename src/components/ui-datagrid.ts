@@ -41,7 +41,8 @@ export class UIDataGrid {
     @bindable()
     summaryRow = false;
     @bindable()
-    emptyText = '';
+    emptyText = '&nbsp;';
+
     @children('.ui-hide ui-data-column')
     colChilds = []
 
@@ -101,15 +102,15 @@ export class UIDataGrid {
     }
 
     colChildsChanged(newValue) {
-        let cols = [];
-        _.forEach(this.colChilds, c => {
-            cols.push(c['columnDef']);
-        });
+        // let cols = [];
+        // _.forEach(this.colChilds, c => {
+        //     cols.push(c['columnDef']);
+        // });
 
-        this.columns = _.orderBy(cols, ['__locked'], ['desc']);
+        this.columns = _.orderBy(this.colChilds, ['__locked'], ['desc']);
 
-        this.__columnsLocked = _.filter(cols, ['__locked', true]);
-        this.__columnsList = _.filter(cols, ['__locked', false]);
+        this.__columnsLocked = _.filter(this.colChilds, ['__locked', true]);
+        this.__columnsList = _.filter(this.colChilds, ['__locked', false]);
 
     }
 
@@ -469,7 +470,7 @@ export class UIDataColumn {
             this.__align = 'end';
         }
         else {
-            this.width = convertToPx(this.width || this.minWidth || 250, this.element);
+            this.width = convertToPx(this.width || this.minWidth || '250px', this.element);
         }
     }
 

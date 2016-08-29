@@ -81,6 +81,13 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-util
             enumerable: true,
             configurable: true
         });
+        UIApplication.prototype.logout = function () {
+            this.AuthUser = null;
+            this.AuthToken = null;
+            this.persist('AppPassword', null);
+            this.IsAuthenticated = false;
+            this.navigateTo('login');
+        };
         UIApplication.prototype.shared = function (key, value) {
             if (value === void 0) { value = '§'; }
             if (value === '§') {

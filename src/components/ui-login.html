@@ -20,8 +20,11 @@
                 <ui-input clear required label-top password value.bind="model.password & validate" placeholder="password"><span t="login.password">Password</span>
                 </ui-input>
 
-                <ui-checkbox checkbox class="ui-stretch" checked.bind="model.remember"><span t="login.remember">Remember Me</span>
-                </ui-checkbox>
+                <div class="ui-pad-all">
+                    <ui-checkbox checkbox class="ui-stretch" checked.bind="model.remember">
+                      <span t="login.remember">Remember Me</span>
+                    </ui-checkbox>
+                </div>
 
                 <div class="ui-text-end">
                     <ui-button primary click.trigger="doLogin()" label="Login" t="[label]login.button"></ui-button>

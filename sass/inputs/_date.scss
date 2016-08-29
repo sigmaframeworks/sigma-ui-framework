@@ -75,7 +75,7 @@
     .ui-date-wrapper {
         span {
             position  : relative;
-            padding   : .45em .4em;
+            padding   : .45em .2em;
             text-align: center;
             @include flex(0 0 auto);
         }
@@ -134,7 +134,7 @@
 
             span {
                 font-weight: $font-weight-strong;
-                width      : 2.5em;
+                width      : 2em;
                 color      : $date-weekday-text;
                 border     : 1px solid shade($date-weekday-bg, 5%);
             }
@@ -203,7 +203,7 @@
 
         .dates {
             span {
-                width: 2.5em;
+                width: 2em;
             }
 
             span.today:after {
