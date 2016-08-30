@@ -176,6 +176,7 @@ export class UIButtonGroup {
     bind() {
         // Set Theme
         if (this.element.hasAttribute('primary')) this.__theme = 'primary';
+        if (this.element.hasAttribute('secondary')) this.__theme = 'secondary';
         if (this.element.hasAttribute('info')) this.__theme = 'info';
         if (this.element.hasAttribute('danger')) this.__theme = 'danger';
         if (this.element.hasAttribute('success')) this.__theme = 'success';
@@ -201,14 +202,14 @@ export class UIButtonGroup {
             this.__theme = 'default';
         }
 
-        let buttons = this.element.getElementsByClassName('ui-button');
-        _.forEach(buttons, b => {
-            b.className = `ui-button ui-button-${this.__theme} ui-button-${this.__size} ${this.__extraClass}`;
-        });
-
         if (this.toggle !== false) {
             if (!isEmpty(this.value)) {
                 this.taskQueue.queueMicroTask(() => {
+                    let buttons = this.element.getElementsByClassName('ui-button');
+                    _.forEach(buttons, b => {
+                        b.className = `ui-button ui-button-${this.__theme} ui-button-${this.__size} ${this.__extraClass}`;
+                    });
+
                     _.forEach((this.value + '').split(','), v => {
                         let opt = this.element.querySelector(`.ui-button[data-value="${v}"]`);
                         if (opt) opt.classList.add('ui-checked');

@@ -20,7 +20,7 @@
         -moz-box-sizing   : content-box;
         box-sizing        : content-box;
         width             : 4em;
-        height            : 1.6em;
+        height            : 1.4em;
         padding           : .1em;
 
         cursor            : pointer;
@@ -61,7 +61,7 @@
 
         .ui-switch-label:after,
         .ui-switch-label:before {
-            line-height: 2em;
+            line-height: 1.9em;
 
             padding    : 0 .75em;
             @include transition(inherit);
@@ -107,9 +107,9 @@
         }
 
         .ui-switch-handle {
-            width        : 1.5em;
-            height       : 1.5em;
-            margin-top   : -.75em;
+            width        : 1.3em;
+            height       : 1.3em;
+            margin-top   : -.65em;
 
             cursor       : pointer;
 
@@ -123,7 +123,7 @@
         .ui-switch-input:checked ~ .ui-switch-handle {
             left       : 100%;
 
-            margin-left: -1.7em;
+            margin-left: -1.5em;
 
             box-shadow : -1px 1px 2px 1px rgba($black, .4);
         }

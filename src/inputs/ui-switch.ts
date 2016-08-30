@@ -45,7 +45,7 @@ export class UISwitch {
 	 * @type        boolean
 	 */
     @bindable({ defaultBindingMode: bindingMode.twoWay })
-    private checked: boolean = false;
+    checked: boolean = false;
 
     constructor(public element: Element) {
 

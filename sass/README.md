@@ -119,6 +119,7 @@ $statsbar-label
 ```
 $menu-link-bg
 $menu-link-text
+$menu-title-text
 
 $menu-hover-bg
 $menu-hover-text

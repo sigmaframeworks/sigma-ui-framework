@@ -15,6 +15,7 @@
     display       : inline-block;
     position      : relative;
 
+    margin        : .2em;
     pointer-events: none;
 
     &.ui-dropdown > .ui-button:after {
@@ -30,7 +31,6 @@
 
     display       : inline-block;
 
-    margin        : .2em;
     padding       : $base-padding;
 
     text-align    : center;
@@ -120,20 +120,34 @@
     pointer-events: none;
     @include flexbox(( display:inline-flex, flex-direction:row, flex-wrap:nowrap ));
 
-     > .ui-button,
-    .ui-button-control .ui-button {
+    &.ui-vertical {
+        @include flexbox(( display:inline-flex, flex-direction:column, flex-wrap:nowrap, align-items: stretch));
+
+        .ui-button-control:not(:first-child) .ui-button {
+            @include border-top-radius(0);
+        }
+
+        .ui-button-control:not(:last-child) .ui-button {
+            @include border-bottom-radius(0);
+        }
+    }
+
+    &:not(.ui-vertical) {
+      .ui-button-control:not(:first-child) .ui-button {
+          @include border-left-radius(0);
+      }
+
+      .ui-button-control:not(:last-child) .ui-button {
+          @include border-right-radius(0);
+      }
+    }
+
+    .ui-button-control {
         margin: 0;
-        @include flex(0 0 auto);
     }
 
-     > .ui-button:not(:first-child),
-    .ui-button-control:not(:first-child) .ui-button {
-        @include border-left-radius(0);
-    }
-
-     > .ui-button:not(:last-child),
-    .ui-button-control:not(:last-child) .ui-button {
-        @include border-right-radius(0);
+    .ui-button-control > .ui-button {
+        width: 100%;
     }
 
     &.ui-button-group-primary .ui-button.ui-checked {
@@ -168,7 +182,7 @@
 }
 
 [dir='rtl'] {
-    .ui-button-group {
+    .ui-button-group:not(.ui-vertical) {
         @include flex-direction(row-reverse);
     }
 }
