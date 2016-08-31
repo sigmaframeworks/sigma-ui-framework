@@ -19,6 +19,8 @@ export class UIPhone extends UIInputGroup {
     private prefixIcon = '';
     private ignoreUpdate = true;
 
+    __type = 'tel';
+
 	/**
 	 * @property    value
 	 * @type        string

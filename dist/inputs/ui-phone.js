@@ -24,6 +24,7 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
             this.prefixText = '';
             this.prefixIcon = '';
             this.ignoreUpdate = true;
+            this.__type = 'tel';
             this.value = '';
             this.isdCode = '';
             this.areaCode = '';

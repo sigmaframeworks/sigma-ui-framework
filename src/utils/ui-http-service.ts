@@ -45,13 +45,14 @@ export class UIHttpService {
                                 return response.text()
                                     .then(resp => {
                                         let json: any = {};
+                                        let error = 'Network Error!!';
                                         try {
                                             json = JSON.parse(resp);
+                                            if (json.message) error = json.message;
+                                            else if (json.error) error = json.error;
+                                            else if (response.statusText) error = response.statusText;
                                         } catch (e) { }
-                                        if (json.message) throw Error(json.message);
-                                        if (json.error) throw Error(json.error);
-                                        if (response.statusText) throw Error(response.statusText);
-                                        if (!response.statusText) throw Error('Network Error!!');
+                                        if (error) throw new Error(error);
                                         return null;
                                     });
                             }

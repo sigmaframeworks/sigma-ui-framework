@@ -40,6 +40,7 @@ export function configure(aurelia: FrameworkConfiguration, configCallback) {
     aurelia.globalResources('./inputs/ui-button');
     aurelia.globalResources('./inputs/ui-switch');
     aurelia.globalResources('./inputs/ui-option');
+    aurelia.globalResources('./inputs/ui-display');
     aurelia.globalResources('./inputs/ui-input');
     aurelia.globalResources('./inputs/ui-file');
     aurelia.globalResources('./inputs/ui-phone');

@@ -1,3 +1,5 @@
+* Added display input, for input styled static text display
+
 <a name="0.0.3-beta.4"></a>
 ## 0.0.3-beta.4 (2016-08-31)
 

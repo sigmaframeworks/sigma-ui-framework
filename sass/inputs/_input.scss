@@ -171,6 +171,10 @@ $shadow: $input-inner-shadow;
                 position: relative;
                 @include flex(1 1 0);
 
+                &.ui-display-pad {
+                    padding: .35em .5em;
+                }
+
                 > .ui-input {
                     width: 100%;
                     @include padding(end, 1em);
@@ -249,13 +253,13 @@ $shadow: $input-inner-shadow;
                 }
             }
 
-             > .ui-input-wrapper:nth-child(2) > .ui-input,
-            .ui-addon:nth-child(2) {
+            .ui-addon:nth-child(2),
+            > .ui-input-wrapper:nth-child(2) > .ui-input {
                 @include border-left-radius($base-border-radius);
             }
 
-             > .ui-input-wrapper:last-child > .ui-input,
-            .ui-addon:last-child {
+            .ui-addon:last-child,
+            > .ui-input-wrapper:last-child > .ui-input {
                 @include border-right-radius($base-border-radius);
             }
         }
@@ -352,14 +356,14 @@ $shadow: $input-inner-shadow;
 
         .ui-control-wrapper {
             > .ui-input-control {
-                 > .ui-input-wrapper:first-child > .ui-input,
-                .ui-addon:first-child {
+                .ui-addon:first-child,
+                > .ui-input-wrapper:first-child > .ui-input {
                     @include border-left-radius(0);
                     @include border-right-radius($base-border-radius);
                 }
 
-                 > .ui-input-wrapper:last-child > .ui-input,
-                .ui-addon:last-child {
+                .ui-addon:last-child,
+                > .ui-input-wrapper:last-child > .ui-input {
                     @include border-right-radius(0);
                     @include border-left-radius($base-border-radius);
                 }
@@ -371,8 +375,8 @@ $shadow: $input-inner-shadow;
             }
 
             > .ui-input-control:not(:last-child) {
-                 > .ui-addon,
-                > .ui-input {
+                 > .ui-input,
+                > .ui-addon {
                     @include border-bottom-radius(0);
                 }
             }

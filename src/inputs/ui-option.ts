@@ -152,6 +152,9 @@ export class UIOptionGroup {
     value: string;
 
     constructor(public element: Element, public taskQueue: TaskQueue) {
+        if (this.element.hasAttribute('auto-width')) this.element.classList.add('ui-auto');
+        if (this.element.hasAttribute('label-top')) this.element.classList.add('ui-label-top');
+        if (this.element.hasAttribute('label-hide')) this.element.classList.add('ui-label-hide');
     }
 
     attached() {

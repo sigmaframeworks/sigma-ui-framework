@@ -191,7 +191,7 @@ export class UIInputGroup {
 
             let rx = '.';
             if (this.__type === 'tel') rx = '[0-9]';
-            if (this.__format === 'number') rx = '[0-9\\-]';
+            if (this.__format === 'number' || this.__format === 'integer') rx = '[0-9\\-]';
             if (this.__format === 'decimal') rx = '[0-9\\-\\.]';
             if (this.__type === 'email') rx = '[A-Za-z0-9\\-\\.@_\\+$/]';
             if (this.__type === 'url') rx = '[A-Za-z0-9\\-\\.?:\\{\\}\\[\\]=&#%!()^_\\+$/]';

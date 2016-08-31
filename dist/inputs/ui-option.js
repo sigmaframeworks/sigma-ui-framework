@@ -128,6 +128,12 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             this.__name = "auf-" + __seed++;
             this.label = '';
             this.name = '';
+            if (this.element.hasAttribute('auto-width'))
+                this.element.classList.add('ui-auto');
+            if (this.element.hasAttribute('label-top'))
+                this.element.classList.add('ui-label-top');
+            if (this.element.hasAttribute('label-hide'))
+                this.element.classList.add('ui-label-hide');
         }
         UIOptionGroup.prototype.attached = function () {
             var _this = this;

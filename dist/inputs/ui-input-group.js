@@ -167,7 +167,7 @@ define(["require", "exports", "../utils/ui-event"], function (require, exports, 
                 var rx = '.';
                 if (this.__type === 'tel')
                     rx = '[0-9]';
-                if (this.__format === 'number')
+                if (this.__format === 'number' || this.__format === 'integer')
                     rx = '[0-9\\-]';
                 if (this.__format === 'decimal')
                     rx = '[0-9\\-\\.]';

@@ -6,6 +6,7 @@ export declare class UIPhone extends UIInputGroup {
     private prefixText;
     private prefixIcon;
     private ignoreUpdate;
+    __type: string;
     /**
      * @property    value
      * @type        string

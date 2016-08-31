@@ -29,6 +29,9 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group"], function
             if (this.element.hasAttribute('number')) {
                 this.__format = 'number';
             }
+            else if (this.element.hasAttribute('integer')) {
+                this.__format = 'integer';
+            }
             else if (this.element.hasAttribute('decimal')) {
                 this.__format = 'decimal';
             }
@@ -36,12 +39,20 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group"], function
                 this.__format = 'title';
             }
             else if (this.element.hasAttribute('email')) {
+                this.__type = 'email';
                 this.__format = 'email';
             }
             else if (this.element.hasAttribute('url')) {
+                this.__type = 'url';
                 this.__format = 'url';
             }
-            else if (this.element.hasAttribute('password')) {
+            else if (this.element.hasAttribute('upper')) {
+                this.__format = 'upper';
+            }
+            else if (this.element.hasAttribute('lower')) {
+                this.__format = 'lower';
+            }
+            if (this.element.hasAttribute('password')) {
                 this.__type = 'password';
             }
             else if (this.element.hasAttribute('search')) {
@@ -74,12 +85,15 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group"], function
                     return txt.charAt(0).toUpperCase() + txt.substr(1);
                 });
             }
-            else if (this.__format === 'email') {
+            else if (this.__format === 'upper') {
+                val = val.toUpperCase();
+            }
+            else if (this.__format === 'email' || this.__format === 'lower') {
                 val = val.toLowerCase();
             }
             evt.target.value = val;
             setTimeout(function () { return evt.target.selectionStart = evt.target.selectionEnd = start; }, 50);
-            return (this.__format == 'number' || this.__format == 'decimal') ? parseFloat(val) : val;
+            return (this.__format == 'integer' || this.__format == 'decimal') ? parseFloat(val) : val;
         };
         __decorate([
             aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }), 

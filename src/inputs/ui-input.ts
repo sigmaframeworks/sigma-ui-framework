@@ -109,6 +109,10 @@ export class UIInput extends UIInputGroup {
             //this.__type   = 'number';
             this.__format = 'number';
         }
+        else if (this.element.hasAttribute('integer')) {
+            //this.__type   = 'number';
+            this.__format = 'integer';
+        }
         else if (this.element.hasAttribute('decimal')) {
             //this.__type   = 'number';
             this.__format = 'decimal';
@@ -117,14 +121,21 @@ export class UIInput extends UIInputGroup {
             this.__format = 'title';
         }
         else if (this.element.hasAttribute('email')) {
-            // this.__type   = 'email';
+            this.__type = 'email';
             this.__format = 'email';
         }
         else if (this.element.hasAttribute('url')) {
-            // this.__type   = 'url';
+            this.__type = 'url';
             this.__format = 'url';
         }
-        else if (this.element.hasAttribute('password')) {
+        else if (this.element.hasAttribute('upper')) {
+            this.__format = 'upper';
+        }
+        else if (this.element.hasAttribute('lower')) {
+            this.__format = 'lower';
+        }
+
+        if (this.element.hasAttribute('password')) {
             this.__type = 'password';
         }
         else if (this.element.hasAttribute('search')) {
@@ -159,11 +170,14 @@ export class UIInput extends UIInputGroup {
                 return txt.charAt(0).toUpperCase() + txt.substr(1);
             });
         }
-        else if (this.__format === 'email') {
+        else if (this.__format === 'upper') {
+            val = val.toUpperCase();
+        }
+        else if (this.__format === 'email' || this.__format === 'lower') {
             val = val.toLowerCase();
         }
         evt.target.value = val;
         setTimeout(() => evt.target.selectionStart = evt.target.selectionEnd = start, 50);
-        return (this.__format == 'number' || this.__format == 'decimal') ? parseFloat(val) : val;
+        return (this.__format == 'integer' || this.__format == 'decimal') ? parseFloat(val) : val;
     }
 }

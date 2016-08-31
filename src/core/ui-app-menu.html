@@ -9,7 +9,7 @@
             <div class="ui-app-logo" if.bind="router.options.showLogo && icon" css.bind="{'background-image':'url('+icon+')'}"></div>
             <div class="ui-app-logo ${iconClass}" if.bind="router.options.showLogo && iconClass"></div>
         </div>
-        <div if "router.options.showInfoBox">
+        <div if.bind="router.options.showInfoBox">
             <p>Logged in as ${appState.Username}</p>
 
             <p class="ui-font-small">
