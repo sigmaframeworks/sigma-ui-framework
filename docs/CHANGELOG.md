@@ -1,7 +1,11 @@
+<a name="0.0.3-beta.4"></a>
+## 0.0.3-beta.4 (2016-08-31)
+
 * HttpService file upload fixed
 * Added option to set on/off values for switch
 * Added ability to indicate errors in Language Input
 * Added language validation rule
+
 
 <a name="0.0.2-beta.3"></a>
 ## 0.0.2-beta.3 (2016-08-30)
