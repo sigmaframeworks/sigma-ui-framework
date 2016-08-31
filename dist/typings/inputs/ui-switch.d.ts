@@ -5,16 +5,17 @@ export declare class UISwitch {
     private __switch;
     private __label;
     private __theme;
+    private __checked;
     /**
      * @property    label-on
      * @type        string
      */
-    labelOn: string;
+    onLabel: string;
     /**
      * @property    label-off
      * @type        string
      */
-    labelOff: string;
+    offLabel: string;
     /**
      * @property    disabled
      * @type        boolean
@@ -26,16 +27,27 @@ export declare class UISwitch {
      */
     width: any;
     /**
-     * @property    checked
-     * @type        boolean
+     * @property    value
+     * @type        any
      */
-    private checked;
+    value: any;
+    /**
+     * @property    onValue
+     * @type        any
+     */
+    onValue: any;
+    /**
+     * @property    onValue
+     * @type        any
+     */
+    offValue: any;
     constructor(element: Element);
     bind(): void;
     attached(): void;
     disable(disabled?: any): void;
+    valueChanged(newValue: any): void;
     disabledChanged(newValue: any): void;
-    valueChanged($event: any): void;
+    checkChanged($event: any): void;
     onFocus(): void;
     onBlur(): void;
 }

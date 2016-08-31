@@ -40,6 +40,37 @@ $shadow: $input-inner-shadow;
     margin: .25em .5em;
     @include flex-row(flex-start);
 
+    .ui-input-invalid {
+        color    : $danger;
+        font-size: 1.2em;
+        margin   : .3em .2em 0;
+        display  : none;
+        z-index  : 5;
+
+        .ui-error-tooltip {
+            font-size    : .75em;
+            color        : $input-error-tooltip-text;
+            background   : $input-error-tooltip-bg;
+            position     : absolute;
+            display      : none;
+            z-index      : 20;
+            left         : 1.5em;
+            min-width    : 15em;
+            border-radius: $base-border-radius;
+            @include box-shadow(0 0 4px 0 $base-shadow-color);
+
+            p {
+                text-align: start;
+                text-align: left;
+                padding   : .3em .5em;
+            }
+        }
+
+        &:hover .ui-error-tooltip {
+            display: block;
+        }
+    }
+
     .ui-label {
         position  : relative;
 
@@ -135,37 +166,6 @@ $shadow: $input-inner-shadow;
         > .ui-input-control {
             min-height: 2em;
             @include flex-row(stretch, $wrap: false);
-
-            .ui-input-invalid {
-                color    : $danger;
-                font-size: 1.2em;
-                margin   : .3em .2em 0;
-                display  : none;
-                z-index  : 5;
-
-                .ui-error-tooltip {
-                    font-size    : .75em;
-                    color        : $input-error-tooltip-text;
-                    background   : $input-error-tooltip-bg;
-                    position     : absolute;
-                    display      : none;
-                    z-index      : 20;
-                    left         : 1.5em;
-                    min-width    : 15em;
-                    border-radius: $base-border-radius;
-                    @include box-shadow(0 0 4px 0 $base-shadow-color);
-
-                    p {
-                        text-align: start;
-                        text-align: left;
-                        padding   : .3em .5em;
-                    }
-                }
-
-                &:hover .ui-error-tooltip {
-                    display: block;
-                }
-            }
 
             > .ui-input-wrapper {
                 position: relative;

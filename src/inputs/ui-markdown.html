@@ -11,6 +11,11 @@
 
     <div class="ui-control-wrapper">
         <div class="ui-markdown-tools ui-button-bar" click.delegate="toolClick($event)">
+            <div class="ui-input-invalid fi-ui-exclaim-white" ref="__errorIcon">
+                <div class="ui-error-tooltip">
+                    <p repeat.for="err of __errorIcon.errors">${err.message || 'Invalid'}</p>
+                </div>
+            </div>
             <div class="ui-button-group" dir="ltr">
                 <button type="button" tabindex="-1" data-id="h1" disabled.bind="__disableTools" class="ui-button ui-button-default ui-button-small ui-plain"><b>H1</b></button>
                 <button type="button" tabindex="-1" data-id="h2" disabled.bind="__disableTools" class="ui-button ui-button-default ui-button-small ui-plain"><b>H2</b></button>

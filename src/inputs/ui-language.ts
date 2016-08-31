@@ -45,6 +45,8 @@ export class UILanguage extends UIInputGroup {
     @bindable()
     disabled: boolean = false;
 
+    __errors = {};
+
     attached() {
         super.attached();
         this.languagesChanged(this.languages);
@@ -64,13 +66,20 @@ export class UILanguage extends UIInputGroup {
         let s = [], a = [];
         let isMap = newValue instanceof Map;
         _.forEach(UILanguage.LANGUAGES, l => {
-            if (!isMap && newValue.indexOf(l.id) == -1) a.push(l);
-            if (!isMap && newValue.indexOf(l.id) > -1) s.push(l);
+            if (!isMap && Object.keys(newValue).indexOf(l.id) == -1) a.push(l);
+            if (!isMap && Object.keys(newValue).indexOf(l.id) > -1) s.push(l);
             if (isMap && newValue.has(l.id)) s.push(l);
             if (isMap && !newValue.has(l.id)) a.push(l);
         });
         this.__languages = s;
         this.__available = a;
+    }
+
+    clearErrors() {
+        this.__errors = {};
+    }
+    addError(key) {
+        this.__errors[key] = true;
     }
 
     __add(lang) {
@@ -81,9 +90,11 @@ export class UILanguage extends UIInputGroup {
     }
 
     __select(lang) {
-        this.value = lang.id;
-        this.__value = lang.name;
-        UIEvent.fireEvent('select', this.element, lang.id);
+        if (UIEvent.fireEvent('beforeselect', this.element, lang.id) !== false) {
+            this.value = lang.id;
+            this.__value = lang.name;
+            UIEvent.fireEvent('select', this.element, lang.id);
+        }
         this.__focus = false;
     }
 

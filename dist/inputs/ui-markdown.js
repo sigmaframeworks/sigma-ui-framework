@@ -34,6 +34,7 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group"], function
                 this.element.classList.add('ui-full-view');
                 this.element.classList.add('ui-side-view');
             }
+            this.value = this.value || '';
         };
         UIMarkdown.prototype.disable = function (disabled) {
             _super.prototype.disable.call(this, disabled);

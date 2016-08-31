@@ -6,7 +6,7 @@
 <template class="ui-datagrid" mousedown.delegate="resizeStart($event)">
 
     <div class="ui-datagrid-wrapper">
-        <div class="ui-table-wrapper sticky">
+        <div class="ui-table-wrapper sticky" if.bind="__columnsLocked.length>0">
             <table ref="__tableLocked" height="100%" class="ui-locked-table">
                 <colgroup>
                     <col repeat.for="col of __columnsLocked" data-index="${$index}" width="${(col.width || col.minWidth || '250')}" />

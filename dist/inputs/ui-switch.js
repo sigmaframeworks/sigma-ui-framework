@@ -13,10 +13,12 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event"], functio
         function UISwitch(element) {
             this.element = element;
             this.__id = "auf-" + __seed++;
-            this.labelOn = 'On';
-            this.labelOff = 'Off';
+            this.onLabel = 'On';
+            this.offLabel = 'Off';
             this.disabled = false;
-            this.checked = false;
+            this.value = false;
+            this.onValue = true;
+            this.offValue = false;
         }
         UISwitch.prototype.bind = function () {
             if (this.element.hasAttribute('primary'))
@@ -33,7 +35,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event"], functio
                 this.__theme = 'ampm';
             if (this.element.hasAttribute('gender'))
                 this.__theme = 'gender';
-            this.checked = isTrue(this.checked);
+            this.__checked = this.value === this.onValue;
             this.disabled = isTrue(this.disabled);
         };
         UISwitch.prototype.attached = function () {
@@ -54,13 +56,17 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event"], functio
                 this.__label.attributes.setNamedItem(document.createAttribute('disabled'));
             }
         };
+        UISwitch.prototype.valueChanged = function (newValue) {
+            this.__checked = this.value === this.onValue;
+        };
         UISwitch.prototype.disabledChanged = function (newValue) {
             this.disabled = isTrue(newValue);
             this.disable();
         };
-        UISwitch.prototype.valueChanged = function ($event) {
+        UISwitch.prototype.checkChanged = function ($event) {
+            this.value = this.__checked ? this.onValue : this.offValue;
             $event.cancelBubble = true;
-            ui_event_1.UIEvent.fireEvent('change', this.element, this.checked);
+            ui_event_1.UIEvent.fireEvent('change', this.element, this.value);
         };
         UISwitch.prototype.onFocus = function () {
             this.__switch.classList.add('ui-focus');
@@ -71,11 +77,11 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event"], functio
         __decorate([
             aurelia_framework_1.bindable(), 
             __metadata('design:type', String)
-        ], UISwitch.prototype, "labelOn", void 0);
+        ], UISwitch.prototype, "onLabel", void 0);
         __decorate([
             aurelia_framework_1.bindable(), 
             __metadata('design:type', String)
-        ], UISwitch.prototype, "labelOff", void 0);
+        ], UISwitch.prototype, "offLabel", void 0);
         __decorate([
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Boolean)
@@ -86,8 +92,16 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event"], functio
         ], UISwitch.prototype, "width", void 0);
         __decorate([
             aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }), 
-            __metadata('design:type', Boolean)
-        ], UISwitch.prototype, "checked", void 0);
+            __metadata('design:type', Object)
+        ], UISwitch.prototype, "value", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UISwitch.prototype, "onValue", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UISwitch.prototype, "offValue", void 0);
         UISwitch = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-switch'), 

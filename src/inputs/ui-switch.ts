@@ -15,19 +15,20 @@ export class UISwitch {
     private __switch: HTMLElement;
     private __label: Element;
     private __theme: string;
+    private __checked: boolean;
 
 	/**
 	 * @property    label-on
 	 * @type        string
 	 */
     @bindable()
-    labelOn: string = 'On';
+    onLabel: string = 'On';
 	/**
 	 * @property    label-off
 	 * @type        string
 	 */
     @bindable()
-    labelOff: string = 'Off';
+    offLabel: string = 'Off';
 	/**
 	 * @property    disabled
 	 * @type        boolean
@@ -41,11 +42,23 @@ export class UISwitch {
     @bindable()
     width: any;
 	/**
-	 * @property    checked
-	 * @type        boolean
+	 * @property    value
+	 * @type        any
 	 */
     @bindable({ defaultBindingMode: bindingMode.twoWay })
-    checked: boolean = false;
+    value: any = false;
+    /**
+  	 * @property    onValue
+  	 * @type        any
+  	 */
+    @bindable()
+    onValue: any = true;
+    /**
+  	 * @property    onValue
+  	 * @type        any
+  	 */
+    @bindable()
+    offValue: any = false;
 
     constructor(public element: Element) {
 
@@ -61,7 +74,7 @@ export class UISwitch {
         if (this.element.hasAttribute('ampm')) this.__theme = 'ampm';
         if (this.element.hasAttribute('gender')) this.__theme = 'gender';
 
-        this.checked = isTrue(this.checked);
+        this.__checked = this.value === this.onValue;
         this.disabled = isTrue(this.disabled);
     }
 
@@ -84,14 +97,19 @@ export class UISwitch {
         }
     }
 
+    valueChanged(newValue) {
+        this.__checked = this.value === this.onValue;
+    }
+
     disabledChanged(newValue) {
         this.disabled = isTrue(newValue);
         this.disable();
     }
 
-    valueChanged($event) {
+    checkChanged($event) {
+        this.value = this.__checked ? this.onValue : this.offValue;
         $event.cancelBubble = true;
-        UIEvent.fireEvent('change', this.element, this.checked);
+        UIEvent.fireEvent('change', this.element, this.value);
     }
 
     onFocus() {

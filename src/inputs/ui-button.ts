@@ -83,8 +83,8 @@ export class UIButton {
         if (this.element.hasAttribute('small')) this.__size = 'small';
         if (this.element.hasAttribute('large')) this.__size = 'large';
 
-        this.__hasMenu = this.element.hasAttribute('menu');
-        this.__hasMenu = this.__useMenuLabel = this.element.hasAttribute('dropdown');
+        this.__hasMenu = this.element.hasAttribute('menu') || this.element.hasAttribute('dropdown');
+        this.__useMenuLabel = this.element.hasAttribute('dropdown');
 
         this.disabled = isTrue(this.disabled);
     }

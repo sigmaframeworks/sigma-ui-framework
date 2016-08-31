@@ -38,8 +38,8 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
                 this.__size = 'small';
             if (this.element.hasAttribute('large'))
                 this.__size = 'large';
-            this.__hasMenu = this.element.hasAttribute('menu');
-            this.__hasMenu = this.__useMenuLabel = this.element.hasAttribute('dropdown');
+            this.__hasMenu = this.element.hasAttribute('menu') || this.element.hasAttribute('dropdown');
+            this.__useMenuLabel = this.element.hasAttribute('dropdown');
             this.disabled = isTrue(this.disabled);
         };
         UIButton.prototype.attached = function () {
@@ -136,6 +136,8 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
         UIButtonGroup.prototype.bind = function () {
             if (this.element.hasAttribute('primary'))
                 this.__theme = 'primary';
+            if (this.element.hasAttribute('secondary'))
+                this.__theme = 'secondary';
             if (this.element.hasAttribute('info'))
                 this.__theme = 'info';
             if (this.element.hasAttribute('danger'))
@@ -165,13 +167,13 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
                 this.element.classList.add("ui-button-group-" + this.__theme);
                 this.__theme = 'default';
             }
-            var buttons = this.element.getElementsByClassName('ui-button');
-            ui_utils_1._.forEach(buttons, function (b) {
-                b.className = "ui-button ui-button-" + _this.__theme + " ui-button-" + _this.__size + " " + _this.__extraClass;
-            });
             if (this.toggle !== false) {
                 if (!isEmpty(this.value)) {
                     this.taskQueue.queueMicroTask(function () {
+                        var buttons = _this.element.getElementsByClassName('ui-button');
+                        ui_utils_1._.forEach(buttons, function (b) {
+                            b.className = "ui-button ui-button-" + _this.__theme + " ui-button-" + _this.__size + " " + _this.__extraClass;
+                        });
                         ui_utils_1._.forEach((_this.value + '').split(','), function (v) {
                             var opt = _this.element.querySelector(".ui-button[data-value=\"" + v + "\"]");
                             if (opt)

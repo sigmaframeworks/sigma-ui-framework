@@ -4799,7 +4799,7 @@ hr {
   border: 1px solid #aaaaa4;
   z-index: 500;
   min-width: 100%;
-  margin: -4px .2em 0;
+  margin: 0;
   left: 0;
   top: 100%;
   max-height: 0;
@@ -4822,8 +4822,14 @@ hr {
   top: -100%;
 }
 .ui-menu.ui-floating .ui-menu-link {
-  padding: .4em .5em;
+  padding: .5em;
   white-space: nowrap;
+  font-size: .9em;
+}
+.ui-menu.ui-floating .ui-menu-title {
+  padding: .3em .5em;
+  white-space: nowrap;
+  font-size: 1em;
 }
 .ui-menu .ui-menu-title {
   font-size: 1.3em;
@@ -5987,6 +5993,35 @@ hr {
   justify-content: flex-start;
   flex-wrap: wrap;
 }
+.ui-input-group .ui-input-invalid {
+  color: #f15162;
+  font-size: 1.2em;
+  margin: .3em .2em 0;
+  display: none;
+  z-index: 5;
+}
+.ui-input-group .ui-input-invalid .ui-error-tooltip {
+  font-size: .75em;
+  color: #f15162;
+  background: #fef9f3;
+  position: absolute;
+  display: none;
+  z-index: 20;
+  left: 1.5em;
+  min-width: 15em;
+  border-radius: 0.2em;
+  -moz-box-shadow: 0 0 4px 0 #636360;
+  -webkit-box-shadow: 0 0 4px 0 #636360;
+  box-shadow: 0 0 4px 0 #636360;
+}
+.ui-input-group .ui-input-invalid .ui-error-tooltip p {
+  text-align: start;
+  text-align: left;
+  padding: .3em .5em;
+}
+.ui-input-group .ui-input-invalid:hover .ui-error-tooltip {
+  display: block;
+}
 .ui-input-group .ui-label {
   position: relative;
   padding: .35em 0;
@@ -6088,35 +6123,6 @@ hr {
   align-items: stretch;
   justify-content: flex-start;
   flex-wrap: nowrap;
-}
-.ui-input-group .ui-control-wrapper > .ui-input-control .ui-input-invalid {
-  color: #f15162;
-  font-size: 1.2em;
-  margin: .3em .2em 0;
-  display: none;
-  z-index: 5;
-}
-.ui-input-group .ui-control-wrapper > .ui-input-control .ui-input-invalid .ui-error-tooltip {
-  font-size: .75em;
-  color: #f15162;
-  background: #fef9f3;
-  position: absolute;
-  display: none;
-  z-index: 20;
-  left: 1.5em;
-  min-width: 15em;
-  border-radius: 0.2em;
-  -moz-box-shadow: 0 0 4px 0 #636360;
-  -webkit-box-shadow: 0 0 4px 0 #636360;
-  box-shadow: 0 0 4px 0 #636360;
-}
-.ui-input-group .ui-control-wrapper > .ui-input-control .ui-input-invalid .ui-error-tooltip p {
-  text-align: start;
-  text-align: left;
-  padding: .3em .5em;
-}
-.ui-input-group .ui-control-wrapper > .ui-input-control .ui-input-invalid:hover .ui-error-tooltip {
-  display: block;
 }
 .ui-input-group .ui-control-wrapper > .ui-input-control > .ui-input-wrapper {
   position: relative;
@@ -6827,6 +6833,7 @@ hr {
 .ui-button-control {
   display: inline-block;
   position: relative;
+  margin: .2em;
   pointer-events: none;
 }
 .ui-button-control.ui-dropdown > .ui-button:after {
@@ -6839,7 +6846,6 @@ hr {
   font-size: 1.1em;
   font-weight: 400;
   display: inline-block;
-  margin: .2em;
   padding: 0.3em 0.8em;
   text-align: center;
   pointer-events: all;
@@ -6952,14 +6958,33 @@ hr {
   flex-direction: row;
   flex-wrap: nowrap;
 }
-.ui-button-group > .ui-button,
-.ui-button-group .ui-button-control .ui-button {
-  margin: 0;
-  -webkit-flex: 0 0 auto;
-  flex: 0 0 auto;
+.ui-button-group.ui-vertical {
+  display: -webkit-inline-flex;
+  -webkit-flex-direction: column;
+  -webkit-flex-wrap: nowrap;
+  -webkit-align-items: stretch;
+  display: inline-flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
 }
-.ui-button-group > .ui-button:not(:first-child),
-.ui-button-group .ui-button-control:not(:first-child) .ui-button {
+.ui-button-group.ui-vertical .ui-button-control:not(:first-child) .ui-button {
+  -moz-border-radius-topleft: 0;
+  -webkit-border-top-left-radius: 0;
+  border-top-left-radius: 0;
+  -moz-border-radius-topright: 0;
+  -webkit-border-top-right-radius: 0;
+  border-top-right-radius: 0;
+}
+.ui-button-group.ui-vertical .ui-button-control:not(:last-child) .ui-button {
+  -moz-border-radius-bottomleft: 0;
+  -webkit-border-bottom-left-radius: 0;
+  border-bottom-left-radius: 0;
+  -moz-border-radius-bottomright: 0;
+  -webkit-border-bottom-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.ui-button-group:not(.ui-vertical) .ui-button-control:not(:first-child) .ui-button {
   -moz-border-radius-topleft: 0;
   -webkit-border-top-left-radius: 0;
   border-top-left-radius: 0;
@@ -6967,14 +6992,19 @@ hr {
   -webkit-border-bottom-left-radius: 0;
   border-bottom-left-radius: 0;
 }
-.ui-button-group > .ui-button:not(:last-child),
-.ui-button-group .ui-button-control:not(:last-child) .ui-button {
+.ui-button-group:not(.ui-vertical) .ui-button-control:not(:last-child) .ui-button {
   -moz-border-radius-topright: 0;
   -webkit-border-top-right-radius: 0;
   border-top-right-radius: 0;
   -moz-border-radius-bottomright: 0;
   -webkit-border-bottom-right-radius: 0;
   border-bottom-right-radius: 0;
+}
+.ui-button-group .ui-button-control {
+  margin: 0;
+}
+.ui-button-group .ui-button-control > .ui-button {
+  width: 100%;
 }
 .ui-button-group.ui-button-group-primary .ui-button.ui-checked {
   color: #fcfcfa;
@@ -7001,7 +7031,7 @@ hr {
   background: #f4713b;
 }
 
-[dir='rtl'] .ui-button-group {
+[dir='rtl'] .ui-button-group:not(.ui-vertical) {
   -webkit-flex-direction: row-reverse;
   flex-direction: row-reverse;
 }
@@ -7018,7 +7048,7 @@ hr {
   -moz-box-sizing: content-box;
   box-sizing: content-box;
   width: 4em;
-  height: 1.6em;
+  height: 1.4em;
   padding: .1em;
   cursor: pointer;
   vertical-align: top;
@@ -7055,7 +7085,7 @@ hr {
 }
 .ui-switch-control .ui-switch .ui-switch-label:after,
 .ui-switch-control .ui-switch .ui-switch-label:before {
-  line-height: 2em;
+  line-height: 1.9em;
   padding: 0 .75em;
   -moz-transition: inherit;
   -o-transition: inherit;
@@ -7095,9 +7125,9 @@ hr {
   opacity: .5;
 }
 .ui-switch-control .ui-switch .ui-switch-handle {
-  width: 1.5em;
-  height: 1.5em;
-  margin-top: -.75em;
+  width: 1.3em;
+  height: 1.3em;
+  margin-top: -.65em;
   cursor: pointer;
   border-radius: 1em;
   background: white linear-gradient(to bottom, #fefeff, #fcfcfa);
@@ -7112,7 +7142,7 @@ hr {
 }
 .ui-switch-control .ui-switch .ui-switch-input:checked ~ .ui-switch-handle {
   left: 100%;
-  margin-left: -1.7em;
+  margin-left: -1.5em;
   box-shadow: -1px 1px 2px 1px rgba(50, 46, 45, 0.4);
 }
 .ui-switch-control .ui-switch.ui-switch-primary > .ui-switch-input:checked ~ .ui-switch-label {

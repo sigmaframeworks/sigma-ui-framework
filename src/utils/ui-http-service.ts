@@ -153,8 +153,8 @@ export class UIHttpService {
         for (var i = 0, q = (form.querySelectorAll('input') as NodeListOf<HTMLInputElement>); i < q.length; i++) {
             if (q[i].type == 'file') {
                 let files = q[i]['draggedFiles'] || q[i].files;
-                for (var x = 0; x < files; x++) {
-                    data.append((q[i].name || 'file') + (i + 1), files[x], files[x].name);
+                for (var x = 0; x < files.length; x++) {
+                    data.append(q[i].name || ('file' + (i + 1) + (x + 1)), (files[x].file || files[x]), files[x].name);
                 }
             }
             else {

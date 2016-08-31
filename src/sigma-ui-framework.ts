@@ -86,16 +86,19 @@ export function configure(aurelia: FrameworkConfiguration, configCallback) {
         .customRule('decimal', (value, obj, min, max) => value === null || value === undefined || Math.floor(value % 1) === 0 && value >= (min || Number.MIN_VALUE) && value <= (max || Number.MAX_VALUE),
         '\${$displayName} must be a decimal value between \${$config.min || "MIN_VALUE"} and \${$config.max || "MAX_VALUE"}.', (min, max) => ({ min, max }));
     ValidationRules
-        .customRule('map', (map, obj, config) => {
+        .customRule('language', (map, obj, langInput) => {
+            if (!(langInput && langInput.clearErrors && langInput.addError)) throw new Error('Language validation must have reference to ui-language');
             let promises = [];
-            if (map instanceof Map) {
-                map.forEach((model, key) => {
-                    promises.push(model.validate()
-                        .catch(e => config.langs.push(key)));
-                });
-            }
-            return Promise.all(promises);
-        }, '\${$config.langs.join(",")} contain invalid values', config => (config || { langs: [] }));
+            langInput.clearErrors();
+            _.forEach(map, (model, key) => {
+                promises.push(this.controller.validator.validateObject(model)
+                    .then(e => {
+                        if (e.length > 0) langInput.addError(key);
+                        return e.length > 0 ? key : '';
+                    }));
+            });
+            return Promise.all(promises).then(e => e.join('').length == 0);
+        }, 'Some language entries contain invalid values');
 
     var Configure = {
         title: (t) => {

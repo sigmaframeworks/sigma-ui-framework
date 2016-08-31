@@ -9,7 +9,11 @@
     </label>
     <div class="ui-control-wrapper">
         <div class="ui-input-control">
-            <div class="ui-input-invalid fi-ui-exclaim-white" ref="__errorIcon"></div>
+            <div class="ui-input-invalid fi-ui-exclaim-white" ref="__errorIcon">
+                <div class="ui-error-tooltip">
+                    <p repeat.for="err of __errorIcon.errors">${err.message || 'Invalid'}</p>
+                </div>
+            </div>
             <div class="ui-addon">
                 <span class="fi-ui-language"></span>
             </div>
@@ -20,7 +24,8 @@
                     <div class="ui-list-group">
                         <p>Added</p>
                         <div class="ui-list-item" repeat.for="opt of __languages | sort:'id'">
-                            <span class="ui-text ui-column ui-col-fill" mousedown.trigger="__select(opt)">${opt.name}</span>
+                            <span class="ui-text ui-column ui-col-fill" mousedown.trigger="__select(opt)">
+                              <i class="fi-ui-error-exclaim ui-text-warning" if.bind="__errors[opt.id]"></i> ${opt.name}</span>
                             <span class="fi-ui-circle-remove ui-lang-remove" mousedown.trigger="__remove(opt)"></span>
                         </div>
                         <div class="ui-list-item" if.bind="__languages.length==0">

@@ -1,6 +1,7 @@
 define(["require", "exports", "./utils/ui-constants", "./utils/ui-utils", "./utils/ui-validation", "aurelia-validation", "./utils/ui-event", "./utils/ui-constants", "./utils/ui-formatters", "./utils/ui-application", "./utils/ui-model", "./utils/ui-dialog", "./utils/ui-tree-models", "./utils/ui-http-service", "./utils/ui-validation", "./utils/ui-utils", 'lodash', 'moment', 'numeral', 'kramed', './scripts/phonelib', './scripts/fileTypes', './scripts/countries', './scripts/currencies'], function (require, exports, ui_constants_1, ui_utils_1, ui_validation_1, aurelia_validation_1, ui_event_1, ui_constants_2, ui_formatters_1, ui_application_1, ui_model_1, ui_dialog_1, ui_tree_models_1, ui_http_service_1, ui_validation_2, ui_utils_2) {
     "use strict";
     function configure(aurelia, configCallback) {
+        var _this = this;
         aurelia.container.registerHandler('ui-validator', function (container) { return container.get(ui_validation_1.UIValidationRenderer); });
         aurelia.globalResources('./core/ui-viewport');
         aurelia.globalResources('./core/ui-page');
@@ -56,16 +57,21 @@ define(["require", "exports", "./utils/ui-constants", "./utils/ui-utils", "./uti
         aurelia_validation_1.ValidationRules
             .customRule('decimal', function (value, obj, min, max) { return value === null || value === undefined || Math.floor(value % 1) === 0 && value >= (min || Number.MIN_VALUE) && value <= (max || Number.MAX_VALUE); }, '\${$displayName} must be a decimal value between \${$config.min || "MIN_VALUE"} and \${$config.max || "MAX_VALUE"}.', function (min, max) { return ({ min: min, max: max }); });
         aurelia_validation_1.ValidationRules
-            .customRule('map', function (map, obj, config) {
+            .customRule('language', function (map, obj, langInput) {
+            if (!(langInput && langInput.clearErrors && langInput.addError))
+                throw new Error('Language validation must have reference to ui-language');
             var promises = [];
-            if (map instanceof Map) {
-                map.forEach(function (model, key) {
-                    promises.push(model.validate()
-                        .catch(function (e) { return config.langs.push(key); }));
-                });
-            }
-            return Promise.all(promises);
-        }, '\${$config.langs.join(",")} contain invalid values', function (config) { return (config || { langs: [] }); });
+            langInput.clearErrors();
+            _.forEach(map, function (model, key) {
+                promises.push(_this.controller.validator.validateObject(model)
+                    .then(function (e) {
+                    if (e.length > 0)
+                        langInput.addError(key);
+                    return e.length > 0 ? key : '';
+                }));
+            });
+            return Promise.all(promises).then(function (e) { return e.join('').length == 0; });
+        }, 'Some language entries contain invalid values');
         var Configure = {
             title: function (t) {
                 ui_constants_1.UIConstants.App.Title = t;

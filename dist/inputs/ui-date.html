@@ -9,7 +9,11 @@
     </label>
     <div class="ui-control-wrapper">
         <div class="ui-input-control">
-            <div class="ui-input-invalid fi-ui-exclaim-white" ref="__errorIcon"></div>
+            <div class="ui-input-invalid fi-ui-exclaim-white" ref="__errorIcon">
+                <div class="ui-error-tooltip">
+                    <p repeat.for="err of __errorIcon.errors">${err.message || 'Invalid'}</p>
+                </div>
+            </div>
             <div class="ui-addon ui-date-addon" click.trigger="__input.focus()">
                 <span class="fi-ui-calendar"></span>
                 <span class="date">${__today}</span>

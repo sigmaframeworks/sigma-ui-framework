@@ -30,10 +30,13 @@ export declare class UILanguage extends UIInputGroup {
      * @type        boolean
      */
     disabled: boolean;
+    __errors: {};
     attached(): void;
     valueChanged(newValue: any): string;
     formatter(evt: any): void;
     languagesChanged(newValue: any): void;
+    clearErrors(): void;
+    addError(key: any): void;
     __add(lang: any): void;
     __select(lang: any): void;
     __remove(lang: any): void;

@@ -81,6 +81,12 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-util
             enumerable: true,
             configurable: true
         });
+        UIApplication.prototype.login = function (authUser, authToken) {
+            this.AuthUser = this.Username = authUser;
+            this.AuthToken = authToken;
+            this.IsAuthenticated = true;
+            this.navigateTo('');
+        };
         UIApplication.prototype.logout = function () {
             this.AuthUser = null;
             this.AuthToken = null;

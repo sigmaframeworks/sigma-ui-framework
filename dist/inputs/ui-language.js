@@ -21,6 +21,7 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
             this.value = '';
             this.languages = [];
             this.disabled = false;
+            this.__errors = {};
         }
         UILanguage.prototype.attached = function () {
             _super.prototype.attached.call(this);
@@ -39,9 +40,9 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
             var s = [], a = [];
             var isMap = newValue instanceof Map;
             ui_utils_1._.forEach(UILanguage.LANGUAGES, function (l) {
-                if (!isMap && newValue.indexOf(l.id) == -1)
+                if (!isMap && Object.keys(newValue).indexOf(l.id) == -1)
                     a.push(l);
-                if (!isMap && newValue.indexOf(l.id) > -1)
+                if (!isMap && Object.keys(newValue).indexOf(l.id) > -1)
                     s.push(l);
                 if (isMap && newValue.has(l.id))
                     s.push(l);
@@ -51,6 +52,12 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
             this.__languages = s;
             this.__available = a;
         };
+        UILanguage.prototype.clearErrors = function () {
+            this.__errors = {};
+        };
+        UILanguage.prototype.addError = function (key) {
+            this.__errors[key] = true;
+        };
         UILanguage.prototype.__add = function (lang) {
             this.__languages.push(ui_utils_1._.remove(this.__available, { 'id': lang.id })[0]);
             ui_event_1.UIEvent.fireEvent('add', this.element, lang.id);
@@ -58,9 +65,11 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
             this.__focus = false;
         };
         UILanguage.prototype.__select = function (lang) {
-            this.value = lang.id;
-            this.__value = lang.name;
-            ui_event_1.UIEvent.fireEvent('select', this.element, lang.id);
+            if (ui_event_1.UIEvent.fireEvent('beforeselect', this.element, lang.id) !== false) {
+                this.value = lang.id;
+                this.__value = lang.name;
+                ui_event_1.UIEvent.fireEvent('select', this.element, lang.id);
+            }
             this.__focus = false;
         };
         UILanguage.prototype.__remove = function (lang) {

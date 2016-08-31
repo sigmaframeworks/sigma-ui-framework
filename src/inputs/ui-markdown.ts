@@ -67,6 +67,7 @@ export class UIMarkdown extends UIInputGroup {
             this.element.classList.add('ui-full-view');
             this.element.classList.add('ui-side-view');
         }
+        this.value = this.value || '';
     }
 
     disable(disabled?) {
