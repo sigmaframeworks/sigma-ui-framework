@@ -66,7 +66,7 @@ export function configure(aurelia: FrameworkConfiguration, configCallback) {
         sanitize: false,
         smartLists: true,
         smartypants: false,
-        highlight: function(code, type) {
+        highlight: function(code) {
             if (hljs) {
                 hljs.configure({
                     useBR: true,
@@ -135,7 +135,7 @@ export function configure(aurelia: FrameworkConfiguration, configCallback) {
             UIConstants.Languages = l;
             return Configure;
         }
-    }
+    };
 
     if (configCallback !== undefined && typeof configCallback === 'function') {
         configCallback(Configure);
@@ -156,4 +156,4 @@ export {UIDialogService, UIDialog} from "./utils/ui-dialog";
 export {UITreeModel, UITreeOptions} from "./utils/ui-tree-models";
 export {UIHttpService} from "./utils/ui-http-service";
 export {UIValidationRenderer} from "./utils/ui-validation";
-export {UIChartStatic, UIUtils, _, moment, numeral, kramed} from "./utils/ui-utils";
+export {UIUtils, UIChartStatic, _, moment, numeral, kramed} from "./utils/ui-utils";

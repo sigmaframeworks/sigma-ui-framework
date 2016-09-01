@@ -1,4 +1,4 @@
-define(["require", "exports", "aurelia-framework", "./ui-event", "lodash", "kramed", "moment", "numeral", "amcharts/amcharts"], function (require, exports, aurelia_framework_1, ui_event_1, ld, km, mm, nm) {
+define(["require", "exports", "aurelia-framework", "./ui-event", "lodash", "kramed", "moment", "numeral"], function (require, exports, aurelia_framework_1, ui_event_1, ld, km, mm, nm) {
     "use strict";
     exports._ = ld;
     exports.kramed = km;

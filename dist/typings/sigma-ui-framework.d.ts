@@ -17,4 +17,4 @@ export { UIDialogService, UIDialog } from "./utils/ui-dialog";
 export { UITreeModel, UITreeOptions } from "./utils/ui-tree-models";
 export { UIHttpService } from "./utils/ui-http-service";
 export { UIValidationRenderer } from "./utils/ui-validation";
-export { UIChartStatic, UIUtils, _, moment, numeral, kramed } from "./utils/ui-utils";
+export { UIUtils, UIChartStatic, _, moment, numeral, kramed } from "./utils/ui-utils";

@@ -57,6 +57,7 @@ export class UIChartBase extends UIChart {
 
     __buildChart() {
         this.__chart = AmCharts.makeChart(this.__canvas, _.cloneDeep(this.chartOptions));
+        this.__chart.write(this.__canvas);
     }
 }
 
@@ -104,7 +105,7 @@ export class UIBar extends UIChart {
     private showLegend = false;
 
     private __graphs = [];
-    private __options: AmCharts.AmSerialChart = <AmCharts.AmSerialChart>{};;
+    private __options: AmCharts.AmSerialChart = <AmCharts.AmSerialChart>{};
 
     constructor(element: Element) {
         super();
@@ -136,8 +137,8 @@ export class UIBar extends UIChart {
             enabled: this.canExport,
             libs: { autoLoad: false },
             menu: [{
-                class: "export-main",
-                menu: ["PNG", "JPG", "CSV", "JSON"]
+                'class': "export-main",
+                'menu': ["PNG", "JPG", "CSV", "JSON"]
             }]
         };
         this.__options.valueAxes = [{
@@ -147,7 +148,7 @@ export class UIBar extends UIChart {
         }];
         this.__options.balloon = <AmCharts.AmBalloon>{
             fillAlpha: .95
-        }
+        };
         if (this.showLegend) {
             this.__options.legend = <AmCharts.AmLegend>{
                 horizontalGap: 10,
@@ -160,8 +161,9 @@ export class UIBar extends UIChart {
         this.__options.categoryField = this.chartOptions.categoryField;
         this.__options.categoryAxis = <AmCharts.CategoryAxis>{
             // parseDates: true
+            labelRotation: -30,
             title: this.chartOptions.categoryAxisTitle || ''
-        }
+        };
 
         this.__graphs = [];
         _.forEach(this.chartOptions.series, v => {
@@ -172,7 +174,7 @@ export class UIBar extends UIChart {
                 fillAlphas: 0.8,
                 lineAlpha: 0.2,
                 fillColorsField: 'color'
-            }, v))
+            }, v));
         });
 
     }
@@ -182,6 +184,7 @@ export class UIBar extends UIChart {
         this.__options.dataProvider = _.cloneDeep(this.chartData);
 
         this.__chart = AmCharts.makeChart(this.__canvas, this.__options);
+        this.__chart.write(this.__canvas);
     }
 }
 
@@ -243,7 +246,7 @@ export class UIPie extends UIChart {
 
     constructor(element: Element) {
         super();
-        this.showDonut = element.hasAttribute('donut')
+        this.showDonut = element.hasAttribute('donut');
         this.canExport = element.hasAttribute('export');
         this.groupExtras = element.hasAttribute('group');
 
@@ -285,8 +288,8 @@ export class UIPie extends UIChart {
             enabled: this.canExport,
             libs: { autoLoad: false },
             menu: [{
-                class: "export-main",
-                menu: ["PNG", "JPG", "CSV", "JSON"]
+                'class': "export-main",
+                'menu': ["PNG", "JPG", "CSV", "JSON"]
             }]
         };
         // this.__options.valueAxes = [{
@@ -297,7 +300,7 @@ export class UIPie extends UIChart {
         if (this.colorProperty) this.__options.colorField = this.colorProperty;
         this.__options.balloon = <AmCharts.AmBalloon>{
             fillAlpha: .95
-        }
+        };
         this.__options.legend = <AmCharts.AmLegend>{
             horizontalGap: 10,
             valueText: '[[percents]]%',
@@ -305,11 +308,12 @@ export class UIPie extends UIChart {
             position: this.legend || 'right',
             // useGraphSettings: true,
             markerSize: 10
-        }
+        };
         this.__options.valueField = this.valueProperty;
         this.__options.titleField = this.titleProperty;
         this.__options.dataProvider = _.cloneDeep(this.chartData);
 
         this.__chart = AmCharts.makeChart(this.__canvas, this.__options);
+        this.__chart.write(this.__canvas);
     }
 }

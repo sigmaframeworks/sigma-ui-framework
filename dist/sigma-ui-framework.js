@@ -39,7 +39,7 @@ define(["require", "exports", "./utils/ui-constants", "./utils/ui-utils", "./uti
             sanitize: false,
             smartLists: true,
             smartypants: false,
-            highlight: function (code, type) {
+            highlight: function (code) {
                 if (hljs) {
                     hljs.configure({
                         useBR: true,
@@ -124,8 +124,8 @@ define(["require", "exports", "./utils/ui-constants", "./utils/ui-utils", "./uti
     exports.UITreeOptions = ui_tree_models_1.UITreeOptions;
     exports.UIHttpService = ui_http_service_1.UIHttpService;
     exports.UIValidationRenderer = ui_validation_2.UIValidationRenderer;
-    exports.UIChartStatic = ui_utils_2.UIChartStatic;
     exports.UIUtils = ui_utils_2.UIUtils;
+    exports.UIChartStatic = ui_utils_2.UIChartStatic;
     exports._ = ui_utils_2._;
     exports.moment = ui_utils_2.moment;
     exports.numeral = ui_utils_2.numeral;

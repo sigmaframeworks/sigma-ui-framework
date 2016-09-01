@@ -1,7 +1,7 @@
 // Global methods
 declare var __seed;
 declare var Constants;
-declare var hljs;
+declare var hljs: any;
 
 declare function isTrue(b: any): boolean;
 declare function isEmpty(a: any): boolean;

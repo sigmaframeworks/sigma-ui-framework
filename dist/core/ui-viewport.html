@@ -6,7 +6,7 @@
 <template role="main" class="ui-viewport" click.delegate="__hideMenu($event)">
     <header class="ui-app-header">
         <!-- Menu handle -->
-        <button class="ui-app-menu-handle" if.bind="router && showMenu && appState.IsAuthenticated" click.trigger="__showMenu($event)">
+        <button class="ui-app-menu-handle" if.bind="router && (showMenu || appState.IsAuthenticated)" click.trigger="__showMenu($event)">
             <span class="fi-ui-bar-light"></span>
         </button>
         <!-- App Logo -->

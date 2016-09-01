@@ -1,5 +1,4 @@
 import { Container } from "aurelia-framework";
-import "amcharts/amcharts";
 import * as mm from "moment";
 export declare var _: any;
 export declare var kramed: KramedStatic;

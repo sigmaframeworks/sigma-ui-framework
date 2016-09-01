@@ -36,6 +36,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "amchart
         };
         UIChartBase.prototype.__buildChart = function () {
             this.__chart = AmCharts.makeChart(this.__canvas, ui_utils_1._.cloneDeep(this.chartOptions));
+            this.__chart.write(this.__canvas);
         };
         __decorate([
             aurelia_framework_1.bindable(), 
@@ -81,7 +82,6 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "amchart
             if (element.hasAttribute('stretch'))
                 element.classList.add('ui-stretch');
         }
-        ;
         UIBar.prototype.chartDataChanged = function (newValue) {
             if (ui_utils_1._.isEmpty(newValue))
                 return;
@@ -104,8 +104,8 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "amchart
                 enabled: this.canExport,
                 libs: { autoLoad: false },
                 menu: [{
-                        class: "export-main",
-                        menu: ["PNG", "JPG", "CSV", "JSON"]
+                        'class': "export-main",
+                        'menu': ["PNG", "JPG", "CSV", "JSON"]
                     }]
             };
             this.__options.valueAxes = [{
@@ -127,6 +127,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "amchart
             }
             this.__options.categoryField = this.chartOptions.categoryField;
             this.__options.categoryAxis = {
+                labelRotation: -30,
                 title: this.chartOptions.categoryAxisTitle || ''
             };
             this.__graphs = [];
@@ -145,6 +146,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "amchart
             this.__options.graphs = ui_utils_1._.cloneDeep(this.__graphs);
             this.__options.dataProvider = ui_utils_1._.cloneDeep(this.chartData);
             this.__chart = AmCharts.makeChart(this.__canvas, this.__options);
+            this.__chart.write(this.__canvas);
         };
         __decorate([
             aurelia_framework_1.bindable(), 
@@ -252,8 +254,8 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "amchart
                 enabled: this.canExport,
                 libs: { autoLoad: false },
                 menu: [{
-                        class: "export-main",
-                        menu: ["PNG", "JPG", "CSV", "JSON"]
+                        'class': "export-main",
+                        'menu': ["PNG", "JPG", "CSV", "JSON"]
                     }]
             };
             if (this.colorProperty)
@@ -272,6 +274,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "amchart
             this.__options.titleField = this.titleProperty;
             this.__options.dataProvider = ui_utils_1._.cloneDeep(this.chartData);
             this.__chart = AmCharts.makeChart(this.__canvas, this.__options);
+            this.__chart.write(this.__canvas);
         };
         __decorate([
             aurelia_framework_1.bindable(), 

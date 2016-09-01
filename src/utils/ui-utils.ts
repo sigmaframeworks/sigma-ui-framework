@@ -6,7 +6,6 @@
 
 import {Lazy, Container, NewInstance, ViewCompiler, ViewResources, ViewSlot} from "aurelia-framework";
 import {UIEvent} from "./ui-event";
-import "amcharts/amcharts";
 import * as ld from "lodash";
 import * as km from "kramed";
 import * as mm from "moment";
