@@ -87,12 +87,12 @@ export function configure(aurelia: FrameworkConfiguration, configCallback) {
         .customRule('decimal', (value, obj, min, max) => value === null || value === undefined || Math.floor(value % 1) === 0 && value >= (min || Number.MIN_VALUE) && value <= (max || Number.MAX_VALUE),
         '\${$displayName} must be a decimal value between \${$config.min || "MIN_VALUE"} and \${$config.max || "MAX_VALUE"}.', (min, max) => ({ min, max }));
     ValidationRules
-        .customRule('language', (map, obj, langInput) => {
+        .customRule('language', (map, obj, controller, langInput) => {
             if (!(langInput && langInput.clearErrors && langInput.addError)) throw new Error('Language validation must have reference to ui-language');
             let promises = [];
             langInput.clearErrors();
             _.forEach(map, (model, key) => {
-                promises.push(this.controller.validator.validateObject(model)
+                promises.push(controller.validator.validateObject(model)
                     .then(e => {
                         if (e.length > 0) langInput.addError(key);
                         return e.length > 0 ? key : '';

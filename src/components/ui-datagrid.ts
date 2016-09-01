@@ -83,7 +83,7 @@ export class UIDataGrid {
 
         // this.__columnsLocked = _.filter(this.colChilds, ['__locked', true]);
         // this.__columnsList = _.filter(this.colChilds, ['__locked', false]);
-        setTimeout(() => {
+        UIEvent.queueTask(() => {
             var w = 0;
             _.forEach(this.columns, (c: any) => {
                 c.edge = w;
@@ -92,11 +92,13 @@ export class UIDataGrid {
             });
             this.__tableWidth = w;
             this.dataListChanged(this.dataList);
-        }, 100);
+        });
     }
 
     dataListChanged(newValue) {
         // this.__table.style.tableLayout = 'auto';
+        this.__data = [];
+        this.__wrapper.scrollTop = 0;
         this.__doSort(newValue);
         // this.__table.style.tableLayout = 'fixed';
         this.signaler.signal(this.__id);
@@ -257,8 +259,6 @@ export class UIDataGrid {
         let columnId = column.dataId || this.defaultSort;
         let siblingId = column.dataSort || this.defaultSort;
         this.__isProcessing = true;
-        this.__data = [];
-        this.__wrapper.scrollTop = 0;
         setTimeout(() => {
             this.__data = _.orderBy(data,
                 [columnId, siblingId],
@@ -423,40 +423,40 @@ export class UIDataColumn {
         if (this.__hasMenu) this.buttonIcon = this.buttonIcon || 'fi-ui-overflow-menu-alt';
 
         if (this.__button = !(isEmpty(this.buttonIcon) && isEmpty(this.buttonTitle) && !this.element.hasAttribute('button'))) this.__align = 'center';
+
+        if (!this.width && !isEmpty(this.buttonIcon) && isEmpty(this.buttonTitle)) {
+            this.width = convertToPx("2.5em");
+        }
+        else if (this.__type == 'date') {
+            this.width = convertToPx("10em");
+            this.__align = 'center';
+        }
+        else if (this.__type == 'datetime') {
+            this.width = convertToPx("12em");
+            this.__align = 'center';
+        }
+        else if (this.__type == 'exrate') {
+            this.width = convertToPx("6em");
+            this.__align = 'end';
+        }
+        else if (this.__type == 'fromnow') {
+            this.width = convertToPx("10em");
+        }
+        else if (this.__type == 'number') {
+            this.width = convertToPx("8em");
+            this.__align = 'end';
+        }
+        else if (this.__type == 'currency') {
+            this.width = convertToPx("8em");
+            this.__align = 'end';
+        }
+        else {
+            this.width = convertToPx(this.width || this.minWidth || '250px');
+        }
     }
 
     attached() {
         this.__title = this.element.textContent;
-
-        if (!this.width && !isEmpty(this.buttonIcon) && isEmpty(this.buttonTitle)) {
-            this.width = convertToPx("2.5em", this.element);
-        }
-        else if (this.__type == 'date') {
-            this.width = convertToPx("10em", this.element);
-            this.__align = 'center';
-        }
-        else if (this.__type == 'datetime') {
-            this.width = convertToPx("12em", this.element);
-            this.__align = 'center';
-        }
-        else if (this.__type == 'exrate') {
-            this.width = convertToPx("6em", this.element);
-            this.__align = 'end';
-        }
-        else if (this.__type == 'fromnow') {
-            this.width = convertToPx("10em", this.element);
-        }
-        else if (this.__type == 'number') {
-            this.width = convertToPx("8em", this.element);
-            this.__align = 'end';
-        }
-        else if (this.__type == 'currency') {
-            this.width = convertToPx("8em", this.element);
-            this.__align = 'end';
-        }
-        else {
-            this.width = convertToPx(this.width || this.minWidth || '250px', this.element);
-        }
     }
 }
 
