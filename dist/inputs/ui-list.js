@@ -12,7 +12,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-utils"], function (require, exports, aurelia_framework_1, ui_listing_1, ui_utils_1) {
+define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-utils", "../utils/ui-event"], function (require, exports, aurelia_framework_1, ui_listing_1, ui_utils_1, ui_event_1) {
     "use strict";
     var UIList = (function (_super) {
         __extends(UIList, _super);
@@ -146,7 +146,7 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
                 this.value = ui_utils_1._.map(this.__value, this.valueProperty).join(',');
             else
                 this.value = ui_utils_1._.chain(this.__value).mapKeys(this.valueProperty)['mapValues']('count');
-            setTimeout(function () { return _this.__ignoreChange = false; }, 500);
+            ui_event_1.UIEvent.queueTask(function () { return _this.__ignoreChange = false; });
         };
         UIList.prototype.__dragStart = function ($event, isNew) {
             if (!$event.target.classList.contains('ui-list-item'))

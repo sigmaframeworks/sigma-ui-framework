@@ -172,7 +172,7 @@ export class UIComboBox extends UIListBehaviour {
         this.__isFiltered = false;
         this.__isGrouped = !_.isArray(newValue);
         this.__options = _.cloneDeep(this.options || []);
-        setTimeout(() => this.valueChanged(this.value), 500);
+        UIEvent.queueTask(() => this.valueChanged(this.value));
     }
 
     __select(item) {
@@ -211,10 +211,10 @@ export class UIComboBox extends UIListBehaviour {
             this.__reverse = false;
             this.__list.style.bottom = "auto";
         }
-        setTimeout(() => {
+        UIEvent.queueTask(() => {
             this.__input.select();
             this.__scrollIntoView();
-        }, 20);
+        });
     }
 
     __lostFocus() {

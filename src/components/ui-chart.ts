@@ -6,11 +6,11 @@
 
 import {autoinject, customElement, bindable, useView, bindingMode, inlineView, BindingEngine} from "aurelia-framework";
 import {_, UIChartStatic} from "../utils/ui-utils";
-import "amcharts/amcharts/amcharts";
-import "amcharts/amcharts/pie";
-import "amcharts/amcharts/serial";
-import "amcharts/amcharts/themes/light";
-import "amcharts/amcharts/plugins/export/export";
+import "amcharts/amcharts";
+import "amcharts/pie";
+import "amcharts/serial";
+import "amcharts/themes/light";
+import "amcharts/plugins/export/export";
 // import "amcharts/amcharts/plugins/export/export.css!";
 // import "amcharts/amcharts3/amcharts/plugins/export/libs/blob.js/blob";
 // import "amcharts/amcharts3/amcharts/plugins/export/libs/fabric.js/fabric";

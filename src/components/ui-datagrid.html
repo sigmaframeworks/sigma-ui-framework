@@ -9,7 +9,7 @@
         <div class="ui-table-wrapper sticky" scroll-left.bind="__scrollLeft">
             <compose view="./dg-header.html" containerless></compose>
         </div>
-        <div ref="__wrapper" class="ui-table-wrapper scroller" scroll.trigger="__scrollLeft=$event.target.scrollLeft & debounce">
+        <div ref="__wrapper" class="ui-table-wrapper scroller" scroll.trigger="__scrollLeft=$event.target.scrollLeft & debounce:50">
             <compose view="./dg-virtual.html" if.bind="useVirtual" containerless></compose>
             <compose view="./dg-body.html" if.bind="!useVirtual" containerless></compose>
         </div>

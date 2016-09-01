@@ -242,10 +242,10 @@ export class UITags extends UIListBehaviour {
                 this.__reverse = false;
                 this.__list.style.bottom = "auto";
             }
-            setTimeout(() => {
+            UIEvent.queueTask(() => {
                 this.__input.select();
                 this.__scrollIntoView();
-            }, 20);
+            });
         }
         this.__tagInput.classList.add('ui-focus');
     }

@@ -89,11 +89,11 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-tree-models", ".
                         p.expanded = true;
                         p = p.parent;
                     }
-                    setTimeout(function () {
+                    ui_event_1.UIEvent.queueTask(function () {
                         var x;
                         if ((x = _this.element.querySelector('.ui-active')) !== null)
                             x.scrollIntoView();
-                    }, 200);
+                    });
                 }
                 var match = rx.test(ui_utils_1.UIUtils.getAscii(n.name));
                 if (!ui_utils_1._.isEmpty(value) && match) {
@@ -125,11 +125,11 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-tree-models", ".
                         n.expanded = value;
                     if (field == 'checked')
                         n.isChecked = value ? 1 : 0;
-                    setTimeout(function () {
+                    ui_event_1.UIEvent.queueTask(function () {
                         var x;
                         if ((x = _this.element.querySelector('.ui-active')) !== null)
                             x.scrollIntoView();
-                    }, 200);
+                    });
                 }
                 return found;
             });

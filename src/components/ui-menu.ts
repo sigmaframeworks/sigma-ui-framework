@@ -22,7 +22,9 @@ export class UIMenu {
     @children('.ui-hidden menu,.ui-hidden divider,.ui-hidden section')
     children: Array<any> = [];
 
+    @bindable()
     menu = [];
+
     hideTitle = false;
 
     constructor(public element: Element, public appState: UIApplication) {
@@ -31,7 +33,7 @@ export class UIMenu {
     }
 
     childrenChanged(newValue) {
-        this.menu = [];
+        if (this.children.length > 0) this.menu = [];
         for (var i = 0, c = this.children; i < c.length; i++) {
             if (c[i].tagName.toLowerCase() === 'menu') {
                 this.menu.push({

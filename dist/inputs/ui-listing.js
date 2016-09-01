@@ -141,7 +141,7 @@ define(["require", "exports", "./ui-input-group", "../utils/ui-utils", "../utils
             }
             this.__isFiltered = true;
             this.__noResult = isEmpty(this.__options);
-            setTimeout(function () { return _this.__hilight = _this.__list.querySelector(".ui-list-item") || null; }, 100);
+            ui_event_1.UIEvent.queueTask(function () { return _this.__hilight = _this.__list.querySelector(".ui-list-item") || null; });
         };
         return UIListBehaviour;
     }(ui_input_group_1.UIInputGroup));

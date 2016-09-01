@@ -35,7 +35,7 @@ define(["require", "exports", "./ui-utils", "aurelia-framework", "aurelia-event-
             if (!__tq) {
                 __tq = ui_utils_1.UIUtils.lazy(aurelia_framework_1.TaskQueue);
             }
-            __tq.queueMicroTask(fn);
+            __tq.queueTask(fn);
         }
         UIEvent.queueTask = queueTask;
     })(UIEvent = exports.UIEvent || (exports.UIEvent = {}));

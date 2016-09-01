@@ -63,7 +63,7 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
             this.__isFiltered = false;
             this.__isGrouped = !ui_utils_1._.isArray(newValue);
             this.__options = ui_utils_1._.cloneDeep(this.options || []);
-            setTimeout(function () { return _this.valueChanged(_this.value); }, 500);
+            ui_event_1.UIEvent.queueTask(function () { return _this.valueChanged(_this.value); });
         };
         UIComboBox.prototype.__select = function (item) {
             if (item !== null) {
@@ -99,10 +99,10 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
                 this.__reverse = false;
                 this.__list.style.bottom = "auto";
             }
-            setTimeout(function () {
+            ui_event_1.UIEvent.queueTask(function () {
                 _this.__input.select();
                 _this.__scrollIntoView();
-            }, 20);
+            });
         };
         UIComboBox.prototype.__lostFocus = function () {
             this.__select(this.__hilight);

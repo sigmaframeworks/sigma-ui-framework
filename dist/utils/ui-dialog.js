@@ -296,11 +296,11 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
         };
         UIDialog.prototype.focus = function () {
             var _this = this;
-            setTimeout(function () {
+            ui_event_1.UIEvent.queueTask(function () {
                 var el = _this.__dialog.querySelector('ui-input input,textarea,ui-phone input,ui-combo input');
                 if (!isEmpty(el))
                     el.focus();
-            }, 10);
+            });
         };
         UIDialog.prototype.expand = function ($event) {
             if ($event)

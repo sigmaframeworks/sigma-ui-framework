@@ -205,7 +205,7 @@ export class UIList extends UIListBehaviour {
             this.value = _.map(this.__value, this.valueProperty).join(',');
         else
             this.value = _.chain(this.__value).mapKeys(this.valueProperty)['mapValues']('count');
-        setTimeout(() => this.__ignoreChange = false, 500);
+        UIEvent.queueTask(() => this.__ignoreChange = false);
     }
 
     private __isNew;

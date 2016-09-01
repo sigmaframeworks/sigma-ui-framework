@@ -5,15 +5,15 @@
 -->
 <template class="ui-datagrid" mousedown.delegate="resizeStart($event)">
 
-    <div class="ui-datagrid-wrapper" ref="__wrapper">
+    <div class="ui-datagrid-wrapper">
         <div class="ui-table-wrapper sticky" scroll-left.bind="__scrollLeft">
             <compose view="./dg-header.html" containerless></compose>
         </div>
-        <div class="ui-table-wrapper scroller" scroll.trigger="__scrollLeft=$event.target.scrollLeft & debounce">
+        <div ref="__wrapper" class="ui-table-wrapper scroller" scroll.trigger="__scrollLeft=$event.target.scrollLeft & debounce:50">
             <compose view="./dg-virtual.html" if.bind="useVirtual" containerless></compose>
             <compose view="./dg-body.html" if.bind="!useVirtual" containerless></compose>
         </div>
-        <div class="ui-table-wrapper sticky" scroll-left.bind="__scrollLeft">
+        <div class="ui-table-wrapper sticky" scroll-left.bind="__scrollLeft" if.bind="summaryRow">
             <compose view="./dg-footer.html" containerless></compose>
         </div>
     </div>

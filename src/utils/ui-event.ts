@@ -47,6 +47,6 @@ export module UIEvent {
         if (!__tq) {
             __tq = UIUtils.lazy(TaskQueue);
         }
-        __tq.queueMicroTask(fn)
+        __tq.queueTask(fn)
     }
 }

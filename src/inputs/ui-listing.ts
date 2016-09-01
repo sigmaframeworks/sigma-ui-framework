@@ -157,6 +157,6 @@ export class UIListBehaviour extends UIInputGroup {
         }
         this.__isFiltered = true;
         this.__noResult = isEmpty(this.__options);
-        setTimeout(() => this.__hilight = this.__list.querySelector(`.ui-list-item`) || null, 100);
+        UIEvent.queueTask(() => this.__hilight = this.__list.querySelector(`.ui-list-item`) || null);
     }
 }

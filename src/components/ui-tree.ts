@@ -107,10 +107,10 @@ export class UITree {
                     p.expanded = true;
                     p = p.parent;
                 }
-                setTimeout(() => {
+                UIEvent.queueTask(() => {
                     let x;
                     if ((x = this.element.querySelector('.ui-active')) !== null) x.scrollIntoView();
-                }, 200);
+                });
             }
             var match = rx.test(UIUtils.getAscii(n.name));
             if (!_.isEmpty(value) && match) {
@@ -142,10 +142,10 @@ export class UITree {
                 if (field == 'expanded') n.expanded = value;
                 if (field == 'checked') n.isChecked = value ? 1 : 0;
 
-                setTimeout(() => {
+                UIEvent.queueTask(() => {
                     let x;
                     if ((x = this.element.querySelector('.ui-active')) !== null) x.scrollIntoView();
-                }, 200);
+                });
             }
 
             return found;

@@ -21,7 +21,8 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../utils/u
             this.hideTitle = element.hasAttribute('hide-title');
         }
         UIMenu.prototype.childrenChanged = function (newValue) {
-            this.menu = [];
+            if (this.children.length > 0)
+                this.menu = [];
             for (var i = 0, c = this.children; i < c.length; i++) {
                 if (c[i].tagName.toLowerCase() === 'menu') {
                     this.menu.push({
@@ -63,6 +64,10 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../utils/u
             aurelia_framework_1.children('.ui-hidden menu,.ui-hidden divider,.ui-hidden section'), 
             __metadata('design:type', Array)
         ], UIMenu.prototype, "children", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UIMenu.prototype, "menu", void 0);
         UIMenu = __decorate([
             aurelia_framework_1.customElement('ui-menu'), 
             __metadata('design:paramtypes', [Element, ui_application_1.UIApplication])

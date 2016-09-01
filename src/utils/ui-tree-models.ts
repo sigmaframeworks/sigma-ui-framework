@@ -132,4 +132,5 @@ export interface UITreePanel {
     check(id: any,
         level: number,
         check: boolean);
+    getChecked();
 }

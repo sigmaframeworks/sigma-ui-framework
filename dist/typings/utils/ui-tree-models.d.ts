@@ -31,4 +31,5 @@ export interface UITreePanel {
     select(id: any, level: number): any;
     expand(id: any, level: number, expand: boolean): any;
     check(id: any, level: number, check: boolean): any;
+    getChecked(): any;
 }

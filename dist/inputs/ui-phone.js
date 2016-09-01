@@ -12,7 +12,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils/ui-utils"], function (require, exports, aurelia_framework_1, ui_input_group_1, ui_utils_1) {
+define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils/ui-utils", "../utils/ui-event"], function (require, exports, aurelia_framework_1, ui_input_group_1, ui_utils_1, ui_event_1) {
     "use strict";
     var UIPhone = (function (_super) {
         __extends(UIPhone, _super);
@@ -94,13 +94,13 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
                 this.__value = '';
             }
             this.processValue();
-            setTimeout(function () {
+            ui_event_1.UIEvent.queueTask(function () {
                 var x = 0;
                 if (_this.__value.length > 0)
                     x = _this.__value.length - _this.__value.substr(0, start).replace(/[^\d]/g, '').length;
                 _this.__input.selectionStart = _this.__input.selectionEnd = start + x;
                 _this.ignoreUpdate = false;
-            }, 50);
+            });
         };
         UIPhone.prototype.processValue = function () {
             if (this.__phoneFormat === PhoneLib.FORMAT.INTERNATIONAL) {

@@ -36,7 +36,9 @@
 
 		&.ui-button {
 			padding   : .2em;
-			box-shadow: none !important;
+			&, &:hover {
+				box-shadow: none;
+			}
 		}
 
 		&.ui-close {

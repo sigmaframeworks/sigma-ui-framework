@@ -52,7 +52,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
         UIDataGrid.prototype.colChildsChanged = function (newValue) {
             var _this = this;
             this.columns = ui_utils_1._.orderBy(this.colChilds, ['__locked'], ['desc']);
-            setTimeout(function () {
+            ui_event_1.UIEvent.queueTask(function () {
                 var w = 0;
                 ui_utils_1._.forEach(_this.columns, function (c) {
                     c.edge = w;
@@ -60,11 +60,12 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
                 });
                 _this.__tableWidth = w;
                 _this.dataListChanged(_this.dataList);
-            }, 100);
+            });
         };
         UIDataGrid.prototype.dataListChanged = function (newValue) {
+            this.__data = [];
+            this.__wrapper.scrollTop = 0;
             this.__doSort(newValue);
-            this.signaler.signal(this.__id);
         };
         UIDataGrid.prototype.isLastLocked = function (locked, index) {
             return (locked && !(this.columns[index + 1] || { __locked: false }).__locked);
@@ -89,7 +90,18 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
                         menu.classList.remove('show');
                         getParentByTag(menu, 'tr').classList.remove('focus');
                     }
-                    target.parentElement.nextElementSibling.classList.add('show');
+                    var td = getParentByTag(target, 'td');
+                    var el = target.parentElement.nextElementSibling;
+                    var sc = this.__wrapper;
+                    el.classList.add('show');
+                    if (sc.scrollTop + sc['offsetHeight'] < td.offsetHeight + td.offsetTop + el.offsetHeight) {
+                        el.style.top = "auto";
+                        el.style.bottom = '1.75em';
+                    }
+                    else {
+                        el.style.top = '1.75em';
+                        el.style.bottom = "auto";
+                    }
                     getParentByTag(target, 'tr').classList.add('focus');
                 }
             }
@@ -201,11 +213,12 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
             var columnId = column.dataId || this.defaultSort;
             var siblingId = column.dataSort || this.defaultSort;
             this.__isProcessing = true;
-            this.__data = [];
-            this.__wrapper.scrollTop = 0;
             setTimeout(function () {
                 _this.__data = ui_utils_1._.orderBy(data, [columnId, siblingId], [_this.__sortOrder, _this.defaultOrder]);
-                ui_event_1.UIEvent.queueTask(function () { return _this.__isProcessing = false; });
+                ui_event_1.UIEvent.queueTask(function () {
+                    _this.signaler.signal(_this.__id);
+                    _this.__isProcessing = false;
+                });
             }, 500);
         };
         UIDataGrid.prototype.resizeStart = function ($event) {
@@ -349,38 +362,38 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
                 this.buttonIcon = this.buttonIcon || 'fi-ui-overflow-menu-alt';
             if (this.__button = !(isEmpty(this.buttonIcon) && isEmpty(this.buttonTitle) && !this.element.hasAttribute('button')))
                 this.__align = 'center';
-        };
-        UIDataColumn.prototype.attached = function () {
-            this.__title = this.element.textContent;
             if (!this.width && !isEmpty(this.buttonIcon) && isEmpty(this.buttonTitle)) {
-                this.width = convertToPx("2.5em", this.element);
+                this.width = convertToPx("2.5em");
             }
             else if (this.__type == 'date') {
-                this.width = convertToPx("10em", this.element);
+                this.width = convertToPx("10em");
                 this.__align = 'center';
             }
             else if (this.__type == 'datetime') {
-                this.width = convertToPx("12em", this.element);
+                this.width = convertToPx("12em");
                 this.__align = 'center';
             }
             else if (this.__type == 'exrate') {
-                this.width = convertToPx("6em", this.element);
+                this.width = convertToPx("6em");
                 this.__align = 'end';
             }
             else if (this.__type == 'fromnow') {
-                this.width = convertToPx("10em", this.element);
+                this.width = convertToPx("10em");
             }
             else if (this.__type == 'number') {
-                this.width = convertToPx("8em", this.element);
+                this.width = convertToPx("8em");
                 this.__align = 'end';
             }
             else if (this.__type == 'currency') {
-                this.width = convertToPx("8em", this.element);
+                this.width = convertToPx("8em");
                 this.__align = 'end';
             }
             else {
-                this.width = convertToPx(this.width || this.minWidth || '250px', this.element);
+                this.width = convertToPx(this.width || this.minWidth || '250px');
             }
+        };
+        UIDataColumn.prototype.attached = function () {
+            this.__title = this.element.textContent;
         };
         __decorate([
             aurelia_framework_1.bindable(), 

@@ -101,7 +101,6 @@ export class UIDataGrid {
         this.__wrapper.scrollTop = 0;
         this.__doSort(newValue);
         // this.__table.style.tableLayout = 'fixed';
-        this.signaler.signal(this.__id);
     }
 
     isLastLocked(locked, index) {
@@ -128,19 +127,20 @@ export class UIDataGrid {
                     menu.classList.remove('show');
                     getParentByTag(menu, 'tr').classList.remove('focus');
                 }
-
-                // let el = <HTMLElement>target.parentElement.nextElementSibling;
-                // let sc = el.parentElement.offsetParent.offsetParent.offsetParent;
-                // if (sc.scrollTop + sc['offsetHeight'] < el.offsetHeight + el.offsetTop + 50) {
-                // 	// this.__reverse = true;
-                // 	el.style.bottom = el.offsetHeight + 'px';
-                // }
-                // else {
-                // 	// this.__reverse = false;
-                // 	el.style.bottom = "auto";
-                // }
-
-                target.parentElement.nextElementSibling.classList.add('show');
+                let td = getParentByTag(target, 'td');
+                let el = <HTMLElement>target.parentElement.nextElementSibling;
+                let sc = this.__wrapper;
+                el.classList.add('show');
+                if (sc.scrollTop + sc['offsetHeight'] < td.offsetHeight + td.offsetTop + el.offsetHeight) {
+                    // this.__reverse = true;
+                    el.style.top = "auto";
+                    el.style.bottom = '1.75em';
+                }
+                else {
+                    // this.__reverse = false;
+                    el.style.top = '1.75em';
+                    el.style.bottom = "auto";
+                }
                 getParentByTag(target, 'tr').classList.add('focus');
             }
         }
@@ -263,9 +263,11 @@ export class UIDataGrid {
             this.__data = _.orderBy(data,
                 [columnId, siblingId],
                 [this.__sortOrder, this.defaultOrder]);
-            UIEvent.queueTask(() => this.__isProcessing = false);
+            UIEvent.queueTask(() => {
+                this.signaler.signal(this.__id);
+                this.__isProcessing = false;
+            });
         }, 500);
-        //setTimeout(()=> this.signaler.signal(this.__id + 'Button'), 100);
     }
 
     private __isResizing = false;

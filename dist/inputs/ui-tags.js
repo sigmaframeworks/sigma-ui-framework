@@ -12,7 +12,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-utils"], function (require, exports, aurelia_framework_1, ui_listing_1, ui_utils_1) {
+define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-utils", "../utils/ui-event"], function (require, exports, aurelia_framework_1, ui_listing_1, ui_utils_1, ui_event_1) {
     "use strict";
     var UITags = (function (_super) {
         __extends(UITags, _super);
@@ -122,10 +122,10 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
                     this.__reverse = false;
                     this.__list.style.bottom = "auto";
                 }
-                setTimeout(function () {
+                ui_event_1.UIEvent.queueTask(function () {
                     _this.__input.select();
                     _this.__scrollIntoView();
-                }, 20);
+                });
             }
             this.__tagInput.classList.add('ui-focus');
         };

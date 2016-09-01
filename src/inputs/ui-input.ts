@@ -152,7 +152,6 @@ export class UIInput extends UIInputGroup {
 
     protected formatter(evt) {
         let val = isEmpty(evt.target.value) ? '' : evt.target.value;
-        // let start = evt.target.selectionStart;
         if (this.__format === 'title') {
             val = val.replace(new RegExp(`[${this.ALPHA}'\\-']+(?=[\\.&\\s]*)`, 'g'), (txt) => {
                 if (txt.toLowerCase().indexOf("mc") == 0) {
@@ -177,7 +176,6 @@ export class UIInput extends UIInputGroup {
             val = val.toLowerCase();
         }
         evt.target.value = val;
-        // setTimeout(() => evt.target.selectionStart = evt.target.selectionEnd = start, 50);
         return (this.__format == 'integer' || this.__format == 'decimal') ? parseFloat(val) : val;
     }
 }

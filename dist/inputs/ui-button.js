@@ -43,6 +43,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             this.disabled = isTrue(this.disabled);
         };
         UIButton.prototype.attached = function () {
+            var _this = this;
             if (this.element.hasAttribute('icon-top'))
                 this.__button.classList.add('ui-icon-top');
             if (this.element.hasAttribute('round'))
@@ -50,9 +51,11 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             if (this.element.hasAttribute('square'))
                 this.__button.classList.add('ui-button-square');
             this.__button.classList.add("ui-button-" + this.__size);
-            if (this.value)
-                this.valueChanged(this.value);
-            this.disable();
+            ui_event_1.UIEvent.queueTask(function () {
+                if (_this.value)
+                    _this.valueChanged(_this.value);
+                _this.disable();
+            });
         };
         UIButton.prototype.disable = function (disabled) {
             if (this.__button.attributes.getNamedItem('disabled') !== null) {

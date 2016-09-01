@@ -5,7 +5,8 @@
 // @license     : MIT
 
 import {Lazy, Container, NewInstance, ViewCompiler, ViewResources, ViewSlot} from "aurelia-framework";
-import "amcharts/amcharts/amcharts";
+import {UIEvent} from "./ui-event";
+import "amcharts/amcharts";
 import * as ld from "lodash";
 import * as km from "kramed";
 import * as mm from "moment";
@@ -226,7 +227,7 @@ export module UIUtils {
             clearTimeout(tmr);
             __removeToast(toast);
         };
-        setTimeout(() => toast.classList.add('ui-toast-show'), 10);
+        UIEvent.queueTask(() => toast.classList.add('ui-toast-show'));
     }
 
     function __removeToast(toast) {

@@ -1,4 +1,4 @@
-define(["require", "exports", "aurelia-framework", "lodash", "kramed", "moment", "numeral", "amcharts/amcharts/amcharts"], function (require, exports, aurelia_framework_1, ld, km, mm, nm) {
+define(["require", "exports", "aurelia-framework", "./ui-event", "lodash", "kramed", "moment", "numeral", "amcharts/amcharts"], function (require, exports, aurelia_framework_1, ui_event_1, ld, km, mm, nm) {
     "use strict";
     exports._ = ld;
     exports.kramed = km;
@@ -203,7 +203,7 @@ define(["require", "exports", "aurelia-framework", "lodash", "kramed", "moment",
                 clearTimeout(tmr);
                 __removeToast(toast);
             };
-            setTimeout(function () { return toast.classList.add('ui-toast-show'); }, 10);
+            ui_event_1.UIEvent.queueTask(function () { return toast.classList.add('ui-toast-show'); });
         }
         UIUtils.showToast = showToast;
         function __removeToast(toast) {

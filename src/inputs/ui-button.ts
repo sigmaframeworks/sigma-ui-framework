@@ -96,8 +96,10 @@ export class UIButton {
 
         this.__button.classList.add(`ui-button-${this.__size}`);
 
-        if (this.value) this.valueChanged(this.value);
-        this.disable();
+        UIEvent.queueTask(() => {
+            if (this.value) this.valueChanged(this.value);
+            this.disable();
+        });
     }
 
     disable(disabled?) {

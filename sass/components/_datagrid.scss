@@ -108,7 +108,7 @@
                 td {
                     > div {
                         line-height   : 1.5;
-                        padding       : .35em .5em;
+                        padding       : .3em .5em;
                         vertical-align: middle;
                         color         : $datagrid-text;
                         border-right  : 1px solid rgba($base-border-color, .2);
@@ -161,18 +161,21 @@
                 td.sticky {
                     z-index: 10;
                     left   : 0;
-                    @include sticky();
+                    // @include sticky();
 
                     &.last-of-type > div {
                         border-right: 1px solid $base-border-color !important;
                     }
                 }
 
+                thead td > div {
+                  background   : $datagrid-header-bg;
+                  border-bottom: 1px solid $base-border-color;
+                }
+
                 thead td:not(:last-child) {
                     > div {
                         padding      : 0;
-                        border-bottom: 1px solid $base-border-color;
-                        background   : $datagrid-header-bg;
                         @include flex-row(stretch);
 
                         > span:first-child {

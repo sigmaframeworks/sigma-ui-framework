@@ -358,10 +358,10 @@ export class UIDialog {
     }
 
     focus() {
-        setTimeout(() => {
+        UIEvent.queueTask(() => {
             let el: any = this.__dialog.querySelector('ui-input input,textarea,ui-phone input,ui-combo input');
             if (!isEmpty(el)) el.focus();
-        }, 10);
+        });
     }
 
     expand($event) {
