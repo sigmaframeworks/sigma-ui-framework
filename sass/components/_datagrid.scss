@@ -10,6 +10,7 @@
     width   : 100%;
     height  : 100%;
     @include flex(1 1 0);
+    @include flex-column($align:stretch);
 
     .ui-empty-text {
         text-align: center;
@@ -43,28 +44,26 @@
     }
 
     .ui-datagrid-wrapper {
-        @include flex-row($align:stretch,$wrap:false);
-        max-height: 100%;
+        @include flex-column($align:stretch);
 
         > .ui-table-wrapper {
-            @include flex(1 1 0);
-            height: 100%;
+            &.scroller {
+                @include flex(1 1 0);
+                overflow: auto;
+            }
 
             &.sticky {
-                z-index   : 30;
-                left      : 0;
-                background: $base-bg;
-                @include sticky();
+                z-index : 30;
+                overflow: hidden;
                 @include flex(0 0 auto);
-                // border-right: 1px solid $base-border-color !important;
             }
 
             .ui-locked-table td:last-child {
                 border-right: 1px solid $base-border-color !important;
             }
 
-             > table > thead,
-            > table > tfoot {
+             > table > tfoot,
+            > table > thead {
                 z-index: 20;
                 @include sticky();
             }
@@ -72,32 +71,24 @@
             > table {
                 min-width   : 100%;
                 min-height  : 100%;
-                table-layout: fixed;
-
-                > thead {
-                    top: 0;
-                }
-
-                > tfoot {
-                    bottom: -1px;
-                }
+                table-layout: auto;
 
                 > tbody {
                     z-index: 10;
 
-                    tr:nth-of-type(odd) > td {
+                    tr.odd > td {
                         background-color: $datagrid-odd-bg;
                     }
 
-                    tr:nth-of-type(even) > td {
+                    tr.even > td {
                         background-color: $datagrid-even-row;
                     }
 
-                    tr:last-child {
+                    tr.last-child {
                         height: 100%;
 
-                         > td,
-                        > td > div {
+                         > td > div,
+                        > td {
                             height     : 100%;
                             padding    : 0;
                             line-height: 0;
@@ -147,20 +138,37 @@
                         a {
                             font-weight: $font-weight-normal;
                         }
+
+                        .ui-color-mark {
+                            display       : inline-block;
+                            vertical-align: middle;
+                            width         : 1em;
+                            height        : 1em;
+                            margin        : -.2em .1em 0;
+                            border-radius : .25em;
+                            border        : 1px solid $base-border-color;
+
+                            $colorList    : (#D53530, #EF6B28, #9D6E4B, #EDEC47, #5DAF43, #38D046, #279F79, #5AC5C4, #338EBD, #375FA7, #7C53A2, #A6216A, #DF8097);
+                            @for $i from 1 through 12 {
+                                &.color-#{$i} {
+                                    background: nth($colorList, $i);
+                                }
+                            }
+                        }
                     }
                 }
 
                 td.sticky {
-                    // z-index: 10;
-                    // left   : 0;
-                    // //@include sticky();
-                    //
-                    // &.last-of-type > div {
-                    //     border-right: 1px solid $base-border-color !important;
-                    // }
+                    z-index: 10;
+                    left   : 0;
+                    @include sticky();
+
+                    &.last-of-type > div {
+                        border-right: 1px solid $base-border-color !important;
+                    }
                 }
 
-                thead td {
+                thead td:not(:last-child) {
                     > div {
                         padding      : 0;
                         border-bottom: 1px solid $base-border-color;
@@ -248,8 +256,7 @@
     }
 
     &:not(.ui-auto-height) > .ui-datagrid-wrapper {
-        @include scroll();
-        @include position(absolute, 0, 0, 0, 0);
+        @include flex(1 1 0);
     }
 }
 

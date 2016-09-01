@@ -14,6 +14,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
             this.element = element;
             this.signaler = signaler;
             this.bindingEngine = bindingEngine;
+            this.__data = [];
             this.__focusRow = 2;
             this.__isProcessing = false;
             this.columns = [];
@@ -21,6 +22,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
             this.defaultOrder = 'asc';
             this.dataList = [];
             this.summaryRow = false;
+            this.useVirtual = false;
             this.emptyText = '&nbsp;';
             this.colChilds = [];
             this.allowSelect = false;
@@ -44,17 +46,24 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
             this.__dataListChangeSubscriber.dispose();
         };
         UIDataGrid.prototype.attached = function () {
-            this.__doSort(this.dataList);
+            var _this = this;
+            ui_event_1.UIEvent.queueTask(function () { return _this.__doSort(_this.dataList); });
         };
         UIDataGrid.prototype.colChildsChanged = function (newValue) {
+            var _this = this;
             this.columns = ui_utils_1._.orderBy(this.colChilds, ['__locked'], ['desc']);
-            this.__columnsLocked = ui_utils_1._.filter(this.colChilds, ['__locked', true]);
-            this.__columnsList = ui_utils_1._.filter(this.colChilds, ['__locked', false]);
+            setTimeout(function () {
+                var w = 0;
+                ui_utils_1._.forEach(_this.columns, function (c) {
+                    c.edge = w;
+                    w += parseInt(c.width || 250);
+                });
+                _this.__tableWidth = w;
+                _this.dataListChanged(_this.dataList);
+            }, 100);
         };
         UIDataGrid.prototype.dataListChanged = function (newValue) {
-            this.__table.style.tableLayout = 'auto';
             this.__doSort(newValue);
-            this.__table.style.tableLayout = 'fixed';
             this.signaler.signal(this.__id);
         };
         UIDataGrid.prototype.isLastLocked = function (locked, index) {
@@ -103,16 +112,11 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
             return false;
         };
         UIDataGrid.prototype.sort = function ($event, column) {
-            var _this = this;
             if (column.__sortable !== true)
                 return;
-            this.__isProcessing = true;
             this.__sortColumn = column.dataId;
             this.__sortOrder = $event.target.classList.contains('asc') ? 'desc' : 'asc';
-            setTimeout(function () {
-                _this.__doSort(_this.dataList);
-                _this.__isProcessing = false;
-            }, 100);
+            this.__doSort(this.dataList);
         };
         UIDataGrid.prototype.summary = function (column) {
             if (ui_utils_1._.isObject(this.summaryRow)) {
@@ -183,9 +187,6 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
                     case 'exrate':
                         retVal = ui_formatters_1.UIFormat.exRate(newValue);
                         break;
-                    case 'color':
-                        retVal = "<span class=\"color-code color-" + value + "\"></span> " + newValue;
-                        break;
                     default:
                         retVal = newValue;
                 }
@@ -193,12 +194,19 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
             return isEmpty(retVal) ? '&nbsp;' : retVal;
         };
         UIDataGrid.prototype.__doSort = function (data) {
+            var _this = this;
             if (this.columns.length == 0)
                 return;
             var column = ui_utils_1._.find(this.columns, ['dataId', this.__sortColumn]);
             var columnId = column.dataId || this.defaultSort;
             var siblingId = column.dataSort || this.defaultSort;
-            this.__data = ui_utils_1._.orderBy(data, [columnId, siblingId], [this.__sortOrder, this.defaultOrder]);
+            this.__isProcessing = true;
+            this.__data = [];
+            this.__wrapper.scrollTop = 0;
+            setTimeout(function () {
+                _this.__data = ui_utils_1._.orderBy(data, [columnId, siblingId], [_this.__sortOrder, _this.defaultOrder]);
+                ui_event_1.UIEvent.queueTask(function () { return _this.__isProcessing = false; });
+            }, 500);
         };
         UIDataGrid.prototype.resizeStart = function ($event) {
             var _this = this;
@@ -213,8 +221,6 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
             document.addEventListener('mousemove', this.__move = function (e) { return _this.resize(e); });
             document.addEventListener('mouseup', this.__stop = function (e) { return _this.resizeEnd(e); });
             this.__column = this.__table.querySelector("colgroup col[data-index=\"" + this.__index + "\"]");
-            if (!this.__column)
-                this.__column = this.__tableLocked.querySelector("colgroup col[data-index=\"" + this.__index + "\"]");
             this.__startX = ($event.x || $event.clientX);
             this.__isResizing = true;
             this.__diff = 0;
@@ -245,8 +251,13 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
             var column = this.columns[this.__index];
             this.__isResizing = false;
             this.__column.width = column.width = (parseInt(this.__column.width) + this.__diff);
-            if (!column.__locked)
-                this.__table.width = parseInt(this.__table.width) + this.__diff;
+            this.__tableWidth = parseInt(this.__tableWidth) + this.__diff;
+            var w = 0;
+            ui_utils_1._.forEach(this.columns, function (c) {
+                c.edge = w;
+                w += parseInt(c.width || 250);
+                return c.__locked;
+            });
         };
         UIDataGrid.__id = 0;
         __decorate([
@@ -265,6 +276,10 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
         ], UIDataGrid.prototype, "summaryRow", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UIDataGrid.prototype, "useVirtual", void 0);
         __decorate([
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
@@ -334,6 +349,9 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
                 this.buttonIcon = this.buttonIcon || 'fi-ui-overflow-menu-alt';
             if (this.__button = !(isEmpty(this.buttonIcon) && isEmpty(this.buttonTitle) && !this.element.hasAttribute('button')))
                 this.__align = 'center';
+        };
+        UIDataColumn.prototype.attached = function () {
+            this.__title = this.element.textContent;
             if (!this.width && !isEmpty(this.buttonIcon) && isEmpty(this.buttonTitle)) {
                 this.width = convertToPx("2.5em", this.element);
             }
@@ -363,9 +381,6 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
             else {
                 this.width = convertToPx(this.width || this.minWidth || '250px', this.element);
             }
-        };
-        UIDataColumn.prototype.attached = function () {
-            this.__title = this.element.textContent;
         };
         __decorate([
             aurelia_framework_1.bindable(), 
@@ -498,4 +513,19 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
         return UIPager;
     }());
     exports.UIPager = UIPager;
+    var ScrollLeftAttribute = (function () {
+        function ScrollLeftAttribute(element) {
+            this.element = element;
+        }
+        ScrollLeftAttribute.prototype.valueChanged = function (newValue) {
+            this.element.scrollLeft = newValue;
+        };
+        ScrollLeftAttribute = __decorate([
+            aurelia_framework_1.autoinject,
+            aurelia_framework_1.customAttribute('scroll-left'), 
+            __metadata('design:paramtypes', [Element])
+        ], ScrollLeftAttribute);
+        return ScrollLeftAttribute;
+    }());
+    exports.ScrollLeftAttribute = ScrollLeftAttribute;
 });

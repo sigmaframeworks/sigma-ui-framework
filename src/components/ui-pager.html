@@ -12,7 +12,7 @@
     </button>
     <div class="ui-button ui-page-input">
         <input class="ui-input ui-text-center" size="3" value.bind="current" keypress.trigger="keyCheck($event)" />
-        <span> of 5</span>
+        <span> of ${total}</span>
     </div>
     <button class="ui-button ui-button-default ui-button-square" disabled.bind="current===total" click.trigger="fireChange(1)">
         <span class="fi-ui-pager-next"></span>

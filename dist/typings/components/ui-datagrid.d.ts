@@ -8,12 +8,10 @@ export declare class UIDataGrid {
     private __id;
     private __data;
     private __table;
-    private __tableLocked;
-    private __columns;
-    private __columnsLocked;
-    private __columnsList;
+    private __tableWidth;
     private __ghost;
     private __indicator;
+    private __wrapper;
     private __focusRow;
     private __isProcessing;
     private columns;
@@ -23,6 +21,7 @@ export declare class UIDataGrid {
     defaultOrder: string;
     dataList: any[];
     summaryRow: boolean;
+    useVirtual: boolean;
     emptyText: string;
     colChilds: any[];
     private allowSelect;
@@ -93,4 +92,9 @@ export declare class UIPager {
     currentChanged(newValue: any): void;
     fireChange(n: any): void;
     keyCheck(evt: any): any;
+}
+export declare class ScrollLeftAttribute {
+    element: Element;
+    constructor(element: Element);
+    valueChanged(newValue: any): void;
 }

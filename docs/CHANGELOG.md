@@ -1,11 +1,18 @@
-* Added display input, for input styled static text display
+<a name="0.0.4-beta.5"></a>
+## 0.0.4-beta.5 (2016-09-01)
+
+* __UIDisplay__: Added display input, for input styled static text display
+* __UIDatagrid__: Added aurelia-ui-virtualization for big data grid
+* __UIDatagrid__: Fixed sorting and resizing issues
+* __UIPager__: Fixed total pages display
+
 
 <a name="0.0.3-beta.4"></a>
 ## 0.0.3-beta.4 (2016-08-31)
 
-* HttpService file upload fixed
-* Added option to set on/off values for switch
-* Added ability to indicate errors in Language Input
+* __UIHttpService__: Fixed file upload
+* __UISwitch__: Added option to set on/off values
+* __UILanguage__: Added ability to indicate errors
 * Added language validation rule
 
 

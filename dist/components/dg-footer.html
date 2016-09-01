@@ -1,0 +1,25 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016 Sigma Frameworks
+// @license     : MIT
+-->
+<template containerless>
+    <table width.bind="__tableWidth" css.bind="{'table-layout': __tableWidth?'fixed':'auto' }">
+        <colgroup>
+            <col repeat.for="col of columns" data-index="${$index}" width="${(col.width || col.minWidth || '250')}"/>
+            <col/>
+        </colgroup>
+        <tfoot if.bind="summaryRow">
+            <tr>
+                <td repeat.for="col of columns" data-index="${$index}" css.bind="{'left':col.edge+'px'}" class="dg-col ${col.__locked ? 'sticky':''} ui-text-${col.__align} ${isLastLocked(col.__locked, $index)?'last-of-type':''}">
+                    <div innerhtml.bind="summary(col) & signal:__id"></div>
+                </td>
+                <td css.bind="{'min-width': '20px'}">
+                    <div>
+                        <span>&nbsp;</span>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</template>

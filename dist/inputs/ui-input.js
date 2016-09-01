@@ -67,7 +67,6 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group"], function
         };
         UIInput.prototype.formatter = function (evt) {
             var val = isEmpty(evt.target.value) ? '' : evt.target.value;
-            var start = evt.target.selectionStart;
             if (this.__format === 'title') {
                 val = val.replace(new RegExp("[" + this.ALPHA + "'\\-']+(?=[\\.&\\s]*)", 'g'), function (txt) {
                     if (txt.toLowerCase().indexOf("mc") == 0) {
@@ -92,7 +91,6 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group"], function
                 val = val.toLowerCase();
             }
             evt.target.value = val;
-            setTimeout(function () { return evt.target.selectionStart = evt.target.selectionEnd = start; }, 50);
             return (this.__format == 'integer' || this.__format == 'decimal') ? parseFloat(val) : val;
         };
         __decorate([

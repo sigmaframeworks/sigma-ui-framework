@@ -5,131 +5,19 @@
 -->
 <template class="ui-datagrid" mousedown.delegate="resizeStart($event)">
 
-    <div class="ui-datagrid-wrapper">
-        <div class="ui-table-wrapper sticky" if.bind="__columnsLocked.length>0">
-            <table ref="__tableLocked" height="100%" class="ui-locked-table">
-                <colgroup>
-                    <col repeat.for="col of __columnsLocked" data-index="${$index}" width="${(col.width || col.minWidth || '250')}" />
-                </colgroup>
-                <thead>
-                    <tr>
-                        <td repeat.for="col of __columnsLocked" data-index="${$index}" css.bind="{'left':col.edge+'px'}" class="${col.__locked ? 'sticky':''} ui-text-${col.__align} ${isLastLocked(col.__locked, $index)?'last-of-type':''}">
-                            <div>
-                                <span class="${col.__sortable===true?'sortable':''} ${col.dataId==__sortColumn?__sortOrder:''}" click.trigger="sort($event, col)">
-									${col.__title}&nbsp;</span>
-                                <span class="resizer ${col.__resizeable===true?'enable':'disable'}" data-index="${$index}"></span>
-                            </div>
-                        </td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr if.bind="__data.length==0">
-                        <td colspan="${columns.length+1}" class="ui-empty-text">
-                          <h3 class="ui-text-muted">&nbsp;</h3>
-                        </td>
-                    </tr>
-                    <tr mouseover.trigger="__focusRow=$index" mouseout.trigger="__focusRow=-1" repeat.for="model of __data" class="${allowSelect?'ui-datagrid-row':''} ${__focusRow==$index?'focus':''}" click.delegate="rowSelect(model)">
-                        <td repeat.for="col of __columnsLocked" data-index="${$index}" css.bind="{'left':col.edge+'px'}" class="dg-col ${col.__locked ? 'sticky':''} ui-text-${col.__align} ${isLastLocked(col.__locked, $index)?'last-of-type':''}">
-                            <div if.bind="col.__button" class="ui-button-bar">
-                                <div click.trigger="linkClicked($event, col, model)" innerhtml.bind="buildButton(model[col.dataId], col, model) & signal:__id"></div>
-                                <ui-menu floating if.bind="col.__hasMenu" menu.bind="col.buttonMenu" menuclick.trigger="menuClicked($event, col, model)"></ui-menu>
-                            </div>
-                            <div class="ui-selectable ${col.class}" if.bind="!col.__button && !col.__link">
-                                <span innerhtml.bind="format(model[col.dataId], col, model) & signal:__id"></span>&nbsp;
-                            </div>
-                            <div if.bind="col.__link">
-                                <a class="ui-link" click.trigger="linkClicked($event, col, model)" innerhtml.bind="format(model[col.dataId], col, model) & signal:__id"></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td repeat.for="col of __columnsLocked" css.bind="{'left':col.edge+'px'}" class="${col.__locked ? 'sticky':''} ui-text-${col.__align} ${isLastLocked(col.__locked, $index)?'last-of-type':''}">
-                            <div>&nbsp;</div>
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot if.bind="summaryRow">
-                    <tr>
-                        <td repeat.for="col of __columnsLocked" data-index="${$index}" css.bind="{'left':col.edge+'px'}" class="${col.__locked ? 'sticky':''} ui-text-${col.__align} ${isLastLocked(col.__locked, $index)?'last-of-type':''}">
-                            <div innerhtml.bind="summary(col) & signal:__id"></div>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
+    <div class="ui-datagrid-wrapper" ref="__wrapper">
+        <div class="ui-table-wrapper sticky" scroll-left.bind="__scrollLeft">
+            <compose view="./dg-header.html" containerless></compose>
         </div>
-        <div class="ui-table-wrapper">
-            <table ref="__table" height="100%">
-                <colgroup>
-                    <col repeat.for="col of __columnsList" data-index="${__columnsLocked.length+$index}" width="${(col.width || col.minWidth || '250')}" />
-                    <col width="auto" />
-                </colgroup>
-
-                <thead>
-                    <tr>
-                        <td repeat.for="col of __columnsList" data-index="${__columnsLocked.length+$index}" css.bind="{'left':col.edge+'px'}" class="${col.__locked ? 'sticky':''} ui-text-${col.__align} ${isLastLocked(col.__locked, $index)?'last-of-type':''}">
-                            <div>
-                                <span class="${col.__sortable===true?'sortable':''} ${col.dataId==__sortColumn?__sortOrder:''}" click.trigger="sort($event, col)">
-									${col.__title}&nbsp;</span>
-                                <span class="resizer ${col.__resizeable===true?'enable':'disable'}" data-index="${$index}"></span>
-                            </div>
-                        </td>
-                        <td css.bind="{'min-width': '20px'}">
-                            <div>
-                                <span>&nbsp;</span>
-                            </div>
-                        </td>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr if.bind="__data.length==0">
-                        <td colspan="${columns.length+1}" class="ui-empty-text">
-                            <h3 class="ui-text-muted" innerhtml.bind="emptyText"></h3>
-                        </td>
-                    </tr>
-                    <tr mouseover.trigger="__focusRow=$index" mouseout.trigger="__focusRow=-1" repeat.for="model of __data" class="${allowSelect?'ui-datagrid-row':''} ${__focusRow==$index?'focus':''}" click.delegate="rowSelect(model)">
-                        <td repeat.for="col of __columnsList" data-index="${__columnsLocked.length+$index}" css.bind="{'left':col.edge+'px'}" class="dg-col ${col.__locked ? 'sticky':''} ui-text-${col.__align} ${isLastLocked(col.__locked, $index)?'last-of-type':''}">
-
-                            <div if.bind="col.__button" class="ui-button-bar">
-                                <div click.trigger="linkClicked($event, col, model)" innerhtml.bind="buildButton(model[col.dataId], col, model) & signal:__id"></div>
-                                <ui-menu floating if.bind="col.__hasMenu" menu.bind="col.buttonMenu" menuclick.trigger="menuClicked($event, col, model)"></ui-menu>
-                            </div>
-                            <div class="ui-selectable ${col.class}" if.bind="!col.__button && !col.__link">
-                                <span innerhtml.bind="format(model[col.dataId], col, model) & signal:__id"></span>&nbsp;
-                            </div>
-                            <div if.bind="col.__link">
-                                <a class="ui-link" click.trigger="linkClicked($event, col, model)" innerhtml.bind="format(model[col.dataId], col, model) & signal:__id"></a>
-                            </div>
-
-                        </td>
-                        <td css.bind="{'min-width': '20px'}">
-                            <div>&nbsp;</div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td repeat.for="col of __columnsList" css.bind="{'left':col.edge+'px'}" class="${col.__locked ? 'sticky':''} ui-text-${col.__align} ${isLastLocked(col.__locked, $index)?'last-of-type':''}">
-                            <div>&nbsp;</div>
-                        </td>
-                        <td css.bind="{'min-width': '20px'}">
-                            <div>&nbsp;</div>
-                        </td>
-                    </tr>
-                </tbody>
-
-                <tfoot if.bind="summaryRow">
-                    <tr>
-                        <td repeat.for="col of __columnsList" data-index="${__columnsLocked.length+$index}" css.bind="{'left':col.edge+'px'}" class="${col.__locked ? 'sticky':''} ui-text-${col.__align} ${isLastLocked(col.__locked, $index)?'last-of-type':''}">
-                            <div innerhtml.bind="summary(col) & signal:__id"></div>
-                        </td>
-                        <td css.bind="{'min-width': '20px'}">
-                            <div>&nbsp;</div>
-                        </td>
-                    </tr>
-                </tfoot>
-
-            </table>
+        <div class="ui-table-wrapper scroller" scroll.trigger="__scrollLeft=$event.target.scrollLeft & debounce">
+            <compose view="./dg-virtual.html" if.bind="useVirtual" containerless></compose>
+            <compose view="./dg-body.html" if.bind="!useVirtual" containerless></compose>
+        </div>
+        <div class="ui-table-wrapper sticky" scroll-left.bind="__scrollLeft">
+            <compose view="./dg-footer.html" containerless></compose>
         </div>
     </div>
+
     <div class="ui-hide" ref="__columns">
         <slot></slot>
     </div>

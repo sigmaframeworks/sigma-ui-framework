@@ -4,7 +4,7 @@
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
 
-import {autoinject, customElement, bindable, useView, bindingMode, children, inlineView, BindingEngine} from "aurelia-framework";
+import {autoinject, customElement, customAttribute, bindable, useView, bindingMode, children, inlineView, BindingEngine} from "aurelia-framework";
 import {BindingSignaler} from "aurelia-templating-resources";
 import {UIFormat} from "../utils/ui-formatters";
 import {UIEvent} from "../utils/ui-event";
@@ -16,14 +16,16 @@ export class UIDataGrid {
     static __id = 0;
 
     private __id;
-    private __data;
+    private __data = [];
     private __table;
-    private __tableLocked;
-    private __columns;
-    private __columnsLocked;
-    private __columnsList;
+    // private __tableLocked;
+    // private __columns;
+    // private __columnsLocked;
+    // private __columnsList;
+    private __tableWidth;
     private __ghost;
     private __indicator;
+    private __wrapper;
     private __focusRow = 2;
     private __isProcessing = false;
 
@@ -41,6 +43,8 @@ export class UIDataGrid {
     @bindable()
     summaryRow = false;
     @bindable()
+    useVirtual = false;
+    @bindable()
     emptyText = '&nbsp;';
 
     @children('.ui-hide ui-data-column')
@@ -56,19 +60,10 @@ export class UIDataGrid {
     }
 
     bind() {
-        // let cols = [];
-        // _.forEach(this.__columns.children, c => {
-        //   cols.push(c['columnDef']);
-        // });
-        //
-        // this.columns = _.orderBy(cols, ['locked'], ['desc']);
-
         this.__sortColumn = this.defaultSort;
         this.__sortOrder = this.defaultOrder;
 
         this.allowSelect = this.element.hasAttribute('selectable');
-
-        // this.__doSort(this.dataList);
 
         this.__dataListChangeSubscriber = this.bindingEngine.collectionObserver(this.dataList).subscribe(e => {
             this.dataListChanged(this.dataList);
@@ -80,44 +75,30 @@ export class UIDataGrid {
     }
 
     attached() {
-        // let cols = [];
-        // _.forEach(this.__columns.children, c => {
-        // 	cols.push(c['columnDef']);
-        // });
-        //
-        // this.columns = _.orderBy(cols, ['__locked'], ['desc']);
-        //
-        // this.__columnsLocked = _.filter(cols, ['__locked', true]);
-        // this.__columnsList = _.filter(cols, ['__locked', false]);
-
-        // var w = 0;
-        // _.forEach(this.__columnsList, (c: any) => {
-        // 	c.edge = w;
-        // 	w += parseInt(c.width || 250);
-        // 	// return c.__locked;
-        // });
-        // this.__table.width = w;
-
-        this.__doSort(this.dataList);
+        UIEvent.queueTask(() => this.__doSort(this.dataList));
     }
 
     colChildsChanged(newValue) {
-        // let cols = [];
-        // _.forEach(this.colChilds, c => {
-        //     cols.push(c['columnDef']);
-        // });
-
         this.columns = _.orderBy(this.colChilds, ['__locked'], ['desc']);
 
-        this.__columnsLocked = _.filter(this.colChilds, ['__locked', true]);
-        this.__columnsList = _.filter(this.colChilds, ['__locked', false]);
-
+        // this.__columnsLocked = _.filter(this.colChilds, ['__locked', true]);
+        // this.__columnsList = _.filter(this.colChilds, ['__locked', false]);
+        setTimeout(() => {
+            var w = 0;
+            _.forEach(this.columns, (c: any) => {
+                c.edge = w;
+                w += parseInt(c.width || 250);
+                // return c.__locked;
+            });
+            this.__tableWidth = w;
+            this.dataListChanged(this.dataList);
+        }, 100);
     }
 
     dataListChanged(newValue) {
-        this.__table.style.tableLayout = 'auto';
+        // this.__table.style.tableLayout = 'auto';
         this.__doSort(newValue);
-        this.__table.style.tableLayout = 'fixed';
+        // this.__table.style.tableLayout = 'fixed';
         this.signaler.signal(this.__id);
     }
 
@@ -185,13 +166,9 @@ export class UIDataGrid {
     sort($event, column) {
         if (column.__sortable !== true) return;
 
-        this.__isProcessing = true;
         this.__sortColumn = column.dataId;
         this.__sortOrder = $event.target.classList.contains('asc') ? 'desc' : 'asc';
-        setTimeout(() => {
-            this.__doSort(this.dataList);
-            this.__isProcessing = false;
-        }, 100);
+        this.__doSort(this.dataList);
     }
 
     summary(column): string {
@@ -267,9 +244,6 @@ export class UIDataGrid {
                 case 'exrate':
                     retVal = UIFormat.exRate(newValue);
                     break;
-                case 'color':
-                    retVal = `<span class="color-code color-${value}"></span> ${newValue}`;
-                    break;
                 default:
                     retVal = newValue;
             }
@@ -282,10 +256,15 @@ export class UIDataGrid {
         let column = _.find(this.columns, ['dataId', this.__sortColumn]);
         let columnId = column.dataId || this.defaultSort;
         let siblingId = column.dataSort || this.defaultSort;
-        this.__data = _.orderBy(data,
-            [columnId, siblingId],
-            [this.__sortOrder, this.defaultOrder]);
-
+        this.__isProcessing = true;
+        this.__data = [];
+        this.__wrapper.scrollTop = 0;
+        setTimeout(() => {
+            this.__data = _.orderBy(data,
+                [columnId, siblingId],
+                [this.__sortOrder, this.defaultOrder]);
+            UIEvent.queueTask(() => this.__isProcessing = false);
+        }, 500);
         //setTimeout(()=> this.signaler.signal(this.__id + 'Button'), 100);
     }
 
@@ -311,8 +290,10 @@ export class UIDataGrid {
         document.addEventListener('mousemove', this.__move = e => this.resize(e));
         document.addEventListener('mouseup', this.__stop = e => this.resizeEnd(e));
 
+        // let w = this.__tableLocked.offsetWidth;
         this.__column = this.__table.querySelector(`colgroup col[data-index="${this.__index}"]`);
-        if (!this.__column) this.__column = this.__tableLocked.querySelector(`colgroup col[data-index="${this.__index}"]`);
+        // if (!this.__column) w = 0;
+        // if (!this.__column) this.__column = this.__tableLocked.querySelector(`colgroup col[data-index="${this.__index}"]`);
         this.__startX = ($event.x || $event.clientX);
         this.__isResizing = true;
         this.__diff = 0;
@@ -347,14 +328,14 @@ export class UIDataGrid {
         this.__isResizing = false;
 
         this.__column.width = column.width = (parseInt(this.__column.width) + this.__diff);
-        if (!column.__locked) this.__table.width = parseInt(this.__table.width) + this.__diff;
+        this.__tableWidth = parseInt(this.__tableWidth) + this.__diff;
 
-        // var w = 0;
-        // _.forEach(this.columns, (c: any) => {
-        // 	c.edge = w;
-        // 	w += parseInt(c.width || 250);
-        // 	return c.__locked;
-        // });
+        var w = 0;
+        _.forEach(this.columns, (c: any) => {
+            c.edge = w;
+            w += parseInt(c.width || 250);
+            return c.__locked;
+        });
     }
 }
 
@@ -442,6 +423,10 @@ export class UIDataColumn {
         if (this.__hasMenu) this.buttonIcon = this.buttonIcon || 'fi-ui-overflow-menu-alt';
 
         if (this.__button = !(isEmpty(this.buttonIcon) && isEmpty(this.buttonTitle) && !this.element.hasAttribute('button'))) this.__align = 'center';
+    }
+
+    attached() {
+        this.__title = this.element.textContent;
 
         if (!this.width && !isEmpty(this.buttonIcon) && isEmpty(this.buttonTitle)) {
             this.width = convertToPx("2.5em", this.element);
@@ -472,10 +457,6 @@ export class UIDataColumn {
         else {
             this.width = convertToPx(this.width || this.minWidth || '250px', this.element);
         }
-    }
-
-    attached() {
-        this.__title = this.element.textContent;
     }
 }
 
@@ -520,5 +501,16 @@ export class UIPager {
             return UIEvent.fireEvent('pagechanged', this.element, this.current);
         }
         return /[0-9]/.test(String.fromCharCode(evt.charCode));
+    }
+}
+
+@autoinject
+@customAttribute('scroll-left')
+export class ScrollLeftAttribute {
+    constructor(public element: Element) {
+    }
+
+    valueChanged(newValue) {
+        this.element.scrollLeft = newValue;
     }
 }
