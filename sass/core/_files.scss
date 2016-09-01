@@ -8,7 +8,7 @@
 Flaticon icon font: Flaticon
 Creation date: 13/03/2016 12:28
 */
-@include font-face( 'FileIcons', inline_font_files('files/flaticon.woff', woff, 'files/flaticon.ttf', ttf, 'files/flaticon.svg', svg ), ('files/flaticon.eot'), normal, normal );
+@include font-face( 'FileIcons', font_files('files/flaticon.woff', woff, 'files/flaticon.ttf', ttf, 'files/flaticon.svg', svg ), ('files/flaticon.eot'), normal, normal );
 
 [class*=" fi-file-"]:after,
 [class*=" fi-file-"]:before,

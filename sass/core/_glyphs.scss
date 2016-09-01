@@ -8,7 +8,7 @@
 Flaticon icon font: Flaticon
 Creation date: 13/03/2016 12:28
 */
-@include font-face( 'Framework', inline_font_files('glyphs/Flaticon.woff', woff, 'glyphs/Flaticon.ttf', ttf, 'glyphs/Flaticon.svg', svg ), ('glyphs/Flaticon.eot'), normal, normal );
+@include font-face( 'Framework', font_files('glyphs/Flaticon.woff', woff, 'glyphs/Flaticon.ttf', ttf, 'glyphs/Flaticon.svg', svg ), ('glyphs/Flaticon.eot'), normal, normal );
 
 .fi-ui {
     font-size: 1em;
