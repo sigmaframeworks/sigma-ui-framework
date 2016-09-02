@@ -1,5 +1,12 @@
-### [Documentation](http://sigmaframeworks.io/docs/framework)
-### [Demo](http://demo.sigmaframeworks.io/)
+[![NPM version][npm-version-image]][npm-url] 
+[![NPM downloads][npm-downloads-image]][npm-url] 
+[![MIT License][license-image]][license-url]
+
+A bespoke UI Framework built on Aurelia for desktop business application
+
+**[Documentation](http://sigmaframeworks.io/docs/framework)**
+
+**[Demo](http://demo.sigmaframeworks.io/)**
 
 ----
 
@@ -73,3 +80,10 @@
         });
       });
     ```
+
+[license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
+[license-url]: LICENSE
+
+[npm-url]: http://npmjs.org/package/sigma-ui-framework
+[npm-version-image]: http://img.shields.io/npm/v/sigma-ui-framework.svg?style=flat
+[npm-downloads-image]: http://img.shields.io/npm/dm/sigma-ui-framework.svg?style=flat
