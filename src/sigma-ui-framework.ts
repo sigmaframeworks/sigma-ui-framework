@@ -35,6 +35,7 @@ export function configure(aurelia: FrameworkConfiguration, configCallback) {
     aurelia.globalResources('./components/ui-tree');
     aurelia.globalResources('./components/ui-datagrid');
     aurelia.globalResources('./components/ui-tab-panel');
+    aurelia.globalResources('./components/ui-chart');
 
     /** Inputs **/
     aurelia.globalResources('./inputs/ui-button');
@@ -126,8 +127,7 @@ export function configure(aurelia: FrameworkConfiguration, configCallback) {
             UIConstants.Http.AuthorizationHeader = t;
             return Configure;
         },
-        loadCharts: () => {
-            aurelia.globalResources('./components/ui-chart');
+        useAmCharts: () => {
             UIChartStatic.init();
             return Configure;
         },

@@ -22,32 +22,48 @@ export class UIChart {
     __chart;
 }
 
+@autoinject()
 @customElement('ui-chart')
 export class UIChartBase extends UIChart {
-	/**
-		 * @property    chart-title
-		 * @type        string
-		 */
+    /**
+       * @property    chart-title
+       * @type        string
+       */
     @bindable()
     chartTitle: string = '';
-	/**
-		 * @property    chart-options
-		 * @type        Array
-		 */
+    /**
+  	   * @property    chart-data
+  	   * @type        Array
+  	   */
+    @bindable()
+    chartData: Array<any> = [];
+    /**
+       * @property    chart-options
+       * @type        Array
+       */
     @bindable()
     chartOptions: AmCharts.AmChart = <AmCharts.AmChart>{};
-	/**
-		 * @property    width
-		 * @type        number
-		 */
+    /**
+       * @property    width
+       * @type        number
+       */
     @bindable()
     width: number = 600;
-	/**
-		 * @property    height
-		 * @type        number
-		 */
+    /**
+       * @property    height
+       * @type        number
+       */
     @bindable()
     height: number = 400;
+
+    @bindable()
+    build: any;
+
+    constructor(element: Element) {
+        super();
+
+        if (element.hasAttribute('stretch')) element.classList.add('ui-stretch');
+    }
 
     chartDataChanged(newValue) {
         if (_.isEmpty(newValue)) return;
@@ -55,8 +71,15 @@ export class UIChartBase extends UIChart {
     }
 
     __buildChart() {
-        this.__chart = AmCharts.makeChart(this.__canvas, _.cloneDeep(this.chartOptions));
-        this.__chart.write(this.__canvas);
+        if (isFunction(this.build)) {
+            this.build(this.__canvas, this.chartData);
+        }
+        else {
+            if (!AmCharts) throw new Error('amCharts not loaded');
+            this.chartOptions.dataProvider = _.cloneDeep(this.chartData);
+            this.__chart = AmCharts.makeChart(this.__canvas, _.cloneDeep(this.chartOptions));
+            this.__chart.write(this.__canvas);
+        }
     }
 }
 
@@ -260,8 +283,9 @@ export class UIPie extends UIChart {
     __options: AmCharts.AmPieChart = <AmCharts.AmPieChart>{};
     __buildChart() {
         this.__options.type = "pie";
-        //this.__options.theme = this.theme;
+        this.__options.theme = this.theme;
         switch (this.theme) {
+            case 'pie': this.__options.colors = UIChartStatic.CHART_PIE; break;
             case 'red': this.__options.colors = UIChartStatic.CHART_RED; break;
             case 'pink': this.__options.colors = UIChartStatic.CHART_PINK; break;
             case 'blue': this.__options.colors = UIChartStatic.CHART_BLUE; break;
@@ -269,7 +293,7 @@ export class UIPie extends UIChart {
             case 'orange': this.__options.colors = UIChartStatic.CHART_ORANGE; break;
             case 'violet': this.__options.colors = UIChartStatic.CHART_VIOLET; break;
             case 'spectrum': this.__options.colors = UIChartStatic.CHART_SPECTRUM; break;
-            default: this.__options.colors = UIChartStatic.CHART_PIE; break;
+            default: this.__options.theme = this.theme; break;
         }
         this.__options.addClassNames = true;
         this.__options.precision = 2;

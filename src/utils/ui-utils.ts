@@ -77,6 +77,7 @@ export module UIChartStatic {
     export var CHART_PIE = ["#B52F30", "#F68F31", "#8FC649", "#A0C4C8", "#A54797", "#977E6D", "#954D43", "#FBCC2E", "#5C8158", "#5D86A3", "#B10D5F", "#0E6BA8", "#0B6848"];
 
     export function init() {
+        if (!AmCharts) throw new Error('amCharts not loaded');
         let colors = { red: 'CHART_RED', pink: 'CHART_PINK', blue: 'CHART_BLUE', green: 'CHART_GREEN', orange: 'CHART_ORANGE', violet: 'CHART_VIOLET', spectrum: 'CHART_SPECTRUM', default: 'CHART_DEFAULT', pie: 'CHART_PIE' }
         _.forEach(colors, (v, k) => {
             AmCharts['themes'][k] = Object.assign({}, AmCharts['themes'].light, {
