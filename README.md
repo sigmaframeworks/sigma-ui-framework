@@ -4,9 +4,9 @@ A bespoke UI Framework built on Aurelia for desktop business application
 
 
 [![NPM version](http://img.shields.io/npm/v/sigma-ui-framework.svg?style=flat)](npm-url) 
-[![NPM downloads](http://img.shields.io/npm/dm/sigma-ui-framework.svg?style=flat)](npm-url) 
+[![NPM downloads](http://img.shields.io/npm/dt/sigma-ui-framework.svg?style=flat)](npm-url) 
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](license-url)
-
+[![Website](https://img.shields.io/badge/visit-WebSite-orange.svg?style=flat)](http://sigmaframeworks.io)
 
 **[Documentation](http://sigmaframeworks.io/docs/framework)**
 
