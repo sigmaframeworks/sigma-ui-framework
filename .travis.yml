@@ -4,9 +4,8 @@ node_js:
 sudo: false
 
 install:
-  - npm install -g gulp typescript aurelia-cli
+  - npm install -g gulpjs/gulp#4.0 typescript aurelia-cli
   - npm install
 script:
   - gulp build-ts
   - gulp sass
-  - au build --env prod

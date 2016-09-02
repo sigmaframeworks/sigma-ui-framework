@@ -1,0 +1,30 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "sourceMap": true,
+    "target": "es5",
+    "module": "amd",
+    "declaration": false,
+    "noImplicitAny": false,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "lib": [
+      "es2015",
+      "dom"
+    ]
+  },
+  "exclude": [],
+  "filesGlob": [
+    "./src/**/*.ts",
+    "./test/**/*.ts",
+    "./typings/index.d.ts",
+    "./custom_typings/**/*.d.ts",
+    "./node_modules/i18next-xhr-backend/typings/*.d.ts",
+    "./node_modules/sigma-ui-framework/dist/typings/**/*.d.ts"
+  ],
+  "atom": {
+    "rewriteTsconfig": false
+  }
+}
