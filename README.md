@@ -7,6 +7,7 @@ A bespoke UI Framework built on Aurelia for desktop business application
 [![NPM downloads][npm-downloads-image]][npm-url]
 [![Travis][travis-image]][travis-url]
 [![MIT License][license-image]][license-url]
+[![Gitter][gitter-image]][gitter-url]
 [![Website][website-image]][website-url]
 
 
@@ -38,7 +39,7 @@ A bespoke UI Framework built on Aurelia for desktop business application
           // Send authorization header with every request
           .addAuthHeader(bool)
 
-          .loadCharts()
+          .useAmCharts()
           .languages(array<{id, name}>)
       });
 
@@ -90,10 +91,13 @@ A bespoke UI Framework built on Aurelia for desktop business application
 
 
 
-[website-image]: https://img.shields.io/badge/visit-WebSite-orange.svg?style=flat
+[website-image]: https://img.shields.io/badge/visit-website-orange.svg?style=flat
 [website-url]: http://sigmaframeworks.io
 
-[license-image]: http://img.shields.io/badge/license-MIT-orange.svg?style=flat
+[gitter-image]: https://img.shields.io/badge/gitter-join_chat-orange.svg?style=flat
+[gitter-url]: https://gitter.im/sigma-frameworks/ui-framework
+
+[license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat
 [license-url]: LICENSE
 
 [travis-image]: https://img.shields.io/travis/sigmaframeworks/sigma-ui-framework.svg?style=flat&maxAge=2592000
