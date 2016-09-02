@@ -3,11 +3,11 @@
 A bespoke UI Framework built on Aurelia for desktop business application
 
 
-[![NPM version](http://img.shields.io/npm/v/sigma-ui-framework.svg?style=flat)](npm-url)
-[![NPM downloads](http://img.shields.io/npm/dt/sigma-ui-framework.svg?style=flat)](npm-url)
-[![Travis](https://img.shields.io/travis/sigmaframeworks/sigma-ui-framework.svg?maxAge=2592000)](https://travis-ci.org/sigmaframeworks/sigma-ui-framework)
-[![MIT License](http://img.shields.io/badge/license-MIT-orange.svg?style=flat)](license-url)
-[![Website](https://img.shields.io/badge/visit-WebSite-orange.svg?style=flat)](http://sigmaframeworks.io)
+[![NPM version][npm-version-image]][npm-url]
+[![NPM downloads][npm-downloads-image]][npm-url]
+[![Travis][travis-image]][travis-url]
+[![MIT License][license-image]][license-url]
+[![Website][website-image]][website-url]
 
 
 **[Documentation](http://sigmaframeworks.io/docs/framework)**
@@ -85,11 +85,20 @@ A bespoke UI Framework built on Aurelia for desktop business application
           debug : false
         });
       });
-    ```
+```
 
-[license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
+
+
+
+[website-image]: https://img.shields.io/badge/visit-WebSite-orange.svg?style=flat
+[website-url]: http://sigmaframeworks.io
+
+[license-image]: http://img.shields.io/badge/license-MIT-orange.svg?style=flat
 [license-url]: LICENSE
+
+[travis-image]: https://img.shields.io/travis/sigmaframeworks/sigma-ui-framework.svg?style=flat&maxAge=2592000
+[travis-url]: https://travis-ci.org/sigmaframeworks/sigma-ui-framework
 
 [npm-url]: https://npmjs.org/package/sigma-ui-framework
 [npm-version-image]: http://img.shields.io/npm/v/sigma-ui-framework.svg?style=flat
-[npm-downloads-image]: http://img.shields.io/npm/dm/sigma-ui-framework.svg?style=flat
+[npm-downloads-image]: http://img.shields.io/npm/dt/sigma-ui-framework.svg?style=flat
