@@ -119,7 +119,7 @@ export class UIDataGrid {
             let target = getParentByClass($event.target, 'ui-button', 'dg-col') ||
                 getParentByClass($event.target, 'ui-link', 'dg-col');
             if (!col.__hasMenu) {
-                UIEvent.fireEvent('linkclick', this.element, { dataId: col.dataId, target: target, model: model });
+                UIEvent.fireEvent('linkclick', this.element, { dataId: col.dataId, target: target, record: model });
             }
             if (col.__hasMenu) {
                 let menu = document.querySelector('.ui-floating.show');
@@ -155,7 +155,7 @@ export class UIDataGrid {
         $event.cancelBubble = true;
         $event.stopPropagation();
         getParentByTag($event.target, 'tr').classList.remove('focus');
-        UIEvent.fireEvent('linkclick', this.element, { dataId: $event.detail, target: $event.target, model: model });
+        UIEvent.fireEvent('linkclick', this.element, { dataId: $event.detail, target: $event.target, record: model });
         return false;
     }
 
@@ -176,6 +176,9 @@ export class UIDataGrid {
     summary(column): string {
         if (_.isObject(this.summaryRow)) {
             return this.format(this.summaryRow[column.dataId], column, this.summaryRow);
+        }
+        else if (_.isFunction(column.summary)) {
+            return column.summary();
         }
         else if (!_.isEmpty(column.summary)) {
             var v = 0, prefix = '';
@@ -202,7 +205,7 @@ export class UIDataGrid {
             enabled: true, theme: column.buttonTheme, title: column.buttonTitle, icon: column.buttonIcon
         };
         if (isFunction(column.button)) {
-            ret = column.button({ value: value, column: column, model: model });
+            ret = column.button({ value: value, column: column, record: model });
         }
         if (_.isString(ret)) return `<span>${ret}</span>`;
         Object.assign(obj, ret || {});
@@ -220,11 +223,11 @@ export class UIDataGrid {
             newValue = column.labels[value];
         }
         if (isFunction(column.value)) {
-            newValue = column.value({ value: value, column: column, model: model });
+            newValue = column.value({ value: value, column: column, record: model });
         }
 
         if (isFunction(column.display)) {
-            retVal = column.display({ value: value, column: column, model: model });
+            retVal = column.display({ value: value, column: column, record: model });
         }
         else {
             switch (column.__type) {
