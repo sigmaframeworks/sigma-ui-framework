@@ -1,3 +1,10 @@
+* __UIChart__: Remove dependency on amCharts
+* __UIDatagrid__: Fixed reset scrollTop when data-list changes
+* __UIDatagrid__: Fixed calculation of table width in chrome happens before columns widths are calculated
+* __UIDatagrid__: Add column summary callback option
+* __Sass__: Remove inline_font_files from `_glyph.scss` and `_files.scss`, causing the css to be ~2.5MB
+
+
 <a name="0.0.4-beta.5"></a>
 ## 0.0.4-beta.5 (2016-09-01)
 
