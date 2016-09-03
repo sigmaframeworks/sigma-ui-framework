@@ -178,7 +178,7 @@ export class UIHttpService {
             'X-Requested-With': 'Fetch',
             'Accept': 'application/json',
             //'Content-Type'               : 'application/json',
-            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Origin': '*'
         };
         Object.assign(headers, this.appState.HttpConfig.Headers || {});
 
