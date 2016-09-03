@@ -15,6 +15,11 @@ A bespoke UI Framework built on Aurelia for desktop business application
 
 **[Demo](http://demo.sigmaframeworks.io/)**
 
+
+|Safari|Chrome|Firefox|MS Edge|IE11|
+|---|---|---|---|---|
+|OK|OK|OK|Slow|Not Working|
+
 ----
 
 ##### Getting Started
@@ -94,10 +99,10 @@ A bespoke UI Framework built on Aurelia for desktop business application
 [website-image]: https://img.shields.io/badge/visit-website-orange.svg?style=flat
 [website-url]: http://sigmaframeworks.io
 
-[gitter-image]: https://img.shields.io/badge/gitter-join_chat-orange.svg?style=flat
+[gitter-image]: https://img.shields.io/badge/gitter-join_chat-red.svg?style=flat
 [gitter-url]: https://gitter.im/sigma-frameworks/ui-framework
 
-[license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat
+[license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
 [license-url]: LICENSE
 
 [travis-image]: https://img.shields.io/travis/sigmaframeworks/sigma-ui-framework.svg?style=flat&maxAge=2592000
