@@ -3,12 +3,12 @@
 A bespoke UI Framework built on Aurelia for desktop business application
 
 
-[![NPM version][npm-version-image]][npm-url]
-[![NPM downloads][npm-downloads-image]][npm-url]
-[![Travis][travis-image]][travis-url]
-[![MIT License][license-image]][license-url]
-[![Gitter][gitter-image]][gitter-url]
-[![Website][website-image]][website-url]
+[![NPM version](http://img.shields.io/npm/v/sigma-ui-framework.svg?style=flat)](https://npmjs.org/package/sigma-ui-framework)
+[![NPM downloads](http://img.shields.io/npm/dt/sigma-ui-framework.svg?style=flat)](https://npmjs.org/package/sigma-ui-framework)
+[![Travis](https://img.shields.io/travis/sigmaframeworks/sigma-ui-framework.svg?style=flat&maxAge=2592000)](https://travis-ci.org/sigmaframeworks/sigma-ui-framework)
+[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
+[![Gitter](https://img.shields.io/badge/gitter-join_chat-red.svg?style=flat)](https://gitter.im/sigma-frameworks/ui-framework)
+[![Website](https://img.shields.io/badge/visit-website-orange.svg?style=flat)](http://sigmaframeworks.io)
 
 
 **[Documentation](http://sigmaframeworks.io/docs/framework)**
@@ -116,22 +116,3 @@ A bespoke UI Framework built on Aurelia for desktop business application
         });
       });
 ```
-
-
-
-
-[website-image]: https://img.shields.io/badge/visit-website-orange.svg?style=flat
-[website-url]: http://sigmaframeworks.io
-
-[gitter-image]: https://img.shields.io/badge/gitter-join_chat-red.svg?style=flat
-[gitter-url]: https://gitter.im/sigma-frameworks/ui-framework
-
-[license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
-[license-url]: LICENSE
-
-[travis-image]: https://img.shields.io/travis/sigmaframeworks/sigma-ui-framework.svg?style=flat&maxAge=2592000
-[travis-url]: https://travis-ci.org/sigmaframeworks/sigma-ui-framework
-
-[npm-url]: https://npmjs.org/package/sigma-ui-framework
-[npm-version-image]: http://img.shields.io/npm/v/sigma-ui-framework.svg?style=flat
-[npm-downloads-image]: http://img.shields.io/npm/dt/sigma-ui-framework.svg?style=flat
