@@ -4,7 +4,7 @@
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
 
-import {autoinject, bindable, useView, computedFrom, customElement, bindingMode, BindingEngine, TaskQueue} from "aurelia-framework";
+import {autoinject, bindable, useView, computedFrom, customElement, bindingMode, BindingEngine} from "aurelia-framework";
 import {UITreeModel, UITreeOptions} from "../utils/ui-tree-models";
 import {_, UIUtils} from "../utils/ui-utils";
 import {UIEvent} from "../utils/ui-event";
@@ -27,7 +27,7 @@ export class UITree {
     @bindable()
     options: UITreeOptions = new UITreeOptions();
 
-    constructor(public element: Element, public taskQueue: TaskQueue, observer: BindingEngine) {
+    constructor(public element: Element, observer: BindingEngine) {
         var self = this;
         this.__subscribeSelect = UIEvent.subscribe('tree-select', v => self.__itemSelect(v));
         this.__subscribeChecked = UIEvent.subscribe('tree-checked', v => self.__itemChecked(v));
@@ -48,7 +48,7 @@ export class UITree {
     }
 
     private attached() {
-        this.taskQueue.queueMicroTask(() => {
+        UIEvent.queueTask(() => {
             let x;
             if ((x = this.element.querySelector('.ui-active')) !== null) x.scrollIntoView();
         });

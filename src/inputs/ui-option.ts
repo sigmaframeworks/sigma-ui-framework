@@ -4,7 +4,7 @@
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
 
-import {autoinject, customElement, bindable, useView, bindingMode, TaskQueue} from "aurelia-framework";
+import {autoinject, customElement, bindable, useView, bindingMode} from "aurelia-framework";
 import {UIEvent} from "../utils/ui-event";
 import {_, UIUtils} from "../utils/ui-utils";
 
@@ -151,7 +151,7 @@ export class UIOptionGroup {
     @bindable({ defaultBindingMode: bindingMode.twoWay })
     value: string;
 
-    constructor(public element: Element, public taskQueue: TaskQueue) {
+    constructor(public element: Element) {
         if (this.element.hasAttribute('auto-width')) this.element.classList.add('ui-auto');
         if (this.element.hasAttribute('label-top')) this.element.classList.add('ui-label-top');
         if (this.element.hasAttribute('label-hide')) this.element.classList.add('ui-label-hide');
@@ -159,7 +159,7 @@ export class UIOptionGroup {
 
     attached() {
         // Need to iterate to all inputs to set the name
-        this.taskQueue.queueMicroTask(() => {
+        UIEvent.queueTask(() => {
             let radios = this.element.querySelectorAll('.ui-radio .ui-option-input');
             _.forEach(radios, (b: HTMLInputElement) => {
                 b.setAttribute('name', this.name || this.__name);

@@ -4,7 +4,7 @@
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
 
-import {customElement, bindable, inlineView, autoinject, TaskQueue} from "aurelia-framework";
+import {customElement, bindable, inlineView, autoinject} from "aurelia-framework";
 import {Router} from "aurelia-router";
 import {UIUtils} from "../utils/ui-utils";
 import {UIEvent} from "../utils/ui-event";

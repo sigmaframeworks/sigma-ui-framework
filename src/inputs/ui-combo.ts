@@ -4,7 +4,7 @@
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
 
-import {customElement, bindable, bindingMode, autoinject, TaskQueue} from "aurelia-framework";
+import {customElement, bindable, bindingMode, autoinject} from "aurelia-framework";
 import {UIListBehaviour} from "./ui-listing";
 import {_, UIUtils} from "../utils/ui-utils";
 import {UIEvent} from "../utils/ui-event";
@@ -13,7 +13,7 @@ import {UIEvent} from "../utils/ui-event";
 @customElement('ui-combo')
 export class UIComboBox extends UIListBehaviour {
 
-    constructor(element: Element, public taskQueue: TaskQueue) {
+    constructor(element: Element) {
         super(element);
     }
 
@@ -147,7 +147,7 @@ export class UIComboBox extends UIListBehaviour {
 
     attached() {
         super.attached();
-        this.taskQueue.queueMicroTask(() => this.valueChanged(this.value));
+        UIEvent.queueTask(() => this.valueChanged(this.value));
     }
 
     detached() {

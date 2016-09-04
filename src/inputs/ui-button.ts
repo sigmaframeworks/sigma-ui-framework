@@ -4,7 +4,7 @@
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
 
-import {autoinject, customElement, bindable, bindingMode, inlineView, children, TaskQueue} from "aurelia-framework";
+import {autoinject, customElement, bindable, bindingMode, inlineView, children} from "aurelia-framework";
 import {UIEvent} from "../utils/ui-event";
 import {_} from "../utils/ui-utils";
 
@@ -172,7 +172,7 @@ export class UIButtonGroup {
     @bindable({ defaultBindingMode: bindingMode.twoWay })
     value: string;
 
-    constructor(public element: Element, public taskQueue: TaskQueue) {
+    constructor(public element: Element) {
     }
 
     bind() {
@@ -206,7 +206,7 @@ export class UIButtonGroup {
 
         if (this.toggle !== false) {
             if (!isEmpty(this.value)) {
-                this.taskQueue.queueMicroTask(() => {
+                UIEvent.queueTask(() => {
                     let buttons = this.element.getElementsByClassName('ui-button');
                     _.forEach(buttons, b => {
                         b.className = `ui-button ui-button-${this.__theme} ui-button-${this.__size} ${this.__extraClass}`;
