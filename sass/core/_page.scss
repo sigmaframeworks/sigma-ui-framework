@@ -144,7 +144,6 @@
 }
 
 .ui-toolbar {
-    z-index   : 2;
     padding   : .1em .5em;
     color     : $toolbar-text;
     border    : {
@@ -180,7 +179,6 @@
 }
 
 .ui-statsbar {
-    z-index   : 1;
     color     : $statsbar-text;
     border    : {
         width: 1px 0;
