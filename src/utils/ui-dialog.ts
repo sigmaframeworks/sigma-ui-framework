@@ -359,8 +359,8 @@ export class UIDialog {
 
     focus() {
         UIEvent.queueTask(() => {
-            let el: any = this.__dialog.querySelector('ui-input input,textarea,ui-phone input,ui-combo input');
-            if (!isEmpty(el)) el.focus();
+            let el: any = this.__dialog.querySelector('.ui-input-group .ui-input-control .ui-input');
+            if (el !== null) el.focus();
         });
     }
 

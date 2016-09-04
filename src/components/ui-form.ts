@@ -4,7 +4,7 @@
 // @copyright   : 2016 Sigma Frameworks
 // @license     : MIT
 
-import {autoinject, customElement, bindable, inlineView, bindingMode, TaskQueue} from "aurelia-framework";
+import {autoinject, customElement, bindable, inlineView, bindingMode} from "aurelia-framework";
 import {UIEvent} from "../utils/ui-event";
 import {_, UIUtils} from "../utils/ui-utils";
 
@@ -16,14 +16,14 @@ export class UIForm {
 
     private __form: HTMLElement;
 
-    constructor(public element: Element, public taskQueue: TaskQueue) {
+    constructor(public element: Element) {
         if (!this.element.hasAttribute('auto-grid')) this.element.classList.add('two-column');
     }
 
     attached() {
-        this.taskQueue.queueMicroTask(() => {
-            let el: any = this.element.querySelector('ui-input input,textarea,ui-phone input');
-            if (!isEmpty(el)) el.focus();
+        UIEvent.queueTask(() => {
+            let el: any = this.element.querySelector('.ui-input-group .ui-input-control .ui-input');
+            if (el !== null) el.focus();
             if (this.busy) this.busyChanged(true);
         });
     }
