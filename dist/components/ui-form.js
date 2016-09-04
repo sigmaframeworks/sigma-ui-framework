@@ -10,17 +10,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../utils/ui-utils"], function (require, exports, aurelia_framework_1, ui_event_1, ui_utils_1) {
     "use strict";
     var UIForm = (function () {
-        function UIForm(element, taskQueue) {
+        function UIForm(element) {
             this.element = element;
-            this.taskQueue = taskQueue;
             if (!this.element.hasAttribute('auto-grid'))
                 this.element.classList.add('two-column');
         }
         UIForm.prototype.attached = function () {
             var _this = this;
-            this.taskQueue.queueMicroTask(function () {
-                var el = _this.element.querySelector('ui-input input,textarea,ui-phone input');
-                if (!isEmpty(el))
+            ui_event_1.UIEvent.queueTask(function () {
+                var el = _this.element.querySelector('.ui-input-group .ui-input-control .ui-input');
+                if (el !== null)
                     el.focus();
                 if (_this.busy)
                     _this.busyChanged(true);
@@ -49,7 +48,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
         UIForm = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-form'), 
-            __metadata('design:paramtypes', [Element, aurelia_framework_1.TaskQueue])
+            __metadata('design:paramtypes', [Element])
         ], UIForm);
         return UIForm;
     }());

@@ -66,6 +66,8 @@ define(["require", "exports", "aurelia-framework", "./ui-event", "lodash", "kram
         UIChartStatic.CHART_DEFAULT = ["#D53530", "#EF6B28", "#9D6E4B", "#EDEC47", "#5DAF43", "#38D046", "#279F79", "#5AC5C4", "#338EBD", "#375FA7", "#7C53A2", "#A6216A", "#DF8097"];
         UIChartStatic.CHART_PIE = ["#B52F30", "#F68F31", "#8FC649", "#A0C4C8", "#A54797", "#977E6D", "#954D43", "#FBCC2E", "#5C8158", "#5D86A3", "#B10D5F", "#0E6BA8", "#0B6848"];
         function init() {
+            if (!AmCharts)
+                throw new Error('amCharts not loaded');
             var colors = { red: 'CHART_RED', pink: 'CHART_PINK', blue: 'CHART_BLUE', green: 'CHART_GREEN', orange: 'CHART_ORANGE', violet: 'CHART_VIOLET', spectrum: 'CHART_SPECTRUM', default: 'CHART_DEFAULT', pie: 'CHART_PIE' };
             exports._.forEach(colors, function (v, k) {
                 AmCharts['themes'][k] = Object.assign({}, AmCharts['themes'].light, {

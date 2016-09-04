@@ -1,8 +1,14 @@
+<a name="0.0.4-beta.6"></a>
+## 0.0.4-beta.6 (2016-09-04)
+
 * __UIChart__: Remove dependency on amCharts
 * __UIDatagrid__: Fixed reset scrollTop when data-list changes
 * __UIDatagrid__: Fixed calculation of table width in chrome happens before columns widths are calculated
 * __UIDatagrid__: Add column summary callback option
+* __UIForm__, __UIDialog__: Updated focusable element query
+* __UIToolbar__: Removes `z-index`
 * __Sass__: Remove inline_font_files from `_glyph.scss` and `_files.scss`, causing the css to be ~2.5MB
+* Update elements with attached method having `queueMicroTask` to `queueTask`
 
 
 <a name="0.0.4-beta.5"></a>

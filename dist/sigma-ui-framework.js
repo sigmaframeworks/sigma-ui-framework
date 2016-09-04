@@ -13,6 +13,7 @@ define(["require", "exports", "./utils/ui-constants", "./utils/ui-utils", "./uti
         aurelia.globalResources('./components/ui-tree');
         aurelia.globalResources('./components/ui-datagrid');
         aurelia.globalResources('./components/ui-tab-panel');
+        aurelia.globalResources('./components/ui-chart');
         aurelia.globalResources('./inputs/ui-button');
         aurelia.globalResources('./inputs/ui-switch');
         aurelia.globalResources('./inputs/ui-option');
@@ -97,8 +98,7 @@ define(["require", "exports", "./utils/ui-constants", "./utils/ui-utils", "./uti
                 ui_constants_1.UIConstants.Http.AuthorizationHeader = t;
                 return Configure;
             },
-            loadCharts: function () {
-                aurelia.globalResources('./components/ui-chart');
+            useAmCharts: function () {
                 ui_utils_1.UIChartStatic.init();
                 return Configure;
             },

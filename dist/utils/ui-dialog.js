@@ -297,8 +297,8 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
         UIDialog.prototype.focus = function () {
             var _this = this;
             ui_event_1.UIEvent.queueTask(function () {
-                var el = _this.__dialog.querySelector('ui-input input,textarea,ui-phone input,ui-combo input');
-                if (!isEmpty(el))
+                var el = _this.__dialog.querySelector('.ui-input-group .ui-input-control .ui-input');
+                if (el !== null)
                     el.focus();
             });
         };

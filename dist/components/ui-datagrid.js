@@ -82,7 +82,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
                 var target = getParentByClass($event.target, 'ui-button', 'dg-col') ||
                     getParentByClass($event.target, 'ui-link', 'dg-col');
                 if (!col.__hasMenu) {
-                    ui_event_1.UIEvent.fireEvent('linkclick', this.element, { dataId: col.dataId, target: target, model: model });
+                    ui_event_1.UIEvent.fireEvent('linkclick', this.element, { dataId: col.dataId, target: target, record: model });
                 }
                 if (col.__hasMenu) {
                     var menu = document.querySelector('.ui-floating.show');
@@ -115,7 +115,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
             $event.cancelBubble = true;
             $event.stopPropagation();
             getParentByTag($event.target, 'tr').classList.remove('focus');
-            ui_event_1.UIEvent.fireEvent('linkclick', this.element, { dataId: $event.detail, target: $event.target, model: model });
+            ui_event_1.UIEvent.fireEvent('linkclick', this.element, { dataId: $event.detail, target: $event.target, record: model });
             return false;
         };
         UIDataGrid.prototype.rowSelect = function (model) {
@@ -133,6 +133,9 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
         UIDataGrid.prototype.summary = function (column) {
             if (ui_utils_1._.isObject(this.summaryRow)) {
                 return this.format(this.summaryRow[column.dataId], column, this.summaryRow);
+            }
+            else if (ui_utils_1._.isFunction(column.summary)) {
+                return column.summary();
             }
             else if (!ui_utils_1._.isEmpty(column.summary)) {
                 var v = 0, prefix = '';
@@ -158,7 +161,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
                 enabled: true, theme: column.buttonTheme, title: column.buttonTitle, icon: column.buttonIcon
             };
             if (isFunction(column.button)) {
-                ret = column.button({ value: value, column: column, model: model });
+                ret = column.button({ value: value, column: column, record: model });
             }
             if (ui_utils_1._.isString(ret))
                 return "<span>" + ret + "</span>";
@@ -174,10 +177,10 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
                 newValue = column.labels[value];
             }
             if (isFunction(column.value)) {
-                newValue = column.value({ value: value, column: column, model: model });
+                newValue = column.value({ value: value, column: column, record: model });
             }
             if (isFunction(column.display)) {
-                retVal = column.display({ value: value, column: column, model: model });
+                retVal = column.display({ value: value, column: column, record: model });
             }
             else {
                 switch (column.__type) {

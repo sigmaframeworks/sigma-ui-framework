@@ -160,7 +160,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-fetch-client", "aure
             var headers = {
                 'X-Requested-With': 'Fetch',
                 'Accept': 'application/json',
-                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Origin': '*'
             };
             Object.assign(headers, this.appState.HttpConfig.Headers || {});
             if (this.appState.HttpConfig.AuthorizationHeader && !isEmpty(this.appState.AuthUser)) {

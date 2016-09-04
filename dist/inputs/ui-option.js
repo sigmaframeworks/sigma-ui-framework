@@ -122,9 +122,8 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
     }(UIOption));
     exports.UIRadio = UIRadio;
     var UIOptionGroup = (function () {
-        function UIOptionGroup(element, taskQueue) {
+        function UIOptionGroup(element) {
             this.element = element;
-            this.taskQueue = taskQueue;
             this.__name = "auf-" + __seed++;
             this.label = '';
             this.name = '';
@@ -137,7 +136,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
         }
         UIOptionGroup.prototype.attached = function () {
             var _this = this;
-            this.taskQueue.queueMicroTask(function () {
+            ui_event_1.UIEvent.queueTask(function () {
                 var radios = _this.element.querySelectorAll('.ui-radio .ui-option-input');
                 ui_utils_1._.forEach(radios, function (b) {
                     b.setAttribute('name', _this.name || _this.__name);
@@ -182,7 +181,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
         UIOptionGroup = __decorate([
             aurelia_framework_1.useView('./ui-option-group.html'),
             aurelia_framework_1.customElement('ui-option-group'), 
-            __metadata('design:paramtypes', [Element, aurelia_framework_1.TaskQueue])
+            __metadata('design:paramtypes', [Element])
         ], UIOptionGroup);
         return UIOptionGroup;
     }());

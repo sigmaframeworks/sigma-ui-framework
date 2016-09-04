@@ -12,7 +12,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "amcharts/amcharts", "amcharts/pie", "amcharts/serial", "amcharts/themes/light", "amcharts/plugins/export/export"], function (require, exports, aurelia_framework_1, ui_utils_1) {
+define(["require", "exports", "aurelia-framework", "../utils/ui-utils"], function (require, exports, aurelia_framework_1, ui_utils_1) {
     "use strict";
     var UIChart = (function () {
         function UIChart() {
@@ -22,12 +22,15 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "amchart
     exports.UIChart = UIChart;
     var UIChartBase = (function (_super) {
         __extends(UIChartBase, _super);
-        function UIChartBase() {
-            _super.apply(this, arguments);
+        function UIChartBase(element) {
+            _super.call(this);
             this.chartTitle = '';
+            this.chartData = [];
             this.chartOptions = {};
             this.width = 600;
             this.height = 400;
+            if (element.hasAttribute('stretch'))
+                element.classList.add('ui-stretch');
         }
         UIChartBase.prototype.chartDataChanged = function (newValue) {
             if (ui_utils_1._.isEmpty(newValue))
@@ -35,13 +38,25 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "amchart
             this.__buildChart();
         };
         UIChartBase.prototype.__buildChart = function () {
-            this.__chart = AmCharts.makeChart(this.__canvas, ui_utils_1._.cloneDeep(this.chartOptions));
-            this.__chart.write(this.__canvas);
+            if (isFunction(this.build)) {
+                this.build(this.__canvas, this.chartData);
+            }
+            else {
+                if (!AmCharts)
+                    throw new Error('amCharts not loaded');
+                this.chartOptions.dataProvider = ui_utils_1._.cloneDeep(this.chartData);
+                this.__chart = AmCharts.makeChart(this.__canvas, ui_utils_1._.cloneDeep(this.chartOptions));
+                this.__chart.write(this.__canvas);
+            }
         };
         __decorate([
             aurelia_framework_1.bindable(), 
             __metadata('design:type', String)
         ], UIChartBase.prototype, "chartTitle", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Array)
+        ], UIChartBase.prototype, "chartData", void 0);
         __decorate([
             aurelia_framework_1.bindable(), 
             __metadata('design:type', AmCharts.AmChart)
@@ -54,9 +69,14 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "amchart
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Number)
         ], UIChartBase.prototype, "height", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UIChartBase.prototype, "build", void 0);
         UIChartBase = __decorate([
+            aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-chart'), 
-            __metadata('design:paramtypes', [])
+            __metadata('design:paramtypes', [Element])
         ], UIChartBase);
         return UIChartBase;
     }(UIChart));
@@ -212,7 +232,11 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "amchart
         };
         UIPie.prototype.__buildChart = function () {
             this.__options.type = "pie";
+            this.__options.theme = this.theme;
             switch (this.theme) {
+                case 'pie':
+                    this.__options.colors = ui_utils_1.UIChartStatic.CHART_PIE;
+                    break;
                 case 'red':
                     this.__options.colors = ui_utils_1.UIChartStatic.CHART_RED;
                     break;
@@ -235,7 +259,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils", "amchart
                     this.__options.colors = ui_utils_1.UIChartStatic.CHART_SPECTRUM;
                     break;
                 default:
-                    this.__options.colors = ui_utils_1.UIChartStatic.CHART_PIE;
+                    this.__options.theme = this.theme;
                     break;
             }
             this.__options.addClassNames = true;

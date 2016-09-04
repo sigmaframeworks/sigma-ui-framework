@@ -10,9 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "aurelia-framework", "../utils/ui-tree-models", "../utils/ui-utils", "../utils/ui-event"], function (require, exports, aurelia_framework_1, ui_tree_models_1, ui_utils_1, ui_event_1) {
     "use strict";
     var UITree = (function () {
-        function UITree(element, taskQueue, observer) {
+        function UITree(element, observer) {
             this.element = element;
-            this.taskQueue = taskQueue;
             this.searchText = '';
             this.selectedNode = {};
             this.model = [];
@@ -34,7 +33,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-tree-models", ".
         };
         UITree.prototype.attached = function () {
             var _this = this;
-            this.taskQueue.queueMicroTask(function () {
+            ui_event_1.UIEvent.queueTask(function () {
                 var x;
                 if ((x = _this.element.querySelector('.ui-active')) !== null)
                     x.scrollIntoView();
@@ -180,7 +179,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-tree-models", ".
         UITree = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-tree'), 
-            __metadata('design:paramtypes', [Element, aurelia_framework_1.TaskQueue, aurelia_framework_1.BindingEngine])
+            __metadata('design:paramtypes', [Element, aurelia_framework_1.BindingEngine])
         ], UITree);
         return UITree;
     }());

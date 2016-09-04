@@ -127,9 +127,8 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
     }());
     exports.UIButton = UIButton;
     var UIButtonGroup = (function () {
-        function UIButtonGroup(element, taskQueue) {
+        function UIButtonGroup(element) {
             this.element = element;
-            this.taskQueue = taskQueue;
             this.__size = 'normal';
             this.__theme = 'default';
             this.__extraClass = '';
@@ -172,7 +171,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             }
             if (this.toggle !== false) {
                 if (!isEmpty(this.value)) {
-                    this.taskQueue.queueMicroTask(function () {
+                    ui_event_1.UIEvent.queueTask(function () {
                         var buttons = _this.element.getElementsByClassName('ui-button');
                         ui_utils_1._.forEach(buttons, function (b) {
                             b.className = "ui-button ui-button-" + _this.__theme + " ui-button-" + _this.__size + " " + _this.__extraClass;
@@ -257,7 +256,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-button-group'),
             aurelia_framework_1.inlineView('<template class="ui-button-group" click.delegate="fireChange($event)"><slot></slot></template>'), 
-            __metadata('design:paramtypes', [Element, aurelia_framework_1.TaskQueue])
+            __metadata('design:paramtypes', [Element])
         ], UIButtonGroup);
         return UIButtonGroup;
     }());

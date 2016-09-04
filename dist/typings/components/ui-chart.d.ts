@@ -1,33 +1,35 @@
-import "amcharts/amcharts";
-import "amcharts/pie";
-import "amcharts/serial";
-import "amcharts/themes/light";
-import "amcharts/plugins/export/export";
 export declare class UIChart {
     __canvas: any;
     __chart: any;
 }
 export declare class UIChartBase extends UIChart {
     /**
-         * @property    chart-title
-         * @type        string
-         */
+       * @property    chart-title
+       * @type        string
+       */
     chartTitle: string;
     /**
-         * @property    chart-options
-         * @type        Array
-         */
+       * @property    chart-data
+       * @type        Array
+       */
+    chartData: Array<any>;
+    /**
+       * @property    chart-options
+       * @type        Array
+       */
     chartOptions: AmCharts.AmChart;
     /**
-         * @property    width
-         * @type        number
-         */
+       * @property    width
+       * @type        number
+       */
     width: number;
     /**
-         * @property    height
-         * @type        number
-         */
+       * @property    height
+       * @type        number
+       */
     height: number;
+    build: any;
+    constructor(element: Element);
     chartDataChanged(newValue: any): void;
     __buildChart(): void;
 }
