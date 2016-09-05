@@ -24,7 +24,7 @@ declare interface UIConfig {
     apiHeaders(t: any): UIConfig;
     addAuthHeader(t: boolean): UIConfig;
 
-    loadCharts(): UIConfig;
+    useAmCharts(): UIConfig;
 
     languages(l: Array<any>): UIConfig;
 }
