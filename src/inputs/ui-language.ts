@@ -64,13 +64,17 @@ export class UILanguage extends UIInputGroup {
 
     languagesChanged(newValue) {
         let s = [], a = [];
-        let isMap = newValue instanceof Map;
-        _.forEach(UILanguage.LANGUAGES, l => {
-            if (!isMap && Object.keys(newValue).indexOf(l.id) == -1) a.push(l);
-            if (!isMap && Object.keys(newValue).indexOf(l.id) > -1) s.push(l);
-            if (isMap && newValue.has(l.id)) s.push(l);
-            if (isMap && !newValue.has(l.id)) a.push(l);
-        });
+        if (isEmpty(newValue)) {
+            a = _.clone(UILanguage.LANGUAGES);
+        }
+        else {
+            let isMap = newValue instanceof Map;
+            _.forEach(UILanguage.LANGUAGES, l => {
+                if (_.isArray(newValue)) (newValue.indexOf(l.id) ? s.push(l) : a.push(l));
+                else if (!isMap) (Object.keys(newValue).indexOf(l.id) > -1 ? s.push(l) : a.push(l));
+                else if (isMap) (newValue.has(l.id) ? s.push(l) : a.push(l));
+            });
+        }
         this.__languages = s;
         this.__available = a;
     }
