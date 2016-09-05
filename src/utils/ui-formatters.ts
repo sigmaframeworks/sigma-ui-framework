@@ -36,9 +36,9 @@ export module UIFormat {
                 ret = Array(minlen - ret.length + 1).join('0') + ret;
             }
         }
-        ret.replace(/[^\d\.]+/g, (txt) => {
-            return `<small>${txt.toUpperCase()}</small>`;
-        });
+        // ret.replace(/[^\d\.]+/g, (txt) => {
+        //     return `<small>${txt.toUpperCase()}</small>`;
+        // });
         return ret;
     }
 
@@ -46,10 +46,10 @@ export module UIFormat {
         return nm === null || isNaN(nm) ? '' :
             numeral(nm)
                 .format(fm)
-                .replace('$', sy)
-                .replace(/[^\d\.]+/g, (txt) => {
-                    return `<small>${txt.toUpperCase()}</small>`;
-                });
+                .replace('$', sy);
+        // .replace(/[^\d\.]+/g, (txt) => {
+        //     return `<small>${txt.toUpperCase()}</small>`;
+        // });
     }
 
     export function percent(nm: any): string {
