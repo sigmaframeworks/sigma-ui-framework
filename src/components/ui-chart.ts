@@ -42,7 +42,7 @@ export class UIChartBase extends UIChart {
        * @type        Array
        */
     @bindable()
-    chartOptions: AmCharts.AmChart = <AmCharts.AmChart>{};
+    chartOptions: any;
     /**
        * @property    width
        * @type        number
