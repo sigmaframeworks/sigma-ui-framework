@@ -38,7 +38,7 @@ export class UIViewport {
 
     constructor(public element: Element, public appState: UIApplication, container: Container) {
         UIUtils.container(container);
-        this.appState.info(this.constructor.name, "UIViewport Created");
+        this.appState.info(this.appState.AppConfig.Key, "UIViewport::Created");
 
         this.hideLogout = element.hasAttribute('hide-logout');
         if (element.hasAttribute('menu-end')) element.classList.add('ui-menu-end');
@@ -59,12 +59,12 @@ export class UIViewport {
     __showMenu($event) {
         $event.stopPropagation();
         this.element.classList.add('show-menu');
-        this.appState.info(this.constructor.name, "showMenu");
+        this.appState.info(this.appState.AppConfig.Key, "UIViewport::showMenu");
     }
 
     __hideMenu($event) {
         if (this.element.classList.contains('show-menu')) {
-            this.appState.info(this.constructor.name, "hideMenu");
+            this.appState.info(this.appState.AppConfig.Key, "UIViewport::hideMenu");
             this.element.classList.remove('show-menu');
         }
         let menu = document.querySelector('.ui-floating.show');
@@ -75,7 +75,7 @@ export class UIViewport {
     }
 
     logout() {
-        this.appState.info(this.constructor.name, "fire logout event");
+        this.appState.info(this.appState.AppConfig.Key, "UIViewport::fire logout event");
         UIEvent.fireEvent('logout', this.element);
     }
 }
