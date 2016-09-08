@@ -150,7 +150,7 @@ export class UIPhone extends UIInputGroup {
                 PhoneLib.formatInput(newValue,
                     this.__phoneFormat !== PhoneLib.FORMAT.INTERNATIONAL ? this.country : '',
                     false, true);
-            if (this.__value.length > newValue.length) start += this.__value.length - newValue.length;
+            start += this.__value.length - newValue.length;
             this.value =
                 PhoneLib.format(this.__value,
                     this.__phoneFormat !== PhoneLib.FORMAT.INTERNATIONAL ? this.country : '',
@@ -163,7 +163,7 @@ export class UIPhone extends UIInputGroup {
         UIEvent.queueTask(() => {
             let x = 0;
             if (this.__value.length > 0) x = this.__value.length - this.__value.substr(0, start).replace(/[^\d]/g, '').length;
-            this.__input.selectionStart = this.__input.selectionEnd = start + x;
+            this.__input.setSelectionRange(start + x, start + x);
             this.ignoreUpdate = false;
         });
     }

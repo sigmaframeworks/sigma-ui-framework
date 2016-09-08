@@ -161,6 +161,7 @@ export class UIInputDual extends UIInputGroup {
 
     protected formatter(evt) {
         let val = isEmpty(evt.target.value) ? '' : evt.target.value;
+        var start = evt.target.selectionStart;
         if (this.__format === 'title') {
             val = val.replace(new RegExp(`[${this.ALPHA}'\\-']+(?=[\\.&\\s]*)`, 'g'), (txt) => {
                 if (txt.toLowerCase().indexOf("mc") == 0) {
@@ -182,6 +183,7 @@ export class UIInputDual extends UIInputGroup {
             val = val.toLowerCase();
         }
         evt.target.value = val;
+        try { evt.target.setSelctionRange(start, start); } catch (e) { }
         return (this.__format == 'number' || this.__format == 'decimal') ? parseFloat(val) : val;
     }
 }
