@@ -15,6 +15,7 @@
 }
 
 .ui-row {
+		position: relative;
     @include flex-row(flex-start);
     @include grid-columns(xs, $grid-xs-min);
     @include grid-columns(sm, $grid-sm-min);
@@ -63,6 +64,7 @@
 }
 
 .ui-column {
+		position: relative;
     &:not(.ui-column-row) {
         display: block;
     }
