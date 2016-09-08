@@ -183,7 +183,7 @@ export class UIInputDual extends UIInputGroup {
             val = val.toLowerCase();
         }
         evt.target.value = val;
-        try { evt.target.setSelctionRange(start, start); } catch (e) { }
+        try { evt.target.setSelectionRange(start, start); } catch (e) { }
         return (this.__format == 'number' || this.__format == 'decimal') ? parseFloat(val) : val;
     }
 }
