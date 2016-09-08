@@ -218,7 +218,7 @@ export class UIComboBox extends UIListBehaviour {
     }
 
     __lostFocus() {
-        this.__select(this.__hilight);
+        //this.__select(this.__hilight);
         this.__focus = false;
     }
 
