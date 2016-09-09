@@ -198,12 +198,17 @@ export class UIComboBox extends UIListBehaviour {
         }
     }
 
-    __gotFocus() {
-        this.__hilight = this.__list.querySelector(`[data-value="${this.value}"]`);
+    __showFocus() {
+        this.__input.focus();
         this.__focus = true;
+    }
 
-        let el = <HTMLElement>this.element;
-        if (el.offsetParent.scrollTop + el.offsetParent['offsetHeight'] < el.offsetHeight + el.offsetTop + 50) {
+    __gotFocus(show) {
+        this.__hilight = this.__list.querySelector(`[data-value="${this.value}"]`);
+        if (show) this.__focus = true;
+
+        let el = <HTMLElement>this.__input;
+        if (this.showReverse()) {
             this.__reverse = true;
             this.__list.style.bottom = el.offsetHeight + 'px';
         }
@@ -218,7 +223,7 @@ export class UIComboBox extends UIListBehaviour {
     }
 
     __lostFocus() {
-        //this.__select(this.__hilight);
+        if (this.__focus) this.__select(this.__hilight);
         this.__focus = false;
     }
 

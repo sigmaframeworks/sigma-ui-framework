@@ -230,13 +230,13 @@ export class UITags extends UIListBehaviour {
         }
     }
 
-    __gotFocus() {
-        this.__focus = true;
+    __gotFocus(show) {
+        if (show) this.__focus = true;
         if (!this.__noList) {
-            let el = <HTMLElement>this.element;
-            if (el.offsetParent.scrollTop + el.offsetParent['offsetHeight'] < el.offsetHeight + el.offsetTop + 50) {
+            let el = <HTMLElement>this.__input;
+            if (this.showReverse()) {
                 this.__reverse = true;
-                this.__list.style.bottom = el.offsetHeight + 'px';
+                this.__list.style.bottom = el.parentElement.offsetHeight + 'px';
             }
             else {
                 this.__reverse = false;

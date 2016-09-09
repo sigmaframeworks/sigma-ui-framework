@@ -37,12 +37,13 @@ export class UIListBehaviour extends UIInputGroup {
     __select(item) { }
     __deselect(item) { }
     __scrollIntoView() { }
-    __gotFocus() { }
+    __gotFocus(show) { }
     __lostFocus() { }
 
     keyDown(evt) {
         if (evt.ctrlKey || evt.altKey || evt.metaKey || (evt.keyCode || evt.which) === 0) return true;
         let code = (evt.keyCode || evt.which);
+        if (this.readonly || this.disabled) return;
 
         if (code == 13 && this.__focus) {
             this.__select(this.__hilight);
@@ -52,7 +53,6 @@ export class UIListBehaviour extends UIInputGroup {
         else if (code == 13 && !this.__focus) {
             return UIEvent.fireEvent('enterpressed', this.element, this);
         }
-
 
         this.__focus = true;
         if (code === 8 && isEmpty(this.__searchText)) {
@@ -97,6 +97,21 @@ export class UIListBehaviour extends UIInputGroup {
     keyPress(evt) {
         if (evt.ctrlKey || evt.altKey || evt.metaKey || (evt.keyCode || evt.which) === 0) return true;
         let code = (evt.keyCode || evt.which);
+    }
+
+    isScrolling(node) {
+        return getComputedStyle(node).getPropertyValue('overflow') == 'auto' || getComputedStyle(node).getPropertyValue('overflow-y') == 'auto';
+    }
+    showReverse() {
+        let el = <HTMLElement>this.__input;
+        let p = <HTMLElement>this.element;
+        let top = 0;
+
+        while (!this.isScrolling(p)) {
+            top += p.offsetTop;
+            p = <HTMLElement>p.offsetParent;
+        }
+        return top > 250 && p.scrollTop + p.offsetHeight < el.offsetHeight + top + 250;
     }
 
     __searchTextChanged() {

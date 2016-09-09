@@ -23,7 +23,7 @@
                 <span class="ui-check-mark"></span>
             </div>
             <div class="ui-input-wrapper">
-                <input class="ui-input" id="${__id}" type.bind="__type" autocomplete="off" size="1" focus.trigger="__gotFocus()" blur.trigger="__lostFocus()" click.trigger="__gotFocus()" keydown.trigger="keyDown($event)" value.bind="__searchText" placeholder.bind="placeholder"
+                <input class="ui-input" id="${__id}" type.bind="__type" autocomplete="off" size="1" focus.trigger="__gotFocus()" blur.trigger="__lostFocus()" click.trigger="__gotFocus(true)" keydown.trigger="keyDown($event)" value.bind="__searchText" placeholder.bind="placeholder"
                     ref="__input" dir="${dir}" input.trigger="__searchTextChanged() & debounce:200" name="${name}" />
                 <span class="ui-clear fi-ui-close-light ${value?'show-clear':''}" click.trigger="clearInput()" if.bind="__clear"></span>
 
@@ -35,7 +35,7 @@
                     <p class="ui-text-muted ui-pad-all" if.bind="__noResult">${emptyText}</p>
                 </div>
             </div>
-            <div class="ui-addon" click.trigger="__input.focus()" style="cursor: pointer">
+            <div class="ui-addon" click.trigger="__showFocus()" style="cursor: pointer">
                 <span class="fi-ui-arrow-down"></span>
             </div>
             <div class="ui-addon" if.bind="suffixIcon || suffixText">
