@@ -253,8 +253,8 @@ $shadow: $input-inner-shadow;
                 }
             }
 
-            .ui-addon:nth-child(2),
-            > .ui-input-wrapper:nth-child(2) > .ui-input {
+            .ui-addon:first-child,
+            > .ui-input-wrapper:first-child > .ui-input {
                 @include border-left-radius($base-border-radius);
             }
 
