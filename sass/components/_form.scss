@@ -5,8 +5,8 @@
 // @license     : MIT
 
 .ui-form {
-    &,
-    .ui-fieldset > fieldset {
+    &.two-column,
+    &.two-column .ui-fieldset > fieldset {
         > .ui-row > .ui-column {
             min-width: 20em;
             @include flex(1 1 20em);
