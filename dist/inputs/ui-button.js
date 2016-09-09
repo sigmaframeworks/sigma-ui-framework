@@ -72,8 +72,12 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
         UIButton.prototype.valueChanged = function (newValue) {
             if (this.__hasMenu && this.__useMenuLabel) {
                 var menu = ui_utils_1._.find(this.__menuEl.menu, { 'id': newValue });
-                if (menu)
+                if (menu) {
+                    if (this.__prevSelection)
+                        this.__prevSelection.active = false;
+                    (this.__prevSelection = menu).active = true;
                     this.label = menu.text;
+                }
             }
         };
         UIButton.prototype.fireClick = function ($event) {
@@ -95,8 +99,9 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             var menu = document.querySelector('.ui-floating.show');
             if (menu)
                 menu.classList.remove('show');
-            if (this.__hasMenu && this.__useMenuLabel)
-                this.label = $event.detail.text;
+            if (this.__hasMenu && this.__useMenuLabel) {
+                this.value = $event.detail;
+            }
         };
         __decorate([
             aurelia_framework_1.bindable(), 

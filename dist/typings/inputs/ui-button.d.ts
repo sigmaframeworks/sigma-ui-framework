@@ -36,6 +36,7 @@ export declare class UIButton {
     attached(): void;
     disable(disabled?: any): void;
     disabledChanged(newValue: any): void;
+    __prevSelection: any;
     valueChanged(newValue: any): void;
     fireClick($event: any): boolean;
     menuClicked($event: any): void;

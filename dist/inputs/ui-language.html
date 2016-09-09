@@ -7,13 +7,13 @@
     <label class="ui-label" ref="__label" for="${__id}">
         <span><slot></slot></span>
     </label>
+    <div class="ui-input-invalid fi-ui-exclaim-white" ref="__errorIcon">
+        <div class="ui-error-tooltip">
+            <p repeat.for="err of __errorIcon.errors">${err.message || 'Invalid'}</p>
+        </div>
+    </div>
     <div class="ui-control-wrapper">
         <div class="ui-input-control">
-            <div class="ui-input-invalid fi-ui-exclaim-white" ref="__errorIcon">
-                <div class="ui-error-tooltip">
-                    <p repeat.for="err of __errorIcon.errors">${err.message || 'Invalid'}</p>
-                </div>
-            </div>
             <div class="ui-addon">
                 <span class="fi-ui-language"></span>
             </div>

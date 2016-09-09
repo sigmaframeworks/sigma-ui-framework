@@ -16,7 +16,7 @@
     <div repeat.for="link of menu">
         <hr if.bind="link==='-'" />
         <p class="ui-menu-section" if.bind="link.length && link!=='-'">${link}</p>
-        <a if.bind="link.text" class="ui-menu-link ${link.isActive ? 'ui-active' : ''}" data-disabled="${link.disabled}" data-id="${link.id}" data-text="${link.text}" href.bind="link.href || 'javascript:;'">
+        <a if.bind="link.text" class="ui-menu-link ${link.active ? 'ui-active' : ''}" data-disabled="${link.disabled}" data-id="${link.id}" href.bind="link.href || 'javascript:;'">
             <span class="ui-icon ${link.icon}" if.bind="link.icon"></span>&nbsp;${link.text}</a>
     </div>
 

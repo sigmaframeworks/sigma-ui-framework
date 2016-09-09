@@ -22,9 +22,9 @@ define(["require", "exports", "./ui-input-group", "../utils/ui-utils", "../utils
         UIListBehaviour.prototype.keyDown = function (evt) {
             if (evt.ctrlKey || evt.altKey || evt.metaKey || (evt.keyCode || evt.which) === 0)
                 return true;
-            var code = (evt.keyCode || evt.which);
             if (this.readonly || this.disabled)
-                return;
+                return true;
+            var code = (evt.keyCode || evt.which);
             if (code == 13 && this.__focus) {
                 this.__select(this.__hilight);
                 this.__focus = false;
@@ -92,8 +92,7 @@ define(["require", "exports", "./ui-input-group", "../utils/ui-utils", "../utils
                 top += p.offsetTop;
                 p = p.offsetParent;
             }
-            console.log(top, el.offsetHeight, p.scrollTop, p.offsetHeight);
-            return p.scrollTop + p.offsetHeight < el.offsetHeight + top + 50;
+            return top > 250 && p.scrollTop + p.offsetHeight < el.offsetHeight + top + 250;
         };
         UIListBehaviour.prototype.__searchTextChanged = function () {
             var _this = this;

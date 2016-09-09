@@ -30,7 +30,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../utils/u
                         text: c[i].textContent,
                         icon: c[i].getAttribute('icon'),
                         disabled: isTrue(c[i].getAttribute('disabled')),
-                        isActive: isTrue(c[i].getAttribute('active')),
+                        active: isTrue(c[i].getAttribute('active')),
                         href: c[i].getAttribute('href') || 'javascript:;',
                     });
                 }
@@ -53,7 +53,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../utils/u
             this.element.classList.remove('show');
             var link = getParentByClass($event.target, 'ui-menu-link', 'ui-menu');
             if (link !== null)
-                ui_event_1.UIEvent.fireEvent('menuclick', this.element, { id: link.dataset['id'], text: link.dataset['text'] });
+                ui_event_1.UIEvent.fireEvent('menuclick', this.element, link.dataset['id']);
             return true;
         };
         __decorate([

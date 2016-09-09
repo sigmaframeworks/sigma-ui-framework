@@ -45,7 +45,8 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group"], function
             if (tool === null)
                 return;
             var id = tool.dataset['id'];
-            var start = this.__input.selectionStart, end = this.__input.selectionEnd, sub = (this.value || '').substr(start, end - start) || 'EditThis';
+            var val = this.value || '';
+            var start = this.__input.selectionStart, end = this.__input.selectionEnd, sub = val.substr(start, end - start) || 'EditThis';
             var diff = 0;
             if (id == 'preview') {
                 this.__toggle('preview');
@@ -56,58 +57,58 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group"], function
             else if (!this.disabled && !this.readonly) {
                 if (id == 'h1') {
                     diff = 3;
-                    this.value = this.value.substr(0, start) + ("# " + sub + "\n\n") + this.value.substr(end);
+                    this.value = val.substr(0, start) + ("# " + sub + "\n\n") + val.substr(end);
                 }
                 else if (id == 'h2') {
                     diff = 4;
-                    this.value = this.value.substr(0, start) + ("## " + sub + "\n\n") + this.value.substr(end);
+                    this.value = val.substr(0, start) + ("## " + sub + "\n\n") + val.substr(end);
                 }
                 else if (id == 'h3') {
                     diff = 5;
-                    this.value = this.value.substr(0, start) + ("### " + sub + "\n\n") + this.value.substr(end);
+                    this.value = val.substr(0, start) + ("### " + sub + "\n\n") + val.substr(end);
                 }
                 else if (id == 'h4') {
                     diff = 6;
-                    this.value = this.value.substr(0, start) + ("#### " + sub + "\n\n") + this.value.substr(end);
+                    this.value = val.substr(0, start) + ("#### " + sub + "\n\n") + val.substr(end);
                 }
                 else if (id == 'h5') {
                     diff = 7;
-                    this.value = this.value.substr(0, start) + ("##### " + sub + "\n\n") + this.value.substr(end);
+                    this.value = val.substr(0, start) + ("##### " + sub + "\n\n") + val.substr(end);
                 }
                 else if (id == 'h6') {
                     diff = 8;
-                    this.value = this.value.substr(0, start) + ("###### " + sub + "\n\n") + this.value.substr(end);
+                    this.value = val.substr(0, start) + ("###### " + sub + "\n\n") + val.substr(end);
                 }
                 else if (id == 'b') {
                     diff = 2;
-                    this.value = this.value.substr(0, start) + (" __" + sub + "__ ") + this.value.substr(end);
+                    this.value = val.substr(0, start) + (" __" + sub + "__ ") + val.substr(end);
                 }
                 else if (id == 'i') {
                     diff = 1;
-                    this.value = this.value.substr(0, start) + (" _" + sub + "_ ") + this.value.substr(end);
+                    this.value = val.substr(0, start) + (" _" + sub + "_ ") + val.substr(end);
                 }
                 else if (id == 's') {
                     diff = 2;
-                    this.value = this.value.substr(0, start) + (" ~~" + sub + "~~ ") + this.value.substr(end);
+                    this.value = val.substr(0, start) + (" ~~" + sub + "~~ ") + val.substr(end);
                 }
                 else if (id == 'a') {
                     diff = 1;
-                    this.value = this.value.substr(0, start) + (" [" + sub + "](Place_Url_Here) ") + this.value.substr(end);
+                    this.value = val.substr(0, start) + (" [" + sub + "](Place_Url_Here) ") + val.substr(end);
                 }
                 else if (id == 'img') {
                     diff = 2;
-                    this.value = this.value.substr(0, start) + (" ![" + sub + "](Place_Url_Here) ") + this.value.substr(end);
+                    this.value = val.substr(0, start) + (" ![" + sub + "](Place_Url_Here) ") + val.substr(end);
                 }
                 else if (id == 'ul') {
                     diff = 1;
                     sub = sub.replace(/^.+$/gm, function (t) { return ("* " + t); });
-                    this.value = this.value.substr(0, start) + (sub + "\n") + this.value.substr(end);
+                    this.value = val.substr(0, start) + (sub + "\n") + val.substr(end);
                 }
                 else if (id == 'ol') {
                     diff = 1;
                     var i = 1;
                     sub = sub.replace(/^.+$/gm, function (t) { return ((i++ == 1 ? '1.' : '*') + " " + t); });
-                    this.value = this.value.substr(0, start) + (sub + "\n") + this.value.substr(end);
+                    this.value = val.substr(0, start) + (sub + "\n") + val.substr(end);
                 }
                 if (id != 'preview' && id != 'help') {
                     this.__input.focus();

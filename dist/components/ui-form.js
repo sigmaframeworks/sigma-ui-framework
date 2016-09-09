@@ -12,12 +12,12 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
     var UIForm = (function () {
         function UIForm(element) {
             this.element = element;
-            if (!this.element.hasAttribute('auto-grid'))
-                this.element.classList.add('two-column');
         }
         UIForm.prototype.attached = function () {
             var _this = this;
             ui_event_1.UIEvent.queueTask(function () {
+                if (!_this.element.hasAttribute('auto-grid'))
+                    _this.__form.classList.add('two-column');
                 var el = _this.element.querySelector('.ui-input-group .ui-input-control .ui-input');
                 if (el !== null)
                     el.focus();

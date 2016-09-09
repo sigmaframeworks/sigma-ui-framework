@@ -1,3 +1,12 @@
+<a name="1.0.0-preview"></a>
+# 1.0.0 (2016-09-09)
+
+* __UIButton__: Set active for selected dropdown option
+* __UIButton__: Update value for dropdown type
+* __UIForm__: Fixed auto-grid layout
+* __UIMarkdown__: Fixed issue when value not assigned
+
+
 <a name="0.0.4-beta.16"></a>
 ## 0.0.4-beta.16 (2016-09-09)
 

@@ -116,7 +116,7 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
                 var el = this.__input;
                 if (this.showReverse()) {
                     this.__reverse = true;
-                    this.__list.style.bottom = el.offsetHeight + 'px';
+                    this.__list.style.bottom = el.parentElement.offsetHeight + 'px';
                 }
                 else {
                     this.__reverse = false;
