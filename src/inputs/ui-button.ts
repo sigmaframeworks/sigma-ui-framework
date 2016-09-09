@@ -116,10 +116,15 @@ export class UIButton {
         this.disable();
     }
 
+    __prevSelection;
     valueChanged(newValue) {
         if (this.__hasMenu && this.__useMenuLabel) {
             let menu: any = _.find(this.__menuEl.menu, { 'id': newValue });
-            if (menu) this.label = menu.text;
+            if (menu) {
+                if (this.__prevSelection) this.__prevSelection.active = false;
+                (this.__prevSelection = menu).active = true;
+                this.label = menu.text;
+            }
         }
     }
 
@@ -141,7 +146,9 @@ export class UIButton {
         let menu = document.querySelector('.ui-floating.show');
         if (menu) menu.classList.remove('show');
 
-        if (this.__hasMenu && this.__useMenuLabel) this.label = $event.detail.text;
+        if (this.__hasMenu && this.__useMenuLabel) {
+            this.value = $event.detail;
+        }
     }
 }
 

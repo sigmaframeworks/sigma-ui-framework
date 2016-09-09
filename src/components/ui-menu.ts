@@ -41,7 +41,7 @@ export class UIMenu {
                     text: c[i].textContent,
                     icon: c[i].getAttribute('icon'),
                     disabled: isTrue(c[i].getAttribute('disabled')),
-                    isActive: isTrue(c[i].getAttribute('active')),
+                    active: isTrue(c[i].getAttribute('active')),
                     href: c[i].getAttribute('href') || 'javascript:;',
                 });
             }
@@ -63,7 +63,7 @@ export class UIMenu {
         $event.cancelBubble = true;
         this.element.classList.remove('show');
         let link = getParentByClass($event.target, 'ui-menu-link', 'ui-menu');
-        if (link !== null) UIEvent.fireEvent('menuclick', this.element, { id: link.dataset['id'], text: link.dataset['text'] });
+        if (link !== null) UIEvent.fireEvent('menuclick', this.element, link.dataset['id']);
         return true;
     }
 }
