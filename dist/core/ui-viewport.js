@@ -22,7 +22,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../utils/u
             this.showTaskbar = true;
             this.hideLogout = false;
             ui_utils_1.UIUtils.container(container);
-            this.appState.info(this.constructor.name, "UIViewport Created");
+            this.appState.info(this.appState.AppConfig.Key, "UIViewport::Created");
             this.hideLogout = element.hasAttribute('hide-logout');
             if (element.hasAttribute('menu-end'))
                 element.classList.add('ui-menu-end');
@@ -41,11 +41,11 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../utils/u
         UIViewport.prototype.__showMenu = function ($event) {
             $event.stopPropagation();
             this.element.classList.add('show-menu');
-            this.appState.info(this.constructor.name, "showMenu");
+            this.appState.info(this.appState.AppConfig.Key, "UIViewport::showMenu");
         };
         UIViewport.prototype.__hideMenu = function ($event) {
             if (this.element.classList.contains('show-menu')) {
-                this.appState.info(this.constructor.name, "hideMenu");
+                this.appState.info(this.appState.AppConfig.Key, "UIViewport::hideMenu");
                 this.element.classList.remove('show-menu');
             }
             var menu = document.querySelector('.ui-floating.show');
@@ -57,7 +57,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../utils/u
             return true;
         };
         UIViewport.prototype.logout = function () {
-            this.appState.info(this.constructor.name, "fire logout event");
+            this.appState.info(this.appState.AppConfig.Key, "UIViewport::fire logout event");
             ui_event_1.UIEvent.fireEvent('logout', this.element);
         };
         __decorate([

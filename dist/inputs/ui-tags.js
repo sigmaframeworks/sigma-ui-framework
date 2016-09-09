@@ -108,12 +108,13 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
                 this.__select(o);
             }
         };
-        UITags.prototype.__gotFocus = function () {
+        UITags.prototype.__gotFocus = function (show) {
             var _this = this;
-            this.__focus = true;
+            if (show)
+                this.__focus = true;
             if (!this.__noList) {
-                var el = this.element;
-                if (el.offsetParent.scrollTop + el.offsetParent['offsetHeight'] < el.offsetHeight + el.offsetTop + 50) {
+                var el = this.__input;
+                if (this.showReverse()) {
                     this.__reverse = true;
                     this.__list.style.bottom = el.offsetHeight + 'px';
                 }

@@ -17,7 +17,7 @@ export declare class UIChartBase extends UIChart {
        * @property    chart-options
        * @type        Array
        */
-    chartOptions: AmCharts.AmChart;
+    chartOptions: any;
     /**
        * @property    width
        * @type        number

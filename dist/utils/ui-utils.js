@@ -4,43 +4,6 @@ define(["require", "exports", "aurelia-framework", "./ui-event", "lodash", "kram
     exports.kramed = km;
     exports.moment = mm;
     exports.numeral = nm;
-    window.isTrue = function (b) {
-        return (/^(true|yes|1|y|on)$/i).test(b);
-    };
-    window.isEmpty = function (a) {
-        if (typeof a === 'number')
-            return false;
-        return a === undefined || a === null || a === '' || Object.keys(a).length == 0 || a.length === 0;
-    };
-    window.isFunction = function (a) {
-        return exports._.isFunction(a);
-    };
-    window.getParentByTag = function (el, selector) {
-        do {
-            if (el.tagName.toLowerCase() === selector.toLowerCase())
-                return el;
-            el = el.parentElement;
-        } while (el !== null);
-        return null;
-    };
-    window.getParentByClass = function (el, selector, last) {
-        do {
-            if (last && el.classList.contains(last))
-                return null;
-            if (el.classList.contains(selector))
-                return el;
-            el = el.parentElement;
-        } while (el !== null);
-        return null;
-    };
-    window.convertToPx = function (size, context) {
-        var baseSize = 1;
-        if (size.indexOf('em') > -1)
-            baseSize = getComputedStyle(context || document.documentElement).fontSize;
-        if (size.indexOf('rem') > -1)
-            baseSize = getComputedStyle(document.documentElement).fontSize;
-        return parseFloat(size) * parseFloat(baseSize);
-    };
     Object.defineProperties(window, {
         '__seed': {
             writable: true,

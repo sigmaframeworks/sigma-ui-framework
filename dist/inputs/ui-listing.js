@@ -17,12 +17,14 @@ define(["require", "exports", "./ui-input-group", "../utils/ui-utils", "../utils
         UIListBehaviour.prototype.__select = function (item) { };
         UIListBehaviour.prototype.__deselect = function (item) { };
         UIListBehaviour.prototype.__scrollIntoView = function () { };
-        UIListBehaviour.prototype.__gotFocus = function () { };
+        UIListBehaviour.prototype.__gotFocus = function (show) { };
         UIListBehaviour.prototype.__lostFocus = function () { };
         UIListBehaviour.prototype.keyDown = function (evt) {
             if (evt.ctrlKey || evt.altKey || evt.metaKey || (evt.keyCode || evt.which) === 0)
                 return true;
             var code = (evt.keyCode || evt.which);
+            if (this.readonly || this.disabled)
+                return;
             if (code == 13 && this.__focus) {
                 this.__select(this.__hilight);
                 this.__focus = false;
@@ -78,6 +80,20 @@ define(["require", "exports", "./ui-input-group", "../utils/ui-utils", "../utils
             if (evt.ctrlKey || evt.altKey || evt.metaKey || (evt.keyCode || evt.which) === 0)
                 return true;
             var code = (evt.keyCode || evt.which);
+        };
+        UIListBehaviour.prototype.isScrolling = function (node) {
+            return getComputedStyle(node).getPropertyValue('overflow') == 'auto' || getComputedStyle(node).getPropertyValue('overflow-y') == 'auto';
+        };
+        UIListBehaviour.prototype.showReverse = function () {
+            var el = this.__input;
+            var p = this.element;
+            var top = 0;
+            while (!this.isScrolling(p)) {
+                top += p.offsetTop;
+                p = p.offsetParent;
+            }
+            console.log(top, el.offsetHeight, p.scrollTop, p.offsetHeight);
+            return p.scrollTop + p.offsetHeight < el.offsetHeight + top + 50;
         };
         UIListBehaviour.prototype.__searchTextChanged = function () {
             var _this = this;

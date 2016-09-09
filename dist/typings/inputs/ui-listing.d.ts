@@ -19,9 +19,11 @@ export declare class UIListBehaviour extends UIInputGroup {
     __select(item: any): void;
     __deselect(item: any): void;
     __scrollIntoView(): void;
-    __gotFocus(): void;
+    __gotFocus(show: any): void;
     __lostFocus(): void;
     keyDown(evt: any): any;
     keyPress(evt: any): boolean;
+    isScrolling(node: any): boolean;
+    showReverse(): boolean;
     __searchTextChanged(): void;
 }

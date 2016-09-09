@@ -1,3 +1,13 @@
+<a name="0.0.4-beta.16"></a>
+## 0.0.4-beta.16 (2016-09-09)
+
+* __UIChart__: Removed reference to AmCharts
+* __UIInput__: Fixed caret positioning
+* __UICombo__, __UITag__: Fixed dropdown positioning
+* __UILanguage__: Updated selected languages valueChange to accept Array, Object or Map
+* Moved extra common scripts to `sigma-libs`
+
+
 <a name="0.0.4-beta.6"></a>
 ## 0.0.4-beta.6 (2016-09-04)
 

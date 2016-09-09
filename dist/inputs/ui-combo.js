@@ -85,12 +85,17 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
                 this.__select(this.__hilight = o);
             }
         };
-        UIComboBox.prototype.__gotFocus = function () {
+        UIComboBox.prototype.__showFocus = function () {
+            this.__input.focus();
+            this.__focus = true;
+        };
+        UIComboBox.prototype.__gotFocus = function (show) {
             var _this = this;
             this.__hilight = this.__list.querySelector("[data-value=\"" + this.value + "\"]");
-            this.__focus = true;
-            var el = this.element;
-            if (el.offsetParent.scrollTop + el.offsetParent['offsetHeight'] < el.offsetHeight + el.offsetTop + 50) {
+            if (show)
+                this.__focus = true;
+            var el = this.__input;
+            if (this.showReverse()) {
                 this.__reverse = true;
                 this.__list.style.bottom = el.offsetHeight + 'px';
             }
@@ -104,7 +109,8 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
             });
         };
         UIComboBox.prototype.__lostFocus = function () {
-            this.__select(this.__hilight);
+            if (this.__focus)
+                this.__select(this.__hilight);
             this.__focus = false;
         };
         UIComboBox.prototype.formatter = function () {

@@ -6,13 +6,13 @@ var assign = Object.assign || require('object.assign');
 var del = require('del');
 var vinylPaths = require('vinyl-paths');
 var dts = require('dts-bundle')
+var injectHtml = require('gulp-inject-stringified-html');
 
 var appRoot = 'src/';
 var paths = {
     root: appRoot,
     source: appRoot + '**/*.ts',
     html: appRoot + '**/*.html',
-    scripts: appRoot + 'scripts/**/*',
     typings: appRoot + 'typings/**/*',
     sass: 'sass/**/*',
     css: 'css/**/*',
@@ -38,7 +38,7 @@ compileToModules.forEach(function(moduleType) {
                 module: moduleType,
                 target: moduleType == 'es2015' ? 'es2015' : 'es5'
             }), ts.reporter.defaultReporter());
-        var tsResult = gulp.src([paths.source], {
+        var tsResult = gulp.src(tsconfig.filesGlob, {
             base: appRoot
         }).pipe(ts(tsProject));
         return tsResult.js
@@ -52,7 +52,7 @@ gulp.task('build-dts', function() {
             target: "es2015",
             module: "es2015"
         }), ts.reporter.defaultReporter());
-    var tsResult = gulp.src([paths.source], {
+    var tsResult = gulp.src(tsconfig.filesGlob, {
         base: appRoot
     }).pipe(ts(tsProject));
     return tsResult.dts.pipe(gulp.dest(paths.output + '/typings'));
@@ -66,14 +66,11 @@ gulp.task('bundle-dts', gulp.series('build-dts', function(done) {
 }));
 
 gulp.task('copy-extras', function() {
-    return gulp.src([paths.typings, paths.scripts, paths.html], {
+    return gulp.src([paths.typings, paths.html], {
         base: appRoot
     }).pipe(gulp.dest(paths.output));
-
-    // return gulp.src([paths.sass, paths.css], {
-    //     base: '.'
-    // }).pipe(gulp.dest(paths.output));
 });
+
 
 gulp.task('build-ts', gulp.series('clean', 'build-ts-amd', 'bundle-dts', 'copy-extras',
     function(done) {

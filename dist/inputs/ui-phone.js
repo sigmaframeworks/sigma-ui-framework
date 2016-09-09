@@ -69,11 +69,9 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
             this.valueChanged(this.value);
         };
         UIPhone.prototype.valueChanged = function (newValue) {
-            var _this = this;
             if (this.ignoreUpdate)
                 return;
             this.ignoreUpdate = true;
-            var start = this.__input.selectionStart;
             if (this.__phoneFormat === PhoneLib.FORMAT.INTERNATIONAL) {
                 if (isEmpty(newValue))
                     this.prefixIcon = 'ui-flag';
@@ -85,8 +83,6 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
                     newValue = '';
                 this.__value =
                     PhoneLib.formatInput(newValue, this.__phoneFormat !== PhoneLib.FORMAT.INTERNATIONAL ? this.country : '', false, true);
-                if (this.__value.length > newValue.length)
-                    start += this.__value.length - newValue.length;
                 this.value =
                     PhoneLib.format(this.__value, this.__phoneFormat !== PhoneLib.FORMAT.INTERNATIONAL ? this.country : '', PhoneLib.FORMAT.FULL);
             }
@@ -94,13 +90,34 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
                 this.__value = '';
             }
             this.processValue();
+            this.ignoreUpdate = false;
+        };
+        UIPhone.prototype.formatter = function (evt) {
+            var _this = this;
+            var newValue = evt.target.value;
+            var start = this.__input.selectionStart;
+            if (this.__phoneFormat === PhoneLib.FORMAT.INTERNATIONAL) {
+                if (isEmpty(newValue))
+                    this.prefixIcon = 'ui-flag';
+                if (!isEmpty(newValue) && !/^\+/.test(newValue))
+                    newValue = '+' + newValue;
+            }
+            if (!isEmpty(newValue)) {
+                if (newValue === 'NaN')
+                    newValue = '';
+                evt.target.value =
+                    PhoneLib.formatInput(newValue, this.__phoneFormat !== PhoneLib.FORMAT.INTERNATIONAL ? this.country : '', false, true);
+                newValue = PhoneLib.format(newValue, this.__phoneFormat !== PhoneLib.FORMAT.INTERNATIONAL ? this.country : '', PhoneLib.FORMAT.FULL);
+            }
+            else {
+                newValue = '';
+            }
+            this.processValue();
             ui_event_1.UIEvent.queueTask(function () {
-                var x = 0;
-                if (_this.__value.length > 0)
-                    x = _this.__value.length - _this.__value.substr(0, start).replace(/[^\d]/g, '').length;
-                _this.__input.selectionStart = _this.__input.selectionEnd = start + x;
-                _this.ignoreUpdate = false;
+                var x = /(\s\d)|(\+\d)$/.test(_this.__value) ? 1 : 0;
+                _this.__input.setSelectionRange(start + x, start + x);
             });
+            return newValue;
         };
         UIPhone.prototype.processValue = function () {
             if (this.__phoneFormat === PhoneLib.FORMAT.INTERNATIONAL) {

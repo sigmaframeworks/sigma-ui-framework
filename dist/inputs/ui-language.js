@@ -38,17 +38,20 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
         };
         UILanguage.prototype.languagesChanged = function (newValue) {
             var s = [], a = [];
-            var isMap = newValue instanceof Map;
-            ui_utils_1._.forEach(UILanguage.LANGUAGES, function (l) {
-                if (!isMap && Object.keys(newValue).indexOf(l.id) == -1)
-                    a.push(l);
-                if (!isMap && Object.keys(newValue).indexOf(l.id) > -1)
-                    s.push(l);
-                if (isMap && newValue.has(l.id))
-                    s.push(l);
-                if (isMap && !newValue.has(l.id))
-                    a.push(l);
-            });
+            if (isEmpty(newValue)) {
+                a = ui_utils_1._.clone(UILanguage.LANGUAGES);
+            }
+            else {
+                var isMap_1 = newValue instanceof Map;
+                ui_utils_1._.forEach(UILanguage.LANGUAGES, function (l) {
+                    if (ui_utils_1._.isArray(newValue))
+                        (newValue.indexOf(l.id) ? s.push(l) : a.push(l));
+                    else if (!isMap_1)
+                        (Object.keys(newValue).indexOf(l.id) > -1 ? s.push(l) : a.push(l));
+                    else if (isMap_1)
+                        (newValue.has(l.id) ? s.push(l) : a.push(l));
+                });
+            }
             this.__languages = s;
             this.__available = a;
         };

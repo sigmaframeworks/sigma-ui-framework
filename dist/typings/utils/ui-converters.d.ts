@@ -23,22 +23,22 @@ export declare class GroupValueConverter {
     toView(object: any, property: any): any;
 }
 export declare class SortValueConverter {
-    toView(value: any, property: any): any;
+    toView(value: any, property: any): {}[];
 }
 export declare class JsonValueConverter {
     toView(value: any): string;
 }
 export declare class IsStringValueConverter {
-    toView(value: any): any;
+    toView(value: any): boolean;
 }
 export declare class IsArrayValueConverter {
-    toView(value: any): any;
+    toView(value: any): boolean;
 }
 export declare class IsObjectValueConverter {
-    toView(value: any): any;
+    toView(value: any): boolean;
 }
 export declare class IsEmptyValueConverter {
-    toView(value: any): any;
+    toView(value: any): boolean;
 }
 export declare class IsTrueValueConverter {
     toView(value: any): boolean;

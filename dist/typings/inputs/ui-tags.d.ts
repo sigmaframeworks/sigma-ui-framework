@@ -111,7 +111,7 @@ export declare class UITags extends UIListBehaviour {
     __select(item: any): void;
     __deselect(item: any): void;
     __clicked($event: any): void;
-    __gotFocus(): void;
+    __gotFocus(show: any): void;
     __lostFocus(): void;
     inputClicked(evt: any): void;
     formatter(): string;

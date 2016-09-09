@@ -31,9 +31,6 @@ define(["require", "exports", "./ui-utils"], function (require, exports, ui_util
                     ret = Array(minlen - ret.length + 1).join('0') + ret;
                 }
             }
-            ret.replace(/[^\d\.]+/g, function (txt) {
-                return "<small>" + txt.toUpperCase() + "</small>";
-            });
             return ret;
         }
         UIFormat.number = number;
@@ -43,10 +40,7 @@ define(["require", "exports", "./ui-utils"], function (require, exports, ui_util
             return nm === null || isNaN(nm) ? '' :
                 ui_utils_1.numeral(nm)
                     .format(fm)
-                    .replace('$', sy)
-                    .replace(/[^\d\.]+/g, function (txt) {
-                    return "<small>" + txt.toUpperCase() + "</small>";
-                });
+                    .replace('$', sy);
         }
         UIFormat.currency = currency;
         function percent(nm) {

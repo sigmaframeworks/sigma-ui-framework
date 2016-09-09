@@ -26,7 +26,6 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils"], functio
             _super.call(this);
             this.chartTitle = '';
             this.chartData = [];
-            this.chartOptions = {};
             this.width = 600;
             this.height = 400;
             if (element.hasAttribute('stretch'))
@@ -59,7 +58,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-utils"], functio
         ], UIChartBase.prototype, "chartData", void 0);
         __decorate([
             aurelia_framework_1.bindable(), 
-            __metadata('design:type', AmCharts.AmChart)
+            __metadata('design:type', Object)
         ], UIChartBase.prototype, "chartOptions", void 0);
         __decorate([
             aurelia_framework_1.bindable(), 

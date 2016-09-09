@@ -23,7 +23,7 @@
                 <span class="ui-check-mark"></span>
             </div>
             <div class="ui-input-wrapper">
-                <input class="ui-input" id="${__id}" type.bind="__type" autocomplete="off" size="1" click.trigger="__startFocus=true" readonly dir="ltr" focus.trigger="__startFocus=true" blur.trigger="__startFocus=false" value.bind="__value" placeholder.bind="placeholder"
+                <input class="ui-input" id="${__id}" type.bind="__type" autocomplete="off" size="1" click.trigger="__startFocus=true" readonly dir="ltr" keydown.trigger="__startFocus=true" blur.trigger="__startFocus=false" value.bind="__value" placeholder.bind="placeholder"
                     ref="__input" />
                 <span class="ui-clear fi-ui-close-light ${__value?'show-clear':''}" click.trigger="clearInput()" if.bind="__clear"></span>
 
@@ -31,7 +31,7 @@
             </div>
             <div class="ui-addon ui-small-caps" if.bind="__dual" click.trigger="__input2.focus()">to</div>
             <div class="ui-input-wrapper" if.bind="__dual">
-                <input class="ui-input" id="${__id+'-second'}" type.bind="__type" size="1" click.trigger="__endFocus=true" readonly dir="ltr" focus.trigger="__endFocus=true" blur.trigger="__endFocus=false" autocomplete="off" value.bind="__value2" placeholder.bind="placeholderSecond"
+                <input class="ui-input" id="${__id+'-second'}" type.bind="__type" size="1" click.trigger="__endFocus=true" readonly dir="ltr" keydown.trigger="__endFocus=true" blur.trigger="__endFocus=false" autocomplete="off" value.bind="__value2" placeholder.bind="placeholderSecond"
                     ref="__input2" />
                 <span class="ui-clear fi-ui-close-light ui-clear2 ${__value2?'show-clear':''}" click.trigger="clearInput(true)" if.bind="__clear"></span>
 

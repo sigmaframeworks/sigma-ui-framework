@@ -1,9 +1,10 @@
 import { Container } from "aurelia-framework";
+import * as ld from "lodash";
 import * as mm from "moment";
-export declare var _: any;
+export declare var _: ld.LoDashStatic;
 export declare var kramed: KramedStatic;
 export declare var moment: typeof mm;
-export declare var numeral: any;
+export declare var numeral: Numeral;
 export declare module UIChartStatic {
     var CHART_RED: string[];
     var CHART_PINK: string[];

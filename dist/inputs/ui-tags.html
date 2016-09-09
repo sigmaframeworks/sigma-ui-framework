@@ -24,8 +24,8 @@
             </div>
             <div class="ui-input-wrapper">
                 <div class="ui-input ui-tags" ref="__tagInput" click.trigger="inputClicked($event)">
-                    <button class="ui-tag" model.bind="tag" value.bind="tag[valueProperty] || tag" repeat.for="tag of __tags">${tag[displayProperty] || tag}</button>
-                    <input id="${__id}" type.bind="__type" autocomplete="off" size="1" click.trigger="__gotFocus()" focus.trigger="__gotFocus()" blur.trigger="__lostFocus()" keydown.trigger="keyDown($event)" value.bind="__searchText" placeholder.bind="placeholder" ref="__input"
+                    <button class="ui-tag" model.bind="tag" value.bind="tag[valueProperty] || tag" repeat.for="tag of __tags" tabindex="-1">${tag[displayProperty] || tag}</button>
+                    <input id="${__id}" type.bind="__type" autocomplete="off" size="1" click.trigger="__gotFocus(true)" focus.trigger="__gotFocus()" blur.trigger="__lostFocus()" keydown.trigger="keyDown($event)" value.bind="__searchText" placeholder.bind="placeholder" ref="__input"
                         dir="${dir}" input.trigger="__searchTextChanged() & debounce:200" />
                 </div>
                 <span class="ui-clear fi-ui-close-light ${value?'show-clear':''}" click.trigger="clearInput()" if.bind="__clear"></span>

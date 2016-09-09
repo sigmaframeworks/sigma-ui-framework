@@ -103,7 +103,8 @@ export declare class UIComboBox extends UIListBehaviour {
     optionsChanged(newValue: any): void;
     __select(item: any): void;
     __clicked($event: any): void;
-    __gotFocus(): void;
+    __showFocus(): void;
+    __gotFocus(show: any): void;
     __lostFocus(): void;
     formatter(): string;
     __scrollIntoView(): void;

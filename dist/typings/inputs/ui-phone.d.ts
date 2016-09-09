@@ -71,5 +71,6 @@ export declare class UIPhone extends UIInputGroup {
     bind(): void;
     countryChanged(): void;
     valueChanged(newValue: any): void;
+    formatter(evt: any): any;
     protected processValue(): void;
 }
