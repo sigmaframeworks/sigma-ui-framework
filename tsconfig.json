@@ -25,6 +25,7 @@
   "filesGlob": [
     "./src/**/*.ts",
     "./typings/globals/**/*.d.ts",
+    "./node_modules/sigma-libs/typings/*.d.ts",
     "./node_modules/aurelia-validation/dist/amd/*.d.ts"
   ],
   "atom": {
