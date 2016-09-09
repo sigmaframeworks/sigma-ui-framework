@@ -139,7 +139,6 @@ export class UIPhone extends UIInputGroup {
     valueChanged(newValue) {
         if (this.ignoreUpdate) return;
         this.ignoreUpdate = true;
-        let start = this.__input.selectionStart;
         if (this.__phoneFormat === PhoneLib.FORMAT.INTERNATIONAL) {
             if (isEmpty(newValue)) this.prefixIcon = 'ui-flag';
             if (!isEmpty(newValue) && !/^\+/.test(newValue)) newValue = '+' + newValue;
@@ -150,7 +149,6 @@ export class UIPhone extends UIInputGroup {
                 PhoneLib.formatInput(newValue,
                     this.__phoneFormat !== PhoneLib.FORMAT.INTERNATIONAL ? this.country : '',
                     false, true);
-            start += this.__value.length - newValue.length;
             this.value =
                 PhoneLib.format(this.__value,
                     this.__phoneFormat !== PhoneLib.FORMAT.INTERNATIONAL ? this.country : '',
@@ -160,12 +158,35 @@ export class UIPhone extends UIInputGroup {
             this.__value = '';
         }
         this.processValue();
+        this.ignoreUpdate = false;
+    }
+
+    formatter(evt) {
+        let newValue = evt.target.value;
+        let start = this.__input.selectionStart;
+        if (this.__phoneFormat === PhoneLib.FORMAT.INTERNATIONAL) {
+            if (isEmpty(newValue)) this.prefixIcon = 'ui-flag';
+            if (!isEmpty(newValue) && !/^\+/.test(newValue)) newValue = '+' + newValue;
+        }
+        if (!isEmpty(newValue)) {
+            if (newValue === 'NaN') newValue = '';
+            evt.target.value =
+                PhoneLib.formatInput(newValue,
+                    this.__phoneFormat !== PhoneLib.FORMAT.INTERNATIONAL ? this.country : '',
+                    false, true);
+            newValue = PhoneLib.format(newValue,
+                this.__phoneFormat !== PhoneLib.FORMAT.INTERNATIONAL ? this.country : '',
+                PhoneLib.FORMAT.FULL);
+        }
+        else {
+            newValue = '';
+        }
+        this.processValue();
         UIEvent.queueTask(() => {
-            let x = 0;
-            if (this.__value.length > 0) x = this.__value.length - this.__value.substr(0, start).replace(/[^\d]/g, '').length;
+            var x = /(\s\d)|(\+\d)$/.test(this.__value) ? 1 : 0;
             this.__input.setSelectionRange(start + x, start + x);
-            this.ignoreUpdate = false;
         });
+        return newValue;
     }
 
     protected processValue() {
