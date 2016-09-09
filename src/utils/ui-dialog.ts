@@ -193,6 +193,9 @@ export class UIDialogService {
             dialog.__dialog.classList.remove('ui-minimize');
             this.__changeActive(dialog);
         }
+        else if (dialog.__active !== true) {
+            this.__changeActive(dialog);
+        }
         else {
             this.__collapse({ detail: dialog });
         }
