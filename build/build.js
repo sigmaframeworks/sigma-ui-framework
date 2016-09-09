@@ -5,8 +5,7 @@ var ts = require('gulp-typescript');
 var assign = Object.assign || require('object.assign');
 var del = require('del');
 var vinylPaths = require('vinyl-paths');
-var dts = require('dts-bundle')
-var injectHtml = require('gulp-inject-stringified-html');
+var dts = require('dts-bundle');
 
 var appRoot = 'src/';
 var paths = {
