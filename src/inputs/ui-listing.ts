@@ -42,8 +42,8 @@ export class UIListBehaviour extends UIInputGroup {
 
     keyDown(evt) {
         if (evt.ctrlKey || evt.altKey || evt.metaKey || (evt.keyCode || evt.which) === 0) return true;
+        if (this.readonly || this.disabled) return true;
         let code = (evt.keyCode || evt.which);
-        if (this.readonly || this.disabled) return;
 
         if (code == 13 && this.__focus) {
             this.__select(this.__hilight);
