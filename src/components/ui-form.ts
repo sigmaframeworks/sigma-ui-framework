@@ -17,11 +17,12 @@ export class UIForm {
     private __form: HTMLElement;
 
     constructor(public element: Element) {
-        if (!this.element.hasAttribute('auto-grid')) this.element.classList.add('two-column');
     }
 
     attached() {
         UIEvent.queueTask(() => {
+            if (!this.element.hasAttribute('auto-grid')) this.__form.classList.add('two-column');
+
             let el: any = this.element.querySelector('.ui-input-group .ui-input-control .ui-input');
             if (el !== null) el.focus();
             if (this.busy) this.busyChanged(true);
