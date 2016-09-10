@@ -175,7 +175,7 @@ export module UIUtils {
     export function showToast(container, config) {
         let tmr;
         if (typeof config === 'string') config = { message: config };
-        let opt = Object.assign({ theme: 'default', autoHide: true, extraClass: '' }, config);
+        let opt = Object.assign({ theme: 'default', autoHide: 5000, extraClass: '' }, config);
         let toast = document.createElement('div');
         toast.classList.add('ui-toast');
         toast.classList.add(opt.theme);
@@ -187,7 +187,7 @@ export module UIUtils {
     		</div>`;
 
         container.appendChild(toast);
-        if (opt.autoHide) tmr = setTimeout(() => __removeToast(toast), 5000);
+        if (opt.autoHide > 0) tmr = setTimeout(() => __removeToast(toast), 5000);
         toast.onclick = () => {
             clearTimeout(tmr);
             __removeToast(toast);
