@@ -17,7 +17,6 @@
         > fieldset {
             border       : 1px solid $base-border-color;
             border-radius: $base-border-radius;
-            padding      : .5em;
             margin       : .3em 0;
             min-height   : 2em;
             @include transition(max-height .5s);
@@ -27,6 +26,10 @@
                 color    : rgba($input-text, .7);
                 font-size: .9em;
             }
+        }
+        
+        &.ui-padded > fieldset {
+          padding: .5em;
         }
 
         &.ui-disabled > fieldset {

@@ -60,6 +60,7 @@ export class UIFieldset {
     private checkbox = false;
     constructor(public element: Element) {
         this.checkbox = this.element.hasAttribute('enabled');
+        if (this.element.hasAttribute('padded')) this.element.classList.add('ui-padded');
     }
 
     bind() {
