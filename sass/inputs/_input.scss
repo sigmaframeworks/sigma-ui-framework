@@ -223,7 +223,7 @@ $shadow: $input-inner-shadow;
                 span.ui-icon {
                     min-width      : 1.2em;
                     min-height     : 1.2em;
-
+                    display        : inline-block;
                     background-size: 1.2em auto;
                 }
             }
