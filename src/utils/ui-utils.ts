@@ -187,7 +187,7 @@ export module UIUtils {
     		</div>`;
 
         container.appendChild(toast);
-        if (opt.autoHide > 0) tmr = setTimeout(() => __removeToast(toast), 5000);
+        if (opt.autoHide > 0) tmr = setTimeout(() => __removeToast(toast), opt.autoHide);
         toast.onclick = () => {
             clearTimeout(tmr);
             __removeToast(toast);
