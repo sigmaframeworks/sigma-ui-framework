@@ -170,6 +170,7 @@ export class UIPhone extends UIInputGroup {
         }
         if (!isEmpty(newValue)) {
             if (newValue === 'NaN') newValue = '';
+            newValue = newValue.replace(/\sext\.\s$/, '');
             evt.target.value =
                 PhoneLib.formatInput(newValue,
                     this.__phoneFormat !== PhoneLib.FORMAT.INTERNATIONAL ? this.country : '',
@@ -183,8 +184,8 @@ export class UIPhone extends UIInputGroup {
         }
         this.processValue();
         UIEvent.queueTask(() => {
-            var x = /(\s\d)|(\+\d)$/.test(this.__value) ? 1 : 0;
-            this.__input.setSelectionRange(start + x, start + x);
+            var x = /(\s\d)|(\+\d)$/.test(this.__value) ? 2 : 0;
+            if (x) this.__input.setSelectionRange(start + x, start + x);
         });
         return newValue;
     }
