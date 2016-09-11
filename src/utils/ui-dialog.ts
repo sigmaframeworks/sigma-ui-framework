@@ -335,7 +335,7 @@ export class UIDialog {
 
     private __taskButton;
 
-    private __current: any = {
+    __current: any = {
         top: UIDialog.__y + 'px',
         left: (UIDialog.__x += 30) + 'px',
         height: '400px', width: '600px'

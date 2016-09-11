@@ -154,7 +154,7 @@ define(["require", "exports", "aurelia-framework", "./ui-event", "lodash", "kram
             var tmr;
             if (typeof config === 'string')
                 config = { message: config };
-            var opt = Object.assign({ theme: 'default', autoHide: true, extraClass: '' }, config);
+            var opt = Object.assign({ theme: 'default', autoHide: 5000, extraClass: '' }, config);
             var toast = document.createElement('div');
             toast.classList.add('ui-toast');
             toast.classList.add(opt.theme);
@@ -162,7 +162,7 @@ define(["require", "exports", "aurelia-framework", "./ui-event", "lodash", "kram
                 toast.classList.add(opt.extraClass);
             toast.innerHTML = "<div class=\"ui-toast-wrapper\">\n    \t\t\t<span class=\"ui-icon " + opt.icon + "\"></span>\n    \t\t\t<p class=\"ui-message\">" + opt.message + "</p>\n    \t\t\t<span class=\"ui-close\">&times;</span>\n    \t\t</div>";
             container.appendChild(toast);
-            if (opt.autoHide)
+            if (opt.autoHide > 0)
                 tmr = setTimeout(function () { return __removeToast(toast); }, 5000);
             toast.onclick = function () {
                 clearTimeout(tmr);

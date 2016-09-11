@@ -60,6 +60,8 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             this.enabled = true;
             this.checkbox = false;
             this.checkbox = this.element.hasAttribute('enabled');
+            if (this.element.hasAttribute('padded'))
+                this.element.classList.add('ui-padded');
         }
         UIFieldset.prototype.bind = function () {
             this.enabled = isTrue(this.enabled);

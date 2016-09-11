@@ -9,7 +9,7 @@ import 'numeral';
 import 'kramed';
 import {FrameworkConfiguration} from "aurelia-framework";
 import {UIConstants} from "./utils/ui-constants";
-import {UIChartStatic, kramed} from "./utils/ui-utils";
+import {UIChartStatic, kramed, _} from "./utils/ui-utils";
 import {UIApplication} from "./utils/ui-application";
 import {UIValidationRenderer} from "./utils/ui-validation";
 import {ValidationRules, RenderInstruction, ValidationError} from "aurelia-validation";
