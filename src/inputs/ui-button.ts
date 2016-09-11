@@ -93,6 +93,7 @@ export class UIButton {
         if (this.element.hasAttribute('icon-top')) this.__button.classList.add('ui-icon-top');
         if (this.element.hasAttribute('round')) this.__button.classList.add('ui-button-round');
         if (this.element.hasAttribute('square')) this.__button.classList.add('ui-button-square');
+        if (this.element.hasAttribute('no-shadow')) this.__button.classList.add('no-shadow');
 
         this.__button.classList.add(`ui-button-${this.__size}`);
 
@@ -200,7 +201,10 @@ export class UIButtonGroup {
         }
         else if (this.element.hasAttribute('square')) this.__extraClass += ' ui-button-square';
 
+        if (this.element.hasAttribute('no-shadow')) this.__extraClass += 'no-shadow';
+
         if (this.element.hasAttribute('vertical')) this.element.classList.add('ui-vertical');
+
 
         this.disabled = isTrue(this.disabled);
     }

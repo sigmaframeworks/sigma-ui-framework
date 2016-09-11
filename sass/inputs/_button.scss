@@ -38,7 +38,10 @@
 
     border        : 1px solid $base-border-color;
     border-radius : $base-border-radius;
-    @include box-shadow(2px 2px 4px 0 $base-shadow-color);
+
+    &:not(.no-shadow) {
+        @include box-shadow(2px 2px 4px 0 $base-shadow-color);
+    }
     @include button-style(default, $button-default-bg, $button-default-text);
     @include button-style(secondary, $button-secondary-bg, $button-secondary-text);
     @include button-style(primary, $button-primary-bg, $button-primary-text);
@@ -86,8 +89,8 @@
     &[disabled] {
         opacity: .5;
 
-         > span,
-        & {
+         &,
+        > span {
             cursor        : not-allowed;
             pointer-events: none;
         }
@@ -133,13 +136,13 @@
     }
 
     &:not(.ui-vertical) {
-      .ui-button-control:not(:first-child) .ui-button {
-          @include border-left-radius(0);
-      }
+        .ui-button-control:not(:first-child) .ui-button {
+            @include border-left-radius(0);
+        }
 
-      .ui-button-control:not(:last-child) .ui-button {
-          @include border-right-radius(0);
-      }
+        .ui-button-control:not(:last-child) .ui-button {
+            @include border-right-radius(0);
+        }
     }
 
     .ui-button-control {
