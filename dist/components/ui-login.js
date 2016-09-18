@@ -55,10 +55,9 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
         UILogin = __decorate([
             aurelia_framework_1.inject(Element, ui_application_1.UIApplication, aurelia_framework_1.NewInstance.of(aurelia_validation_1.ValidationController)),
             aurelia_framework_1.customElement('ui-login'), 
-            __metadata('design:paramtypes', [Element, ui_application_1.UIApplication, (typeof (_a = typeof aurelia_validation_1.ValidationController !== 'undefined' && aurelia_validation_1.ValidationController) === 'function' && _a) || Object])
+            __metadata('design:paramtypes', [Element, ui_application_1.UIApplication, aurelia_validation_1.ValidationController])
         ], UILogin);
         return UILogin;
-        var _a;
     }());
     exports.UILogin = UILogin;
     var LoginModel = (function (_super) {

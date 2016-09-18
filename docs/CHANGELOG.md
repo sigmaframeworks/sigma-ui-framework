@@ -1,3 +1,12 @@
+<a name="1.0.0"></a>
+# [1.0.0](https://github.com/sigmaframeworks/sigma-ui-framework/compare/1.0.0-preview...v1.0.0) (2016-09-18)
+
+* __UIButton__: Added `no-shadow` optional attribute
+* __UIUtils__: Fixed toast message `autoHide`, 0 will disabled auto-hide
+* __UIUtils__: Return `promise` for alert also
+* __UIUtils__: Promise for confirm resolves with boolean 
+
+
 <a name="1.0.0-preview"></a>
 # 1.0.0 (2016-09-09)
 

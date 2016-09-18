@@ -195,7 +195,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-util
                 config = { message: config };
             config.type = config.type || "info";
             config.button = config.button || "OK";
-            ui_utils_1.UIUtils.alert(config);
+            return ui_utils_1.UIUtils.alert(config);
         };
         UIApplication.prototype.confirm = function (config) {
             if (typeof config === 'string')

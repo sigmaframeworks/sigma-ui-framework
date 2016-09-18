@@ -47,7 +47,7 @@ export declare class UIApplication {
     toast(config: any): void;
     toastSuccess(config: any): void;
     toastError(config: any): void;
-    alert(config: any): void;
+    alert(config: any): Promise<{}>;
     confirm(config: any): Promise<{}>;
 }
 export declare class AuthInterceptor {

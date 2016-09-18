@@ -105,6 +105,7 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
             if (!isEmpty(newValue)) {
                 if (newValue === 'NaN')
                     newValue = '';
+                newValue = newValue.replace(/\sext\.\s$/, '');
                 evt.target.value =
                     PhoneLib.formatInput(newValue, this.__phoneFormat !== PhoneLib.FORMAT.INTERNATIONAL ? this.country : '', false, true);
                 newValue = PhoneLib.format(newValue, this.__phoneFormat !== PhoneLib.FORMAT.INTERNATIONAL ? this.country : '', PhoneLib.FORMAT.FULL);
@@ -114,8 +115,9 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
             }
             this.processValue();
             ui_event_1.UIEvent.queueTask(function () {
-                var x = /(\s\d)|(\+\d)$/.test(_this.__value) ? 1 : 0;
-                _this.__input.setSelectionRange(start + x, start + x);
+                var x = /(\s\d)|(\+\d)$/.test(_this.__value) ? 2 : 0;
+                if (x)
+                    _this.__input.setSelectionRange(start + x, start + x);
             });
             return newValue;
         };

@@ -22,7 +22,7 @@ export declare module UIUtils {
     function lazy(T: any): any;
     function newInstance(T: any, container: any): any;
     function compileView(markup: any, container: any, vm?: any): any;
-    function alert(config: any): void;
+    function alert(config: any): Promise<{}>;
     function confirm(config: any): Promise<{}>;
     function showToast(container: any, config: any): void;
     function getAscii(str: any): string;

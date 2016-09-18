@@ -63,7 +63,7 @@ define(["require", "exports", "./utils/ui-constants", "./utils/ui-utils", "./uti
                 throw new Error('Language validation must have reference to ui-language');
             var promises = [];
             langInput.clearErrors();
-            _.forEach(map, function (model, key) {
+            ui_utils_1._.forEach(map, function (model, key) {
                 promises.push(controller.validator.validateObject(model)
                     .then(function (e) {
                     if (e.length > 0)

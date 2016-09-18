@@ -50,6 +50,8 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
                 this.__button.classList.add('ui-button-round');
             if (this.element.hasAttribute('square'))
                 this.__button.classList.add('ui-button-square');
+            if (this.element.hasAttribute('no-shadow'))
+                this.__button.classList.add('no-shadow');
             this.__button.classList.add("ui-button-" + this.__size);
             ui_event_1.UIEvent.queueTask(function () {
                 if (_this.value)
@@ -164,6 +166,8 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             }
             else if (this.element.hasAttribute('square'))
                 this.__extraClass += ' ui-button-square';
+            if (this.element.hasAttribute('no-shadow'))
+                this.__extraClass += 'no-shadow';
             if (this.element.hasAttribute('vertical'))
                 this.element.classList.add('ui-vertical');
             this.disabled = isTrue(this.disabled);

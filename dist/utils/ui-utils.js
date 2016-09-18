@@ -95,28 +95,31 @@ define(["require", "exports", "aurelia-framework", "./ui-event", "lodash", "kram
                 type = "fi-ui-error-black";
             if (config.type == "exclaim")
                 type = "fi-ui-exclaim-black";
-            var view = UIUtils.compileView("<div class=\"ui-dialog-wrapper ui-modal\" ref=\"__wrapper\">\n        <div class=\"ui-dialog ui-alert\">\n        <input style=\"position:fixed;top:-100%\" ref=\"__focusBlock\" keydown.trigger=\"checkKey($event)\" blur.trigger=\"cancelBlur($event)\"/>\n        <div class=\"ui-message-bar\">\n        <span class=\"" + type + "\"></span><p innerhtml.bind='message'></p></div>\n        <div class=\"ui-button-bar\"><button click.trigger=\"closeAlert()\">" + config.button + "</button></div>\n        </div></div>", dialogContainer, {
-                __wrapper: null,
-                __focusBlock: null,
-                message: config.message,
-                attached: function () {
-                    this.__focusBlock.focus();
-                },
-                closeAlert: function () {
-                    this.__wrapper.remove();
-                },
-                cancelBlur: function ($event) {
-                    $event.preventDefault();
-                    this.__focusBlock.focus();
-                    return false;
-                },
-                checkKey: function ($event) {
-                    var key = ($event.keyCode || $event.which);
-                    if (key == 13)
-                        this.closeAlert();
-                    if (key == 27)
-                        this.closeAlert();
-                }
+            return new Promise(function (resolve, reject) {
+                var view = UIUtils.compileView("<div class=\"ui-dialog-wrapper ui-modal\" ref=\"__wrapper\">\n        <div class=\"ui-dialog ui-alert\">\n        <input style=\"position:fixed;top:-100%\" ref=\"__focusBlock\" keydown.trigger=\"checkKey($event)\" blur.trigger=\"cancelBlur($event)\"/>\n        <div class=\"ui-message-bar\">\n        <span class=\"" + type + "\"></span><p innerhtml.bind='message'></p></div>\n        <div class=\"ui-button-bar\"><button click.trigger=\"closeAlert()\">" + config.button + "</button></div>\n        </div></div>", dialogContainer, {
+                    __wrapper: null,
+                    __focusBlock: null,
+                    message: config.message,
+                    attached: function () {
+                        this.__focusBlock.focus();
+                    },
+                    closeAlert: function () {
+                        resolve();
+                        this.__wrapper.remove();
+                    },
+                    cancelBlur: function ($event) {
+                        $event.preventDefault();
+                        this.__focusBlock.focus();
+                        return false;
+                    },
+                    checkKey: function ($event) {
+                        var key = ($event.keyCode || $event.which);
+                        if (key == 13)
+                            this.closeAlert();
+                        if (key == 27)
+                            this.closeAlert();
+                    }
+                });
             });
         }
         UIUtils.alert = alert;
@@ -131,7 +134,7 @@ define(["require", "exports", "aurelia-framework", "./ui-event", "lodash", "kram
                         this.__focusBlock.focus();
                     },
                     closeAlert: function (b) {
-                        b ? resolve() : reject();
+                        resolve(b);
                         this.__wrapper.remove();
                     },
                     cancelBlur: function ($event) {
@@ -163,7 +166,7 @@ define(["require", "exports", "aurelia-framework", "./ui-event", "lodash", "kram
             toast.innerHTML = "<div class=\"ui-toast-wrapper\">\n    \t\t\t<span class=\"ui-icon " + opt.icon + "\"></span>\n    \t\t\t<p class=\"ui-message\">" + opt.message + "</p>\n    \t\t\t<span class=\"ui-close\">&times;</span>\n    \t\t</div>";
             container.appendChild(toast);
             if (opt.autoHide > 0)
-                tmr = setTimeout(function () { return __removeToast(toast); }, 5000);
+                tmr = setTimeout(function () { return __removeToast(toast); }, opt.autoHide);
             toast.onclick = function () {
                 clearTimeout(tmr);
                 __removeToast(toast);
