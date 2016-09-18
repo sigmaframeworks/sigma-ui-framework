@@ -196,7 +196,7 @@ export class UIApplication {
         if (typeof config === 'string') config = { message: config };
         config.type = config.type || "info";
         config.button = config.button || "OK";
-        UIUtils.alert(config);
+        return UIUtils.alert(config);
     }
     confirm(config) {
         if (typeof config === 'string') config = { message: config };

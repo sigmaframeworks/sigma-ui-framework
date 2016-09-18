@@ -108,33 +108,36 @@ export module UIUtils {
         if (config.type == "error") type = "fi-ui-error-black";
         if (config.type == "exclaim") type = "fi-ui-exclaim-black";
 
-        let view = UIUtils.compileView(`<div class="ui-dialog-wrapper ui-modal" ref="__wrapper">
+        return new Promise((resolve, reject) => {
+            let view = UIUtils.compileView(`<div class="ui-dialog-wrapper ui-modal" ref="__wrapper">
         <div class="ui-dialog ui-alert">
         <input style="position:fixed;top:-100%" ref="__focusBlock" keydown.trigger="checkKey($event)" blur.trigger="cancelBlur($event)"/>
         <div class="ui-message-bar">
         <span class="${type}"></span><p innerhtml.bind='message'></p></div>
         <div class="ui-button-bar"><button click.trigger="closeAlert()">${config.button}</button></div>
         </div></div>`, dialogContainer, {
-                __wrapper: null,
-                __focusBlock: null,
-                message: config.message,
-                attached: function() {
-                    this.__focusBlock.focus();
-                },
-                closeAlert: function() {
-                    this.__wrapper.remove();
-                },
-                cancelBlur: function($event) {
-                    $event.preventDefault();
-                    this.__focusBlock.focus();
-                    return false;
-                },
-                checkKey: function($event) {
-                    let key = ($event.keyCode || $event.which);
-                    if (key == 13) this.closeAlert();
-                    if (key == 27) this.closeAlert();
-                }
-            });
+                    __wrapper: null,
+                    __focusBlock: null,
+                    message: config.message,
+                    attached: function() {
+                        this.__focusBlock.focus();
+                    },
+                    closeAlert: function() {
+                        resolve();
+                        this.__wrapper.remove();
+                    },
+                    cancelBlur: function($event) {
+                        $event.preventDefault();
+                        this.__focusBlock.focus();
+                        return false;
+                    },
+                    checkKey: function($event) {
+                        let key = ($event.keyCode || $event.which);
+                        if (key == 13) this.closeAlert();
+                        if (key == 27) this.closeAlert();
+                    }
+                });
+        });
     }
 
     export function confirm(config) {
@@ -155,7 +158,7 @@ export module UIUtils {
                         this.__focusBlock.focus();
                     },
                     closeAlert: function(b) {
-                        b ? resolve() : reject();
+                        resolve(b);
                         this.__wrapper.remove();
                     },
                     cancelBlur: function($event) {
