@@ -39,9 +39,8 @@
     border        : 1px solid $base-border-color;
     border-radius : $base-border-radius;
 
-    &:not(.no-shadow) {
-        @include box-shadow(2px 2px 4px 0 $base-shadow-color);
-    }
+    @include box-shadow(2px 2px 4px 0 $base-shadow-color);
+
     @include button-style(default, $button-default-bg, $button-default-text);
     @include button-style(secondary, $button-secondary-bg, $button-secondary-text);
     @include button-style(primary, $button-primary-bg, $button-primary-text);
@@ -103,6 +102,7 @@
     }
 }
 
+.ui-button.no-shadow,
 .ui-button-bar .ui-button {
     @include box-shadow(0 0 1px 0 $base-shadow-color);
 
