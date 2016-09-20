@@ -48,7 +48,7 @@ export class UIDataGrid {
     emptyText = '&nbsp;';
 
     @children('.ui-hide ui-data-column')
-    colChilds = []
+    colChilds = [];
 
     private allowSelect = false;
 
