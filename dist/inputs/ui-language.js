@@ -24,9 +24,32 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
             this.__errors = {};
         }
         UILanguage.prototype.attached = function () {
+            var _this = this;
             _super.prototype.attached.call(this);
-            this.languagesChanged(this.languages);
-            this.valueChanged(this.value);
+            ui_event_1.UIEvent.queueTask(function () {
+                _this.__tethered = new ui_utils_1.Tether({
+                    element: _this.__list,
+                    target: _this.__input,
+                    attachment: 'top left',
+                    targetAttachment: 'bottom left',
+                    constraints: [
+                        {
+                            to: 'scrollParent',
+                            attachment: 'together'
+                        },
+                        {
+                            to: 'window',
+                            attachment: 'together'
+                        }
+                    ]
+                });
+                _this.languagesChanged(_this.languages);
+                _this.valueChanged(_this.value);
+            });
+        };
+        UILanguage.prototype.detached = function () {
+            this.__tethered.element.remove();
+            this.__tethered.destroy();
         };
         UILanguage.prototype.valueChanged = function (newValue) {
             if (newValue === null)
@@ -60,6 +83,22 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
         };
         UILanguage.prototype.addError = function (key) {
             this.__errors[key] = true;
+        };
+        UILanguage.prototype.__showFocus = function () {
+            if (this.__focus)
+                return this.__focus = false;
+            this.__input.focus();
+            this.__focus = true;
+        };
+        UILanguage.prototype.__gotFocus = function (show) {
+            if (show)
+                this.__focus = true;
+            this.__tethered.element.style.minWidth = this.__tethered.target.offsetWidth + 'px';
+            this.__tethered.position();
+        };
+        UILanguage.prototype.__lostFocus = function () {
+            var _this = this;
+            setTimeout(function () { return _this.__focus = false; }, 500);
         };
         UILanguage.prototype.__add = function (lang) {
             this.__languages.push(ui_utils_1._.remove(this.__available, { 'id': lang.id })[0]);

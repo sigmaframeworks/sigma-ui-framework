@@ -27,13 +27,16 @@ export declare class UIButton {
      * @type        string
      */
     disabled: boolean;
+    private __menu;
     private __menuEl;
+    private __tethered;
     private __useMenuLabel;
     private __hasMenu;
     private __isDropdown;
     constructor(element: Element);
     bind(): void;
     attached(): void;
+    detached(): void;
     disable(disabled?: any): void;
     disabledChanged(newValue: any): void;
     __prevSelection: any;

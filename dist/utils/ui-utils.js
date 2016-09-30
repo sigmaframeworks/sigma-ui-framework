@@ -1,9 +1,10 @@
-define(["require", "exports", "aurelia-framework", "./ui-event", "lodash", "kramed", "moment", "numeral"], function (require, exports, aurelia_framework_1, ui_event_1, ld, km, mm, nm) {
+define(["require", "exports", "aurelia-framework", "./ui-event", "lodash", "kramed", "moment", "numeral", "tether"], function (require, exports, aurelia_framework_1, ui_event_1, ld, km, mm, nm, th) {
     "use strict";
     exports._ = ld;
     exports.kramed = km;
     exports.moment = mm;
     exports.numeral = nm;
+    exports.Tether = th;
     Object.defineProperties(window, {
         '__seed': {
             writable: true,

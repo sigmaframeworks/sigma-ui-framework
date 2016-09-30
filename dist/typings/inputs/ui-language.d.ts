@@ -6,6 +6,7 @@ export declare class UILanguage extends UIInputGroup {
     __options: any;
     __languages: any;
     __available: any;
+    __tethered: any;
     static LANGUAGES: ({
         id: string;
         name: string;
@@ -32,11 +33,15 @@ export declare class UILanguage extends UIInputGroup {
     disabled: boolean;
     __errors: {};
     attached(): void;
+    detached(): void;
     valueChanged(newValue: any): string;
     formatter(evt: any): void;
     languagesChanged(newValue: any): void;
     clearErrors(): void;
     addError(key: any): void;
+    __showFocus(): boolean;
+    __gotFocus(show: any): void;
+    __lostFocus(): void;
     __add(lang: any): void;
     __select(lang: any): void;
     __remove(lang: any): void;

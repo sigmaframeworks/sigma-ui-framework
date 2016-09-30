@@ -69,8 +69,9 @@ export declare class UIPhone extends UIInputGroup {
     helpText: string;
     constructor(element: Element);
     bind(): void;
+    attached(): void;
     countryChanged(): void;
     valueChanged(newValue: any): void;
-    formatter(evt: any): any;
+    formatter(evt: any): void;
     protected processValue(): void;
 }

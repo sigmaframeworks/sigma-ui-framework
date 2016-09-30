@@ -41,9 +41,33 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
         UITags.prototype.attached = function () {
             var _this = this;
             _super.prototype.attached.call(this);
-            ui_event_1.UIEvent.queueTask(function () { return _this.valueChanged(_this.value); });
+            ui_event_1.UIEvent.queueTask(function () {
+                if (!_this.__noList) {
+                    _this.__tethered = new ui_utils_1.Tether({
+                        element: _this.__list,
+                        target: _this.__input.offsetParent,
+                        attachment: 'top left',
+                        targetAttachment: 'bottom left',
+                        constraints: [
+                            {
+                                to: 'scrollParent',
+                                attachment: 'together'
+                            },
+                            {
+                                to: 'window',
+                                attachment: 'together'
+                            }
+                        ]
+                    });
+                }
+                _this.valueChanged(_this.value);
+            });
         };
         UITags.prototype.detached = function () {
+            if (!this.__noList) {
+                this.__tethered.element.remove();
+                this.__tethered.destroy();
+            }
         };
         UITags.prototype.valueChanged = function (newValue) {
             var v = newValue || [];
@@ -113,15 +137,8 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
             if (show)
                 this.__focus = true;
             if (!this.__noList) {
-                var el = this.__input;
-                if (this.showReverse()) {
-                    this.__reverse = true;
-                    this.__list.style.bottom = el.parentElement.offsetHeight + 'px';
-                }
-                else {
-                    this.__reverse = false;
-                    this.__list.style.bottom = "auto";
-                }
+                this.__tethered.element.style.minWidth = this.__tethered.target.offsetWidth + 'px';
+                this.__tethered.position();
                 ui_event_1.UIEvent.queueTask(function () {
                     _this.__input.select();
                     _this.__scrollIntoView();

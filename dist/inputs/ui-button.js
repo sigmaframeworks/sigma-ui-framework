@@ -54,10 +54,34 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
                 this.__button.classList.add('no-shadow');
             this.__button.classList.add("ui-button-" + this.__size);
             ui_event_1.UIEvent.queueTask(function () {
+                if (_this.__hasMenu) {
+                    _this.__tethered = new ui_utils_1.Tether({
+                        element: _this.__menuEl,
+                        target: _this.__button,
+                        attachment: 'top left',
+                        targetAttachment: 'bottom left',
+                        constraints: [
+                            {
+                                to: 'scrollParent',
+                                attachment: 'together'
+                            },
+                            {
+                                to: 'window',
+                                attachment: 'together'
+                            }
+                        ]
+                    });
+                }
                 if (_this.value)
                     _this.valueChanged(_this.value);
                 _this.disable();
             });
+        };
+        UIButton.prototype.detached = function () {
+            if (this.__hasMenu) {
+                this.__tethered.element.remove();
+                this.__tethered.destroy();
+            }
         };
         UIButton.prototype.disable = function (disabled) {
             if (this.__button.attributes.getNamedItem('disabled') !== null) {
@@ -73,7 +97,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
         };
         UIButton.prototype.valueChanged = function (newValue) {
             if (this.__hasMenu && this.__useMenuLabel) {
-                var menu = ui_utils_1._.find(this.__menuEl.menu, { 'id': newValue });
+                var menu = ui_utils_1._.find(this.__menu.menu, { 'id': newValue });
                 if (menu) {
                     if (this.__prevSelection)
                         this.__prevSelection.active = false;
@@ -86,12 +110,16 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             var menu = document.querySelector('.ui-floating.show');
             if (menu)
                 menu.classList.remove('show');
+            if (menu == this.__menuEl)
+                return;
             $event.preventDefault();
             $event.cancelBubble = true;
             if (this.disabled === true)
                 return false;
             if (this.__hasMenu) {
-                this.__menuEl.element.classList.add('show');
+                this.__menuEl.classList.add('show');
+                this.__tethered.element.style.minWidth = this.__tethered.target.offsetWidth + 'px';
+                this.__tethered.position();
             }
             else {
                 ui_event_1.UIEvent.fireEvent('click', this.element, this);

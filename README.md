@@ -41,6 +41,7 @@ A bespoke UI Framework built on Aurelia for desktop business application
   * lodash (http://lodash.com)
   * moment (http://momentjs.com)
   * numeral (http://numeraljs.com)
+  * tether (http://tether.io)
   * kramed (https://www.npmjs.com/package/kramed)
 
 

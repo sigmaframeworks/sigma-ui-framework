@@ -2,6 +2,7 @@ import 'lodash';
 import 'moment';
 import 'numeral';
 import 'kramed';
+import 'tether';
 import { FrameworkConfiguration } from "aurelia-framework";
 export declare function configure(aurelia: FrameworkConfiguration, configCallback: any): void;
 export { UIEvent } from "./utils/ui-event";

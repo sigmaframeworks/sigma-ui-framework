@@ -63,6 +63,11 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
             }
             this.valueChanged(val);
         };
+        UIPhone.prototype.attached = function () {
+            var _this = this;
+            _super.prototype.attached.call(this);
+            this.__input.oninput = function (evt) { return _this.formatter(evt); };
+        };
         UIPhone.prototype.countryChanged = function () {
             this.prefixText = '+' + PhoneLib.getDialingCode(this.country);
             this.placeholder = PhoneLib.getExample(this.country, this.__phoneType, this.__phoneFormat !== PhoneLib.FORMAT.INTERNATIONAL);
@@ -94,6 +99,7 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
         };
         UIPhone.prototype.formatter = function (evt) {
             var _this = this;
+            this.ignoreUpdate = true;
             var newValue = evt.target.value;
             var start = this.__input.selectionStart;
             if (this.__phoneFormat === PhoneLib.FORMAT.INTERNATIONAL) {
@@ -106,20 +112,21 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
                 if (newValue === 'NaN')
                     newValue = '';
                 newValue = newValue.replace(/\sext\.\s$/, '');
-                evt.target.value =
+                this.__value =
                     PhoneLib.formatInput(newValue, this.__phoneFormat !== PhoneLib.FORMAT.INTERNATIONAL ? this.country : '', false, true);
-                newValue = PhoneLib.format(newValue, this.__phoneFormat !== PhoneLib.FORMAT.INTERNATIONAL ? this.country : '', PhoneLib.FORMAT.FULL);
+                this.value = PhoneLib.format(newValue, this.__phoneFormat !== PhoneLib.FORMAT.INTERNATIONAL ? this.country : '', PhoneLib.FORMAT.FULL);
             }
             else {
-                newValue = '';
+                this.value = '';
             }
             this.processValue();
             ui_event_1.UIEvent.queueTask(function () {
-                var x = /(\s\d)|(\+\d)$/.test(_this.__value) ? 2 : 0;
+                var x = /(ext\.\s\d)$/.test(_this.__value) ? 6 :
+                    (/((\s\d)|(\+\d))$/.test(_this.__value) ? 2 : 0);
                 if (x)
                     _this.__input.setSelectionRange(start + x, start + x);
+                _this.ignoreUpdate = false;
             });
-            return newValue;
         };
         UIPhone.prototype.processValue = function () {
             if (this.__phoneFormat === PhoneLib.FORMAT.INTERNATIONAL) {

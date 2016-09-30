@@ -1,3 +1,11 @@
+<a name="1.0.1"></a>
+## [1.0.1](https://github.com/sigmaframeworks/sigma-ui-framework/compare/1.0.0...v1.0.1) (2016-09-30)
+
+* Added tether library for floating dropdowns
+* __UIPhone__: Fixed input formatting
+* __UIButton__: Fixed `no-shadow` stylings
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/sigmaframeworks/sigma-ui-framework/compare/1.0.0-preview...v1.0.0) (2016-09-18)
 

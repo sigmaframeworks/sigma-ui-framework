@@ -82,7 +82,12 @@ define(["require", "exports", "./ui-input-group", "../utils/ui-utils", "../utils
             var code = (evt.keyCode || evt.which);
         };
         UIListBehaviour.prototype.isScrolling = function (node) {
-            return getComputedStyle(node).getPropertyValue('overflow') == 'auto' || getComputedStyle(node).getPropertyValue('overflow-y') == 'auto';
+            try {
+                var cs = getComputedStyle(node);
+                return cs.getPropertyValue('overflow') == 'auto' || cs.getPropertyValue('overflow-y') == 'auto';
+            }
+            catch (e) { }
+            return false;
         };
         UIListBehaviour.prototype.showReverse = function () {
             var el = this.__input;

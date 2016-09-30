@@ -38,9 +38,29 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
         UIComboBox.prototype.attached = function () {
             var _this = this;
             _super.prototype.attached.call(this);
-            ui_event_1.UIEvent.queueTask(function () { return _this.valueChanged(_this.value); });
+            ui_event_1.UIEvent.queueTask(function () {
+                _this.__tethered = new ui_utils_1.Tether({
+                    element: _this.__list,
+                    target: _this.__input,
+                    attachment: 'top left',
+                    targetAttachment: 'bottom left',
+                    constraints: [
+                        {
+                            to: 'scrollParent',
+                            attachment: 'together'
+                        },
+                        {
+                            to: 'window',
+                            attachment: 'together'
+                        }
+                    ]
+                });
+                _this.valueChanged(_this.value);
+            });
         };
         UIComboBox.prototype.detached = function () {
+            this.__tethered.element.remove();
+            this.__tethered.destroy();
         };
         UIComboBox.prototype.valueChanged = function (newValue) {
             if (!isEmpty(newValue)) {
@@ -86,6 +106,8 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
             }
         };
         UIComboBox.prototype.__showFocus = function () {
+            if (this.__focus)
+                return this.__focus = false;
             this.__input.focus();
             this.__focus = true;
         };
@@ -94,24 +116,18 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
             this.__hilight = this.__list.querySelector("[data-value=\"" + this.value + "\"]");
             if (show)
                 this.__focus = true;
-            var el = this.__input;
-            if (this.showReverse()) {
-                this.__reverse = true;
-                this.__list.style.bottom = el.offsetHeight + 'px';
-            }
-            else {
-                this.__reverse = false;
-                this.__list.style.bottom = "auto";
-            }
+            this.__tethered.element.style.minWidth = this.__tethered.target.offsetWidth + 'px';
+            this.__tethered.position();
             ui_event_1.UIEvent.queueTask(function () {
                 _this.__input.select();
                 _this.__scrollIntoView();
             });
         };
         UIComboBox.prototype.__lostFocus = function () {
+            var _this = this;
             if (this.__focus)
                 this.__select(this.__hilight);
-            this.__focus = false;
+            setTimeout(function () { return _this.__focus = false; }, 500);
         };
         UIComboBox.prototype.formatter = function () {
             return this.value;
