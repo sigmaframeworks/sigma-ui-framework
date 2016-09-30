@@ -127,6 +127,8 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             this.__name = "auf-" + __seed++;
             this.label = '';
             this.name = '';
+            if (this.element.hasAttribute('vertical'))
+                this.element.classList.add('ui-vertical');
             if (this.element.hasAttribute('auto-width'))
                 this.element.classList.add('ui-auto');
             if (this.element.hasAttribute('label-top'))
@@ -157,6 +159,8 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
             }
         };
         UIOptionGroup.prototype.checkChanged = function ($event) {
+            if ($event.detail == undefined)
+                return;
             var opt = this.element.querySelector(".ui-option-input[value=\"" + this.value + "\"]");
             if (opt && this.value != $event.detail) {
                 opt.setAttribute('checked', 'false');

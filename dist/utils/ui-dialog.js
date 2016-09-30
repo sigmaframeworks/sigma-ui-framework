@@ -122,6 +122,8 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
         };
         UIDialogService.prototype.__closeDialog = function (dialog) {
             var _this = this;
+            if (!dialog)
+                return;
             this.__invokeLifecycle(dialog, 'canDeactivate', null)
                 .then(function (canDeactivate) {
                 if (canDeactivate) {

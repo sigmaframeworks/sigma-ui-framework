@@ -62,8 +62,8 @@
                 border-right: 1px solid $base-border-color !important;
             }
 
-             > table > tfoot,
-            > table > thead {
+             > table > thead,
+            > table > tfoot {
                 z-index: 20;
                 @include sticky();
             }
@@ -87,8 +87,8 @@
                     tr.last-child {
                         height: 100%;
 
-                         > td > div,
-                        > td {
+                         > td,
+                        > td > div {
                             height     : 100%;
                             padding    : 0;
                             line-height: 0;
@@ -148,7 +148,7 @@
                             border-radius : .25em;
                             border        : 1px solid $base-border-color;
 
-                            $colorList    : (#D53530, #EF6B28, #9D6E4B, #EDEC47, #5DAF43, #38D046, #279F79, #5AC5C4, #338EBD, #375FA7, #7C53A2, #A6216A, #DF8097);
+                            $colorList    : (#B52F30, #F68F31, #8FC649, #A0C4C8, #A54797, #977E6D, #954D43, #FBCC2E, #5C8158, #5D86A3, #B10D5F, #0E6BA8, #0B6848);
                             @for $i from 1 through 12 {
                                 &.color-#{$i} {
                                     background: nth($colorList, $i);
@@ -169,13 +169,13 @@
                 }
 
                 thead td > div {
-                  background   : $datagrid-header-bg;
-                  border-bottom: 1px solid $base-border-color;
+                    background   : $datagrid-header-bg;
+                    border-bottom: 1px solid $base-border-color;
                 }
 
                 thead td:not(:last-child) {
                     > div {
-                        padding      : 0;
+                        padding: 0;
                         @include flex-row(stretch);
 
                         > span:first-child {
