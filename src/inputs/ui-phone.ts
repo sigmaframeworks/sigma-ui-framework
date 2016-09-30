@@ -129,6 +129,11 @@ export class UIPhone extends UIInputGroup {
         this.valueChanged(val);
     }
 
+    attached() {
+        super.attached();
+        this.__input.oninput = (evt) => this.formatter(evt);
+    }
+
     countryChanged() {
         this.prefixText = '+' + PhoneLib.getDialingCode(this.country);
         this.placeholder = PhoneLib.getExample(this.country, this.__phoneType,
@@ -162,6 +167,7 @@ export class UIPhone extends UIInputGroup {
     }
 
     formatter(evt) {
+        this.ignoreUpdate = true;
         let newValue = evt.target.value;
         let start = this.__input.selectionStart;
         if (this.__phoneFormat === PhoneLib.FORMAT.INTERNATIONAL) {
@@ -171,23 +177,24 @@ export class UIPhone extends UIInputGroup {
         if (!isEmpty(newValue)) {
             if (newValue === 'NaN') newValue = '';
             newValue = newValue.replace(/\sext\.\s$/, '');
-            evt.target.value =
+            this.__value =
                 PhoneLib.formatInput(newValue,
                     this.__phoneFormat !== PhoneLib.FORMAT.INTERNATIONAL ? this.country : '',
                     false, true);
-            newValue = PhoneLib.format(newValue,
+            this.value = PhoneLib.format(newValue,
                 this.__phoneFormat !== PhoneLib.FORMAT.INTERNATIONAL ? this.country : '',
                 PhoneLib.FORMAT.FULL);
         }
         else {
-            newValue = '';
+            this.value = '';
         }
         this.processValue();
         UIEvent.queueTask(() => {
-            var x = /(\s\d)|(\+\d)$/.test(this.__value) ? 2 : 0;
+            var x = /(ext\.\s\d)$/.test(this.__value) ? 6 :
+                (/((\s\d)|(\+\d))$/.test(this.__value) ? 2 : 0);
             if (x) this.__input.setSelectionRange(start + x, start + x);
+            this.ignoreUpdate = false;
         });
-        return newValue;
     }
 
     protected processValue() {
