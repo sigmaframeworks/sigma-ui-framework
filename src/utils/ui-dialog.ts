@@ -153,6 +153,7 @@ export class UIDialogService {
     }
 
     private __closeDialog(dialog) {
+        if (!dialog) return;
         this.__invokeLifecycle(dialog, 'canDeactivate', null)
             .then(
             canDeactivate => {

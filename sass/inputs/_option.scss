@@ -65,9 +65,11 @@
     }
 
     .ui-option-label {
-        padding: .15em 0;
-        color  : $input-label;
-        @include flex(0 0 auto);
+        padding   : .15em 0;
+        color     : $input-label;
+        text-align: left;
+        text-align: start;
+        @include flex(0 1 auto);
         @include padding(end, .5em);
         @include padding(start, .2em);
     }
@@ -99,9 +101,10 @@
     @include flex-row(flex-start);
 
     .ui-option {
-        @include flex(0 0 10em);
+        max-width: 10em;
+        @include flex(0 1 10em);
 
-        .ui-label {
+        .ui-option-label {
             display: block;
             @include ellipsis();
         }
@@ -119,5 +122,9 @@
     .ui-switch-control {
         margin: .2em 0;
         @include flex(0 0 auto);
+
+        .ui-option-label {
+            flex-shrink: 0;
+        }
     }
 }

@@ -152,6 +152,7 @@ export class UIOptionGroup {
     value: string;
 
     constructor(public element: Element) {
+        if (this.element.hasAttribute('vertical')) this.element.classList.add('ui-vertical');
         if (this.element.hasAttribute('auto-width')) this.element.classList.add('ui-auto');
         if (this.element.hasAttribute('label-top')) this.element.classList.add('ui-label-top');
         if (this.element.hasAttribute('label-hide')) this.element.classList.add('ui-label-hide');
@@ -181,6 +182,7 @@ export class UIOptionGroup {
     }
 
     checkChanged($event) {
+        if ($event.detail == undefined) return;
         let opt = <HTMLInputElement>this.element.querySelector(`.ui-option-input[value="${this.value}"]`);
         if (opt && this.value != $event.detail) {
             opt.setAttribute('checked', 'false');
