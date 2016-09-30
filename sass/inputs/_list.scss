@@ -14,15 +14,15 @@
     background   : $base-bg;
 
     &.floating {
-        position: absolute;
-        z-index : 50;
-        right   : 0;
-        left    : 0;
-        @include box-shadow(0 2px 4px 0 $base-shadow-color);
+        // position: absolute;
+        z-index: 50;
+        // right   : 0;
+        // left    : 0;
+        // @include box-shadow(0 2px 4px 0 $base-shadow-color);
     }
 
     &.reverse {
-        @include box-shadow(0 -2px 4px 0 $base-shadow-color);
+        // @include box-shadow(0 -2px 4px 0 $base-shadow-color);
     }
 
     .ui-lang-remove {
