@@ -6,7 +6,7 @@
 
 import {customElement, bindable, bindingMode, autoinject} from "aurelia-framework";
 import {UIListBehaviour} from "./ui-listing";
-import {_, UIUtils} from "../utils/ui-utils";
+import {_, UIUtils, Tether} from "../utils/ui-utils";
 import {UIEvent} from "../utils/ui-event";
 
 @autoinject
@@ -147,10 +147,30 @@ export class UIComboBox extends UIListBehaviour {
 
     attached() {
         super.attached();
-        UIEvent.queueTask(() => this.valueChanged(this.value));
+        UIEvent.queueTask(() => {
+            this.__tethered = new Tether({
+                element: this.__list,
+                target: this.__input,
+                attachment: 'top left',
+                targetAttachment: 'bottom left',
+                constraints: [
+                    {
+                        to: 'scrollParent',
+                        attachment: 'together'
+                    },
+                    {
+                        to: 'window',
+                        attachment: 'together'
+                    }
+                ]
+            });
+            this.valueChanged(this.value);
+        });
     }
 
     detached() {
+        this.__tethered.element.remove();
+        this.__tethered.destroy();
     }
 
     valueChanged(newValue) {
@@ -199,6 +219,7 @@ export class UIComboBox extends UIListBehaviour {
     }
 
     __showFocus() {
+        if (this.__focus) return this.__focus = false;
         this.__input.focus();
         this.__focus = true;
     }
@@ -207,15 +228,17 @@ export class UIComboBox extends UIListBehaviour {
         this.__hilight = this.__list.querySelector(`[data-value="${this.value}"]`);
         if (show) this.__focus = true;
 
-        let el = <HTMLElement>this.__input;
-        if (this.showReverse()) {
-            this.__reverse = true;
-            this.__list.style.bottom = el.offsetHeight + 'px';
-        }
-        else {
-            this.__reverse = false;
-            this.__list.style.bottom = "auto";
-        }
+        // let el = <HTMLElement>this.__input;
+        // if (this.showReverse()) {
+        //     this.__reverse = true;
+        //     this.__list.style.bottom = el.offsetHeight + 'px';
+        // }
+        // else {
+        //     this.__reverse = false;
+        //     this.__list.style.bottom = "auto";
+        // }
+        this.__tethered.element.style.minWidth = this.__tethered.target.offsetWidth + 'px';
+        this.__tethered.position();
         UIEvent.queueTask(() => {
             this.__input.select();
             this.__scrollIntoView();
@@ -224,7 +247,7 @@ export class UIComboBox extends UIListBehaviour {
 
     __lostFocus() {
         if (this.__focus) this.__select(this.__hilight);
-        this.__focus = false;
+        setTimeout(() => this.__focus = false, 500);
     }
 
     formatter() {

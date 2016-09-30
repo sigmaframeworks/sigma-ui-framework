@@ -6,7 +6,7 @@
 
 import {autoinject, customElement, bindable, bindingMode, inlineView, children} from "aurelia-framework";
 import {UIEvent} from "../utils/ui-event";
-import {_} from "../utils/ui-utils";
+import {_, Tether} from "../utils/ui-utils";
 
 @autoinject()
 @customElement('ui-button')
@@ -45,30 +45,14 @@ export class UIButton {
     @bindable()
     disabled: boolean = false;
 
+    private __menu;
     private __menuEl;
+    private __tethered;
     private __useMenuLabel;
     private __hasMenu = false;
     private __isDropdown = false;
 
     constructor(public element: Element) {
-        // let content = <HTMLElement>this.element.querySelector('au-content');
-        // if (content.children.length > 0) {
-        // 	for (var i = 0, c = content.children; i < c.length; i++) {
-        // 		if (c[i].tagName.toLowerCase() === 'menu') {
-        // 			this.menu.push({
-        // 				id: c[i].getAttribute('id'),
-        // 				text: c[i].textContent,
-        // 				icon: c[i].getAttribute('icon'),
-        // 				href: c[i].getAttribute('href') || 'javascript:;',
-        // 				t: c[i].getAttribute('t')
-        // 			});
-        // 		}
-        // 		if (c[i].tagName.toLowerCase() === 'section') this.menu.push(c[i].textContent);
-        // 		if (c[i].tagName.toLowerCase() === 'divider') this.menu.push('-');
-        // 	}
-        // }
-        // if (this.__hasMenu = this.menu.length > 0)
-        // 	this.element.classList.add('ui-dropdown');
     }
 
     bind() {
@@ -98,9 +82,34 @@ export class UIButton {
         this.__button.classList.add(`ui-button-${this.__size}`);
 
         UIEvent.queueTask(() => {
+            if (this.__hasMenu) {
+                this.__tethered = new Tether({
+                    element: this.__menuEl,
+                    target: this.__button,
+                    attachment: 'top left',
+                    targetAttachment: 'bottom left',
+                    constraints: [
+                        {
+                            to: 'scrollParent',
+                            attachment: 'together'
+                        },
+                        {
+                            to: 'window',
+                            attachment: 'together'
+                        }
+                    ]
+                });
+            }
             if (this.value) this.valueChanged(this.value);
             this.disable();
         });
+    }
+
+    detached() {
+        if (this.__hasMenu) {
+            this.__tethered.element.remove();
+            this.__tethered.destroy();
+        }
     }
 
     disable(disabled?) {
@@ -120,7 +129,7 @@ export class UIButton {
     __prevSelection;
     valueChanged(newValue) {
         if (this.__hasMenu && this.__useMenuLabel) {
-            let menu: any = _.find(this.__menuEl.menu, { 'id': newValue });
+            let menu: any = _.find(this.__menu.menu, { 'id': newValue });
             if (menu) {
                 if (this.__prevSelection) this.__prevSelection.active = false;
                 (this.__prevSelection = menu).active = true;
@@ -132,12 +141,15 @@ export class UIButton {
     fireClick($event) {
         let menu = document.querySelector('.ui-floating.show');
         if (menu) menu.classList.remove('show');
+        if (menu == this.__menuEl) return;
 
         $event.preventDefault();
         $event.cancelBubble = true;
         if (this.disabled === true) return false;
         if (this.__hasMenu) {
-            this.__menuEl.element.classList.add('show');
+            this.__menuEl.classList.add('show');
+            this.__tethered.element.style.minWidth = this.__tethered.target.offsetWidth + 'px';
+            this.__tethered.position();
         } else {
             UIEvent.fireEvent('click', this.element, this);
         }

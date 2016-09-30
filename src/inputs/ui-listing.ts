@@ -17,6 +17,7 @@ export class UIListBehaviour extends UIInputGroup {
     __isGrouped;
     __isFiltered;
     __available;
+    __tethered;
     __searchText;
     __subscribeSearch;
     __noResult = false;

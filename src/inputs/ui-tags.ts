@@ -6,7 +6,7 @@
 
 import {customElement, bindable, bindingMode, autoinject} from "aurelia-framework";
 import {UIListBehaviour} from "./ui-listing";
-import {_, UIUtils} from "../utils/ui-utils";
+import {_, UIUtils, Tether} from "../utils/ui-utils";
 import {UIEvent} from "../utils/ui-event";
 
 @autoinject
@@ -155,10 +155,34 @@ export class UITags extends UIListBehaviour {
 
     attached() {
         super.attached();
-        UIEvent.queueTask(() => this.valueChanged(this.value));
+        UIEvent.queueTask(() => {
+            if (!this.__noList) {
+                this.__tethered = new Tether({
+                    element: this.__list,
+                    target: this.__input.offsetParent,
+                    attachment: 'top left',
+                    targetAttachment: 'bottom left',
+                    constraints: [
+                        {
+                            to: 'scrollParent',
+                            attachment: 'together'
+                        },
+                        {
+                            to: 'window',
+                            attachment: 'together'
+                        }
+                    ]
+                });
+            }
+            this.valueChanged(this.value);
+        });
     }
 
     detached() {
+        if (!this.__noList) {
+            this.__tethered.element.remove();
+            this.__tethered.destroy();
+        }
     }
 
     valueChanged(newValue) {
@@ -233,15 +257,17 @@ export class UITags extends UIListBehaviour {
     __gotFocus(show) {
         if (show) this.__focus = true;
         if (!this.__noList) {
-            let el = <HTMLElement>this.__input;
-            if (this.showReverse()) {
-                this.__reverse = true;
-                this.__list.style.bottom = el.parentElement.offsetHeight + 'px';
-            }
-            else {
-                this.__reverse = false;
-                this.__list.style.bottom = "auto";
-            }
+            // let el = <HTMLElement>this.__input;
+            // if (this.showReverse()) {
+            //     this.__reverse = true;
+            //     this.__list.style.bottom = el.parentElement.offsetHeight + 'px';
+            // }
+            // else {
+            //     this.__reverse = false;
+            //     this.__list.style.bottom = "auto";
+            // }
+            this.__tethered.element.style.minWidth = this.__tethered.target.offsetWidth + 'px';
+            this.__tethered.position();
             UIEvent.queueTask(() => {
                 this.__input.select();
                 this.__scrollIntoView();

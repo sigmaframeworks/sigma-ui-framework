@@ -10,11 +10,13 @@ import * as ld from "lodash";
 import * as km from "kramed";
 import * as mm from "moment";
 import * as nm from "numeral";
+import * as th from "tether";
 
 export var _ = ld;
 export var kramed = km;
 export var moment = mm;
 export var numeral = nm;
+export var Tether = th;
 
 Object.defineProperties(window, {
     '__seed': {

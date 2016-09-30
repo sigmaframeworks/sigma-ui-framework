@@ -6,7 +6,7 @@
 
 import {customElement, bindable, bindingMode, autoinject} from "aurelia-framework";
 import {UIInputGroup} from "./ui-input-group";
-import {_, UIUtils} from "../utils/ui-utils";
+import {_, UIUtils, Tether} from "../utils/ui-utils";
 import {UIApplication} from "../utils/ui-application";
 import {UIEvent} from "../utils/ui-event";
 import {UIConstants} from "../utils/ui-constants";
@@ -19,6 +19,7 @@ export class UILanguage extends UIInputGroup {
     __options;
     __languages;
     __available;
+    __tethered;
 
     static LANGUAGES = UIConstants.Languages;
 
@@ -49,8 +50,31 @@ export class UILanguage extends UIInputGroup {
 
     attached() {
         super.attached();
-        this.languagesChanged(this.languages);
-        this.valueChanged(this.value);
+        UIEvent.queueTask(() => {
+            this.__tethered = new Tether({
+                element: this.__list,
+                target: this.__input,
+                attachment: 'top left',
+                targetAttachment: 'bottom left',
+                constraints: [
+                    {
+                        to: 'scrollParent',
+                        attachment: 'together'
+                    },
+                    {
+                        to: 'window',
+                        attachment: 'together'
+                    }
+                ]
+            });
+            this.languagesChanged(this.languages);
+            this.valueChanged(this.value);
+        });
+    }
+
+    detached() {
+        this.__tethered.element.remove();
+        this.__tethered.destroy();
     }
 
     valueChanged(newValue) {
@@ -84,6 +108,22 @@ export class UILanguage extends UIInputGroup {
     }
     addError(key) {
         this.__errors[key] = true;
+    }
+
+    __showFocus() {
+        if (this.__focus) return this.__focus = false;
+        this.__input.focus();
+        this.__focus = true;
+    }
+
+    __gotFocus(show) {
+        if (show) this.__focus = true;
+        this.__tethered.element.style.minWidth = this.__tethered.target.offsetWidth + 'px';
+        this.__tethered.position();
+    }
+
+    __lostFocus() {
+        setTimeout(() => this.__focus = false, 500);
     }
 
     __add(lang) {
