@@ -100,7 +100,11 @@ export class UIListBehaviour extends UIInputGroup {
     }
 
     isScrolling(node) {
-        return getComputedStyle(node).getPropertyValue('overflow') == 'auto' || getComputedStyle(node).getPropertyValue('overflow-y') == 'auto';
+        try {
+            let cs = getComputedStyle(node);
+            return cs.getPropertyValue('overflow') == 'auto' || cs.getPropertyValue('overflow-y') == 'auto';
+        } catch (e) { }
+        return false;
     }
     showReverse() {
         let el = <HTMLElement>this.__input;
