@@ -258,7 +258,7 @@ export class UIDataGrid {
 
     private __doSort(data) {
         if (this.columns.length == 0) return;
-        let column = _.find(this.columns, ['dataId', this.__sortColumn]);
+        let column = _.find(this.columns, ['dataId', this.__sortColumn]) || {};
         let columnId = column.dataId || this.defaultSort;
         let siblingId = column.dataSort || this.defaultSort;
         this.__isProcessing = true;
