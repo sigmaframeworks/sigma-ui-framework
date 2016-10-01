@@ -131,16 +131,16 @@ export class UIDataGrid {
                 let el = <HTMLElement>target.parentElement.nextElementSibling;
                 let sc = this.__wrapper;
                 el.classList.add('show');
-                if (sc.scrollTop + sc['offsetHeight'] < td.offsetHeight + td.offsetTop + el.offsetHeight) {
-                    // this.__reverse = true;
-                    el.style.top = "auto";
-                    el.style.bottom = '1.75em';
-                }
-                else {
-                    // this.__reverse = false;
-                    el.style.top = '1.75em';
-                    el.style.bottom = "auto";
-                }
+                // if (sc.scrollTop + sc['offsetHeight'] < td.offsetHeight + td.offsetTop + el.offsetHeight) {
+                //     // this.__reverse = true;
+                //     el.style.top = "auto";
+                //     el.style.bottom = '1.75em';
+                // }
+                // else {
+                // this.__reverse = false;
+                el.style.top = '1.75em';
+                el.style.bottom = "auto";
+                // }
                 getParentByTag(target, 'tr').classList.add('focus');
             }
         }
@@ -216,6 +216,13 @@ export class UIDataGrid {
 				</button>`;
     }
 
+    getMenu(column, model) {
+        if (isFunction(column.buttonMenu))
+            return column.buttonMenu({ column: column, record: model });
+        else
+            return column.buttonMenu;
+    }
+
     format(value, column, model): string {
         var retVal = '';
         var newValue = value;
@@ -230,8 +237,10 @@ export class UIDataGrid {
             retVal = column.display({ value: value, column: column, record: model });
         }
         else {
+            if (newValue == null) return '';
             switch (column.__type) {
                 case 'currency':
+                    if (model.hasOwnProperty(column.symbol) && model[column.symbol] == null) return '';
                     retVal = UIFormat.currency(newValue, model[column.symbol] || column.symbol || '$', column.format || '$ 0,0.00');
                     break;
                 case 'number':
@@ -424,7 +433,7 @@ export class UIDataColumn {
         if (this.element.hasAttribute('edit')) this.buttonIcon = this.buttonIcon || 'fi-ui-edit';
         if (this.element.hasAttribute('delete')) this.buttonIcon = this.buttonIcon || 'fi-ui-delete';
 
-        this.__hasMenu = !!this.buttonMenu && this.buttonMenu.length > 0;
+        this.__hasMenu = !!this.buttonMenu && (this.buttonMenu.length > 0 || isFunction(this.buttonMenu));
         if (this.__hasMenu) this.buttonIcon = this.buttonIcon || 'fi-ui-overflow-menu-alt';
 
         if (this.__button = !(isEmpty(this.buttonIcon) && isEmpty(this.buttonTitle) && !this.element.hasAttribute('button'))) this.__align = 'center';
