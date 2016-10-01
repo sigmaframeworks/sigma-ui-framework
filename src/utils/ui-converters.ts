@@ -19,6 +19,11 @@ export class DateValueConverter {
         return UIFormat.date(value, format);
     }
 }
+export class DatetimeValueConverter {
+    toView(value: string, format?: string) {
+        return UIFormat.datetime(value, format);
+    }
+}
 export class FromNowValueConverter {
     toView(value: string) {
         return UIFormat.fromNow(value);

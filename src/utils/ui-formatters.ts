@@ -12,7 +12,12 @@ export module UIFormat {
     }
 
     // Dates
-    export function date(dt: any, ft: string = 'DD MMM YYYY hh:mm A') {
+    export function date(dt: any, ft: string = 'DD MMM YYYY') {
+        let x;
+        return dt === null || !(x = moment(dt)).isValid() ? null : x.format(ft);
+    }
+
+    export function datetime(dt: any, ft: string = 'DD MMM YYYY hh:mm A') {
         let x;
         return dt === null || !(x = moment(dt)).isValid() ? null : x.format(ft);
     }
