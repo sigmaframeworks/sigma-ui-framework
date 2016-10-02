@@ -226,8 +226,7 @@ export class UIComboBox extends UIListBehaviour {
 
     __gotFocus(show) {
         this.__hilight = this.__list.querySelector(`[data-value="${this.value}"]`);
-        if (show) this.__focus = true;
-
+        if (!show) return;
         // let el = <HTMLElement>this.__input;
         // if (this.showReverse()) {
         //     this.__reverse = true;
@@ -237,6 +236,7 @@ export class UIComboBox extends UIListBehaviour {
         //     this.__reverse = false;
         //     this.__list.style.bottom = "auto";
         // }
+        this.__focus = true;
         this.__tethered.element.style.minWidth = this.__tethered.target.offsetWidth + 'px';
         this.__tethered.position();
         UIEvent.queueTask(() => {

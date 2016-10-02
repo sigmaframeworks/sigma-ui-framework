@@ -117,7 +117,8 @@ export class UILanguage extends UIInputGroup {
     }
 
     __gotFocus(show) {
-        if (show) this.__focus = true;
+        if (!show) return;
+        this.__focus = true;
         this.__tethered.element.style.minWidth = this.__tethered.target.offsetWidth + 'px';
         this.__tethered.position();
     }
