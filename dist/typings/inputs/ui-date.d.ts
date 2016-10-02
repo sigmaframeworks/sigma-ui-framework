@@ -77,6 +77,7 @@ export declare class UIDate extends UIInputGroup {
     showTime: boolean;
     constructor(element: Element);
     bind(): void;
+    clearInput(isSecond: any): void;
     dateChanged(newValue: any): void;
     dateEndChanged(newValue: any): void;
 }

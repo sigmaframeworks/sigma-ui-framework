@@ -18,6 +18,15 @@ define(["require", "exports", "./ui-formatters", "./ui-utils"], function (requir
         return DateValueConverter;
     }());
     exports.DateValueConverter = DateValueConverter;
+    var DatetimeValueConverter = (function () {
+        function DatetimeValueConverter() {
+        }
+        DatetimeValueConverter.prototype.toView = function (value, format) {
+            return ui_formatters_1.UIFormat.datetime(value, format);
+        };
+        return DatetimeValueConverter;
+    }());
+    exports.DatetimeValueConverter = DatetimeValueConverter;
     var FromNowValueConverter = (function () {
         function FromNowValueConverter() {
         }

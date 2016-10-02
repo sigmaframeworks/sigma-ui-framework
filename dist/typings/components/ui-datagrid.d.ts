@@ -39,6 +39,7 @@ export declare class UIDataGrid {
     sort($event: any, column: any): void;
     summary(column: any): string;
     buildButton(value: any, column: any, model: any): string;
+    getMenu(column: any, model: any): any;
     format(value: any, column: any, model: any): string;
     private __doSort(data);
     private __isResizing;

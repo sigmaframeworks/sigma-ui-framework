@@ -4,6 +4,9 @@ export declare class MarkdownValueConverter {
 export declare class DateValueConverter {
     toView(value: string, format?: string): any;
 }
+export declare class DatetimeValueConverter {
+    toView(value: string, format?: string): any;
+}
 export declare class FromNowValueConverter {
     toView(value: string): string;
 }

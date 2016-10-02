@@ -114,8 +114,9 @@ define(["require", "exports", "aurelia-framework", "./ui-listing", "../utils/ui-
         UIComboBox.prototype.__gotFocus = function (show) {
             var _this = this;
             this.__hilight = this.__list.querySelector("[data-value=\"" + this.value + "\"]");
-            if (show)
-                this.__focus = true;
+            if (!show)
+                return;
+            this.__focus = true;
             this.__tethered.element.style.minWidth = this.__tethered.target.offsetWidth + 'px';
             this.__tethered.position();
             ui_event_1.UIEvent.queueTask(function () {

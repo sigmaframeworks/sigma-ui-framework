@@ -91,8 +91,9 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
             this.__focus = true;
         };
         UILanguage.prototype.__gotFocus = function (show) {
-            if (show)
-                this.__focus = true;
+            if (!show)
+                return;
+            this.__focus = true;
             this.__tethered.element.style.minWidth = this.__tethered.target.offsetWidth + 'px';
             this.__tethered.position();
         };

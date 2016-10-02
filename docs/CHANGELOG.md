@@ -1,7 +1,14 @@
+<a name="1.0.3"></a>
+## [1.0.3](https://github.com/sigmaframeworks/sigma-ui-framework/compare/1.0.1...v1.0.3) (2016-10-02)
+
+* __UIDatagrid__: Updated button-menu to allow callback for each record
+* Separated date formatter to date and datetime
+* Fixed dropdown z-index
+* Fixed date input clear value
+
+
 <a name="1.0.2"></a>
 ## [1.0.2](https://github.com/sigmaframeworks/sigma-ui-framework/compare/1.0.1...v1.0.2) (2016-09-30)
-
-
 
 * Fixed various firefox issues
 

@@ -94,14 +94,8 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
                     var el = target.parentElement.nextElementSibling;
                     var sc = this.__wrapper;
                     el.classList.add('show');
-                    if (sc.scrollTop + sc['offsetHeight'] < td.offsetHeight + td.offsetTop + el.offsetHeight) {
-                        el.style.top = "auto";
-                        el.style.bottom = '1.75em';
-                    }
-                    else {
-                        el.style.top = '1.75em';
-                        el.style.bottom = "auto";
-                    }
+                    el.style.top = '1.75em';
+                    el.style.bottom = "auto";
                     getParentByTag(target, 'tr').classList.add('focus');
                 }
             }
@@ -170,6 +164,12 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
                 return '<span>&nbsp;</span>';
             return "<button class=\"ui-button ui-button-" + obj.theme + " ui-button-small\">\n\t\t\t\t\t" + (obj.icon ? '<span class="' + obj.icon + '"></span>' : '') + "\n\t\t\t\t\t" + (obj.title ? '<span>' + obj.title + '</span>' : '') + "\n\t\t\t\t</button>";
         };
+        UIDataGrid.prototype.getMenu = function (column, model) {
+            if (isFunction(column.buttonMenu))
+                return column.buttonMenu({ column: column, record: model });
+            else
+                return column.buttonMenu;
+        };
         UIDataGrid.prototype.format = function (value, column, model) {
             var retVal = '';
             var newValue = value;
@@ -183,8 +183,12 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
                 retVal = column.display({ value: value, column: column, record: model });
             }
             else {
+                if (newValue == null)
+                    return '';
                 switch (column.__type) {
                     case 'currency':
+                        if (model.hasOwnProperty(column.symbol) && model[column.symbol] == null)
+                            return '';
                         retVal = ui_formatters_1.UIFormat.currency(newValue, model[column.symbol] || column.symbol || '$', column.format || '$ 0,0.00');
                         break;
                     case 'number':
@@ -212,7 +216,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
             var _this = this;
             if (this.columns.length == 0)
                 return;
-            var column = ui_utils_1._.find(this.columns, ['dataId', this.__sortColumn]);
+            var column = ui_utils_1._.find(this.columns, ['dataId', this.__sortColumn]) || {};
             var columnId = column.dataId || this.defaultSort;
             var siblingId = column.dataSort || this.defaultSort;
             this.__isProcessing = true;
@@ -360,7 +364,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-templating-resources
                 this.buttonIcon = this.buttonIcon || 'fi-ui-edit';
             if (this.element.hasAttribute('delete'))
                 this.buttonIcon = this.buttonIcon || 'fi-ui-delete';
-            this.__hasMenu = !!this.buttonMenu && this.buttonMenu.length > 0;
+            this.__hasMenu = !!this.buttonMenu && (this.buttonMenu.length > 0 || isFunction(this.buttonMenu));
             if (this.__hasMenu)
                 this.buttonIcon = this.buttonIcon || 'fi-ui-overflow-menu-alt';
             if (this.__button = !(isEmpty(this.buttonIcon) && isEmpty(this.buttonTitle) && !this.element.hasAttribute('button')))

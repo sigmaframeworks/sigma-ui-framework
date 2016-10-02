@@ -7,11 +7,17 @@ define(["require", "exports", "./ui-utils"], function (require, exports, ui_util
         }
         UIFormat.toHTML = toHTML;
         function date(dt, ft) {
-            if (ft === void 0) { ft = 'DD MMM YYYY hh:mm A'; }
+            if (ft === void 0) { ft = 'DD MMM YYYY'; }
             var x;
             return dt === null || !(x = ui_utils_1.moment(dt)).isValid() ? null : x.format(ft);
         }
         UIFormat.date = date;
+        function datetime(dt, ft) {
+            if (ft === void 0) { ft = 'DD MMM YYYY hh:mm A'; }
+            var x;
+            return dt === null || !(x = ui_utils_1.moment(dt)).isValid() ? null : x.format(ft);
+        }
+        UIFormat.datetime = datetime;
         function dateToISO(dt) {
             var x;
             return dt === null || !(x = ui_utils_1.moment(dt)).isValid() ? null : x.toISOString();

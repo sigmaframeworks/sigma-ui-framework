@@ -45,8 +45,18 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
                 this.__dateEnd.minDate = this.date;
             }
         };
+        UIDate.prototype.clearInput = function (isSecond) {
+            if (isSecond === true) {
+                this.dateEnd = null;
+                this.__input2.focus();
+            }
+            if (isSecond !== true) {
+                this.date = null;
+                this.__input.focus();
+            }
+        };
         UIDate.prototype.dateChanged = function (newValue) {
-            if (ui_utils_1.moment(newValue).isValid()) {
+            if (newValue && ui_utils_1.moment(newValue).isValid()) {
                 this.__value = ui_utils_1.moment(newValue).format(this.format);
                 if (this.__dual) {
                     this.__dateEnd.minDate = newValue;
@@ -59,7 +69,7 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group", "../utils
             }
         };
         UIDate.prototype.dateEndChanged = function (newValue) {
-            if (ui_utils_1.moment(newValue).isValid()) {
+            if (newValue && ui_utils_1.moment(newValue).isValid()) {
                 this.__value2 = ui_utils_1.moment(newValue).format(this.format);
             }
             else {
