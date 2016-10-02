@@ -92,7 +92,7 @@
 }
 
 .ui-col-fill {
-    @include flex(1 1 0);
+    @include flex(1 1 auto);
 }
 
 .ui-col-full {

@@ -121,7 +121,7 @@
         border    : 1px solid $input-border;
 
         .ui-list {
-            @include flex(1 1 0);
+            @include flex(1 1 auto);
             min-height: inherit;
             max-height: inherit;
         }
@@ -142,7 +142,7 @@
         color     : $input-text;
         border    : none !important;
         background: transparent !important;
-        @include flex(1 1 0);
+        @include flex(1 1 auto);
     }
 
     .ui-tag {

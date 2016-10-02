@@ -120,7 +120,7 @@
 
             .label {
                 font-variant: small-caps;
-                @include flex(1 1 0);
+                @include flex(1 1 auto);
 
                 &:not(.nohover):before {
                     content    : $font-ui-sort-asc;
@@ -149,7 +149,7 @@
                 cursor       : pointer;
                 color        : $date-control-text;
                 border-radius: $base-border-radius;
-                @include flex(1 1 0);
+                @include flex(1 1 auto);
 
                 &:hover {
                     color     : $date-control-hover-text;
@@ -222,7 +222,7 @@
             span {
                 line-height: 300%;
                 margin     : .1em .2em;
-                @include flex(1 1 0);
+                @include flex(1 1 auto);
             }
         }
 
@@ -230,7 +230,7 @@
             span {
                 line-height: 200%;
                 margin     : .1em .2em;
-                @include flex(1 1 0);
+                @include flex(1 1 auto);
             }
         }
 
@@ -279,7 +279,7 @@
 
             .months,
             .years {
-                @include flex(1 1 0);
+                @include flex(1 1 auto);
 
                 span {
                     @include align-self(stretch);

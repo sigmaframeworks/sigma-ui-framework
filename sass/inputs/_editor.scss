@@ -36,7 +36,7 @@
 
     &.ui-full-view {
         margin: 0;
-        @include flex(1 1 0);
+        @include flex(1 1 auto);
         @include align-items(stretch);
         @include flex-direction(column);
 
@@ -57,7 +57,7 @@
 
             .ui-input-control {
                 position: relative;
-                @include flex(1 1 0);
+                @include flex(1 1 auto);
 
                 .ui-input {
                     resize      : none;
@@ -72,7 +72,7 @@
         .ui-markdown-preview {
             position: relative !important;
             display : block !important;
-            @include flex(1 1 0);
+            @include flex(1 1 auto);
         }
     }
 }

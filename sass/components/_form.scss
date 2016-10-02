@@ -19,6 +19,7 @@
             border-radius: $base-border-radius;
             margin       : .3em 0;
             min-height   : 2em;
+            overflow     : hidden;
             @include transition(max-height .5s);
 
             legend {
@@ -34,8 +35,11 @@
         }
 
         &.ui-disabled > fieldset {
-            overflow  : hidden;
             max-height: 0;
+
+            .ui-fs-body {
+                display: none;
+            }
         }
     }
 }

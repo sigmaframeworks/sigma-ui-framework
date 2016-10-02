@@ -23,14 +23,14 @@
 
     .ui-page-body {
         @include flex-column();
-        @include flex(1 1 0);
+        @include flex(1 1 auto);
     }
 }
 
 .ui-section {
     position: relative;
     overflow: hidden;
-    @include flex(1 1 0);
+    @include flex(1 1 auto);
 
     &.ui-section-row {
         @include flex-row($align: stretch, $wrap : false);
@@ -42,7 +42,7 @@
 
     router-view {
         position: relative;
-        @include flex(1 1 0);
+        @include flex(1 1 auto);
         @include flex-column($align: stretch);
     }
 }
@@ -55,7 +55,7 @@
     }
 
     &:not(.ui-auto-fit) {
-        @include flex(1 1 0);
+        @include flex(1 1 auto);
     }
 
     &:not(.ui-scroll) {
@@ -92,7 +92,7 @@
     }
 
     .ui-sidebar-content {
-        @include flex(1 1 0);
+        @include flex(1 1 auto);
         // @include scroll();
     }
 
@@ -193,7 +193,7 @@
     .ui-stat {
         padding   : .5em 1.2em;
         text-align: center;
-        @include flex(1 1 0);
+        @include flex(1 1 auto);
         @include border(start, 1px solid rgba($white, .3));
         @include border(end, 1px solid rgba($black, .3));
         @include flex-row(center, center, false);

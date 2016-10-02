@@ -17,7 +17,7 @@
 
 		margin      : 0;
 		padding     : $base-padding;
-		@include flex(1 1 0);
+		@include flex(1 1 auto);
 	}
 
 	button {

@@ -66,7 +66,7 @@
 
     .ui-tab-body {
         position: relative;
-        @include flex(1 1 0);
+        @include flex(1 1 auto);
 
         .ui-tab-content {
             position: absolute;

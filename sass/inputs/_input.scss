@@ -169,7 +169,7 @@ $shadow: $input-inner-shadow;
 
             > .ui-input-wrapper {
                 position: relative;
-                @include flex(1 1 0);
+                @include flex(1 1 auto);
 
                 &.ui-display-pad {
                     padding: .35em .5em;
@@ -338,7 +338,7 @@ $shadow: $input-inner-shadow;
         padding: .25em .4em;
 
         .ui-control-wrapper {
-            @include flex(1 1 0);
+            @include flex(1 1 auto);
         }
 
         &.ui-label-top .ui-control-wrapper {
