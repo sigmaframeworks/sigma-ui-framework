@@ -152,7 +152,8 @@ export class UIInput extends UIInputGroup {
 
     protected formatter(evt) {
         let val = isEmpty(evt.target.value) ? '' : evt.target.value;
-        var start = evt.target.selectionStart;
+        var start = 0;
+        try { start = evt.target.selectionStart; } catch (e) { }
         if (this.__format === 'title') {
             val = val.replace(new RegExp(`[${this.ALPHA}'\\-']+(?=[\\.&\\s]*)`, 'g'), (txt) => {
                 if (txt.toLowerCase().indexOf("mc") == 0) {
