@@ -50,7 +50,7 @@ export class UIForm {
 
 @autoinject
 @customElement('ui-fieldset')
-@inlineView('<template class="ui-fieldset"><fieldset><legend if.bind="label"><ui-checkbox checked.bind="enabled" if.bind="checkbox">${label}</ui-checkbox><span if.bind="!checkbox">${label}</span></legend><slot></slot></fieldset></template>')
+@inlineView('<template class="ui-fieldset"><fieldset><legend if.bind="label"><ui-checkbox checked.bind="enabled" if.bind="checkbox">${label}</ui-checkbox><span if.bind="!checkbox">${label}</span></legend><div class="ui-fs-body"><slot></slot></div></fieldset></template>')
 export class UIFieldset {
     @bindable()
     label: string = '';
