@@ -132,8 +132,19 @@ export class UIDate extends UIInputGroup {
         }
     }
 
+    clearInput(isSecond) {
+        if (isSecond === true) {
+            this.dateEnd = null;
+            this.__input2.focus();
+        }
+        if (isSecond !== true) {
+            this.date = null;
+            this.__input.focus();
+        }
+    }
+
     dateChanged(newValue) {
-        if (moment(newValue).isValid()) {
+        if (newValue && moment(newValue).isValid()) {
             this.__value = moment(newValue).format(this.format);
             if (this.__dual) {
                 this.__dateEnd.minDate = newValue;
@@ -146,7 +157,7 @@ export class UIDate extends UIInputGroup {
     }
 
     dateEndChanged(newValue) {
-        if (moment(newValue).isValid()) {
+        if (newValue && moment(newValue).isValid()) {
             this.__value2 = moment(newValue).format(this.format);
             //if (this.__dual)this.__dateStart.maxDate = newValue;
         }
