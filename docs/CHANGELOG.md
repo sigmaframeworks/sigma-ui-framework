@@ -1,3 +1,10 @@
+<a name="1.0.4"></a>
+## [1.0.4](https://github.com/sigmaframeworks/sigma-ui-framework/compare/1.0.1...v1.0.4) (2016-10-03)
+
+* Fixed bug for email input on chrome
+* Fixed flexbox grow/shrink issue on chrome/safari
+* Added fieldset wrapper
+
 <a name="1.0.3"></a>
 ## [1.0.3](https://github.com/sigmaframeworks/sigma-ui-framework/compare/1.0.1...v1.0.3) (2016-10-02)
 

@@ -1,6 +1,6 @@
 {
     "name": "sigma-ui-framework",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "A bespoke UI Framework for building desktop business applications",
     "keywords": [
         "ui-framework",
@@ -79,7 +79,7 @@
         "lodash": "^4.5.1",
         "moment": "^2.14.1",
         "numeral": "^1.5.3",
-        "sigma-libs": "^0.0.1",
+        "sigma-libs": "^0.0.4",
         "tether": "^1.3.7",
         "whatwg-fetch": "^1.0.0"
     },

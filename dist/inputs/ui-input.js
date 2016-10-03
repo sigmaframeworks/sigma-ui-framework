@@ -67,7 +67,11 @@ define(["require", "exports", "aurelia-framework", "./ui-input-group"], function
         };
         UIInput.prototype.formatter = function (evt) {
             var val = isEmpty(evt.target.value) ? '' : evt.target.value;
-            var start = evt.target.selectionStart;
+            var start = 0;
+            try {
+                start = evt.target.selectionStart;
+            }
+            catch (e) { }
             if (this.__format === 'title') {
                 val = val.replace(new RegExp("[" + this.ALPHA + "'\\-']+(?=[\\.&\\s]*)", 'g'), function (txt) {
                     if (txt.toLowerCase().indexOf("mc") == 0) {

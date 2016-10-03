@@ -81,7 +81,7 @@ define(["require", "exports", "aurelia-framework", "../utils/ui-event", "../util
         UIFieldset = __decorate([
             aurelia_framework_1.autoinject,
             aurelia_framework_1.customElement('ui-fieldset'),
-            aurelia_framework_1.inlineView('<template class="ui-fieldset"><fieldset><legend if.bind="label"><ui-checkbox checked.bind="enabled" if.bind="checkbox">${label}</ui-checkbox><span if.bind="!checkbox">${label}</span></legend><slot></slot></fieldset></template>'), 
+            aurelia_framework_1.inlineView('<template class="ui-fieldset"><fieldset><legend if.bind="label"><ui-checkbox checked.bind="enabled" if.bind="checkbox">${label}</ui-checkbox><span if.bind="!checkbox">${label}</span></legend><div class="ui-fs-body"><slot></slot></div></fieldset></template>'), 
             __metadata('design:paramtypes', [Element])
         ], UIFieldset);
         return UIFieldset;
