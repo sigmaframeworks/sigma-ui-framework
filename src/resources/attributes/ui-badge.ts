@@ -7,7 +7,7 @@ import {autoinject, bindable, containerless, customAttribute, inlineView} from "
 
 // @autoinject()
 // @customAttribute('badge')
-class UIBadgeBase {
+export class UIBadgeBase {
   constructor(element: Element, bg: string) {
     this.__el = document.createElement('div');
     this.__el.classList.add('ui-badge');

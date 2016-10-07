@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var ts = require('gulp-typescript');
 var assign = Object.assign || require('object.assign');
 var del = require('del');
+var rename = require('gulp-rename');
 var vinylPaths = require('vinyl-paths');
 
 var tsconfig = require('../tsconfig.json');
@@ -46,6 +47,7 @@ gulp.task('build-dts', function() {
   var tsProject = ts.createProject(
     compilerTsOptions({
       removeComments: false,
+      declaration: true,
       target: "es2015",
       module: "es2015"
     }), ts.reporter.defaultReporter());
@@ -62,7 +64,14 @@ gulp.task('copy-extras', function() {
 });
 
 
-gulp.task('build-ts', gulp.series('clean', 'build-ts-amd', 'copy-extras',
+gulp.task('build-ts', gulp.series('clean', 'build-ts-amd', 'build-dts', 'copy-extras',
   function(done) {
+    gulp.src(paths.output + 'index.js')
+      .pipe(rename("sigma-ui-framework.js"))
+      .pipe(gulp.dest("./dist"));
+    gulp.src(paths.output + 'typings/index.d.ts')
+      .pipe(rename("typings/sigma-ui-framework.d.ts"))
+      .pipe(gulp.dest("./dist"));
+    del([paths.output + 'index.js', paths.output + 'typings/index.d.ts']);
     done();
   }));

@@ -1,12 +1,24 @@
 {
   "name": "sigma-ui-framework",
-  "description": "An Aurelia UI Framework.",
   "version": "2.0.0-beta.1",
-  "repository": {
-    "type": "???",
-    "url": "???"
+  "description": "A bespoke UI Framework for building desktop business applications",
+  "keywords": [
+    "ui-framework",
+    "desktop-framework",
+    "aurelia-ui-framework"
+  ],
+  "homepage": "http://sigmaframeworks.io",
+  "bugs": {
+    "url": "https://github.com/sigmaframeworks/sigma-ui-framework/issues"
   },
   "license": "MIT",
+  "author": "Adarsh Pastakia <adarshpastakia@outlook.com> (http://adarshpastakia.github.io/)",
+  "main": "dist/sigma-ui-framework.js",
+  "typings": "dist/typings/sigma-ui-framework.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sigmaframeworks/sigma-ui-framework"
+  },
   "dependencies": {
     "aurelia-animator-css": "^1.0.0",
     "aurelia-bootstrapper": "^1.0.0",
