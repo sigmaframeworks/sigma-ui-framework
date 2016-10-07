@@ -5,6 +5,10 @@ A bespoke UI Framework built on Aurelia for desktop business application
 
 **[Demo](http://demo-v2.sigmaframeworks.io/)**
 
+## Changes
+* Updating custom elements to have inline views to compensate for aurelia-cli' inability to include custom-element markup.
+* Making components more customizable rather than have a rigid structure and layouts
+
 ---
 
 ### Browser Support
