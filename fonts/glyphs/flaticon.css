@@ -1,0 +1,72 @@
+	/*
+  	Flaticon icon font: Flaticon
+  	Creation date: 03/10/2016 20:43
+  	*/
+
+@font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+[class^="fi-ui-"]:before, [class*=" fi-ui-"]:before,
+[class^="fi-ui-"]:after, [class*=" fi-ui-"]:after {   
+  font-family: Flaticon;
+        font-size: 20px;
+font-style: normal;
+margin-left: 20px;
+}
+
+.fi-ui-angle-down:before { content: "\f100"; }
+.fi-ui-angle-left:before { content: "\f101"; }
+.fi-ui-angle-right:before { content: "\f102"; }
+.fi-ui-angle-up:before { content: "\f103"; }
+.fi-ui-arrow-down:before { content: "\f104"; }
+.fi-ui-arrow-left:before { content: "\f105"; }
+.fi-ui-arrow-right:before { content: "\f106"; }
+.fi-ui-arrow-up:before { content: "\f107"; }
+.fi-ui-bell:before { content: "\f108"; }
+.fi-ui-calendar:before { content: "\f109"; }
+.fi-ui-chart-bar:before { content: "\f10a"; }
+.fi-ui-chart-pie:before { content: "\f10b"; }
+.fi-ui-check:before { content: "\f10c"; }
+.fi-ui-circle:before { content: "\f10d"; }
+.fi-ui-close:before { content: "\f10e"; }
+.fi-ui-days:before { content: "\f10f"; }
+.fi-ui-delete:before { content: "\f110"; }
+.fi-ui-desktop:before { content: "\f111"; }
+.fi-ui-dialog-close:before { content: "\f112"; }
+.fi-ui-dialog-maximize:before { content: "\f113"; }
+.fi-ui-dialog-minimize:before { content: "\f114"; }
+.fi-ui-dialog-restore:before { content: "\f115"; }
+.fi-ui-download:before { content: "\f116"; }
+.fi-ui-drawer:before { content: "\f117"; }
+.fi-ui-edit:before { content: "\f118"; }
+.fi-ui-email:before { content: "\f119"; }
+.fi-ui-folder:before { content: "\f11a"; }
+.fi-ui-image:before { content: "\f11b"; }
+.fi-ui-key:before { content: "\f11c"; }
+.fi-ui-logout:before { content: "\f11d"; }
+.fi-ui-overflow:before { content: "\f11e"; }
+.fi-ui-page:before { content: "\f11f"; }
+.fi-ui-pencil:before { content: "\f120"; }
+.fi-ui-phone:before { content: "\f121"; }
+.fi-ui-search:before { content: "\f122"; }
+.fi-ui-settings:before { content: "\f123"; }
+.fi-ui-tree-check-off:before { content: "\f124"; }
+.fi-ui-tree-check-on:before { content: "\f125"; }
+.fi-ui-tree-check-partial:before { content: "\f126"; }
+.fi-ui-upload:before { content: "\f127"; }
+.fi-ui-window:before { content: "\f128"; }

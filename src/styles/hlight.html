@@ -1,0 +1,57 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <ui-content scroll padded>
+    <div class="ui-margin-v">
+      <pre markdown>
+        <xmp>
+        ```html
+        <ui-button primary icon.bind="glyph class" disabled="bool" click.trigger="fn()">Label</ui-button>
+        ```
+        
+        ```scss
+        $primary: #899809 !default;
+        @mixin test() {
+          border: 1px solid $primary;
+        }
+        
+        .borderer {
+          @include test();
+        }
+        ```
+        
+        ```ts
+        import {ClassName} from "module";
+        
+        @autoinject()
+        export class MyName extends BaseClass {
+          public _int:Number = 10;
+          private _str:String = "Hello";
+          private _map:Map<string, Object> = null;
+          
+          @bindable({mode: two})
+          class:string = '';
+          
+          constructor(public x:App) {
+          }
+          
+          // Comment
+          attached() {
+            x = () => {
+              return test;
+            }
+            
+            this.test();
+            
+            return null;
+          }
+        }
+        ```
+        </xmp>
+      </pre>
+    </div>
+  </ui-content>
+</template>

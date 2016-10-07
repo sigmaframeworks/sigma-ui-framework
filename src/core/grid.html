@@ -1,0 +1,158 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <style>
+    .card {
+      border-radius: 4px;
+      margin: 4px;
+      padding: 4px 8px;
+    }
+
+  </style>
+  <ui-page page-title="Grid Layout">
+    <ui-content scroll padded>
+      <div class="ui-container">
+        <h1>Grids</h1>
+        <hr/>
+        <h5 class="ui-text-muted">Auto Layout</h5>
+        <ui-row class="ui-text-white ui-thin ui-margin-v">
+          <ui-column auto>
+            <div class="card ui-bg-info">Auto Width</div>
+          </ui-column>
+          <ui-column width="18em">
+            <div class="card ui-bg-danger">Fixed Width</div>
+          </ui-column>
+          <ui-column fill>
+            <div class="card ui-bg-success">Fill Width</div>
+          </ui-column>
+          <ui-column full>
+            <div class="card ui-bg-warning">Full Width</div>
+          </ui-column>
+        </ui-row>
+
+        <hr/>
+        <h5 class="ui-text-muted">Multi Sized
+          <small>(xl-2 lg-4 md-6)</small>
+        </h5>
+        <ui-row class="ui-text-white ui-thin ui-margin-v">
+          <ui-column size="xl-2 lg-4 md-6">
+            <div class="card ui-bg-primary">&nbsp;</div>
+          </ui-column>
+          <ui-column size="xl-2 lg-4 md-6">
+            <div class="card ui-bg-secondary">&nbsp;</div>
+          </ui-column>
+          <ui-column size="xl-2 lg-4 md-6">
+            <div class="card ui-bg-info">&nbsp;</div>
+          </ui-column>
+          <ui-column size="xl-2 lg-4 md-6">
+            <div class="card ui-bg-danger">&nbsp;</div>
+          </ui-column>
+          <ui-column size="xl-2 lg-4 md-6">
+            <div class="card ui-bg-success">&nbsp;</div>
+          </ui-column>
+          <ui-column size="xl-2 lg-4 md-6">
+            <div class="card ui-bg-warning">&nbsp;</div>
+          </ui-column>
+        </ui-row>
+
+        <hr/>
+        <h5 class="ui-text-muted">X-Large
+          <small>(1536px)</small>
+        </h5>
+        <ui-row class="ui-text-white ui-thin ui-margin-v">
+          <ui-column size="xl-3">
+            <div class="card ui-bg-info">&nbsp;</div>
+          </ui-column>
+          <ui-column size="xl-3">
+            <div class="card ui-bg-danger">&nbsp;</div>
+          </ui-column>
+          <ui-column size="xl-3">
+            <div class="card ui-bg-success">&nbsp;</div>
+          </ui-column>
+          <ui-column size="xl-3">
+            <div class="card ui-bg-warning">&nbsp;</div>
+          </ui-column>
+        </ui-row>
+
+        <hr/>
+        <h5 class="ui-text-muted">Large
+          <small>(1024px)</small>
+        </h5>
+        <ui-row class="ui-text-white ui-thin ui-margin-v">
+          <ui-column size="lg-3">
+            <div class="card ui-bg-info">&nbsp;</div>
+          </ui-column>
+          <ui-column size="lg-3">
+            <div class="card ui-bg-danger">&nbsp;</div>
+          </ui-column>
+          <ui-column size="lg-3">
+            <div class="card ui-bg-success">&nbsp;</div>
+          </ui-column>
+          <ui-column size="lg-3">
+            <div class="card ui-bg-warning">&nbsp;</div>
+          </ui-column>
+        </ui-row>
+
+        <hr/>
+        <h5 class="ui-text-muted">Medium
+          <small>(768px)</small>
+        </h5>
+        <ui-row class="ui-text-white ui-thin ui-margin-v">
+          <ui-column size="md-3">
+            <div class="card ui-bg-info">&nbsp;</div>
+          </ui-column>
+          <ui-column size="md-3">
+            <div class="card ui-bg-danger">&nbsp;</div>
+          </ui-column>
+          <ui-column size="md-3">
+            <div class="card ui-bg-success">&nbsp;</div>
+          </ui-column>
+          <ui-column size="md-3">
+            <div class="card ui-bg-warning">&nbsp;</div>
+          </ui-column>
+        </ui-row>
+
+        <hr/>
+        <h5 class="ui-text-muted">Small
+          <small>(480px)</small>
+        </h5>
+        <ui-row class="ui-text-white ui-thin ui-margin-v">
+          <ui-column size="sm-3">
+            <div class="card ui-bg-info">&nbsp;</div>
+          </ui-column>
+          <ui-column size="sm-3">
+            <div class="card ui-bg-danger">&nbsp;</div>
+          </ui-column>
+          <ui-column size="sm-3">
+            <div class="card ui-bg-success">&nbsp;</div>
+          </ui-column>
+          <ui-column size="sm-3">
+            <div class="card ui-bg-warning">&nbsp;</div>
+          </ui-column>
+        </ui-row>
+
+        <hr/>
+        <h5 class="ui-text-muted">X-Small
+          <small>(320px)</small>
+        </h5>
+        <ui-row class="ui-text-white ui-thin ui-margin-v">
+          <ui-column size="xs-3">
+            <div class="card ui-bg-info">&nbsp;</div>
+          </ui-column>
+          <ui-column size="xs-3">
+            <div class="card ui-bg-danger">&nbsp;</div>
+          </ui-column>
+          <ui-column size="xs-3">
+            <div class="card ui-bg-success">&nbsp;</div>
+          </ui-column>
+          <ui-column size="xs-3">
+            <div class="card ui-bg-warning">&nbsp;</div>
+          </ui-column>
+        </ui-row>
+      </div>
+    </ui-content>
+  </ui-page>
+</template>

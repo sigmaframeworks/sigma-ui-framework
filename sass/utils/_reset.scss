@@ -1,0 +1,223 @@
+// 
+// @description : 
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+
+a {
+  text-decoration: none;
+}
+
+img {
+  border: none;
+}
+
+a,
+button {
+  cursor : pointer;
+  outline: none;
+  color  : inherit;
+}
+
+.ui-link {
+  color: $link-text;
+
+  &:focus,
+  &:hover {
+    color: $link-hover-text;
+    @include box-shadow(0 1px 0 0 $link-hover-text);
+  }
+
+  &:active {
+    color: $link-active-text;
+  }
+}
+
+fieldset {
+  border       : 1px solid $base-border-color;
+  border-radius: $base-border-radius;
+  margin       : .5em;
+}
+
+hr {
+  background: none;
+  border    : {
+    top   : 1px solid $divider-shadow;
+    bottom: 1px solid $divider-hilight;
+  }
+  @include transform(scaleY(.5));
+}
+
+.ui-scroll {
+  @include scroll();
+}
+
+.ui-hidden {
+  display: none;
+}
+
+.ui-block {
+  display: block;
+}
+
+.ui-inline-block {
+  display: inline-block;
+}
+
+.ui-inline {
+  display: inline;
+}
+
+.ui-hide {
+  visibility: hidden;
+}
+
+.ui-disabled {
+  pointer-events: none;
+}
+
+.ui-shadow {
+  box-shadow: 0 0 3px 0 $base-shadow;
+}
+
+// Padding
+.ui-pad-all {
+  padding: .25em .5em;
+}
+
+.ui-pad-h {
+  padding: 0 .5em;
+}
+
+.ui-pad-v {
+  padding: .25em 0;
+}
+
+.ui-pad-t {
+  padding-top: .25em;
+}
+
+.ui-pad-b {
+  padding-bottom: .25em;
+}
+
+.ui-pad-s {
+  @include padding(start, .5em);
+}
+
+.ui-pad-e {
+  @include padding(end, .5em);
+}
+
+// Margin
+.ui-margin-all {
+  margin: .25em .5em;
+}
+
+.ui-margin-h {
+  margin: 0 .5em;
+}
+
+.ui-margin-v {
+  margin: .25em 0;
+}
+
+.ui-margin-t {
+  margin-top: .25em;
+}
+
+.ui-margin-b {
+  margin-bottom: .25em;
+}
+
+.ui-margin-s {
+  @include margin(start, .5em);
+}
+
+.ui-margin-e {
+  @include margin(end, .5em);
+}
+
+// BORDERS
+.ui-border-all {
+  border: 1px solid $base-border-color;
+}
+
+.ui-border-h {
+  border: {
+    width: 1px 0;
+    color: $base-border-color;
+    style: solid;
+  }
+}
+
+.ui-border-v {
+  border: {
+    width: 0 1px;
+    color: $base-border-color;
+    style: solid;
+  }
+}
+
+.ui-border-t {
+  border-top: 1px solid $base-border-color;
+}
+
+.ui-border-b {
+  border-bottom: 1px solid $base-border-color;
+}
+
+.ui-border-s {
+  @include border(start, 1px solid $base-border-color);
+}
+
+.ui-border-e {
+  @include border(end, 1px solid $base-border-color);
+}
+
+// Colors
+.ui-badge {
+  color        : $white;
+  border-radius: 2rem;
+  padding      : .2rem;
+  min-width    : 1.5rem;
+  font-size    : .65rem;
+  line-height  : .65rem;
+  text-align   : center;
+  @include position(absolute, -.5em -.5em auto auto);
+}
+
+.ui-bg-dark {
+  background-color: $cg-8;
+  color           : $white;
+}
+
+.ui-bg-primary {
+  background-color: $primary;
+  color           : $primary-text;
+}
+
+.ui-bg-secondary {
+  background-color: $secondary;
+  color           : $secondary-text;
+}
+
+.ui-bg-info {
+  background-color: $info;
+  color           : $info-text;
+}
+
+.ui-bg-danger {
+  background-color: $danger;
+  color           : $danger-text;
+}
+
+.ui-bg-success {
+  background-color: $success;
+  color           : $success-text;
+}
+
+.ui-bg-warning {
+  background-color: $warning;
+  color           : $warning-text;
+}

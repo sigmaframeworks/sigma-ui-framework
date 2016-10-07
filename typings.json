@@ -1,8 +1,16 @@
 {
+  "name": "aui",
   "dependencies": {},
+  "globalDevDependencies": {
+    "angular-protractor": "registry:dt/angular-protractor#1.5.0+20160425143459",
+    "jasmine": "registry:dt/jasmine#2.2.0+20160505161446",
+    "node": "registry:dt/node",
+    "selenium-webdriver": "registry:dt/selenium-webdriver#2.44.0+20160317120654"
+  },
   "globalDependencies": {
-    "lodash": "registry:dt/lodash#4.14.0+20160817155621",
-    "node": "registry:dt/node#6.0.0+20160831021119",
-    "numeraljs": "registry:dt/numeraljs#0.0.0+20160316155526"
+    "lodash": "registry:dt/lodash#4.14.0+20161004174455",
+    "moment": "registry:dt/moment#2.11.1+20160829143156",
+    "numeraljs": "registry:dt/numeraljs#0.0.0+20160316155526",
+    "tether": "registry:dt/tether#1.1.0+20160316155526"
   }
 }

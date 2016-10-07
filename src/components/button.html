@@ -1,0 +1,238 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <ui-page page-title="Buttons">
+    <ui-content scroll padded>
+      <div class="ui-container">
+        <h1>Buttons</h1>
+        <hr/>
+        <h5 class="ui-text-muted">Themed Buttons</h5>
+        <ui-row middle class="ui-margin-all">
+          <ui-column auto>
+            <ui-button icon="fi-ui-bell" badge-danger="5">Click Me!</ui-button>
+            <p class="ui-font-small ui-text-center">Default</p>
+          </ui-column>
+          <ui-column auto>
+            <ui-button icon="fi-ui-bell" badge-success="5" dark>Click Me!</ui-button>
+            <p class="ui-font-small ui-text-center">Dark</p>
+          </ui-column>
+          <ui-column auto>
+            <ui-button icon="fi-ui-bell" badge-warning="5" primary>Click Me!</ui-button>
+            <p class="ui-font-small ui-text-center">Primary</p>
+          </ui-column>
+          <ui-column auto>
+            <ui-button icon="fi-ui-bell" badge="5" secondary>Click Me!</ui-button>
+            <p class="ui-font-small ui-text-center">Secondary</p>
+          </ui-column>
+          <ui-column auto>
+            <ui-button icon="fi-ui-bell" badge-primary="5" info>Click Me!</ui-button>
+            <p class="ui-font-small ui-text-center">Info</p>
+          </ui-column>
+          <ui-column auto>
+            <ui-button icon="fi-ui-bell" badge-info="5" danger>Click Me!</ui-button>
+            <p class="ui-font-small ui-text-center">Danger</p>
+          </ui-column>
+          <ui-column auto>
+            <ui-button icon="fi-ui-bell" success>Click Me!</ui-button>
+            <p class="ui-font-small ui-text-center">Success</p>
+          </ui-column>
+          <ui-column auto>
+            <ui-button icon="fi-ui-bell" warning>Click Me!</ui-button>
+            <p class="ui-font-small ui-text-center">Warning</p>
+          </ui-column>
+          <ui-column auto>
+            <ui-button icon="fi-ui-bell" class="ui-disabled">Click Me!</ui-button>
+            <p class="ui-font-small ui-text-center">Disabled</p>
+          </ui-column>
+        </ui-row>
+        <hr/>
+        <h5 class="ui-text-muted">Sized Buttons</h5>
+        <ui-row bottom class="ui-margin-all">
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" primary square small></ui-button>
+            <p class="ui-font-small">Small<br/>Square</p>
+          </ui-column>
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" primary square></ui-button>
+            <p class="ui-font-small">Normal<br/>Square</p>
+          </ui-column>
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" primary square big></ui-button>
+            <p class="ui-font-small">Big<br/>Square</p>
+          </ui-column>
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" badge="5" primary small>Click Me!</ui-button>
+            <p class="ui-font-small">Small<br/>&nbsp;</p>
+          </ui-column>
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" badge="5" primary>Click Me!</ui-button>
+            <p class="ui-font-small">Normal<br/>&nbsp;</p>
+          </ui-column>
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" badge="5" primary big>Click Me!</ui-button>
+            <p class="ui-font-small">Big<br/>&nbsp;</p>
+          </ui-column>
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" primary icon-top small>Click Me!</ui-button>
+            <p class="ui-font-small">Small<br/>Icon-Top</p>
+          </ui-column>
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" primary icon-top>Click Me!</ui-button>
+            <p class="ui-font-small">Normal<br/>Icon-Top</p>
+          </ui-column>
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" primary icon-top big>Click Me!</ui-button>
+            <p class="ui-font-small">Big<br/>Icon-Top</p>
+          </ui-column>
+        </ui-row>
+        <hr/>
+        <h5 class="ui-text-muted">Round Buttons</h5>
+        <ui-row bottom class="ui-margin-all">
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" secondary small square round></ui-button>
+            <p class="ui-font-small">Small<br/>Square</p>
+          </ui-column>
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" secondary square round></ui-button>
+            <p class="ui-font-small">Normal<br/>Square</p>
+          </ui-column>
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" secondary square big round></ui-button>
+            <p class="ui-font-small">Big<br/>Square</p>
+          </ui-column>
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" secondary small round>Click Me!</ui-button>
+            <p class="ui-font-small">Small<br/>&nbsp;</p>
+          </ui-column>
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" secondary round>Click Me!</ui-button>
+            <p class="ui-font-small">Normal<br/>&nbsp;</p>
+          </ui-column>
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" secondary big round>Click Me!</ui-button>
+            <p class="ui-font-small">Big<br/>&nbsp;</p>
+          </ui-column>
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" badge="5" secondary icon-top small round>Click Me!</ui-button>
+            <p class="ui-font-small">Small<br/>Icon-Top</p>
+          </ui-column>
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" badge="5" secondary icon-top round>Click Me!</ui-button>
+            <p class="ui-font-small">Normal<br/>Icon-Top</p>
+          </ui-column>
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" badge="5" secondary icon-top big round>Click Me!</ui-button>
+            <p class="ui-font-small">Big<br/>Icon-Top</p>
+          </ui-column>
+        </ui-row>
+
+        <hr/>
+        <h5 class="ui-text-muted">Dropdown Buttons</h5>
+        <ui-row bottom class="ui-margin-all">
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" dropdown.bind="__menu">Open Me!</ui-button>
+            <ui-menu ref="__menu">
+              <ui-menu-item>Add</ui-menu-item>
+              <ui-menu-item>Edit</ui-menu-item>
+              <ui-menu-item>Delete</ui-menu-item>
+              <ui-menu-divider></ui-menu-divider>
+              <ui-menu-item>Options</ui-menu-item>
+            </ui-menu>
+          </ui-column>
+          <ui-column auto class="ui-text-center ui-pad-h">
+            <ui-button icon="fi-ui-bell" dropdown.bind="__menu2" primary>Open Me!</ui-button>
+            <ui-menu ref="__menu2">
+              <ui-menu-item>Add</ui-menu-item>
+              <ui-menu-item>Edit</ui-menu-item>
+              <ui-menu-item>Delete</ui-menu-item>
+              <ui-menu-divider></ui-menu-divider>
+              <ui-menu-item>Options</ui-menu-item>
+            </ui-menu>
+          </ui-column>
+        </ui-row>
+
+        <hr/>
+        <h5>Markup</h5>
+        <div class="ui-margin-v">
+          <pre markdown>
+          <xmp>
+          ```html
+          <ui-button [theme] [size] [style] icon[bindable]="glyph class" disabled[bindable]="bool" dropdown.bind="menuEl" click.trigger="fn()">Label</ui-button>
+          
+          <!-- For using aurelia-i18n -->
+          <!-- Wrap button label in a span -->
+          <ui-button><span t="i18nKey"></span></ui-button>
+          
+          <!-- Badges -->
+          <ui-button badge-primary="10">Click</ui-button>
+          <!-- Any relative positioned element -->
+          <div badge="Value"></div>
+          ```
+
+          * Themes
+            - `default`
+            - `dark`
+            - `primary`
+            - `secondary`
+            - `info`
+            - `danger`
+            - `success`
+            - `warning`
+          * Sizes
+            - `normal`
+            - `small`
+            - `big`
+          * Styles
+            - `icon-top`
+            - `square`: Equal padding
+            - `round`: Rounded corners
+            
+          * Badges
+            - `badge` - default dark background
+            - `badge-primary`
+            - `badge-secondary`
+            - `badge-info`
+            - `badge-danger`
+            - `badge-success`
+            - `badge-warning`
+          </xmp>
+        </pre>
+        </div>
+
+        <hr/>
+        <h5>Examples</h5>
+        <div class="ui-margin-v">
+          <pre markdown>
+          <xmp>
+          ```html
+          <ui-button primary>Click Me</ui-button>
+          
+          <ui-button warning icon-top icon="flaticon-bell">Click Me</ui-button>
+          
+          <ui-button danger big round icon="flaticon-error">Click Me</ui-button>
+          
+          <ui-button dark round icon.bind="_icon">Click Me</ui-button>
+          
+          <!-- Icon only -->
+          <ui-button success round icon="flaticon-save"></ui-button>
+          
+          <!-- Dropdown -->
+          <ui-button dark icon.bind="_icon" dropdown.bind="_menu">Open Me</ui-button>
+          <ui-menu ref="_menu">
+            <ui-menu-item>Add</ui-menu-item>
+            <ui-menu-item>Edit</ui-menu-item>
+            <ui-menu-item>Delete</ui-menu-item>
+            <ui-menu-divider></ui-menu-divider>
+            <ui-menu-item>Options</ui-menu-item>
+          </ui-menu>
+          ```
+          </xmp>
+        </pre>
+        </div>
+      </div>
+    </ui-content>
+  </ui-page>
+</template>

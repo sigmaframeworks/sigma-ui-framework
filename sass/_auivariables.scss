@@ -1,0 +1,155 @@
+// 
+// @description : 
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+@import "compass/css3";
+@import 'compass/utilities';
+@import "utils/copic";
+
+$primary                     : $lapis-lazuli !default;
+$secondary                   : $blue-violet !default;
+
+$info                        : $process-blue !default;
+$danger                      : $strong-red !default;
+$success                     : $moss !default;
+$warning                     : $atoll !default;
+$muted                       : $cg-6 !default;
+
+$primary-text                : $white !default;
+$secondary-text              : $white !default;
+
+$info-text                   : $white !default;
+$danger-text                 : $white !default;
+$success-text                : $white !default;
+$warning-text                : $white !default;
+
+$base-font-family            : 'Open Sans', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif !default;
+$base-font-size              : 1rem !default;
+
+$base-padding                : .25em .5em !default;
+$base-border-radius          : .25em !default;
+
+$base-bg                     : $white !default;
+$base-text                   : $cg-10 !default;
+$base-shadow                 : rgba($wg-4, .75) !default;
+$base-shadow-dark            : rgba($wg-9, .75) !default;
+$base-border-color           : rgba($wg-6, .75) !default;
+
+$link-text                   : $primary !default;
+$link-hover-text             : darken($primary,10%) !default;
+$link-active-text            : darken($primary,20%) !default;
+
+$body-image                  : false !default;
+$splash-image                : 'splash-ring.svg' !default;
+
+$divider-shadow              : #888 !default;
+$divider-hilight             : #fff !default;
+
+$enable-blur                 : true !default;
+$enable-gradient             : false !default;
+
+$z-index-dialog              : 50 !default;
+$z-index-floating            : 100 !default;
+$z-index-toast               : 200 !default;
+$z-index-drawer              : 1000 !default;
+$z-index-splash              : 50000 !default;
+
+/** Grid Breakpoints **/
+$grid-xs-min                 : 320px !default; // 320 - 480
+$grid-sm-min                 : 480px !default; // 480 - 768
+$grid-md-min                 : 768px !default; // 768 - 1024
+$grid-lg-min                 : 1024px !default; // 1024 - 1536
+$grid-xl-min                 : 1536px !default; // 1536 - ∞
+
+/** App Elements **/
+$app-header-bg               : $primary !default;
+$app-header-text             : contrast-color($primary) !default;
+
+$app-footer-bg               : $cg-10 !default;
+$app-footer-text             : $cg-3 !default;
+
+/** Page Element **/
+$page-title-bg               : $secondary !default;
+$page-title-text             : $white !default;
+
+$sidebar-width               : 15em !default;
+
+$toolbar-bg                  : $cg-00 !default;
+
+/** Menu Elements **/
+$menubar-bg                  : $cg-00 !default;
+$menu-dropdown-bg            : $white !default;
+
+$menu-section-title          : $cg-8 !default;
+
+$menu-link-text              : $primary !default;
+$menu-link-disabled          : $cg-5 !default;
+$menu-link-hover-bg          : $cg-0 !default;
+$menu-link-hover-text        : $primary !default;
+$menu-link-active-bg         : desaturate(lighten($primary, 30%),10%) !default;
+$menu-link-active-text       : contrast-color($menu-link-active-bg) !default;
+
+/** Drawer Element **/
+$drawer-width                : 18em !default;
+$drawer-bg                   : $base-bg !default;
+
+/** Button Elements **/
+$button-default-bg           : $cg-00 !default;
+$button-default-text         : $black !default;
+$button-default-hover-bg     : $cg-1 !default;
+$button-default-hover-text   : $button-default-text !default;
+$button-default-active-bg    : $cg-3 !default;
+$button-default-active-text  : $button-default-text !default;
+
+$button-disabled-bg          : $ng-3 !default;
+$button-disabled-text        : #eee !default;
+
+$button-dark-bg              : $cg-8 !default;
+$button-dark-text            : $white !default;
+$button-dark-hover-bg        : $cg-9 !default;
+$button-dark-hover-text      : $button-dark-text !default;
+$button-dark-active-bg       : $cg-10 !default;
+$button-dark-active-text     : $button-dark-text !default;
+
+$button-primary-bg           : $primary !default;
+$button-primary-text         : $white !default;
+$button-primary-hover-bg     : darken($button-primary-bg, 10%) !default;
+$button-primary-hover-text   : $button-primary-text !default;
+$button-primary-active-bg    : darken($button-primary-bg, 20%) !default;
+$button-primary-active-text  : $button-primary-text !default;
+
+$button-secondary-bg         : $secondary !default;
+$button-secondary-text       : $white !default;
+$button-secondary-hover-bg   : darken($button-secondary-bg, 10%) !default;
+$button-secondary-hover-text : $button-secondary-text !default;
+$button-secondary-active-bg  : darken($button-secondary-bg, 20%) !default;
+$button-secondary-active-text: $button-secondary-text !default;
+
+$button-info-bg              : $info !default;
+$button-info-text            : $white !default;
+$button-info-hover-bg        : darken($button-info-bg, 10%) !default;
+$button-info-hover-text      : $button-info-text !default;
+$button-info-active-bg       : darken($button-info-bg, 20%) !default;
+$button-info-active-text     : $button-info-text !default;
+
+$button-danger-bg            : $danger !default;
+$button-danger-text          : $white !default;
+$button-danger-hover-bg      : darken($button-danger-bg, 10%) !default;
+$button-danger-hover-text    : $button-danger-text !default;
+$button-danger-active-bg     : darken($button-danger-bg, 20%) !default;
+$button-danger-active-text   : $button-danger-text !default;
+
+$button-success-bg           : $success !default;
+$button-success-text         : $white !default;
+$button-success-hover-bg     : darken($button-success-bg, 10%) !default;
+$button-success-hover-text   : $button-success-text !default;
+$button-success-active-bg    : darken($button-success-bg, 20%) !default;
+$button-success-active-text  : $button-success-text !default;
+
+$button-warning-bg           : $warning !default;
+$button-warning-text         : $white !default;
+$button-warning-hover-bg     : darken($button-warning-bg, 10%) !default;
+$button-warning-hover-text   : $button-warning-text !default;
+$button-warning-active-bg    : darken($button-warning-bg, 20%) !default;
+$button-warning-active-text  : $button-warning-text !default;

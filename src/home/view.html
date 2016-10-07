@@ -1,0 +1,36 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <style>
+    .color-round {
+      width: 0.75em;
+      height: 0.75em;
+      border-radius: 50%;
+    }
+
+  </style>
+  <ui-page>
+    <ui-content scroll padded>
+      <div class="ui-text-end ui-pad-all">
+        <div class="ui-inline-block color-round ui-bg-primary">&nbsp;</div>
+        <div class="ui-inline-block color-round ui-bg-secondary">&nbsp;</div>
+        <div class="ui-inline-block color-round ui-bg-info">&nbsp;</div>
+        <div class="ui-inline-block color-round ui-bg-danger">&nbsp;</div>
+        <div class="ui-inline-block color-round ui-bg-success">&nbsp;</div>
+        <div class="ui-inline-block color-round ui-bg-warning">&nbsp;</div>
+      </div>
+      <hr/>
+      <ui-row center middle>
+        <img src="../images/logo.png" align="middle" height="64"/>
+        <h1 class="ui-pad-all ui-font-thin">Sigma UI<span>UI Framework for business applications</span>
+        </h1>
+      </h1>
+      <div class="ui-container">
+        <compose view="home/lipsum-big.html"></compose>
+      </div>
+    </ui-content>
+  </ui-page>
+</template>

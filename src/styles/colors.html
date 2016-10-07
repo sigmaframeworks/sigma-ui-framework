@@ -1,0 +1,56 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <style>
+    .color-card {
+      border: 1px solid silver;
+      border-radius: 12px;
+      display: inline-block;
+      margin: 0.5em;
+      overflow: hidden;
+    }
+
+    .color-card .color {
+      text-align: center;
+      width: 6em;
+      height: 3em;
+    }
+
+    .color-card .color button {
+      font-size: 1.5em;
+      width: 5em;
+      height: 2em;
+      padding: 0.5em 0;
+      text-shadow: 0 0 1px white;
+    }
+
+    .color-card p {
+      font-size: 10px;
+    }
+
+  </style>
+  <ui-content scroll padded>
+    <h2 class="ui-text-primary">
+      <a href="//www.copicmarker.com" target="_blank">Copic Markers 358 Color Chart</a>
+    </h2>
+    <div>
+      <ui-option-group auto-width label="Click color to copy" name="radio" value.bind="optVal">
+        <ui-radio value="1">SASS Variable</ui-radio>
+        <ui-radio value="2">Color Hex</ui-radio>
+      </ui-option-group>
+    </div>
+    <hr/>
+    <div repeat.for="k of colors | keys">
+      <h5>${k}</h5>
+      <div class="color-card" repeat.for="c of colors[k] | keys">
+        <div class="color" css.bind="{background:colors[k][c]}">&nbsp;
+          <!-- <button data-clipboard-text.bind="optVal==1?c:colors[k][c]" tabindex="-1"></button> -->
+        </div>
+        <p class="ui-text-center ui-selectable">${c}</p>
+      </div>
+    </div>
+  </ui-content>
+</template>

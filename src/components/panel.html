@@ -1,0 +1,74 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <ui-page page-title="Drawers">
+    <ui-content scroll padded>
+      <div class="ui-container">
+        <br/>
+        <h5 class="ui-text-muted">Simple Panel</h5>
+        <ui-panel>
+          <ui-panel-body padded scroll max-height="20em">
+            <compose view="home/lipsum-big.html"></compose>
+          </ui-panel-body>
+        </ui-panel>
+        <hr/>
+        <h5 class="ui-text-muted">Panel with Header</h5>
+
+        <ui-row class="ui-margin-v">
+          <ui-column size="xl-2 lg-4 md-6" padded>
+            <ui-panel>
+              <ui-header>Panel</ui-header>
+              <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+            </ui-panel>
+          </ui-column>
+          <ui-column size="xl-2 lg-4 md-6" padded>
+            <ui-panel>
+              <ui-header dark>Panel</ui-header>
+              <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+            </ui-panel>
+          </ui-column>
+          <ui-column size="xl-2 lg-4 md-6" padded>
+            <ui-panel>
+              <ui-header primary>Panel</ui-header>
+              <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+            </ui-panel>
+          </ui-column>
+          <ui-column size="xl-2 lg-4 md-6" padded>
+            <ui-panel>
+              <ui-header secondary>Panel</ui-header>
+              <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+            </ui-panel>
+          </ui-column>
+          <ui-column size="xl-2 lg-4 md-6" padded>
+            <ui-panel>
+              <ui-header info>Panel</ui-header>
+              <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+            </ui-panel>
+          </ui-column>
+          <ui-column size="xl-2 lg-4 md-6" padded>
+            <ui-panel>
+              <ui-header danger>Panel</ui-header>
+              <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+            </ui-panel>
+          </ui-column>
+          <ui-column size="xl-2 lg-4 md-6" padded>
+            <ui-panel>
+              <ui-header success>Panel</ui-header>
+              <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+            </ui-panel>
+          </ui-column>
+          <ui-column size="xl-2 lg-4 md-6" padded>
+            <ui-panel>
+              <ui-header warning>Panel</ui-header>
+              <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+            </ui-panel>
+          </ui-column>
+        </ui-row>
+
+      </div>
+    </ui-content>
+  </ui-page>
+</template>

@@ -1,0 +1,190 @@
+// 
+// @description : 
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  position: relative;
+
+  > span {
+    font-size  : .6em;
+    line-height: 1.5;
+    display    : block;
+    color      : $muted;
+  }
+}
+
+h6 {
+  font-size: .9em;
+}
+
+h5 {
+  font-size: 1.1em;
+}
+
+h4 {
+  font-size: 1.3em;
+}
+
+h3 {
+  font-size: 1.5em;
+}
+
+h2 {
+  font-size: 1.8em;
+}
+
+h1 {
+  font-size: 2em;
+
+  &.ui-font-big {
+    font-size: 3em;
+  }
+
+  &.ui-font-large {
+    font-size: 4em;
+  }
+}
+
+small {
+  font-size: .75em;
+}
+
+// Styles
+.ui-strong,
+strong {
+  font-weight: 500;
+}
+
+.ui-bold,
+b {
+  font-weight: 600;
+}
+
+.ui-thin {
+  font-weight: 300;
+}
+
+.ui-italic,
+address,
+cite,
+dfn,
+em,
+i,
+var {
+  font-style: italic;
+}
+
+.ui-small-caps {
+  font-variant: small-caps;
+}
+
+.ui-uppercase {
+  text-transform: uppercase;
+}
+
+.ui-lowercase {
+  text-transform: lowercase;
+}
+
+.ui-titlecase {
+  text-transform: capitalize;
+}
+// Sizes
+.ui-font-small,
+small {
+  font-size: .75em;
+}
+
+.ui-font-big,
+big {
+  font-size: 1.15em;
+}
+
+.ui-font-large {
+  font-size: 1.5em;
+}
+
+// Alignments
+.ui-text-start {
+  text-align: left;
+  text-align: start;
+}
+
+.ui-text-center {
+  text-align: center;
+}
+
+.ui-text-justify {
+  text-align: justify;
+}
+
+.ui-text-end {
+  text-align: right;
+  text-align: end;
+}
+
+// Colors
+.ui-text-primary {
+  color: $primary;
+}
+
+.ui-text-secondary {
+  color: $secondary;
+}
+
+.ui-text-info {
+  color: $info;
+}
+
+.ui-text-danger {
+  color: $danger;
+}
+
+.ui-text-success {
+  color: $success;
+}
+
+.ui-text-warning {
+  color: $warning;
+}
+
+.ui-text-muted {
+  color: $muted;
+}
+
+.ui-text-black {
+  color: $black;
+}
+
+.ui-text-white {
+  color: $white;
+}
+
+[dir='rtl'] {
+  [class*='fi-'],
+  [class^='fi-'] {
+    transform: scale(-1, 1);
+  }
+
+  .ui-flip {
+    transform: scale(1, 1);
+  }
+}
+
+[dir='ltr'] {
+  [class*='fi-'],
+  [class^='fi-'] {
+    transform: scale(1, 1);
+  }
+
+  .ui-flip {
+    transform: scale(-1, 1);
+  }
+}

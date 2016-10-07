@@ -1,275 +1,159 @@
-// UI Viewport
-// @description :
+// 
+// @description : 
 // @author      : Adarsh Pastakia
-// @copyright   : 2016 Sigma Frameworks
+// @copyright   : 2016
 // @license     : MIT
 
+body,
+html {
+  height          : 100%;
+  width           : 100%;
+  padding         : 0;
+  margin          : 0;
+  line-height     : 1.25;
+  overflow        : hidden;
+  cursor          : default;
+  @include user-select(none);
+
+  color           : $base-text;
+  background-color: $base-bg;
+
+  font            : {
+    family: $base-font-family;
+    size  : $base-font-size;
+  }
+
+  .ui-selectable {
+    cursor: text;
+    @include user-select(text);
+  }
+}
+
+*,
+*:after,
+*:before {
+  @include box-sizing(border-box);
+  @include selection($primary, contrast-color($primary));
+  @include input-placeholder {
+    // color: $input-placeholder-text;
+  }
+}
+
+.ui-splash {
+  background: #fff no-repeat center center;
+  @include position(absolute);
+  @if $splash-image {
+    background-image: image-url($splash-image);
+  }
+}
+
 .ui-viewport {
-    @include flex-column();
-    @include position(absolute, 0, 0, 0, 0);
+  overflow: hidden;
+  @include flex-column();
+  @include position(absolute, 0);
+  @if $body-image {
+    background-image: image-url($body-image);
+  }
+
+  .ui-app-header {
+    min-height      : 2em;
+    padding         : .25em .5em;
+    @include flex(0 0 auto);
+    @include flex-row($align: center, $wrap:false);
+
+    color           : $app-header-text;
+    background-color: $app-header-bg;
+    border-bottom   : 1px solid rgba($wg-9,.25);
+
+    a {
+      color: $app-header-text;
+    }
 
     .ui-app-logo {
-        width              : 3em;
-        height             : 3em;
-        margin             : 0 auto;
-
-        background-repeat  : no-repeat;
-        background-position: center center;
-        background-size    : auto 2.8em;
+      height: 32px;
+      margin: 0 .5em;
     }
 
-    .ui-app-header {
-        z-index   : 5;
-
-        color     : $app-header-text;
-        background: $app-header-bg;
-        @include flex-row($justify: flex-end);
-        @include flex(0 0 auto);
-        @include box-shadow(0 0 5px 0 $base-shadow-color);
-
-        .ui-app-title {
-            font-size   : $app-header-font-size;
-            font-variant: small-caps;
-            @include flex(1 0 auto);
-
-            a {
-                display: inline-block;
-                color  : $app-header-text;
-            }
-
-            span.nosub {
-                font-size  : 1.5em;
-                font-weight: $font-weight-normal;
-            }
-
-            small {
-                font-size  : .75em;
-                font-weight: $font-weight-normal;
-
-                display    : block;
-
-                margin-top : .2em;
-
-                color      : $app-header-subtitle;
-            }
-        }
-
-        .ui-app-logo {
-            @include flex(0 0 auto);
-        }
-
-        .ui-app-menu-handle {
-            font-size  : 1.5em;
-            line-height: 0;
-
-            width      : 1.5em;
-            padding    : 0;
-            margin     : 0 .3em;
-
-            color      : $app-header-text;
-        }
-
-        .ui-app-header-options {
-            padding: 0 .5em;
-            @include flex(0 0 auto);
-
-            .ui-button {
-                padding: .25em;
-            }
-        }
+    .ui-app-title {
+      font-size: 1.2em;
     }
 
-    .ui-app-footer {
-        padding   : $base-padding;
-
-        color     : $app-footer-text;
-        background: $app-footer-bg;
-        @include flex(0 0 auto);
-        @include flex-row($justify: space-between);
-
-        .heart {
-            color: $cadmium-red;
-        }
-
-        small {
-            font-size: $app-footer-font-size;
-            @include flex(0 0 auto);
-        }
+    .ui-drawer-toggle {
+      font-size: 1.25em;
+      color    : $app-header-text;
     }
+  }
 
-    .ui-app-taskbar {
-        overflow  : hidden;
+  .ui-app-footer {
+    font-size       : .5em;
+    padding         : .25em 1em;
+    @include flex(0 0 auto);
+    @include flex-row($align: center, $justify:space-between);
 
-        min-height: 2em;
+    color           : $app-footer-text;
+    background-color: $app-footer-bg;
+  }
 
-        border-top: 1px solid $base-border-color;
-        background: $base-bg;
+  .ui-router-view {
+    overflow: hidden;
+    position: relative;
+    @include flex(1 1 auto);
+    @include flex-column();
+  }
 
-        .ui-quick-links {
-            display: inline-block;
-            @include border(end, 1px solid $base-border-color);
-        }
+  .ui-loader {
+    @include position(absolute, 0);
+    background: rgba($base-bg, .25);
+    cursor    : wait;
 
-        .ui-button {
-            font-size   : .8em;
+    .ui-loader-div {
+      @include box-shadow(0 0 20px 0 $base-shadow-dark);
+      @include position(absolute, 50% auto auto 50%);
+      @include transform(translateX(-50%) translateY(-50%));
 
-            padding     : .25em .5em;
-            margin      : .25em;
+      background   : $base-bg;
+      overflow     : hidden;
+      padding      : .8em .5em;
+      line-height  : 1;
+      z-index      : $z-index-splash;
+      border-radius: $base-border-radius;
 
-            border-color: darken($button-default-bg, 10%);
+      span:first-child {
+        font-size: 2em;
+        color    : $primary;
+      }
 
-            &.ui-active {
-                color       : $secondary-text;
-                border-color: darken($secondary, 10%);
-                background  : $secondary;
-                box-shadow  : 0 0 2px 0 $base-shadow-color inset !important;
-            }
-        }
+      span:last-child {
+        font-size  : 1.25em;
+        margin-left: -5px;
+        color      : $cg-8;
+      }
     }
+  }
 
-    .ui-viewport-body {
-        position: relative;
-        z-index : 2;
-        @include flex(1 1 auto);
+  .ui-dialog-container {
+    pointer-events: none;
+    z-index       : $z-index-dialog;
+    @include position(absolute, 0);
+
+    &.ui-dragging {
+      pointer-events: all;
     }
+  }
 
-    .ui-app-menu {
-        z-index         : $z-index-splash+1;
+  .ui-overlay-container {
+    overflow      : hidden;
+    padding       : 5em 0 1.5em;
+    pointer-events: none;
+    z-index       : $z-index-toast;
+    @include position(absolute, 0);
+    @include flex-column(flex-end, flex-start);
+  }
 
-        min-width       : 15em;
-        max-width       : 20em;
-
-        color           : $app-menu-text;
-        background-color: $app-menu-bg;
-        @include position(fixed, $l: 0, $t : 0, $b : 0);
-        @include transition(left .6s ease-out);
-        @include box-shadow(0 0 5px 1px #000);
-        @if ($app-menu-bg-image) {
-            background-image: inline_image($app-menu-bg-image);
-        }
-
-        .ui-auth-info {
-            top          : 0;
-
-            margin-bottom: .5em;
-            padding      : .3em .7em;
-
-            background   : rgba(#333, .95);
-            @include sticky();
-            @include box-shadow(-3px 0 3px 1px #111);
-            @include backdrop-blur(9px);
-        }
-
-        .ui-menu-section {
-            padding: .3em .7em;
-        }
-
-        .ui-menu-link {
-            font-size: $app-menu-font-size;
-
-            color    : $app-menu-text;
-            @include border(start, 3px solid transparent);
-
-            &:hover {
-                color     : $app-menu-hover-text;
-                background: $app-menu-hover-bg;
-            }
-
-            &.ui-active {
-                color       : $app-menu-active-text;
-                border-color: $app-menu-active-border;
-                background  : $app-menu-active-bg;
-                @include box-shadow(0 0 4px 0 #333 inset);
-            }
-
-            &[data-disabled='true'] {
-                cursor        : not-allowed;
-                pointer-events: none;
-
-                color         : $wg-5;
-            }
-        }
-
-        hr {
-            border-color    : $black-sp;
-            background-color: $wg-7;
-        }
-    }
-
-    .ui-app-menu-shim {
-        z-index         : $z-index-splash;
-
-        display         : none;
-
-        opacity         : 0;
-        background-color: rgba($app-menu-shim, .5);
-        @include position(fixed, 0, 0, 0, 0);
-        @include backdrop-blur(1px);
-        @include transition(opacity .3s);
-    }
-
-    &.show-menu {
-        .ui-app-menu-shim {
-            display: block;
-
-            opacity: 1;
-        }
-    }
-
-    .ui-dialog-container {
-        z-index       : $z-index-floating;
-
-        pointer-events: none;
-        @include position(absolute, 0, 0, 0, 0);
-
-        &.ui-dragging {
-            pointer-events: all;
-        }
-    }
-
-    .ui-overlay-container {
-        z-index       : $z-index-notify;
-
-        overflow      : hidden;
-
-        padding       : 5em 0 1.5em;
-
-        pointer-events: none;
-        @include position(absolute, 0, 0, 0, 0);
-        @include flex-column(flex-end, flex-start);
-    }
-
-    &.ui-menu-end .ui-app-menu-handle {
-        order: 8;
-    }
 }
-
-[dir='ltr'] .ui-viewport.ui-menu-start,
-[dir='rtl'] .ui-viewport.ui-menu-end {
-    .ui-app-menu {
-        left : -20em;
-        right: auto;
-        @include transition-property(left);
-    }
-
-    &.show-menu {
-        .ui-app-menu {
-            left: 0;
-        }
-    }
-}
-
-[dir='ltr'] .ui-viewport.ui-menu-end,
-[dir='rtl'] .ui-viewport.ui-menu-start {
-    .ui-app-menu {
-        right: -20em;
-        left : auto;
-        @include transition-property(right);
-    }
-
-    &.show-menu {
-        .ui-app-menu {
-            right: 0;
-        }
-    }
+@if $enable-blur {
+  .ua-safari .ui-viewport .ui-loader-div {
+    background-color: rgba($base-bg, .75);
+    @include backdrop-blur(20px);
+  }
 }
