@@ -9,25 +9,34 @@ import {UIEvent} from "../../utils/ui-event";
 // Panel
 @autoinject()
 @customElement('ui-panel')
-@inlineView(`<template class="ui-panel"><slot></slot></template>`)
+@inlineView(`<template class="ui-panel \${collapsed?'ui-collapse':''}" collapse.trigger="collapsed=!collapsed" close.trigger="closePanel()"><slot></slot></template>`)
 export class UIPanel {
   constructor(public element: Element) { }
+
+  closePanel() {
+    this.element.remove();
+  }
 }
 
 @autoinject()
 @customElement('ui-panel-body')
-@inlineView(`<template class="ui-panel-body" css.bind="{'max-height': maxHeight}"><slot></slot></template>`)
+@inlineView(`<template class="ui-panel-body" css.bind="{'max-height': maxHeight}"><div class="ui-wrapper \${__wrapperClass}"><slot></slot></div></template>`)
 export class UIContent {
   constructor(public element: Element) {
     if (element.hasAttribute('scroll')) element.classList.add('ui-scroll');
-    if (element.hasAttribute('padded')) element.classList.add('ui-pad-all');
+    if (element.hasAttribute('padded')) this.__wrapperClass = 'ui-pad-all';
   }
+  __wrapperClass = '';
+
   @bindable() maxHeight = 'auto';
 }
 
 @autoinject()
 @customElement('ui-header')
-@inlineView(`<template class="ui-header"><span if.bind="icon" class="\${icon}"></span><slot></slot></template>`)
+@inlineView(`<template class="ui-header"><span if.bind="icon" class="\${icon}"></span><slot></slot><span class="ui-col-fill"></span>
+<button class="ui-header-button ui-collapse" if.bind="collapsable" click.trigger="fireEvent($event,'collapse')"><span class="fi-ui-angle-up"></span></button>
+<button class="ui-header-button ui-close" if.bind="closeable" click.trigger="fireEvent($event,'close')"><span class="fi-ui-close"></span></button>
+</template>`)
 export class UIHeader {
   constructor(public element: Element) {
     if (this.element.hasAttribute('primary')) element.classList.add('ui-bg-primary');
@@ -38,6 +47,19 @@ export class UIHeader {
     else if (this.element.hasAttribute('success')) element.classList.add('ui-bg-success');
     else if (this.element.hasAttribute('warning')) element.classList.add('ui-bg-warning');
   }
+
+  bind() {
+    this.closeable = isTrue(this.closeable);
+    this.collapsable = isTrue(this.collapsable);
+  }
+
   @bindable() icon = '';
+  @bindable() closeable = false;
+  @bindable() collapsable = false;
+
+  fireEvent(evt, type) {
+    if (evt.button != 0) return true;
+    return UIEvent.fireEvent(type, this.element);
+  }
 }
 

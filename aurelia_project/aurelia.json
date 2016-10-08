@@ -94,7 +94,6 @@
         "lodash",
         "moment",
         "numeral",
-        "numeral",
         {
           "name": "kramed",
           "path": "../node_modules/kramed/lib",

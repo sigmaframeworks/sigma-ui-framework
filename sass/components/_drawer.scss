@@ -39,7 +39,7 @@
   > .ui-drawer-shim {
     z-index       : 0;
     display       : none;
-    background    : rgba(white, 0);
+    background    : $drawer-shim;
     pointer-events: all;
     @include position(absolute, 0);
   }

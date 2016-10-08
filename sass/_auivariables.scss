@@ -10,6 +10,7 @@
 $primary                     : $lapis-lazuli !default;
 $secondary                   : $blue-violet !default;
 
+$dark                        : $cg-8 !default;
 $info                        : $process-blue !default;
 $danger                      : $strong-red !default;
 $success                     : $moss !default;
@@ -93,6 +94,7 @@ $menu-link-active-text       : contrast-color($menu-link-active-bg) !default;
 /** Drawer Element **/
 $drawer-width                : 18em !default;
 $drawer-bg                   : $base-bg !default;
+$drawer-shim                 : rgba(white, 0) !default;
 
 /** Button Elements **/
 $button-default-bg           : $cg-00 !default;

@@ -3,11 +3,11 @@
 // @author      : Adarsh Pastakia
 // @copyright   : 2016
 // @license     : MIT
-import {autoinject, bindable, containerless, customAttribute, inlineView} from "aurelia-framework";
+import {autoinject, bindable, containerless, customAttribute, inlineView, noView} from "aurelia-framework";
 
 // @autoinject()
 // @customAttribute('badge')
-export class UIBadgeBase {
+class UIBadgeBase {
   constructor(element: Element, bg: string) {
     this.__el = document.createElement('div');
     this.__el.classList.add('ui-badge');
@@ -22,7 +22,6 @@ export class UIBadgeBase {
   __el;
 
   valueChanged(newValue) {
-    console.log(newValue);
     this.__el.classList[newValue ? 'remove' : 'add']('ui-hidden');
     this.__el.innerHTML = newValue;
   }

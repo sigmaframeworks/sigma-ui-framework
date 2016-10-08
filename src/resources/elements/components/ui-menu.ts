@@ -25,9 +25,12 @@ export class UIMenubar {
   __isOverflow = false;
   __tether;
 
+  __obResize;
+  __obClick;
+
   attached() {
-    UIEvent.subscribe('windowresize', () => this.arrange());
-    UIEvent.subscribe('mouseclick', () => this.__overflow.classList.add('ui-hidden'));
+    this.__obResize = UIEvent.subscribe('windowresize', () => this.arrange());
+    this.__obClick = UIEvent.subscribe('mouseclick', () => this.__overflow.classList.add('ui-hidden'));
     window.setTimeout(() => this.arrange(), 500);
     this.__tether = new Tether({
       element: this.__overflow,
@@ -44,8 +47,11 @@ export class UIMenubar {
     });
   }
 
-  unbind() {
+  detached() {
     this.__tether.destroy();
+    this.__obClick.dispose();
+    this.__obResize.dispose();
+    this.__overflow.remove();
   }
 
   arrange() {
@@ -103,6 +109,11 @@ export class UIMenuDivider {
     <span if.bind="icon" class="fi-ui \${icon}"></span><slot></slot></a></template>`)
 export class UIMenuLink {
   constructor(public element: Element) { }
+
+  bind() {
+    this.active = isTrue(this.active);
+    this.disabled = isTrue(this.disabled);
+  }
 
   @bindable() icon = '';
   @bindable() active = false;

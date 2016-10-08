@@ -64,7 +64,7 @@
   }
 
   &.ui-round {
-    border-radius: 4em;
+    border-radius: 1em;
   }
 
   &.ui-big {
@@ -76,8 +76,14 @@
     font-weight: 300;
   }
 
-  &.ui-icon-top .ui-label {
-    display: block;
+  &.ui-icon-top {
+    .ui-label {
+      display: block;
+    }
+
+    &.ui-round {
+      border-radius: 2em;
+    }
   }
 
   &.ui-dropdown:after {

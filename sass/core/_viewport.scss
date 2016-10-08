@@ -97,6 +97,7 @@ html {
   .ui-router-view {
     overflow: hidden;
     position: relative;
+    z-index : 0;
     @include flex(1 1 auto);
     @include flex-column();
   }

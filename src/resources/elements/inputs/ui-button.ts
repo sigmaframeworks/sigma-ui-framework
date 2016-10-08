@@ -37,7 +37,7 @@ export class UIButton {
 
   attached() {
     if (this.dropdown) {
-      UIEvent.subscribe('mouseclick', () => {
+      this.__obClick = UIEvent.subscribe('mouseclick', () => {
         this.__button.classList.remove('ui-open');
         this.dropdown.classList.add('ui-hidden');
       });
@@ -55,21 +55,21 @@ export class UIButton {
             to: 'scrollParent',
             attachment: 'together'
           }
-        ],
-        optimizations: {
-          gpu: false,
-          moveElement: false
-        }
+        ]
       });
     }
   }
 
-  unbind() {
+  detached() {
     if (this.__tether) this.__tether.destroy();
+    if (this.__obClick) this.__obClick.dispose();
+    if (this.dropdown) this.dropdown.remove();
   }
 
   __tether;
   __button: Element;
+
+  __obClick;
 
   @bindable() icon = '';
   @bindable() label = '';

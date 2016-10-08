@@ -12,7 +12,36 @@
   @include flex-column($align:stretch);
 
   .ui-panel-body {
+    max-height: 50em;
+    @include transition(max-height .5s);
     @include flex(1 1 auto);
+  }
+
+  &.ui-collapse {
+    .ui-header-button.ui-collapse span:before {
+      content: $fi-ui-angle-down;
+    }
+
+    .ui-panel-body {
+      max-height: 0 !important;
+      overflow  : hidden !important;
+    }
+  }
+}
+@mixin header-theme($theme, $bg, $color) {
+  &.ui-bg-#{$theme} {
+    .ui-header-button {
+      background: darken($bg, 7%);
+      border    : 1px solid rgba($color, .3);
+
+      &:hover {
+        border-color: rgba($color, .5);
+      }
+
+      &:active {
+        background: darken($bg, 14%);
+      }
+    }
   }
 }
 
@@ -22,4 +51,27 @@
   padding      : $base-padding;
   text-shadow  : -1px -1px 0 rgba(0, 0, 0, .1);
   border-bottom: 1px solid $base-border-color;
+
+  .ui-header-button {
+    color        : inherit;
+    background   : darken($base-bg, 5%);
+    border-radius: $base-border-radius;
+    border       : 1px solid rgba($base-text, .3);
+    text-shadow  : -1px -1px 0 rgba(0, 0, 0, .1);
+
+    &:hover {
+      border-color: rgba($base-text, .5);
+    }
+
+    &:active {
+      background: darken($base-bg, 9%);
+    }
+  }
+  @include header-theme(dark, $dark,$white);
+  @include header-theme(primary, $primary, $primary-text);
+  @include header-theme(secondary, $secondary, $secondary-text);
+  @include header-theme(info, $info, $info-text);
+  @include header-theme(danger, $danger, $danger-text);
+  @include header-theme(success, $success, $success-text);
+  @include header-theme(warning, $warning, $warning-text);
 }

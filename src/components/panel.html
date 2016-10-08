@@ -7,7 +7,8 @@
   <ui-page page-title="Drawers">
     <ui-content scroll padded>
       <div class="ui-container">
-        <br/>
+        <h1>Panels</h1>
+        <hr/>
         <h5 class="ui-text-muted">Simple Panel</h5>
         <ui-panel>
           <ui-panel-body padded scroll max-height="20em">
@@ -15,57 +16,49 @@
           </ui-panel-body>
         </ui-panel>
         <hr/>
-        <h5 class="ui-text-muted">Panel with Header</h5>
+        <h5 class="ui-text-muted">Collapsable Panel</h5>
+        <ui-panel>
+          <ui-header dark collapsable="true">Panel</ui-header>
+          <ui-panel-body padded scroll max-height="20em">
+            <compose view="home/lipsum-big.html"></compose>
+          </ui-panel-body>
+        </ui-panel>
+        <hr/>
+        <h5 class="ui-text-muted">Closeable Panels</h5>
 
         <ui-row class="ui-margin-v">
-          <ui-column size="xl-2 lg-4 md-6" padded>
-            <ui-panel>
-              <ui-header>Panel</ui-header>
-              <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
-            </ui-panel>
-          </ui-column>
-          <ui-column size="xl-2 lg-4 md-6" padded>
-            <ui-panel>
-              <ui-header dark>Panel</ui-header>
-              <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
-            </ui-panel>
-          </ui-column>
-          <ui-column size="xl-2 lg-4 md-6" padded>
-            <ui-panel>
-              <ui-header primary>Panel</ui-header>
-              <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
-            </ui-panel>
-          </ui-column>
-          <ui-column size="xl-2 lg-4 md-6" padded>
-            <ui-panel>
-              <ui-header secondary>Panel</ui-header>
-              <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
-            </ui-panel>
-          </ui-column>
-          <ui-column size="xl-2 lg-4 md-6" padded>
-            <ui-panel>
-              <ui-header info>Panel</ui-header>
-              <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
-            </ui-panel>
-          </ui-column>
-          <ui-column size="xl-2 lg-4 md-6" padded>
-            <ui-panel>
-              <ui-header danger>Panel</ui-header>
-              <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
-            </ui-panel>
-          </ui-column>
-          <ui-column size="xl-2 lg-4 md-6" padded>
-            <ui-panel>
-              <ui-header success>Panel</ui-header>
-              <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
-            </ui-panel>
-          </ui-column>
-          <ui-column size="xl-2 lg-4 md-6" padded>
-            <ui-panel>
-              <ui-header warning>Panel</ui-header>
-              <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
-            </ui-panel>
-          </ui-column>
+          <ui-panel class="ui-margin-all" style="width:320px">
+            <ui-header closeable="true">Panel</ui-header>
+            <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+          </ui-panel>
+          <ui-panel class="ui-margin-all" style="width:320px">
+            <ui-header closeable="true" dark>Panel</ui-header>
+            <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+          </ui-panel>
+          <ui-panel class="ui-margin-all" style="width:320px">
+            <ui-header closeable="true" primary>Panel</ui-header>
+            <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+          </ui-panel>
+          <ui-panel class="ui-margin-all" style="width:320px">
+            <ui-header closeable="true" secondary>Panel</ui-header>
+            <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+          </ui-panel>
+          <ui-panel class="ui-margin-all" style="width:320px">
+            <ui-header closeable="true" info>Panel</ui-header>
+            <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+          </ui-panel>
+          <ui-panel class="ui-margin-all" style="width:320px">
+            <ui-header closeable="true" danger>Panel</ui-header>
+            <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+          </ui-panel>
+          <ui-panel class="ui-margin-all" style="width:320px">
+            <ui-header closeable="true" success>Panel</ui-header>
+            <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+          </ui-panel>
+          <ui-panel class="ui-margin-all" style="width:320px">
+            <ui-header closeable="true" warning>Panel</ui-header>
+            <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+          </ui-panel>
         </ui-row>
 
       </div>
