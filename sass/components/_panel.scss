@@ -4,33 +4,53 @@
 // @copyright   : 2016
 // @license     : MIT
 
+.ui-panel-group {
+  > .ui-panel {
+    border-radius      : 0;
+    border-bottom-width: 0;
+
+    &:first-child {
+      border-top-left-radius : $base-border-radius;
+      border-top-right-radius: $base-border-radius;
+    }
+
+    &:last-child {
+      border-bottom-width       : 1px;
+      border-bottom-left-radius : $base-border-radius;
+      border-bottom-right-radius: $base-border-radius;
+    }
+  }
+}
+
 .ui-panel {
   overflow     : hidden;
   position     : relative;
+  max-height   : 50em;
   border       : 1px solid $base-border-color;
   border-radius: $base-border-radius;
   @include flex-column($align:stretch);
+  @include transition(max-height .5s);
 
   .ui-panel-body {
     max-height: 50em;
-    @include transition(max-height .5s);
     @include flex(1 1 auto);
   }
 
   &.ui-collapse {
     .ui-header-button.ui-collapse span:before {
-      @include transform(rotate(180deg));
+      @include transform(rotate(-180deg));
       // content: $fi-ui-angle-down;
     }
 
-    .ui-panel-body {
-      max-height: 0 !important;
-      overflow  : hidden !important;
-    }
+    max-height: 2em !important;
   }
 }
 @mixin header-theme($theme, $bg, $color) {
   &.ui-bg-#{$theme} {
+    .ui-drawer-toggle {
+      color: $color !important;
+    }
+
     .ui-header-button {
       color     : rgba($color, .7);
       background: darken($bg, 7%);
@@ -51,9 +71,10 @@
 .ui-header {
   @include flex-auto();
   @include flex-row($align:center);
+  max-height   : 2.2em !important;
   padding      : $base-padding;
   text-shadow  : -1px -1px 0 rgba(0, 0, 0, .1);
-  border-bottom: 1px solid $base-border-color;
+  border-bottom: 1px solid rgba($base-border-color, .3);
 
   .ui-header-button {
     color        : rgba($base-text, .7);
@@ -76,7 +97,8 @@
       background: darken($base-bg, 9%);
     }
   }
-  @include header-theme(dark, $dark,$white);
+  @include header-theme(dark, $dark, $white);
+  @include header-theme(light, $light, $black);
   @include header-theme(primary, $primary, $primary-text);
   @include header-theme(secondary, $secondary, $secondary-text);
   @include header-theme(info, $info, $info-text);

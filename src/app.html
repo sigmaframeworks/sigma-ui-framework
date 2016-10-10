@@ -26,7 +26,35 @@
     </ui-menubar>
 
     <ui-drawer ref="infoDrawer" position="end" scroll padded>
-      <compose view="./home/lipsum-big.html"></compose>
+      <ui-panel-group>
+        <ui-panel collapsed>
+          <ui-header light>
+            <ui-header-title>Panel</ui-header-title>
+            <ui-header-tool collapse></ui-header-tool>
+          </ui-header>
+          <ui-panel-body padded>
+            <compose view="home/lipsum-small.html"></compose>
+          </ui-panel-body>
+        </ui-panel>
+        <ui-panel collapsed>
+          <ui-header light>
+            <ui-header-title>Panel</ui-header-title>
+            <ui-header-tool collapse></ui-header-tool>
+          </ui-header>
+          <ui-panel-body padded>
+            <compose view="home/lipsum-small.html"></compose>
+          </ui-panel-body>
+        </ui-panel>
+        <ui-panel collapsed>
+          <ui-header light>
+            <ui-header-title>Panel</ui-header-title>
+            <ui-header-tool collapse></ui-header-tool>
+          </ui-header>
+          <ui-panel-body padded>
+            <compose view="home/lipsum-small.html"></compose>
+          </ui-panel-body>
+        </ui-panel>
+      </ui-panel-group>
     </ui-drawer>
 
     <ui-drawer ref="appDrawer" position="start" scroll close-on-click>

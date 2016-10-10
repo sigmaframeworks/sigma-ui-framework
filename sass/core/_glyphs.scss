@@ -11,7 +11,11 @@
 }
 
 .fi-ui {
-  font-size: 1em;
+  font-size  : 1em;
+  display    : inline-block;
+  width      : 1em;
+  height     : 1em;
+  line-height: 1em;
 }
 
 .fi-ui:before,
