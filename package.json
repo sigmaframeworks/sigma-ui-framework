@@ -51,6 +51,7 @@
     "gulp-sourcemaps": "^2.0.0-alpha",
     "gulp-tslint": "^5.0.0",
     "gulp-typescript": "^2.13.6",
+    "highlight.js": "^9.7.0",
     "highlightjs": "^8.7.0",
     "minimatch": "^3.0.2",
     "require-dir": "^0.3.0",

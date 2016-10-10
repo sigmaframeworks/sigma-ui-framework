@@ -5,7 +5,11 @@
 // @license     : MIT
 import {Aurelia} from 'aurelia-framework'
 import environment from './environment';
-import "highlightjs";
+import "highlight.js";
+import "highlight.js/languages/css";
+import "highlight.js/languages/scss";
+import "highlight.js/languages/xml";
+import "highlight.js/languages/json";
 
 //Configure Bluebird Promises.
 //Note: You may want to use environment-specific configuration.
@@ -15,6 +19,10 @@ import "highlightjs";
   }
 });
 
+hljs.registerLanguage('css', require("highlight.js/languages/css"));
+hljs.registerLanguage('xml', require("highlight.js/languages/xml"));
+hljs.registerLanguage('json', require("highlight.js/languages/json"));
+hljs.registerLanguage('scss', require("highlight.js/languages/scss"));
 hljs.registerLanguage('typescript', function(hljs) {
   var KEYWORDS = {
     keyword:

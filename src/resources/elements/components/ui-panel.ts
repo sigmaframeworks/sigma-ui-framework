@@ -35,7 +35,9 @@ export class UIContent {
 @customElement('ui-header')
 @inlineView(`<template class="ui-header"><span if.bind="icon" class="\${icon}"></span><slot></slot><span class="ui-col-fill"></span>
 <button class="ui-header-button ui-collapse" if.bind="collapsable" click.trigger="fireEvent($event,'collapse')"><span class="fi-ui-angle-up"></span></button>
-<button class="ui-header-button ui-close" if.bind="closeable" click.trigger="fireEvent($event,'close')"><span class="fi-ui-close"></span></button>
+<button class="ui-header-button ui-minimize" if.bind="minimizable" click.trigger="fireEvent($event,'minimize')"><span class="fi-ui-dialog-minimize"></span></button>
+<button class="ui-header-button ui-maximize" if.bind="maximizable" click.trigger="fireEvent($event,'maximize')"><span class="fi-ui-dialog-maximize"></span></button>
+<button class="ui-header-button ui-close" if.bind="closeable" click.trigger="fireEvent($event,'close')"><span class="fi-ui-cross"></span></button>
 </template>`)
 export class UIHeader {
   constructor(public element: Element) {
@@ -51,11 +53,15 @@ export class UIHeader {
   bind() {
     this.closeable = isTrue(this.closeable);
     this.collapsable = isTrue(this.collapsable);
+    this.minimizable = isTrue(this.minimizable);
+    this.maximizable = isTrue(this.maximizable);
   }
 
   @bindable() icon = '';
   @bindable() closeable = false;
   @bindable() collapsable = false;
+  @bindable() minimizable = false;
+  @bindable() maximizable = false;
 
   fireEvent(evt, type) {
     if (evt.button != 0) return true;

@@ -61,6 +61,54 @@
           </ui-panel>
         </ui-row>
 
+        <hr/>
+        <h5>Markup</h5>
+        <div class="ui-margin-v">
+          <pre markdown>
+          <xmp>
+          ```html
+          <ui-panel>
+            <ui-header collapsable[bindable]="bool" closeable[bindable]="bool">Title</ui-header>
+            <ui-panel-body [theme] [padded] [scroll] max-height="em | px">
+              <!-- any content -->
+            </ui-panel-body>
+          </ui-panel>
+          ```
+          * Themes
+            - `default`
+            - `dark`
+            - `primary`
+            - `secondary`
+            - `info`
+            - `danger`
+            - `success`
+            - `warning`
+          </xmp>
+          </pre>
+        </div>
+
+        <hr/>
+        <h5>Examples</h5>
+        <div class="ui-margin-v">
+          <pre markdown>
+          <xmp>
+          ```html
+          <ui-panel>
+            <ui-panel-body padded scroll max-height="20em">
+              Lorem ipsum...
+            </ui-panel-body>
+          </ui-panel>
+          
+          <ui-panel>
+            <ui-header dark collapsable="true" closeable="true">Panel</ui-header>
+            <ui-panel-body padded scroll max-height="20em">
+              Lorem ipsum...
+            </ui-panel-body>
+          </ui-panel>
+          ```
+          </xmp>
+          </pre>
+        </div>
       </div>
     </ui-content>
   </ui-page>

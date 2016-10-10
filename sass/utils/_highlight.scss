@@ -42,6 +42,7 @@ $preprocess: #86534E;
   .hljs-tag {
     color: $decorator;
 
+    .hljs-name,
     .hljs-title {
       color: $keyword;
     }

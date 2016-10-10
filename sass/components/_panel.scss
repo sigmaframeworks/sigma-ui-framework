@@ -19,7 +19,8 @@
 
   &.ui-collapse {
     .ui-header-button.ui-collapse span:before {
-      content: $fi-ui-angle-down;
+      @include transform(rotate(180deg));
+      // content: $fi-ui-angle-down;
     }
 
     .ui-panel-body {
@@ -31,10 +32,12 @@
 @mixin header-theme($theme, $bg, $color) {
   &.ui-bg-#{$theme} {
     .ui-header-button {
+      color     : rgba($color, .7);
       background: darken($bg, 7%);
       border    : 1px solid rgba($color, .3);
 
       &:hover {
+        color       : rgba($color, .9);
         border-color: rgba($color, .5);
       }
 
@@ -53,13 +56,19 @@
   border-bottom: 1px solid $base-border-color;
 
   .ui-header-button {
-    color        : inherit;
+    color        : rgba($base-text, .7);
     background   : darken($base-bg, 5%);
     border-radius: $base-border-radius;
     border       : 1px solid rgba($base-text, .3);
     text-shadow  : -1px -1px 0 rgba(0, 0, 0, .1);
 
+    span:before {
+      @include transition(transform .5s);
+      @include transform-origin(50% 50% 0);
+    }
+
     &:hover {
+      color       : rgba($base-text, .9);
       border-color: rgba($base-text, .5);
     }
 

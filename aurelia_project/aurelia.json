@@ -100,9 +100,16 @@
           "main": "kramed"
         },
         {
-          "name": "highlightjs",
-          "path": "../node_modules/highlightjs",
-          "main": "highlight.pack"
+          "name": "highlight.js",
+          "path": "../node_modules/highlight.js/lib",
+          "main": "highlight",
+          "resources": [
+            "languages/xml.js",
+            "languages/css.js",
+            "languages/json.js",
+            "languages/scss.js",
+            "languages/javascript.js"
+          ]
         },
         {
           "name": "tether",

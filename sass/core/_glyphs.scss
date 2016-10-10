@@ -59,140 +59,176 @@
   content: '\f106';
 }
 
-.fi-ui-arrow-up:before {
+.fi-ui-arrow-thin-left:before {
   content: '\f107';
 }
 
-.fi-ui-bell:before {
+.fi-ui-arrow-thin-right:before {
   content: '\f108';
 }
 
-.fi-ui-calendar:before {
+.fi-ui-arrow-up:before {
   content: '\f109';
 }
 
-.fi-ui-chart-bar:before {
+.fi-ui-bell:before {
   content: '\f10a';
 }
 
-.fi-ui-chart-pie:before {
+.fi-ui-calendar:before {
   content: '\f10b';
 }
 
-.fi-ui-check:before {
+.fi-ui-chart-bar:before {
   content: '\f10c';
 }
 
-.fi-ui-circle:before {
+.fi-ui-chart-pie:before {
   content: '\f10d';
 }
 
-.fi-ui-close:before {
+.fi-ui-check-off:before {
   content: '\f10e';
 }
 
-.fi-ui-days:before {
+.fi-ui-check-on:before {
   content: '\f10f';
 }
 
-.fi-ui-delete:before {
+.fi-ui-cross:before {
   content: '\f110';
 }
 
-.fi-ui-desktop:before {
+.fi-ui-days:before {
   content: '\f111';
 }
 
-.fi-ui-dialog-close:before {
+.fi-ui-delete:before {
   content: '\f112';
 }
 
-.fi-ui-dialog-maximize:before {
+.fi-ui-desktop:before {
   content: '\f113';
 }
 
-.fi-ui-dialog-minimize:before {
+.fi-ui-dialog-maximize:before {
   content: '\f114';
 }
 
-.fi-ui-dialog-restore:before {
+.fi-ui-dialog-minimize:before {
   content: '\f115';
 }
 
-.fi-ui-download:before {
+.fi-ui-dialog-restore:before {
   content: '\f116';
 }
 
-.fi-ui-drawer:before {
+.fi-ui-download:before {
   content: '\f117';
 }
 
-.fi-ui-edit:before {
+.fi-ui-drawer:before {
   content: '\f118';
 }
 
-.fi-ui-email:before {
+.fi-ui-edit:before {
   content: '\f119';
 }
 
-.fi-ui-folder:before {
+.fi-ui-email:before {
   content: '\f11a';
 }
 
-.fi-ui-image:before {
+.fi-ui-folder:before {
   content: '\f11b';
 }
 
-.fi-ui-key:before {
+.fi-ui-image:before {
   content: '\f11c';
 }
 
-.fi-ui-logout:before {
+.fi-ui-key:before {
   content: '\f11d';
 }
 
-.fi-ui-overflow:before {
+.fi-ui-logout:before {
   content: '\f11e';
 }
 
-.fi-ui-page:before {
+.fi-ui-overflow:before {
   content: '\f11f';
 }
 
-.fi-ui-pencil:before {
+.fi-ui-overflow-dark:before {
   content: '\f120';
 }
 
-.fi-ui-phone:before {
+.fi-ui-page:before {
   content: '\f121';
 }
 
-.fi-ui-search:before {
+.fi-ui-pencil:before {
   content: '\f122';
 }
 
-.fi-ui-settings:before {
+.fi-ui-phone:before {
   content: '\f123';
 }
 
-.fi-ui-tree-check-off:before {
+.fi-ui-plus:before {
   content: '\f124';
 }
 
-.fi-ui-tree-check-on:before {
+.fi-ui-radio-off:before {
   content: '\f125';
 }
 
-.fi-ui-tree-check-partial:before {
+.fi-ui-radio-on:before {
   content: '\f126';
 }
 
-.fi-ui-upload:before {
+.fi-ui-search:before {
   content: '\f127';
 }
 
-.fi-ui-window:before {
+.fi-ui-settings:before {
   content: '\f128';
+}
+
+.fi-ui-tree-check-off:before {
+  content: '\f129';
+}
+
+.fi-ui-tree-check-on:before {
+  content: '\f12a';
+}
+
+.fi-ui-tree-check-partial:before {
+  content: '\f12b';
+}
+
+.fi-ui-tri-down:before {
+  content: '\f12c';
+}
+
+.fi-ui-tri-left:before {
+  content: '\f12d';
+}
+
+.fi-ui-tri-right:before {
+  content: '\f12e';
+}
+
+.fi-ui-tri-up:before {
+  content: '\f12f';
+}
+
+.fi-ui-upload:before {
+  content: '\f130';
+}
+
+.fi-ui-window:before {
+  content: '\f131';
 }
 
 $fi-ui-angle-down: '\f100';
@@ -202,37 +238,46 @@ $fi-ui-angle-up: '\f103';
 $fi-ui-arrow-down: '\f104';
 $fi-ui-arrow-left: '\f105';
 $fi-ui-arrow-right: '\f106';
-$fi-ui-arrow-up: '\f107';
-$fi-ui-bell: '\f108';
-$fi-ui-calendar: '\f109';
-$fi-ui-chart-bar: '\f10a';
-$fi-ui-chart-pie: '\f10b';
-$fi-ui-check: '\f10c';
-$fi-ui-circle: '\f10d';
-$fi-ui-close: '\f10e';
-$fi-ui-days: '\f10f';
-$fi-ui-delete: '\f110';
-$fi-ui-desktop: '\f111';
-$fi-ui-dialog-close: '\f112';
-$fi-ui-dialog-maximize: '\f113';
-$fi-ui-dialog-minimize: '\f114';
-$fi-ui-dialog-restore: '\f115';
-$fi-ui-download: '\f116';
-$fi-ui-drawer: '\f117';
-$fi-ui-edit: '\f118';
-$fi-ui-email: '\f119';
-$fi-ui-folder: '\f11a';
-$fi-ui-image: '\f11b';
-$fi-ui-key: '\f11c';
-$fi-ui-logout: '\f11d';
-$fi-ui-overflow: '\f11e';
-$fi-ui-page: '\f11f';
-$fi-ui-pencil: '\f120';
-$fi-ui-phone: '\f121';
-$fi-ui-search: '\f122';
-$fi-ui-settings: '\f123';
-$fi-ui-tree-check-off: '\f124';
-$fi-ui-tree-check-on: '\f125';
-$fi-ui-tree-check-partial: '\f126';
-$fi-ui-upload: '\f127';
-$fi-ui-window: '\f128';
+$fi-ui-arrow-thin-left: '\f107';
+$fi-ui-arrow-thin-right: '\f108';
+$fi-ui-arrow-up: '\f109';
+$fi-ui-bell: '\f10a';
+$fi-ui-calendar: '\f10b';
+$fi-ui-chart-bar: '\f10c';
+$fi-ui-chart-pie: '\f10d';
+$fi-ui-check-off: '\f10e';
+$fi-ui-check-on: '\f10f';
+$fi-ui-cross: '\f110';
+$fi-ui-days: '\f111';
+$fi-ui-delete: '\f112';
+$fi-ui-desktop: '\f113';
+$fi-ui-dialog-maximize: '\f114';
+$fi-ui-dialog-minimize: '\f115';
+$fi-ui-dialog-restore: '\f116';
+$fi-ui-download: '\f117';
+$fi-ui-drawer: '\f118';
+$fi-ui-edit: '\f119';
+$fi-ui-email: '\f11a';
+$fi-ui-folder: '\f11b';
+$fi-ui-image: '\f11c';
+$fi-ui-key: '\f11d';
+$fi-ui-logout: '\f11e';
+$fi-ui-overflow: '\f11f';
+$fi-ui-overflow-dark: '\f120';
+$fi-ui-page: '\f121';
+$fi-ui-pencil: '\f122';
+$fi-ui-phone: '\f123';
+$fi-ui-plus: '\f124';
+$fi-ui-radio-off: '\f125';
+$fi-ui-radio-on: '\f126';
+$fi-ui-search: '\f127';
+$fi-ui-settings: '\f128';
+$fi-ui-tree-check-off: '\f129';
+$fi-ui-tree-check-on: '\f12a';
+$fi-ui-tree-check-partial: '\f12b';
+$fi-ui-tri-down: '\f12c';
+$fi-ui-tri-left: '\f12d';
+$fi-ui-tri-right: '\f12e';
+$fi-ui-tri-up: '\f12f';
+$fi-ui-upload: '\f130';
+$fi-ui-window: '\f131';
