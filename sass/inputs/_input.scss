@@ -1,0 +1,236 @@
+// 
+// @description : 
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+
+.ui-form {
+  .ui-column {
+    flex-basis: 18rem;
+  }
+}
+
+.ui-fieldset {
+  overflow  : hidden;
+  max-height: 50rem;
+  border    : 1px solid $input-border;
+  margin    : .5rem .25rem;
+  @include transition(max-height .5s);
+
+  legend {
+    margin   : 0 .5rem;
+    padding  : 0 .25rem;
+    color    : $muted;
+    font-size: .8rem;
+  }
+}
+
+.ui-input-group {
+  margin: .5rem .25rem;
+  @include flex-row($align:flex-start, $justify: flex-start);
+
+  .ui-input-label {
+    padding   : .25em .75em;
+    font-size : .9rem;
+    text-align: right;
+    text-align: end;
+    color     : $input-label;
+    position  : relative;
+    @include flex(0 0 8rem);
+
+    &:after {
+      content       : ' ';
+      font-size     : .7rem;
+      margin-left   : 2px;
+      margin-right  : -7px;
+      color         : $primary;
+      vertical-align: super;
+    }
+
+    &.ui-required:after {
+      content: '*';
+    }
+
+    &.ui-align-top {
+      @include flex(1 1 100%);
+      text-align: left;
+      text-align: start;
+      padding   : .25em .5em;
+    }
+  }
+
+  &.ui-display .ui-group-wrapper {
+    border: none;
+
+    .ui-button,
+    .ui-input-addon {
+      border: none;
+    }
+
+    .ui-input-addon {
+      background: none;
+    }
+
+    .ui-input-wrapper {
+      box-shadow: none;
+    }
+
+    .ui-display {
+      font-family: $base-font-family-input;
+      font-size  : .9rem;
+      color      : $input-text;
+      padding    : .35em .5em;
+      line-height: 1.25em;
+    }
+  }
+
+  .ui-group-wrapper {
+    @include flex-row($align:stretch);
+    @include flex(1 1 10rem);
+    min-height   : 30px;
+    border-radius: $base-border-radius;
+    border       : 1px solid $input-border;
+
+    .ui-button,
+    .ui-input-addon {
+      border      : 1px solid $input-border;
+      border-width: 0 1px;
+
+      + .ui-button,
+      + .ui-input-addon {
+        border-left: none;
+      }
+
+      &:first-child {
+        border-left: none;
+      }
+
+      &:last-child {
+        border-right: none;
+      }
+    }
+
+    .ui-input-addon,
+    .ui-input-button {
+      @include flex(0 0 auto);
+      padding  : .25em;
+      font-size: 1rem;
+    }
+
+    .ui-input-addon {
+      font-size  : .9rem;
+      line-height: 1.5em;
+      color      : $input-addon-text;
+      background : $input-addon-bg;
+
+      [class*=' fi-ui-']:before,
+      [class^='fi-ui-']:before {
+        font-size: 1rem;
+      }
+
+      .ui-flag {
+        min-height: 12px;
+      }
+    }
+
+    .ui-button {
+      margin       : 0;
+      border-radius: 0;
+      padding      : .2em .5em;
+    }
+
+    .ui-input-info-bar {
+      @include flex(1 1 100%);
+      font-size : .7rem;
+      padding   : .1em .5em;
+      border-top: 1px solid rgba($input-border, .75);
+    }
+
+    .ui-input-wrapper {
+      @include flex(1 1 auto);
+      @include flex-row($align:stretch);
+      position   : relative;
+      line-height: 1.5rem;
+      background : $input-bg;
+      border     : 0 solid transparent;
+      @include box-shadow(0 1px 2px 0 $base-shadow inset);
+
+      &.ui-focus {
+        @include box-shadow(0 -4px 0 0 $input-focus inset, 0 0 0 1px $input-focus inset, 0 1px 2px 0 $base-shadow inset);
+      }
+
+      .ui-input {
+        @include flex(1 1 0em);
+        margin     : 0;
+        font-size  : .9rem;
+        outline    : none;
+        border     : none;
+        color      : $input-text;
+        background : none;
+        padding    : .35em .5em;
+        font-family: $base-font-family-input;
+      }
+
+      .ui-invalid-icon {
+        display    : none;
+        padding    : 0 .25em;
+        color      : $white;
+        background : $input-invalid;
+        height     : auto;
+        width      : auto;
+        line-height: 1.5em;
+        font-size  : 1rem;
+
+        &:before {
+          content: $fi-ui-exclaim-wavy;
+        }
+      }
+
+      .ui-clear {
+        cursor   : pointer;
+        padding  : .2em .25em 0;
+        font-size: 1rem;
+        color    : rgba($input-text, .5);
+
+        &:hover {
+          color: rgba($input-text, .75);
+        }
+      }
+
+      &.ui-ta-counter textarea {
+        margin-bottom: 1rem;
+      }
+
+      &.ui-ta-counter .ui-ta-counter {
+        position   : absolute;
+        left       : 0;
+        bottom     : 0;
+        color      : $muted;
+        font-size  : .7rem;
+        line-height: 1;
+        padding    : .2em .4em .4em;
+      }
+
+      .ui-in-counter {
+        color    : $muted;
+        font-size: .7rem;
+        padding  : .2rem .25rem 0;
+      }
+
+      &.ui-invalid {
+        .ui-invalid-icon {
+          display: inline-block;
+        }
+        @include box-shadow(0 0 0 1px $input-invalid inset,0 1px 2px 0 $base-shadow inset);
+
+        &.ui-focus {
+          @include box-shadow(0 -3px 0 0 $input-invalid inset, 0 0 0 1px $input-invalid inset,0 1px 2px 0 $base-shadow inset);
+        }
+
+        &.ui-ta-counter .ui-ta-counter {
+          left: 1.5rem;
+        }
+      }
+    }
+  }
+}

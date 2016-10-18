@@ -121,6 +121,7 @@
     color        : #7D2C42;
     padding      : 0 .5em;
     border-radius: .2em;
+    font-family  : $base-font-family-serif;
   }
 
   pre > code {
@@ -130,6 +131,7 @@
     padding      : 1.2em;
     border       : 1px solid rgba($base-border-color, .5);
     border-radius: $base-border-radius;
+    font-family  : $base-font-family-serif;
     margin       : .5em 0;
     @include scroll();
     @include user-select(text);

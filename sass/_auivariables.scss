@@ -27,6 +27,8 @@ $success-text                : $white !default;
 $warning-text                : $white !default;
 
 $base-font-family            : 'Open Sans', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif !default;
+$base-font-family-serif      : 'Source Code Pro', 'Georgia', 'Times New Roman', serif !default;
+$base-font-family-input      : 'Lato', 'Trebuchet MS', Tahoma, san-serif !default;
 $base-font-size              : 1rem !default;
 
 $base-padding                : .25em .5em !default;
@@ -96,6 +98,17 @@ $menu-link-active-text       : contrast-color($menu-link-active-bg) !default;
 $drawer-width                : 18em !default;
 $drawer-bg                   : $base-bg !default;
 $drawer-shim                 : rgba(white, 0) !default;
+
+/** Input Element **/
+$input-bg                    : $white-sp !default;
+$input-label                 : $cg-8 !default;
+$input-text                  : $cg-10 !default;
+$input-border                : $cg-3 !default;
+$input-placeholder           : $wg-5 !default;
+$input-focus                 : $ultramarine !default;
+$input-invalid               : $redwood !default;
+$input-addon-bg              : lighten($cg-00, 5%) !default;
+$input-addon-text            : $cg-7 !default;
 
 /** Button Elements **/
 $button-default-bg           : $cg-00 !default;

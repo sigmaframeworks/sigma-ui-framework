@@ -69,11 +69,11 @@ export class App {
         name: 'grid'
       }, {
         route: 'input',
-        moduleId: './inputs/input',
+        moduleId: './inputs/view',
         title: 'Inputs',
         nav: true,
         auth: false,
-        settings: { section: 'Input Elements', disabled: true },
+        settings: { section: 'Input Elements' },
         name: 'input'
       }, {
         route: 'switch',
@@ -133,15 +133,15 @@ export class App {
         name: 'panel'
       }, {
         route: 'datagrid',
-        moduleId: './widgets/datagrid',
+        moduleId: './components/datagrid',
         title: 'Datagrid',
         nav: true,
         auth: false,
-        settings: { section: 'Widgets', disabled: true },
+        settings: { section: 'Widgets' },
         name: 'datagrid'
       }, {
         route: 'tab',
-        moduleId: './widgets/tab',
+        moduleId: './components/tab',
         title: 'Tab Panel',
         nav: true,
         auth: false,
@@ -149,7 +149,7 @@ export class App {
         name: 'tab'
       }, {
         route: 'tree',
-        moduleId: './widgets/tree',
+        moduleId: './components/tree',
         title: 'Tree Panel',
         nav: true,
         auth: false,

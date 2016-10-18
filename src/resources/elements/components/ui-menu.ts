@@ -87,12 +87,19 @@ export class UIMenu {
 }
 
 @autoinject()
-@customElement('ui-menu-section')
+@customElement('ui-menu-group')
 @inlineView('<template class="ui-menu-section"><div class="ui-menu-section-title" innerhtml.bind="label"></div><slot></slot></template>')
-export class UIMenuSection {
+export class UIMenuGroup {
   constructor(public element: Element) { }
 
   @bindable() label = '';
+}
+
+@autoinject()
+@customElement('ui-menu-section')
+@inlineView('<template class="ui-menu-section-title"><slot></slot></template>')
+export class UIMenuSection {
+  constructor(public element: Element) { }
 }
 
 @autoinject()

@@ -1,0 +1,44 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <style>
+    .ui-dg-wrapper {
+      position: relative;
+      display: flex;
+      flex-wrap: nowrap;
+      overflow: auto;
+      justify-content: stretch;
+    }
+    .ui-dg-locked-wrapper {
+      flex: 0 0 auto;
+      display: flex;
+      min-width: 300px;
+      position: -webkit-sticky;
+      position: sticky;
+      left: 0;
+      flex-flow: column nowrap;
+    }
+    .ui-dg-normal-wrapper {
+      flex: 1 1 0;
+      display: flex;
+      min-width: 1000px;
+      flex-flow: column nowrap;
+    }
+
+  </style>
+  <ui-page page-title="Datagrid">
+    <ui-content padded scroll>
+      <div class="ui-container">
+        <h1>Datagrid</h1>
+        <hr/>
+        <div class="ui-border-all ui-dg-wrapper" style="height: 600px">
+          <div class="ui-dg-locked-wrapper ui-bg-primary"></div>
+          <div class="ui-dg-normal-wrapper ui-bg-secondary"></div>
+        </div>
+      </div>
+    </ui-content>
+  </ui-page>
+</template>

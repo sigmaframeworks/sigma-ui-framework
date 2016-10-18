@@ -6,21 +6,22 @@
 import {FrameworkConfiguration} from 'aurelia-framework';
 
 import 'lodash';
-// import 'moment';
-// import 'numeral';
+import 'moment';
+import 'numeral';
 import 'tether';
 
 import * as ld from "lodash";
 import * as km from "kramed";
-// import * as mm from "moment";
-// import * as nm from "numeral";
+import * as mm from "moment";
+import * as nm from "numeral";
 
 export var _ = ld;
 export var kramed = km;
-// export var moment = mm;
-// export var numeral = nm;
+export var moment = mm;
+export var numeral = nm;
 
 export * from "./utils/ui-event";
+export * from "./utils/ui-format";
 
 export interface AuiConfig {
 
@@ -38,13 +39,15 @@ export function configure(config: FrameworkConfiguration, configCallback) {
     './elements/components/ui-drawer'
   ]);
   config.globalResources([
-    './elements/inputs/ui-button'
+    './elements/inputs/ui-button',
+    './elements/inputs/ui-input'
   ]);
   config.globalResources([
     './attributes/ui-marked',
     './attributes/ui-badge'
   ]);
   config.globalResources([
+    './value-converters/ui-text',
     './value-converters/ui-lodash'
   ]);
 

@@ -4,41 +4,6 @@
 // @copyright   : 2016
 // @license     : MIT
 
-body,
-html {
-  height          : 100%;
-  width           : 100%;
-  padding         : 0;
-  margin          : 0;
-  line-height     : 1.25;
-  overflow        : hidden;
-  cursor          : default;
-  @include user-select(none);
-
-  color           : $base-text;
-  background-color: $base-bg;
-
-  font            : {
-    family: $base-font-family;
-    size  : $base-font-size;
-  }
-
-  .ui-selectable {
-    cursor: text;
-    @include user-select(text);
-  }
-}
-
-*,
-*:after,
-*:before {
-  @include box-sizing(border-box);
-  @include selection($primary, contrast-color($primary));
-  @include input-placeholder {
-    // color: $input-placeholder-text;
-  }
-}
-
 .ui-splash {
   background: #fff no-repeat center center;
   @include position(absolute);

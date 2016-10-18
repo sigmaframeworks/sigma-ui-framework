@@ -32,7 +32,7 @@
 
             <h5 class="ui-text-muted">Closeable Panels</h5>
 
-            <ui-row class="ui-margin-v">
+            <ui-row>
               <ui-column auto>
                 <ui-panel class="ui-margin-all" style="width:320px">
                   <ui-header light>
@@ -101,56 +101,57 @@
                   <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
                 </ui-panel>
               </ui-column>
-            </ui-column>
-            <ui-column fill>
+            </ui-row>
+          </ui-column>
+          <ui-column fill>
 
-              <h5 class="ui-text-muted">Accordion Panels</h5>
+            <h5 class="ui-text-muted ui-margin-b">Accordion Panels</h5>
 
-              <ui-panel-group class="ui-margin-v">
-                <ui-panel collapsed>
-                  <ui-header light>
-                    <ui-header-title>Panel</ui-header-title>
-                    <ui-header-tool collapse></ui-header-tool>
-                  </ui-header>
-                  <ui-panel-body padded scroll max-height="8em">
-                    <compose view="home/lipsum-small.html"></compose>
-                  </ui-panel-body>
-                </ui-panel>
-                <ui-panel collapsed>
-                  <ui-header dark>
-                    <ui-header-title>Panel</ui-header-title>
-                    <ui-header-tool collapse></ui-header-tool>
-                  </ui-header>
-                  <ui-panel-body padded scroll max-height="8em">
-                    <compose view="home/lipsum-small.html"></compose>
-                  </ui-panel-body>
-                </ui-panel>
-                <ui-panel collapsed>
-                  <ui-header primary>
-                    <ui-header-title>Panel</ui-header-title>
-                    <ui-header-tool collapse></ui-header-tool>
-                  </ui-header>
-                  <ui-panel-body padded scroll max-height="8em">
-                    <compose view="home/lipsum-small.html"></compose>
-                  </ui-panel-body>
-                </ui-panel>
-                <ui-panel collapsed>
-                  <ui-header secondary>
-                    <ui-header-title>Panel</ui-header-title>
-                    <ui-header-tool collapse></ui-header-tool>
-                  </ui-header>
-                  <ui-panel-body padded scroll max-height="8em">
-                    <compose view="home/lipsum-small.html"></compose>
-                  </ui-panel-body>
-                </ui-panel>
-              </ui-panel-group>
-            </ui-column>
-          </ui-row>
+            <ui-panel-group class="ui-margin-v">
+              <ui-panel collapsed>
+                <ui-header light>
+                  <ui-header-title>Panel</ui-header-title>
+                  <ui-header-tool collapse></ui-header-tool>
+                </ui-header>
+                <ui-panel-body padded scroll max-height="8em">
+                  <compose view="home/lipsum-small.html"></compose>
+                </ui-panel-body>
+              </ui-panel>
+              <ui-panel collapsed>
+                <ui-header dark>
+                  <ui-header-title>Panel</ui-header-title>
+                  <ui-header-tool collapse></ui-header-tool>
+                </ui-header>
+                <ui-panel-body padded scroll max-height="8em">
+                  <compose view="home/lipsum-small.html"></compose>
+                </ui-panel-body>
+              </ui-panel>
+              <ui-panel collapsed>
+                <ui-header primary>
+                  <ui-header-title>Panel</ui-header-title>
+                  <ui-header-tool collapse></ui-header-tool>
+                </ui-header>
+                <ui-panel-body padded scroll max-height="8em">
+                  <compose view="home/lipsum-small.html"></compose>
+                </ui-panel-body>
+              </ui-panel>
+              <ui-panel collapsed>
+                <ui-header secondary>
+                  <ui-header-title>Panel</ui-header-title>
+                  <ui-header-tool collapse></ui-header-tool>
+                </ui-header>
+                <ui-panel-body padded scroll max-height="8em">
+                  <compose view="home/lipsum-small.html"></compose>
+                </ui-panel-body>
+              </ui-panel>
+            </ui-panel-group>
+          </ui-column>
+        </ui-row>
 
-          <hr/>
-          <h5>Markup</h5>
-          <div class="ui-margin-v">
-            <pre markdown>
+        <hr/>
+        <h5>Markup</h5>
+        <div class="ui-margin-v">
+          <pre markdown>
             <xmp>
             ```html
             <ui-panel [collapsed]>
@@ -183,12 +184,12 @@
             ```
             </xmp>
             </pre>
-          </div>
+        </div>
 
-          <hr/>
-          <h5>Examples</h5>
-          <div class="ui-margin-v">
-            <pre markdown>
+        <hr/>
+        <h5>Examples</h5>
+        <div class="ui-margin-v">
+          <pre markdown>
             <xmp>
             ```html
             <ui-panel>
@@ -211,8 +212,8 @@
             ```
             </xmp>
             </pre>
-          </div>
         </div>
-      </ui-content>
-    </ui-page>
-  </template>
+      </div>
+    </ui-content>
+  </ui-page>
+</template>

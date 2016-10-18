@@ -130,11 +130,44 @@
         </ui-row>
 
         <hr/>
+        <ui-row>
+          <ui-column fill>
+            <h5 class="ui-margin-v ui-text-muted">Button Groups</h5>
+            <div class="ui-pad-all">
+              <ui-button-group>
+                <ui-button icon="fi-ui-bell" dark>Click Me!</ui-button>
+                <ui-button icon="fi-ui-bell" danger>Click Me!</ui-button>
+                <ui-button icon="fi-ui-bell" secondary>Click Me!</ui-button>
+                <ui-button icon="fi-ui-bell" warning>Click Me!</ui-button>
+              </ui-button-group>
+              <br/><br/>
+              <ui-button-group>
+                <ui-button icon="fi-ui-bell" primary>Click Me!</ui-button>
+                <ui-button icon="fi-ui-bell" primary>Click Me!</ui-button>
+                <ui-button icon="fi-ui-bell" primary>Click Me!</ui-button>
+                <ui-button icon="fi-ui-bell" primary>Click Me!</ui-button>
+              </ui-button-group>
+              <br/><br/>
+              <ui-button-group vertical>
+                <ui-button icon="fi-ui-bell" dark>Click Me!</ui-button>
+                <ui-button icon="fi-ui-bell" primary>Click Me!</ui-button>
+                <ui-button icon="fi-ui-bell" secondary>Click Me!</ui-button>
+                <ui-button icon="fi-ui-bell" warning>Click Me!</ui-button>
+              </ui-button-group>
+            </div>
+          </ui-column>
+          <ui-column fill>
+            <h5 class="ui-margin-v ui-text-muted">Button Group Toggle</h5>
+          </ui-column>
+        </ui-row>
+
+        <hr/>
         <h5 class="ui-text-muted">Dropdown Buttons</h5>
         <ui-row bottom class="ui-margin-all">
-          <ui-column auto class="ui-text-center ui-pad-h">
+          <ui-column auto class="ui-text-center">
             <ui-button icon="fi-ui-bell" dropdown.bind="__menu">Open Me!</ui-button>
             <ui-menu ref="__menu">
+              <ui-menu-section>Edit Options</ui-menu-section>
               <ui-menu-item>Add</ui-menu-item>
               <ui-menu-item>Edit</ui-menu-item>
               <ui-menu-item>Delete</ui-menu-item>
@@ -142,7 +175,7 @@
               <ui-menu-item>Options</ui-menu-item>
             </ui-menu>
           </ui-column>
-          <ui-column auto class="ui-text-center ui-pad-h">
+          <ui-column auto class="ui-text-center">
             <ui-button icon="fi-ui-bell" dropdown.bind="__menu2" primary round>Open Me!</ui-button>
             <ui-menu ref="__menu2">
               <ui-menu-item>Add</ui-menu-item>
@@ -160,7 +193,8 @@
           <pre markdown>
           <xmp>
           ```html
-          <ui-button [theme] [size] [style] icon[bindable]="glyph class" disabled[bindable]="bool" dropdown.bind="menuEl" click.trigger="fn()">Label</ui-button>
+          <ui-button [theme] [size] [style] icon[bindable]="glyph class" disabled[bindable]="bool" 
+            dropdown.bind="menuEl" click.trigger="fn()">Label</ui-button>
           
           <!-- For using aurelia-i18n -->
           <!-- Wrap button label in a span -->

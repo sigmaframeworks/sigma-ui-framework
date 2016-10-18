@@ -1,0 +1,22 @@
+// 
+// @description : 
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+
+.ui-datagrid {
+  @include flex(1 1 auto);
+  position: relative;
+  overflow: hidden;
+
+  table {
+    table-layout: fixed;
+    min-width   : 100%;
+    min-height  : 100%;
+
+    td.ui-expander {
+      min-width: 20px;
+      content  : ' ';
+    }
+  }
+}

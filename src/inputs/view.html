@@ -1,0 +1,142 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <ui-page page-title="Inputs">
+    <ui-content scroll padded>
+      <div class="ui-container">
+        <h1>Inputs</h1>
+        <hr/>
+        <ui-form>
+          <ui-row>
+            <ui-column fill padded>
+              <ui-input-group display>
+                <ui-input-label required>Display Only</ui-input-label>
+                <ui-display value="Sigma Frameworks"></ui-display>
+              </ui-input-group>
+              <ui-input-group>
+                <ui-input-label required>Text</ui-input-label>
+                <!-- <ui-input-addon icon="fi-ui-bell"></ui-input-addon> -->
+                <ui-input placeholder="Any text..." maxlength="25" clear charcount></ui-input>
+              </ui-input-group>
+              <ui-input-group>
+                <ui-input-label required>Password</ui-input-label>
+                <!-- <ui-input-addon icon="fi-ui-bell"></ui-input-addon> -->
+                <ui-input placeholder="Any text..." maxlength="25" password clear charcount></ui-input>
+              </ui-input-group>
+              <ui-input-group>
+                <ui-input-label required>Email</ui-input-label>
+                <!-- <ui-input-addon icon="fi-ui-bell"></ui-input-addon> -->
+                <ui-input placeholder="Any email..." maxlength="50" value.bind="valEmail" clear email charcount></ui-input>
+                <ui-input-info class="ui-text-center">Value: ${valEmail}</ui-input-info>
+              </ui-input-group>
+              <ui-input-group>
+                <ui-input-label required>URL</ui-input-label>
+                <!-- <ui-input-addon icon="fi-ui-bell"></ui-input-addon> -->
+                <ui-input placeholder="Any URL..." maxlength="50" value.bind="valUrl" clear url charcount></ui-input>
+                <ui-input-info class="ui-text-center">Value: ${valUrl}</ui-input-info>
+              </ui-input-group>
+              <ui-input-group>
+                <ui-input-label required>Number</ui-input-label>
+                <!-- <ui-input-addon icon="fi-ui-bell"></ui-input-addon> -->
+                <ui-input placeholder="Any number..." number.bind="valNumber" clear></ui-input>
+                <ui-input-info class="ui-text-center">Value: ${valNumber}</ui-input-info>
+              </ui-input-group>
+              <ui-input-group>
+                <ui-input-label required>Decimal</ui-input-label>
+                <!-- <ui-input-addon icon="fi-ui-bell"></ui-input-addon> -->
+                <ui-input placeholder="Any decimal..." decimal.bind="valDecimal" clear></ui-input>
+                <ui-input-info class="ui-text-center">Value: ${valDecimal}</ui-input-info>
+              </ui-input-group>
+              <ui-input-group>
+                <ui-input-label required>File</ui-input-label>
+                <!-- <ui-input-addon icon="fi-ui-bell"></ui-input-addon> -->
+                <ui-input placeholder="Any File..." clear file></ui-input>
+                <ui-input-info class="ui-text-center">Value: ${valUrl}</ui-input-info>
+              </ui-input-group>
+              <ui-input-group>
+                <ui-input-label required>Double Input</ui-input-label>
+                <ui-input-addon icon="fi-ui-days"></ui-input-addon>
+                <ui-input placeholder="Any text..."></ui-input>
+                <ui-input-addon class="ui-small-caps">to</ui-input-addon>
+                <ui-input placeholder="Any text..."></ui-input>
+                <ui-button success>Go!</ui-button>
+              </ui-input-group>
+            </ui-column>
+            <ui-column fill padded>
+              <ui-input-group>
+                <ui-input-label required align-top>Textarea</ui-input-label>
+                <ui-input-addon icon="fi-ui-bell"></ui-input-addon>
+                <ui-textarea placeholder="Any text..." charcount clear></ui-textarea>
+                <ui-button success>Go!</ui-button>
+              </ui-input-group>
+              <ui-fieldset legend="Phone Inputs">
+                <ui-input-group>
+                  <ui-input-label required>International</ui-input-label>
+                  <!-- <ui-input-addon icon="fi-ui-bell"></ui-input-addon> -->
+                  <ui-phone clear value.bind="valueInt" phone.bind="phoneInt"></ui-phone>
+                  <ui-input-info class="ui-text-center">Value: ${valueInt}</ui-input-info>
+                </ui-input-group>
+                <ui-input-group>
+                  <ui-input-label required>National</ui-input-label>
+                  <!-- <ui-input-addon icon="fi-ui-bell"></ui-input-addon> -->
+                  <ui-phone clear country="ae" value.bind="valueNat" phone.bind="phoneNat"></ui-phone>
+                  <ui-input-info class="ui-text-center">Value: ${valueNat}</ui-input-info>
+                </ui-input-group>
+              </ui-fieldset>
+            </ui-column>
+          </ui-row>
+          <ui-row>
+            <ui-column fill padded></ui-column>
+            <ui-column fill padded></ui-column>
+          </ui-row>
+        </ui-form>
+
+        <hr/>
+        <h5>Markup</h5>
+        <div class="ui-margin-v">
+          <pre markdown>
+            <xmp>
+            ```html
+            <ui-input-group>
+              
+              <ui-input-label [required] [align-top]>Label</ui-input-label>
+              
+              <ui-input-addon icon[bindable]="glyph class"></ui-input-addon>
+              <ui-input-addon>Text</ui-input-addon>
+              
+              <!-- Any one of the following input elements -->
+              
+              <ui-display value[bindable]="string"></ui-display>
+              
+              <ui-input [text | password | email | url | file] [clear] [charcount] 
+                placeholder[bindable]="string" maxlength[bindable]="number"
+                [value[bindable]="string" | number[bindable]="number" | decimal[bindable]="float"]></ui-input>
+                
+              <ui-textarea [clear] [charcount] value[bindable]="string"
+                placeholder[bindable]="string" maxlength[bindable]="number"></ui-textarea>
+              
+              <!-- -->
+            
+              <!-- button as an addon -->
+              <ui-button>Button</ui-button>
+            
+              <ui-input-info>Text</ui-input-info>
+              
+            </ui-input-group>
+            ```
+            
+            * `ui-input`
+              - For text input use `value.bind`
+              - For numeral input `number.bind` or `decimal.bind`
+            
+            </xmp>
+            </pre>
+        </div>
+
+      </div>
+    </ui-content>
+  </ui-page>
+</template>

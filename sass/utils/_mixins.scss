@@ -54,11 +54,11 @@
 }
 
 // Flexboxes
-@mixin flex-row($align:center, $justify: flex-start, $wrap:true) {
-   @include flexbox(( display:flex, flex-direction:row, align-items:$align, justify-content: $justify, flex-wrap: if($wrap, wrap, nowrap) ));
+@mixin flex-row($align:center, $justify: flex-start, $wrap:true, $display:flex) {
+   @include flexbox(( display:$display, flex-direction:row, align-items:$align, justify-content: $justify, flex-wrap: if($wrap, wrap, nowrap) ));
 }
-@mixin flex-column($align:stretch, $justify: flex-start) {
-   @include flexbox(( display:flex, flex-direction:column, align-items:$align, justify-content: $justify, flex-wrap: nowrap ));
+@mixin flex-column($align:stretch, $justify: flex-start, $display:flex) {
+   @include flexbox(( display:$display, flex-direction:column, align-items:$align, justify-content: $justify, flex-wrap: nowrap ));
 }
 @mixin flex-fill() {
    @include flex(1 1 1em);

@@ -49,6 +49,8 @@
   border-radius: $base-border-radius;
   border       : 1px solid $base-border-color;
   position     : relative;
+  cursor       : pointer;
+  display      : inline-block;
   @include box-shadow(1px 1px 2px 0 $base-shadow-dark);
 
   &.ui-disabled {
@@ -131,4 +133,47 @@
   @include button-style(danger, $button-danger-bg, $button-danger-text, $button-danger-hover-bg, $button-danger-hover-text, $button-danger-active-bg, $button-danger-active-text);
   @include button-style(success, $button-success-bg, $button-success-text, $button-success-hover-bg, $button-success-hover-text, $button-success-active-bg, $button-success-active-text);
   @include button-style(warning, $button-warning-bg, $button-warning-text, $button-warning-hover-bg, $button-warning-hover-text, $button-warning-active-bg, $button-warning-active-text);
+}
+
+.ui-button-group {
+  margin: .2rem;
+
+  > .ui-button {
+    @include flex(0 0 auto);
+    margin       : 0;
+    border-radius: 0;
+  }
+
+  &.ui-horizontal {
+    @include flex-row($display:inline-flex, $align: stretch);
+
+    > .ui-button {
+      &:first-child {
+        border-top-left-radius   : $base-border-radius;
+        border-bottom-left-radius: $base-border-radius;
+      }
+
+      &:last-child {
+        border-top-right-radius   : $base-border-radius;
+        border-bottom-right-radius: $base-border-radius;
+      }
+    }
+  }
+
+  &.ui-vertical {
+    @include flex-column($display:inline-flex, $align: stretch);
+
+    > .ui-button {
+      &:first-child {
+        border-top-left-radius : $base-border-radius;
+        border-top-right-radius: $base-border-radius;
+      }
+
+      &:last-child {
+        border-bottom-left-radius : $base-border-radius;
+        border-bottom-right-radius: $base-border-radius;
+      }
+    }
+  }
+
 }

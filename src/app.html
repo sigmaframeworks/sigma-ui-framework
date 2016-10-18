@@ -20,9 +20,9 @@
     </ui-app-header>
 
     <ui-menubar>
-      <ui-menu-section label.bind="routes.key" repeat.for="routes of router.navigation | group:'settings.section'">
+      <ui-menu-group label.bind="routes.key" repeat.for="routes of router.navigation | group:'settings.section'">
         <ui-menu-item repeat.for="route of routes.items" href.bind="route.href" active.bind="route.isActive" icon.bind="route.settings.icon" disabled.bind="route.settings.disabled">${route.settings.title || route.title}</ui-menu-item>
-      </ui-menu-section>
+      </ui-menu-group>
     </ui-menubar>
 
     <ui-drawer ref="infoDrawer" position="end" scroll padded>
@@ -74,9 +74,9 @@
         </fieldset>
       </a>
       <ui-menu class="ui-font-big">
-        <ui-menu-section label.bind="routes.key" repeat.for="routes of router.navigation | group:'settings.section'">
+        <ui-menu-group label.bind="routes.key" repeat.for="routes of router.navigation | group:'settings.section'">
           <ui-menu-item repeat.for="route of routes.items" href.bind="route.href" active.bind="route.isActive" icon.bind="route.settings.icon" disabled.bind="route.settings.disabled">${route.settings.title || route.title}</ui-menu-item>
-        </ui-menu-section>
+        </ui-menu-group>
       </ui-menu>
     </ui-drawer>
     <ui-app-footer>
