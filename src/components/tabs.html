@@ -1,0 +1,39 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <style>
+    .tab-container {
+      position: relative;
+      height: 450px;
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      justify-items: stretch;
+    }
+
+  </style>
+  <ui-page page-title="Tab Panels">
+    <ui-content padded scroll>
+      <div class="ui-container">
+        <h1>Tab Panels</h1>
+        <hr/>
+        <div class="tab-container">
+          <ui-tab-panel>
+            <ui-tab label="Tab" icon="fi-ui-bell" padded scroll>
+              <compose view="home/lipsum-big.html"></compose>
+            </ui-tab>
+            <ui-tab label="Tab Disabled" icon="fi-ui-bell" padded disabled="true" scroll>
+              <compose view="home/lipsum-big.html"></compose>
+            </ui-tab>
+            <ui-tab label="Tab Closeable" icon="fi-ui-bell" padded closeable scroll>
+              <compose view="home/lipsum-big.html"></compose>
+            </ui-tab>
+          </ui-tab-panel>
+        </div>
+      </div>
+    </ui-content>
+  </ui-page>
+</template>

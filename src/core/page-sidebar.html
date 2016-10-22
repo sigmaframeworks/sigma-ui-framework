@@ -1,0 +1,94 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <style>
+    .page-container {
+      position: relative;
+      height: 450px;
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      justify-items: stretch;
+      border: 1px solid #e5e5e5;
+    }
+
+  </style>
+  <ui-content padded scroll>
+    <div class="ui-container">
+      <h1>Page with Sidebar</h1>
+      <hr/>
+      <div class="page-container">
+        <ui-page page-title="Page Title">
+          <ui-section row-layout>
+            <ui-content scroll padded>
+              <compose view="home/lipsum-big.html"></compose>
+            </ui-content>
+            <ui-sidebar scroll padded collapsible label="Sidebar">
+              <compose view="home/lipsum-small.html"></compose>
+            </ui-sidebar>
+          </ui-section>
+        </ui-page>
+      </div>
+      <br/>
+      <h1>Page with Sidebar</h1>
+      <hr/>
+      <div class="page-container">
+        <ui-page page-title="Page Title">
+          <ui-section row-layout>
+            <ui-sidebar scroll padded collapsible label="Sidebar" position="end">
+              <compose view="home/lipsum-small.html"></compose>
+            </ui-sidebar>
+            <ui-content scroll padded>
+              <compose view="home/lipsum-big.html"></compose>
+            </ui-content>
+          </ui-section>
+        </ui-page>
+      </div>
+
+      <hr/>
+      <h5>Markup</h5>
+      <div class="ui-margin-v">
+        <pre markdown>
+        <xmp>
+        ```html
+        <ui-page page-title[bindable]="string">
+          <ui-section row-layout>
+            <ui-sidebar [scroll] [padded] [collapsible] label[bindable]="string" position="start | end">
+              ....
+            </ui-sidebar>              
+            <ui-content [scroll] [padded]>
+              ....
+            </ui-content>
+          </ui-section>
+        </ui-page>
+        ```
+        </xmp>
+      </pre>
+      </div>
+
+      <hr/>
+      <h5>Examples</h5>
+      <div class="ui-margin-v">
+        <pre markdown>
+        <xmp>
+        ```html
+        <ui-page page-title="Sample">
+          <ui-section row-layout>
+            <ui-sidebar scroll padded collapsible label="Sidebar">
+              ....
+            </ui-sidebar>
+            <ui-content scroll padded>
+              ....
+            </ui-content>
+          </ui-section>
+        </ui-page>
+        ```
+        </xmp>
+      </pre>
+      </div>
+    </div>
+  </ui-content>
+</template>

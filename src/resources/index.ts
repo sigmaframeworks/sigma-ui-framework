@@ -34,6 +34,7 @@ export function configure(config: FrameworkConfiguration, configCallback) {
     './elements/core/ui-grid'
   ]);
   config.globalResources([
+    './elements/components/ui-tab',
     './elements/components/ui-menu',
     './elements/components/ui-panel',
     './elements/components/ui-drawer'

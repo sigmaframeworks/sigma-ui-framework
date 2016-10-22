@@ -57,7 +57,7 @@ export class App {
         title: 'Pages',
         nav: true,
         auth: false,
-        settings: { section: 'Core Elements', disabled: true },
+        settings: { section: 'Core Elements' },
         name: 'pages'
       }, {
         route: 'grid',
@@ -137,15 +137,15 @@ export class App {
         title: 'Datagrid',
         nav: true,
         auth: false,
-        settings: { section: 'Widgets' },
+        settings: { section: 'Widgets', disabled: true },
         name: 'datagrid'
       }, {
         route: 'tab',
-        moduleId: './components/tab',
+        moduleId: './components/tabs',
         title: 'Tab Panel',
         nav: true,
         auth: false,
-        settings: { section: 'Widgets', disabled: true },
+        settings: { section: 'Widgets' },
         name: 'tab'
       }, {
         route: 'tree',

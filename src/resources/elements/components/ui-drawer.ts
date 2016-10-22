@@ -12,7 +12,7 @@ import {autoinject, bindable, containerless, customElement, inlineView} from "au
 <template class="ui-drawer \${position}">
   <div class="ui-drawer-content ui-row-column ui-align-stretch">
     <a class="fi-ui ui-drawer-close ui-col-auto" click.trigger="__closeDrawer()"></a>
-    <div class="ui-col-fill \${class}"><slot></slot></div>
+    <div class="ui-drawer-body ui-col-fill \${__class}"><slot></slot></div>
   </div>
   <div class="ui-drawer-shim" click.trigger="__closeDrawer()"></div>
 </template>`)
@@ -21,13 +21,13 @@ export class UIAppDrawer {
     if (element.hasAttribute('close-on-click')) element.addEventListener('mouseup', (e: any) => { if (e.button == 0) this.__closeDrawer(); });
   }
   bind() {
-    if (this.element.hasAttribute('scroll')) this.class += ' ui-scroll';
-    if (this.element.hasAttribute('padded')) this.class += ' ui-pad-all';
+    if (this.element.hasAttribute('scroll')) this.__class += ' ui-scroll';
+    if (this.element.hasAttribute('padded')) this.__class += ' ui-pad-all';
   }
 
   __closeOnClick;
+  __class = '';
 
-  @bindable() class = '';
   @bindable() position = "start";
 
   __closeDrawer() {

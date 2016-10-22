@@ -73,6 +73,10 @@
     // margin: .15rem;
   }
 
+  &.ui-reverse {
+    @include flex-direction(row-reverse);
+  }
+
   &.ui-align-top {
     @include align-items(flex-start);
   }
@@ -162,6 +166,10 @@
   &.ui-align-stretch {
     @include align-self(stretch);
   }
+}
+
+.ui-self-center {
+  @include align-self(center);
 }
 
 .ui-col-auto {

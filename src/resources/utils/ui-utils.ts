@@ -3,8 +3,20 @@
 // @author      : Adarsh Pastakia
 // @copyright   : 2016
 // @license     : MIT
-
-import {Lazy, Container, NewInstance} from "aurelia-framework";
+import {Origin} from "aurelia-metadata";
+import {
+  customElement,
+  useView,
+  singleton,
+  Lazy,
+  View,
+  ViewSlot,
+  Container,
+  NewInstance,
+  ViewCompiler,
+  ViewResources,
+  CompositionEngine
+} from "aurelia-framework";
 
 export module UIUtils {
   export var auContainer: Container;

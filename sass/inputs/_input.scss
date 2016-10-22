@@ -36,6 +36,7 @@
     text-align: end;
     color     : $input-label;
     position  : relative;
+    min-width : 8rem;
     @include flex(0 0 8rem);
 
     &:after {
@@ -88,6 +89,7 @@
     @include flex-row($align:stretch);
     @include flex(1 1 10rem);
     min-height   : 30px;
+    min-width    : 10rem;
     border-radius: $base-border-radius;
     border       : 1px solid $input-border;
 
@@ -110,8 +112,8 @@
       }
     }
 
-    .ui-input-addon,
-    .ui-input-button {
+    .ui-button,
+    .ui-input-addon {
       @include flex(0 0 auto);
       padding  : .25em;
       font-size: 1rem;

@@ -40,19 +40,127 @@
 }
 
 .ui-toolbar {
+  font-size       : .8rem;
   background-color: $toolbar-bg;
   padding         : .2em .4em;
   @include flex-auto();
   @include box-shadow(0 0 1px 0 $base-border-color);
   @include flex-row($align:center, $justify:flex-end, $wrap:false);
+
+  .ui-divider {
+    border-right: 1px solid $divider-hilight;
+    border-left : 1px solid $divider-shadow;
+    margin      : .5em .2em;
+    @include transform(scaleX(.5));
+    @include align-self(stretch);
+  }
+
+  .ui-input-group {
+    margin: 0 .25rem;
+  }
 }
 
 .ui-sidebar {
   overflow  : hidden;
   position  : relative;
   background: $base-bg;
+  max-width : $sidebar-width;
   @include flex(0 0 $sidebar-width);
-  @include border(end, 1px solid $base-border-color);
+  @include transition(max-width .5s);
+
+  .ui-sidebar-title {
+    color         : rgba($base-text, .75);
+    @include ellipsis();
+    pointer-events: none;
+    padding       : $base-padding;
+    left          : 0;
+    top           : 0;
+  }
+
+  .ui-sidebar-head {
+    border-bottom: 1px solid rgba($base-border-color, .5);
+  }
+
+  &.start {
+    @include order(-1);
+    @include border(end, 1px solid $base-border-color);
+
+    .ui-sidebar-close:before {
+      content: $fi-ui-arrow-thin-left;
+    }
+
+    &.ui-collapse {
+      .ui-sidebar-close:before {
+        content: $fi-ui-arrow-thin-right;
+      }
+
+      .ui-sidebar-content {
+        left: -1 * $sidebar-width;
+        @include transition(left .5s);
+        @include border(end, 1px solid $base-border-color);
+      }
+
+      &.ui-show-overlay {
+        .ui-sidebar-content {
+          left: 2rem;
+        }
+      }
+    }
+  }
+
+  &.end {
+    @include order(1);
+    @include border(start, 1px solid $base-border-color);
+
+    .ui-sidebar-close:before {
+      content: $fi-ui-arrow-thin-right;
+    }
+
+    &.ui-collapse {
+      .ui-sidebar-close:before {
+        content: $fi-ui-arrow-thin-left;
+      }
+
+      .ui-sidebar-content {
+        right: -1 * $sidebar-width;
+        @include transition(right .5s);
+        @include border(start, 1px solid $base-border-color);
+      }
+
+      &.ui-show-overlay {
+        .ui-sidebar-content {
+          right: 2rem;
+        }
+      }
+    }
+  }
+
+  &.ui-collapse {
+    max-width: 2rem;
+    overflow : visible;
+
+    .ui-sidebar-close span:before {
+      content: $fi-ui-arrow-thin-right;
+    }
+
+    .ui-sidebar-content {
+      width  : $sidebar-width;
+      z-index: $z-index-floating;
+      @include position(absolute, 0 auto);
+      @if $enable-blur {
+        background-color: rgba($drawer-bg, .6);
+        @include backdrop-blur(50px);
+      }
+      @else {
+        background-color: $drawer-bg;
+      }
+    }
+
+    .ui-sidebar-title {
+      @include transform(rotate(90deg) translateX(70%) translateY(90%));
+      position: absolute;
+    }
+  }
 }
 
 .ui-content {

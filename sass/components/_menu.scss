@@ -96,6 +96,10 @@ a.ui-menu-item {
 }
 
 .ui-menu {
+  :not(.ui-floating) {
+    display: block;
+  }
+
   &.ui-floating {
     font-size       : .9em;
     min-width       : 10em;
