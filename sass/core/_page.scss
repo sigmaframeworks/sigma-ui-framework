@@ -43,8 +43,10 @@
   font-size       : .8rem;
   background-color: $toolbar-bg;
   padding         : .2em .4em;
+  border          : 1px solid rgba($base-border-color, .5);
+  border-width    : 1px 0;
   @include flex-auto();
-  @include box-shadow(0 0 1px 0 $base-border-color);
+  // @include box-shadow(0 0 1px 0 $base-border-color);
   @include flex-row($align:center, $justify:flex-end, $wrap:false);
 
   .ui-divider {
@@ -63,7 +65,7 @@
 .ui-sidebar {
   overflow  : hidden;
   position  : relative;
-  background: $base-bg;
+  background: $drawer-bg;
   max-width : $sidebar-width;
   @include flex(0 0 $sidebar-width);
   @include transition(max-width .5s);
@@ -78,12 +80,12 @@
   }
 
   .ui-sidebar-head {
-    border-bottom: 1px solid rgba($base-border-color, .5);
+    border-bottom: 1px solid rgba($base-border-color, .25);
   }
 
   &.start {
     @include order(-1);
-    @include border(end, 1px solid $base-border-color);
+    @include border(end, 1px solid rgba($base-border-color, .5));
 
     .ui-sidebar-close:before {
       content: $fi-ui-arrow-thin-left;
@@ -103,6 +105,7 @@
       &.ui-show-overlay {
         .ui-sidebar-content {
           left: 2rem;
+          @include box-shadow(25px 0 50px 5px rgba($base-shadow-dark, .25));
         }
       }
     }
@@ -110,7 +113,7 @@
 
   &.end {
     @include order(1);
-    @include border(start, 1px solid $base-border-color);
+    @include border(start, 1px solid rgba($base-border-color, .5));
 
     .ui-sidebar-close:before {
       content: $fi-ui-arrow-thin-right;
@@ -130,6 +133,7 @@
       &.ui-show-overlay {
         .ui-sidebar-content {
           right: 2rem;
+          @include box-shadow(-25px 0 50px 5px rgba($base-shadow-dark, .25));
         }
       }
     }
@@ -144,27 +148,29 @@
     }
 
     .ui-sidebar-content {
-      width  : $sidebar-width;
-      z-index: $z-index-floating;
+      width           : $sidebar-width;
+      z-index         : $z-index-floating;
+      background-color: $drawer-bg;
       @include position(absolute, 0 auto);
-      @if $enable-blur {
-        background-color: rgba($drawer-bg, .6);
-        @include backdrop-blur(50px);
-      }
-      @else {
-        background-color: $drawer-bg;
-      }
     }
 
     .ui-sidebar-title {
-      @include transform(rotate(90deg) translateX(70%) translateY(90%));
+      @include apply-origin(0% 0% 0, false);
+      @include transform(rotate(90deg) translateX(2em) translateY(-100%));
       position: absolute;
     }
+  }
+}
+@if $enable-blur {
+  .ua-safari .ui-sidebar.ui-collapse > .ui-sidebar-content {
+    // background-color: rgba($drawer-bg, .9);
+    // @include backdrop-blur(50px);
   }
 }
 
 .ui-content {
   position: relative;
   display : block;
+  // background: $white-sp;
   @include flex-fill();
 }

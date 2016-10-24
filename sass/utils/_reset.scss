@@ -227,6 +227,7 @@ hr {
   font-size    : .65rem;
   line-height  : .65rem;
   text-align   : center;
+  z-index      : 1;
   @include position(absolute, -.5em -.5em auto auto);
 }
 

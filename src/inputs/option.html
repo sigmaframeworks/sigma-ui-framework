@@ -1,0 +1,48 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <ui-page page-title="Option Inputs">
+    <ui-content padded scroll>
+      <div class="ui-container">
+        <h1>Option Inputs</h1>
+        <hr/>
+        <h5 class="ui-text-muted">Switches</h5>
+        <ui-option-group>
+          <ui-input-label>Switches</ui-input-label>
+          <ui-switch checked="true"></ui-switch>
+          <ui-switch checked="true" dark></ui-switch>
+          <ui-switch checked="true" primary></ui-switch>
+          <ui-switch checked="true" secondary></ui-switch>
+          <ui-switch checked="true" info></ui-switch>
+          <ui-switch checked="true" danger></ui-switch>
+          <ui-switch checked="true" success></ui-switch>
+          <ui-switch checked="true" warning></ui-switch>
+          <ui-switch checked="true" disabled="true">Disabled</ui-switch>
+        </ui-option-group>
+        <ui-option-group vertical>
+          <ui-input-label>With Labels</ui-input-label>
+          <ui-switch warning on-label="Priority" off-label="Normal" size="6em" off-value="normal" on-value="priority">Mode</ui-switch>
+          <ui-switch success on-label="Via SMS" off-label="Via Email" size="6em" off-value="email" on-value="sms">Notify</ui-switch>
+        </ui-option-group>
+
+        <h5 class="ui-text-muted">Checkboxes</h5>
+        <ui-option-group>
+          <ui-input-label>Checkboxes</ui-input-label>
+          <ui-checkbox checked="true">Simple Checkbox</ui-checkbox>
+          <ui-checkbox change.trigger="val = $event.detail?1:0">Simple Checkbox</ui-checkbox>
+        </ui-option-group>
+
+        <h5 class="ui-text-muted">Radios</h5>
+        <ui-option-group name="radios" value.bind="val">
+          <ui-input-label>Checkboxes</ui-input-label>
+          <ui-radio value="0">Simple Radio</ui-radio>
+          <ui-radio value="1">Simple Radio</ui-radio>
+        </ui-option-group>
+      </div>
+    </ui-content>
+  </ui-page>
+
+</template>

@@ -28,7 +28,9 @@ export class UIButton {
     if (this.element.hasAttribute('small')) this.element.classList.add('ui-small');
     if (this.element.hasAttribute('square')) this.element.classList.add('ui-square');
     if (this.element.hasAttribute('round')) this.element.classList.add('ui-round');
+  }
 
+  bind() {
     this.disabled = isTrue(this.disabled);
   }
 
@@ -105,5 +107,14 @@ export class UIButtonGroup {
     else this.element.classList.add('ui-horizontal');
   }
 
+  bind() {
+    this.disabled = isTrue(this.disabled);
+  }
+
   @children('ui-button') buttons;
+  @bindable() disabled = false;
+
+  disabledChanged(newValue) {
+    this.disabled = isTrue(newValue);
+  }
 }

@@ -51,9 +51,9 @@ export class UIContent {
 @autoinject()
 @customElement('ui-sidebar')
 @inlineView(`<template class="ui-sidebar ui-row-column ui-align-stretch \${position}" click.trigger="__showOverlay($event)">
-  <div class="ui-col-auto ui-row ui-align-end ui-sidebar-head \${position=='start'?'':'ui-reverse'}" if.bind="__collapsible">
+  <div class="ui-col-auto ui-row ui-align-end ui-sidebar-head \${position=='start'?'':'ui-reverse'}" if.bind="__collapsible || label">
   <h5 class="ui-col-fill ui-sidebar-title">\${label}</h5>
-  <a click.trigger="__toggleCollapse($event)" class="ui-col-auto ui-pad-all"><span class="fi-ui ui-sidebar-close"></span></a></div>
+  <a click.trigger="__toggleCollapse($event)" class="ui-col-auto ui-pad-all" if.bind="__collapsible"><span class="fi-ui ui-sidebar-close"></span></a></div>
   <div class="ui-col-fill ui-sidebar-content \${__class}"><slot></slot></div>
 </template>`)
 export class UISidebar {

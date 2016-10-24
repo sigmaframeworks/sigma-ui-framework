@@ -55,6 +55,7 @@
       color     : rgba($color, .7);
       background: darken($bg, 7%);
       border    : 1px solid rgba($color, .3);
+      padding   : .25em .5em;
 
       &:hover {
         color       : rgba($color, .9);

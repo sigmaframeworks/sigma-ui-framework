@@ -53,11 +53,16 @@
   @include box-shadow(1px 1px 2px 0 $base-shadow-dark);
 
   &.ui-disabled {
-    color         : $button-disabled-text !important;
-    background    : $button-disabled-bg !important;
     border-color  : darken($button-disabled-bg,10%) !important;
     box-shadow    : none !important;
     pointer-events: none !important;
+
+    &:after {
+      content      : ' ';
+      border-radius: inherit;
+      background   : rgba($button-disabled-bg, .5);
+      @include position(absolute, 0);
+    }
   }
 
   &.ui-square {
@@ -141,6 +146,19 @@
     @include flex(0 0 auto);
     margin       : 0;
     border-radius: 0;
+  }
+
+  &.ui-disabled > .ui-button {
+    border-color  : darken($button-disabled-bg,10%) !important;
+    box-shadow    : none !important;
+    pointer-events: none !important;
+
+    &:after {
+      content      : ' ';
+      border-radius: inherit;
+      background   : rgba($button-disabled-bg, .5);
+      @include position(absolute, 0);
+    }
   }
 
   &.ui-horizontal {

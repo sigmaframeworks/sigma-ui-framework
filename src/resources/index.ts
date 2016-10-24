@@ -41,7 +41,8 @@ export function configure(config: FrameworkConfiguration, configCallback) {
   ]);
   config.globalResources([
     './elements/inputs/ui-button',
-    './elements/inputs/ui-input'
+    './elements/inputs/ui-input',
+    './elements/inputs/ui-option'
   ]);
   config.globalResources([
     './attributes/ui-marked',

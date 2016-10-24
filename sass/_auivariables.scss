@@ -34,7 +34,7 @@ $base-font-size              : 1rem !default;
 $base-padding                : .25em .5em !default;
 $base-border-radius          : .25em !default;
 
-$base-bg                     : $white !default;
+$base-bg                     : $white-sp !default;
 $base-text                   : $cg-10 !default;
 $base-shadow                 : rgba($wg-4, .75) !default;
 $base-shadow-dark            : rgba($wg-9, .75) !default;
@@ -96,8 +96,8 @@ $menu-link-active-text       : contrast-color($menu-link-active-bg) !default;
 
 /** Drawer Element **/
 $drawer-width                : 18em !default;
-$drawer-bg                   : $base-bg !default;
-$drawer-shim                 : rgba(white, 0) !default;
+$drawer-bg                   : $white !default;
+$drawer-shim                 : rgba($white, 0) !default;
 
 /** Input Element **/
 $input-bg                    : $white-sp !default;
@@ -118,8 +118,7 @@ $button-default-hover-text   : $button-default-text !default;
 $button-default-active-bg    : $cg-3 !default;
 $button-default-active-text  : $button-default-text !default;
 
-$button-disabled-bg          : $ng-3 !default;
-$button-disabled-text        : #eee !default;
+$button-disabled-bg          : $ng-0 !default;
 
 $button-dark-bg              : $cg-8 !default;
 $button-dark-text            : $white !default;

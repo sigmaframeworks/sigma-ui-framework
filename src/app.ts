@@ -76,13 +76,13 @@ export class App {
         settings: { section: 'Input Elements' },
         name: 'input'
       }, {
-        route: 'switch',
-        moduleId: './inputs/switch',
-        title: 'Switches',
+        route: 'option',
+        moduleId: './inputs/option',
+        title: 'Option Inputs',
         nav: true,
         auth: false,
-        settings: { section: 'Input Elements', disabled: true },
-        name: 'switch'
+        settings: { section: 'Input Elements' },
+        name: 'option'
       }, {
         route: 'list',
         moduleId: './inputs/list',
