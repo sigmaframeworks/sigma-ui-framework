@@ -9,7 +9,7 @@
     background  : $bg;
     border-color: rgba(darken($bg, 15%),.5);
 
-    &.ui-dropdown:after {
+    &.ui-btn-dropdown:after {
       border-color: rgba($text, .8)transparent;
     }
 
@@ -92,7 +92,7 @@
     }
   }
 
-  &.ui-dropdown:after {
+  &.ui-btn-dropdown:after {
     content            : ' ';
     display            : inline-block;
     border             : .4em solid transparent;

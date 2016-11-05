@@ -1,0 +1,138 @@
+// 
+// @description : 
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+
+.ui-tree-panel {
+  font-size: .9em;
+  display  : block;
+
+  &.has-search {
+    padding-top: 2rem;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .ui-search {
+    z-index      : 50;
+    top          : 0;
+    width        : 100%;
+    border-radius: 0 !important;
+    border-width : 0 0 1px !important;
+    position     : absolute;
+  }
+
+  .ui-tree-level {
+    z-index: 10;
+    @include padding(start, .75em);
+  }
+
+  .ui-tree-level .ui-tree-level {
+    @include padding(start, 1.5em);
+  }
+
+  .ui-tree-item {
+    display: block;
+  }
+
+  .ui-tree-item > .ui-tree-item-link {
+    @include flex-row(center, $wrap: false);
+    margin: .1em 0;
+
+    &.ui-disabled {
+      pointer-events: none;
+      opacity       : .5;
+    }
+
+    a.ui-expander {
+      font-size    : 1em;
+      line-height  : 1;
+
+      margin       : 0 .1em;
+      padding      : .125em;
+
+      color        : $muted;
+      border-radius: .2em;
+      @include flex(0 0 auto);
+
+      & span:before {
+        content: $fi-ui-tree-expand;
+      }
+
+      &.expanded span:before {
+        content: $fi-ui-tree-collapse;
+      }
+
+      &:hover {
+        color: $primary;
+      }
+    }
+
+    a.ui-node-checkbox {
+      font-size: 1em;
+      padding  : .25em;
+      color    : $muted;
+      @include flex(0 0 auto);
+
+      &:hover {
+        color: $primary;
+      }
+
+      &.off span:before {
+        content: $fi-ui-tree-check-off;
+      }
+
+      &.on span:before {
+        content: $fi-ui-tree-check-on;
+      }
+
+      &.partial span:before {
+        content: $fi-ui-tree-check-partial;
+      }
+
+      &.on {
+        & ~ a.ui-link {}
+      }
+    }
+
+    a.ui-node-link {
+      padding    : .15rem .25rem;
+      white-space: nowrap;
+      color      : $base-text;
+      @include flex(1 1 1em);
+      @include flex-row($wrap: false);
+
+      span.ui-icon {
+        font-weight    : normal;
+        margin         : 0 .25em;
+        background-size: auto 1.2em;
+      }
+
+      b {
+        text-decoration: underline;
+        color          : $primary;
+      }
+
+      &:hover {
+        background-color: rgba($primary, .25);
+      }
+
+      &.ui-active {
+        color           : $primary-text;
+        background-color: rgba($primary, .75);
+
+        b {
+          color: $primary-text;
+        }
+      }
+
+      &.ui-partial {
+        color          : $primary;
+        text-decoration: underline;
+      }
+    }
+  }
+}

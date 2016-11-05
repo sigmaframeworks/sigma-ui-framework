@@ -10,6 +10,7 @@
   @include flex-column();
 
   .ui-page-title {
+    z-index      : 5;
     background   : $page-title-bg;
     color        : $page-title-text;
     font-size    : .9em;
@@ -40,6 +41,7 @@
 }
 
 .ui-toolbar {
+  z-index         : 5;
   font-size       : .8rem;
   background-color: $toolbar-bg;
   padding         : .2em .4em;
@@ -63,6 +65,7 @@
 }
 
 .ui-sidebar {
+  z-index   : 5;
   overflow  : hidden;
   position  : relative;
   background: $drawer-bg;
@@ -96,16 +99,18 @@
         content: $fi-ui-arrow-thin-right;
       }
 
-      .ui-sidebar-content {
-        left: -1 * $sidebar-width;
-        @include transition(left .5s);
-        @include border(end, 1px solid $base-border-color);
-      }
-
-      &.ui-show-overlay {
+      &:not(.ui-mini-display) {
         .ui-sidebar-content {
-          left: 2rem;
-          @include box-shadow(25px 0 50px 5px rgba($base-shadow-dark, .25));
+          left: -1 * $sidebar-width;
+          @include transition(left .5s);
+          @include border(end, 1px solid $base-border-color);
+        }
+
+        &.ui-show-overlay {
+          .ui-sidebar-content {
+            left: 2rem;
+            @include box-shadow(25px 0 50px 5px rgba($base-shadow-dark, .25));
+          }
         }
       }
     }
@@ -124,40 +129,67 @@
         content: $fi-ui-arrow-thin-left;
       }
 
-      .ui-sidebar-content {
-        right: -1 * $sidebar-width;
-        @include transition(right .5s);
-        @include border(start, 1px solid $base-border-color);
-      }
-
-      &.ui-show-overlay {
+      &:not(.ui-mini-display) {
         .ui-sidebar-content {
-          right: 2rem;
-          @include box-shadow(-25px 0 50px 5px rgba($base-shadow-dark, .25));
+          right: -1 * $sidebar-width;
+          @include transition(right .5s);
+          @include border(start, 1px solid $base-border-color);
+        }
+
+        &.ui-show-overlay {
+          .ui-sidebar-content {
+            right: 2rem;
+            @include box-shadow(-25px 0 50px 5px rgba($base-shadow-dark, .25));
+          }
         }
       }
     }
   }
 
   &.ui-collapse {
-    max-width: 2rem;
-    overflow : visible;
+    overflow: visible;
 
     .ui-sidebar-close span:before {
       content: $fi-ui-arrow-thin-right;
     }
 
-    .ui-sidebar-content {
-      width           : $sidebar-width;
-      z-index         : $z-index-floating;
-      background-color: $drawer-bg;
-      @include position(absolute, 0 auto);
+    &:not(.ui-mini-display) {
+      z-index  : 10;
+      max-width: 2rem;
+
+      .ui-sidebar-content {
+        width           : $sidebar-width;
+        z-index         : $z-index-floating;
+        background-color: $drawer-bg;
+        @include position(absolute, 0 auto);
+      }
+
+      .ui-sidebar-title {
+        @include apply-origin(0% 0% 0, false);
+        @include transform(rotate(90deg) translate(2em,-100%));
+        position: absolute;
+      }
     }
 
-    .ui-sidebar-title {
-      @include apply-origin(0% 0% 0, false);
-      @include transform(rotate(90deg) translateX(2em) translateY(-100%));
-      position: absolute;
+    &.ui-mini-display {
+      max-width: 4rem;
+
+      .ui-sidebar-title {
+        display: none;
+      }
+
+      .ui-menu-item {
+        text-overflow: clip;
+
+        .ui-menu-icon {
+          font-size: 2rem;
+        }
+
+        .ui-menu-label {
+          max-width: 0;
+          overflow : hidden;
+        }
+      }
     }
   }
 }

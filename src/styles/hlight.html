@@ -4,9 +4,10 @@
 // @license     : MIT
 -->
 <template>
-  <ui-content scroll padded>
-    <div class="ui-margin-v">
-      <pre markdown>
+  <ui-page page-title="MD Test">
+    <ui-content scroll padded>
+      <div class="ui-margin-v">
+        <pre markdown>
         <xmp>
         ```html
         <ui-button primary icon.bind="glyph class" disabled="bool" click.trigger="fn()">Label</ui-button>
@@ -52,6 +53,7 @@
         ```
         </xmp>
       </pre>
-    </div>
-  </ui-content>
+      </div>
+    </ui-content>
+  </ui-page>
 </template>

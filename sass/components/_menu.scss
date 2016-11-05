@@ -11,6 +11,17 @@ a.ui-menu-item {
   color   : $menu-link-text;
   @include transition(all .5s);
 
+  .ui-menu-label {
+    max-width: 20em;
+    display  : inline-block;
+    @include transition(all 0.5s);
+  }
+
+  .ui-menu-icon {
+    margin: 0 .15em;
+    @include transition(all 0.5s);
+  }
+
   &:hover {
     color           : $menu-link-hover-text;
     background-color: $menu-link-hover-bg;
@@ -21,9 +32,7 @@ a.ui-menu-item {
   }
 
   &.ui-active {
-    pointer-events  : none;
-    color           : $menu-link-active-text;
-    background-color: $menu-link-active-bg;
+    pointer-events: none;
   }
 }
 
@@ -31,9 +40,12 @@ a.ui-menu-item {
   font-size: .8rem;
   padding  : .2em .5em;
   color    : $menu-section-title;
+  display  : block;
+  @include ellipsis();
 }
 
 .ui-menubar {
+  z-index         : 5;
   font-size       : .8em;
   @include flex(0 0 auto);
   @include flex-row($align: center, $wrap:false);
@@ -96,7 +108,7 @@ a.ui-menu-item {
 }
 
 .ui-menu {
-  :not(.ui-floating) {
+  &:not(.ui-floating) {
     display: block;
   }
 
@@ -159,6 +171,8 @@ a.ui-menu-item {
     }
 
     &.ui-active {
+      color           : $menu-link-active-text;
+      background-color: $menu-link-active-bg;
       @include box-shadow(4px 0 0 0 $primary inset);
     }
   }

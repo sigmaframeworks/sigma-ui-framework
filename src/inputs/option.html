@@ -20,12 +20,24 @@
           <ui-switch checked="true" danger></ui-switch>
           <ui-switch checked="true" success></ui-switch>
           <ui-switch checked="true" warning></ui-switch>
-          <ui-switch checked="true" disabled="true">Disabled</ui-switch>
+        </ui-option-group>
+        <ui-option-group>
+          <ui-input-label>Disabled</ui-input-label>
+          <ui-switch checked="true" disabled="true"></ui-switch>
+          <ui-switch checked="true" disabled="true" dark></ui-switch>
+          <ui-switch checked="true" disabled="true" primary></ui-switch>
+          <ui-switch checked="true" disabled="true" secondary></ui-switch>
+          <ui-switch checked="true" disabled="true" info></ui-switch>
+          <ui-switch checked="true" disabled="true" danger></ui-switch>
+          <ui-switch checked="true" disabled="true" success></ui-switch>
+          <ui-switch checked="true" disabled="true" warning></ui-switch>
         </ui-option-group>
         <ui-option-group vertical>
           <ui-input-label>With Labels</ui-input-label>
           <ui-switch warning on-label="Priority" off-label="Normal" size="6em" off-value="normal" on-value="priority">Mode</ui-switch>
           <ui-switch success on-label="Via SMS" off-label="Via Email" size="6em" off-value="email" on-value="sms">Notify</ui-switch>
+          <ui-switch class="ui-switch-gender" on-label="Female" off-label="Male" size="6em" off-value="male" on-value="female">Gender</ui-switch>
+          <ui-switch class="ui-switch-ampm" on-label="PM" off-label="AM" size="3.5em" off-value="am" on-value="pm">Day/Night</ui-switch>
         </ui-option-group>
 
         <h5 class="ui-text-muted">Checkboxes</h5>
@@ -33,6 +45,7 @@
           <ui-input-label>Checkboxes</ui-input-label>
           <ui-checkbox checked="true">Simple Checkbox</ui-checkbox>
           <ui-checkbox change.trigger="val = $event.detail?1:0">Simple Checkbox</ui-checkbox>
+          <ui-checkbox disabled="true">Disabled Checkbox</ui-checkbox>
         </ui-option-group>
 
         <h5 class="ui-text-muted">Radios</h5>
@@ -40,7 +53,43 @@
           <ui-input-label>Checkboxes</ui-input-label>
           <ui-radio value="0">Simple Radio</ui-radio>
           <ui-radio value="1">Simple Radio</ui-radio>
+          <ui-radio disabled="true">Disabled Radio</ui-radio>
         </ui-option-group>
+
+        <hr/>
+        <h5>Markup</h5>
+        <div class="ui-margin-v">
+          <pre markdown>
+            <xmp>
+            ```html
+            <ui-option-group>
+              
+              <ui-input-label [required] [align-top] value[bindable]="string">Label</ui-input-label>
+              
+              <!-- Any one of the following input elements -->
+              
+              <ui-switch [theme] size[bindable]="px | em"
+                disabled[bindable]="bool" checked[bindable]="bool" 
+                on-label[bindable]="string" off-label[bindable]="string"
+                on-valuebindable]="string" off-value[bindable]="string">Switch Label</ui-switch>
+                
+              <ui-checkbox [theme] size[bindable]="px | em"
+                disabled[bindable]="bool" checked[bindable]="bool">Checkbox Label</ui-checkbox>
+                  
+              <ui-radio [theme] size[bindable]="px | em" value[bindable]="string"
+                disabled[bindable]="bool">Radio Label</ui-radio>
+                  
+            
+              <!-- -->
+            
+            </ui-option-group>
+            ```
+            
+            * `ui-option-group`: Value available only for group of radio buttons
+            
+            </xmp>
+            </pre>
+        </div>
       </div>
     </ui-content>
   </ui-page>

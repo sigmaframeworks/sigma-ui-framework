@@ -33,6 +33,7 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing : antialiased;
   font-smoothing         : antialiased;
+  pointer-events         : none;
 }
 
 .fi-ui-angle-down:before {
@@ -259,40 +260,64 @@
   content: '\f137';
 }
 
-.fi-ui-tree-check-off:before {
+.fi-ui-st-color:before {
   content: '\f138';
 }
 
-.fi-ui-tree-check-on:before {
+.fi-ui-st-css:before {
   content: '\f139';
 }
 
-.fi-ui-tree-check-partial:before {
+.fi-ui-st-test:before {
   content: '\f13a';
 }
 
-.fi-ui-tri-down:before {
+.fi-ui-st-typo:before {
   content: '\f13b';
 }
 
-.fi-ui-tri-left:before {
+.fi-ui-tree-check-off:before {
   content: '\f13c';
 }
 
-.fi-ui-tri-right:before {
+.fi-ui-tree-check-on:before {
   content: '\f13d';
 }
 
-.fi-ui-tri-up:before {
+.fi-ui-tree-check-partial:before {
   content: '\f13e';
 }
 
-.fi-ui-upload:before {
+.fi-ui-tree-collapse:before {
   content: '\f13f';
 }
 
-.fi-ui-window:before {
+.fi-ui-tree-expand:before {
   content: '\f140';
+}
+
+.fi-ui-tri-down:before {
+  content: '\f141';
+}
+
+.fi-ui-tri-left:before {
+  content: '\f142';
+}
+
+.fi-ui-tri-right:before {
+  content: '\f143';
+}
+
+.fi-ui-tri-up:before {
+  content: '\f144';
+}
+
+.fi-ui-upload:before {
+  content: '\f145';
+}
+
+.fi-ui-window:before {
+  content: '\f146';
 }
 
 $fi-ui-angle-down: '\f100';
@@ -351,12 +376,18 @@ $fi-ui-radio-off: '\f134';
 $fi-ui-radio-on: '\f135';
 $fi-ui-search: '\f136';
 $fi-ui-settings: '\f137';
-$fi-ui-tree-check-off: '\f138';
-$fi-ui-tree-check-on: '\f139';
-$fi-ui-tree-check-partial: '\f13a';
-$fi-ui-tri-down: '\f13b';
-$fi-ui-tri-left: '\f13c';
-$fi-ui-tri-right: '\f13d';
-$fi-ui-tri-up: '\f13e';
-$fi-ui-upload: '\f13f';
-$fi-ui-window: '\f140';
+$fi-ui-st-color: '\f138';
+$fi-ui-st-css: '\f139';
+$fi-ui-st-test: '\f13a';
+$fi-ui-st-typo: '\f13b';
+$fi-ui-tree-check-off: '\f13c';
+$fi-ui-tree-check-on: '\f13d';
+$fi-ui-tree-check-partial: '\f13e';
+$fi-ui-tree-collapse: '\f13f';
+$fi-ui-tree-expand: '\f140';
+$fi-ui-tri-down: '\f141';
+$fi-ui-tri-left: '\f142';
+$fi-ui-tri-right: '\f143';
+$fi-ui-tri-up: '\f144';
+$fi-ui-upload: '\f145';
+$fi-ui-window: '\f146';

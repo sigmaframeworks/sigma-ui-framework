@@ -1,0 +1,113 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <ui-page page-title="List Inputs">
+    <ui-content scroll padded>
+      <div class="ui-container">
+        <h1>Inputs</h1>
+        <hr/>
+        <ui-form>
+          <ui-row>
+            <ui-column fill padded>
+              <ui-input-group>
+                <ui-input-label required>Combo</ui-input-label>
+                <ui-input-addon icon="fi-ui-${icn}"></ui-input-addon>
+                <ui-combo placeholder="Select one..." clear force-select="false" value.bind="icn" options.bind="options"></ui-combo>
+                <ui-input-info class="ui-text-center">Value: ${icn}</ui-input-info>
+              </ui-input-group>
+            </ui-column>
+            <ui-column fill padded>
+              <ui-input-group>
+                <ui-input-label required>Combo</ui-input-label>
+                <ui-input-addon icon="fi-ui ui-flag ${ctry}"></ui-input-addon>
+                <ui-combo placeholder="Select one..." icon-class="ui-flag" clear value.bind="ctry" options.bind="countries" value-property="iso3" display-property="name" icon-property="iso3"></ui-combo>
+              </ui-input-group>
+            </ui-column>
+          </ui-row>
+          <ui-row>
+            <ui-column fill padded>
+              <ui-input-group>
+                <ui-input-label required>Tags</ui-input-label>
+                <ui-tag placeholder="Select any..." force-select="false" options.bind="options" nolist value.bind="icns"></ui-tag>
+                <ui-input-info class="ui-text-center">Value: ${icns}</ui-input-info>
+              </ui-input-group>
+            </ui-column>
+            <ui-column fill padded>
+              <ui-input-group>
+                <ui-input-label required>Tags</ui-input-label>
+                <ui-tag placeholder="Select one..." icon-class="ui-flag" value.bind="ctries" options.bind="countries" value-property="iso2" display-property="name" icon-property="iso3"></ui-tag>
+                <ui-input-info class="ui-text-center">Value: ${ctries}</ui-input-info>
+              </ui-input-group>
+            </ui-column>
+          </ui-row>
+          <ui-row>
+            <ui-column fill padded>
+              <ui-input-group>
+                <ui-input-label required>List</ui-input-label>
+                <ui-input-addon icon="fi-ui-${icn}"></ui-input-addon>
+                <ui-list placeholder="Select one..." value.bind="icn" options.bind="options"></ui-list>
+              </ui-input-group>
+            </ui-column>
+            <ui-column fill padded>
+              <ui-input-group>
+                <ui-input-label required>List</ui-input-label>
+                <ui-input-addon icon="fi-ui ui-flag ${ctry}"></ui-input-addon>
+                <ui-list placeholder="Select one..." icon-class="ui-flag" value.bind="ctry" options.bind="countries" value-property="iso3" display-property="name" icon-property="iso3"></ui-list>
+              </ui-input-group>
+            </ui-column>
+          </ui-row>
+        </ui-form>
+
+        <hr/>
+        <h5>Markup</h5>
+        <div class="ui-margin-v">
+          <pre markdown>
+            <xmp>
+            ```html
+            <ui-input-group>
+              
+              <ui-input-label [required] [align-top]>Label</ui-input-label>
+              
+              <ui-input-addon icon[bindable]="glyph class"></ui-input-addon>
+              <ui-input-addon>Text</ui-input-addon>
+              
+              <!-- Any one of the following input elements -->
+              
+              <ui-combo [clear] options.bind="array | object" force-select[bindable]="bool"
+                placeholder[bindable]="string" value[bindable]="any"
+                disabled[bindable]="bool" readonly[bindable]="bool"
+                value-property[bindable]="string" display-property[bindable]="string"
+                icon-property[bindable]="string" icon-class[bindable]="string"></ui-combo>
+                
+              <ui-tag [nolist] options.bind="array | object" force-select[bindable]="bool"
+                placeholder[bindable]="string" value[bindable]="any"
+                disabled[bindable]="bool" readonly[bindable]="bool"
+                value-property[bindable]="string" display-property[bindable]="string"
+                icon-property[bindable]="string" icon-class[bindable]="string"></ui-tag>
+                  
+              <ui-list options.bind="array | object"
+                placeholder[bindable]="string" value[bindable]="any"
+                disabled[bindable]="bool" readonly[bindable]="bool"
+                value-property[bindable]="string" display-property[bindable]="string"
+                icon-property[bindable]="string" icon-class[bindable]="string"></ui-list>
+                
+              <!-- -->
+            
+              <!-- button as an addon -->
+              <ui-button>Button</ui-button>
+            
+              <ui-input-info>Text</ui-input-info>
+              
+            </ui-input-group>
+            ```
+            
+            </xmp>
+            </pre>
+        </div>
+      </div>
+    </ui-content>
+  </ui-page>
+</template>

@@ -12,14 +12,15 @@ export class App {
   configureRouter(config, router: Router) {
     this.router = router;
     config.title = "Sigma UI";
-    config.map([{
-      route: ['', 'home'],
-      moduleId: './home/view',
-      title: 'Home',
-      nav: false,
-      auth: false,
-      name: 'home'
-    }, {
+    config.map([
+      {
+        route: ['', 'home'],
+        moduleId: './home/view',
+        title: 'Home',
+        nav: false,
+        auth: false,
+        name: 'home'
+      }, {
         route: 'start',
         moduleId: './home/start',
         title: 'Getting Started',
@@ -89,7 +90,7 @@ export class App {
         title: 'Lists',
         nav: true,
         auth: false,
-        settings: { section: 'Input Elements', disabled: true },
+        settings: { section: 'Input Elements' },
         name: 'list'
       }, {
         route: 'markdown',
@@ -105,7 +106,7 @@ export class App {
         title: 'Buttons',
         nav: true,
         auth: false,
-        settings: { section: 'Components' },
+        settings: { section: 'Input Elements' },
         name: 'button'
       }, {
         route: 'menu',
@@ -113,7 +114,7 @@ export class App {
         title: 'Menus',
         nav: true,
         auth: false,
-        settings: { section: 'Components', disabled: true },
+        settings: { section: 'UI Components', disabled: true },
         name: 'menu'
       }, {
         route: 'drawer',
@@ -121,7 +122,7 @@ export class App {
         title: 'Drawers',
         nav: true,
         auth: false,
-        settings: { section: 'Components' },
+        settings: { section: 'UI Components' },
         name: 'drawer'
       }, {
         route: 'panel',
@@ -129,7 +130,7 @@ export class App {
         title: 'Panels',
         nav: true,
         auth: false,
-        settings: { section: 'Components' },
+        settings: { section: 'UI Components' },
         name: 'panel'
       }, {
         route: 'datagrid',
@@ -137,7 +138,7 @@ export class App {
         title: 'Datagrid',
         nav: true,
         auth: false,
-        settings: { section: 'Widgets', disabled: true },
+        settings: { section: 'UI Components', disabled: true },
         name: 'datagrid'
       }, {
         route: 'tab',
@@ -145,7 +146,7 @@ export class App {
         title: 'Tab Panel',
         nav: true,
         auth: false,
-        settings: { section: 'Widgets' },
+        settings: { section: 'UI Components' },
         name: 'tab'
       }, {
         route: 'tree',
@@ -153,7 +154,7 @@ export class App {
         title: 'Tree Panel',
         nav: true,
         auth: false,
-        settings: { section: 'Widgets', disabled: true },
+        settings: { section: 'UI Components' },
         name: 'tree'
       }]);
   }

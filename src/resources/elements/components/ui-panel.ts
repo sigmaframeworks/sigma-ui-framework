@@ -7,7 +7,6 @@ import {autoinject, bindable, containerless, customElement, inlineView, children
 import {UIEvent} from "../../utils/ui-event";
 import * as _ from "lodash";
 
-// Panel
 @autoinject()
 @customElement('ui-panel-group')
 @inlineView(`<template class="ui-panel-group" collapse.delegate="__unCollapse()"><slot></slot></template>`)
@@ -26,7 +25,6 @@ export class UIPanelGroup {
   }
 }
 
-// Panel
 @autoinject()
 @customElement('ui-panel')
 @inlineView(`<template class="ui-panel \${collapsed?'ui-collapse':''}" collapse.trigger="toggleCollapse()" close.trigger="closePanel()"><slot></slot></template>`)
@@ -36,7 +34,7 @@ export class UIPanel {
   }
 
   closePanel() {
-    this.element.remove();
+    DOM.removeNode(this.element);
   }
 
   collapsed = false;
@@ -60,7 +58,7 @@ export class UIContent {
 
 @autoinject()
 @customElement('ui-header-tool')
-@inlineView(`<template><button class="ui-header-button ui-\${__type}" click.trigger="fireEvent($event)">
+@inlineView(`<template><button tabindex="-1" class="ui-header-button ui-\${__type}" click.trigger="fireEvent($event)">
   <slot><span class="\${__icon}"></span></slot></button></template>`)
 export class UIHeaderTool {
   constructor(public element: Element) {

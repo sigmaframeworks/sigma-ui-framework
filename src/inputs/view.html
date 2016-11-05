@@ -19,7 +19,7 @@
               <ui-input-group>
                 <ui-input-label required>Text</ui-input-label>
                 <!-- <ui-input-addon icon="fi-ui-bell"></ui-input-addon> -->
-                <ui-input placeholder="Any text..." maxlength="25" clear charcount></ui-input>
+                <ui-input class="ui-invalid" placeholder="Any text..." maxlength="25" clear charcount></ui-input>
               </ui-input-group>
               <ui-input-group>
                 <ui-input-label required>Password</ui-input-label>
@@ -111,11 +111,13 @@
               
               <ui-display value[bindable]="string"></ui-display>
               
-              <ui-input [text | password | email | url | file] [clear] [charcount] 
+              <ui-input [text | password | email | url | file] [clear] [charcount]
+                disabled[bindable]="bool" readonly[bindable]="bool" 
                 placeholder[bindable]="string" maxlength[bindable]="number"
                 [value[bindable]="string" | number[bindable]="number" | decimal[bindable]="float"]></ui-input>
                 
               <ui-textarea [clear] [charcount] value[bindable]="string"
+                disabled[bindable]="bool" readonly[bindable]="bool"
                 placeholder[bindable]="string" maxlength[bindable]="number"></ui-textarea>
               
               <!-- -->

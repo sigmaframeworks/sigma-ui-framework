@@ -40,7 +40,7 @@ export class UIButton {
         this.element.classList.remove('ui-open');
         this.dropdown.classList.add('ui-hidden');
       });
-      this.element.classList.add('ui-dropdown');
+      this.element.classList.add('ui-btn-dropdown');
       this.dropdown.classList.add('ui-floating');
       this.dropdown.classList.add('ui-hidden');
       this.__tether = new Tether({
@@ -53,8 +53,15 @@ export class UIButton {
           {
             to: 'scrollParent',
             attachment: 'together'
+          },
+          {
+            to: 'window',
+            attachment: 'together'
           }
-        ]
+        ],
+        optimizations: {
+          moveElement: false
+        }
       });
     }
   }
@@ -62,7 +69,7 @@ export class UIButton {
   detached() {
     if (this.__tether) this.__tether.destroy();
     if (this.__obClick) this.__obClick.dispose();
-    if (this.dropdown) this.dropdown.remove();
+    if (this.dropdown) DOM.removeNode(this.dropdown);
   }
 
   __tether;
@@ -89,7 +96,6 @@ export class UIButton {
         this.dropdown.classList.add('ui-hidden');
       }
     }
-    // let e = DOM.createCustomEvent('click', { bubbles: true, cancelable: true });
     return true;
   }
 

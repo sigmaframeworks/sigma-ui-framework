@@ -3,7 +3,7 @@
 // @author      : Adarsh Pastakia
 // @copyright   : 2016
 // @license     : MIT
-import {Aurelia} from 'aurelia-framework'
+import {Aurelia, DOM} from 'aurelia-framework'
 import environment from './environment';
 import "highlight.js";
 import "highlight.js/languages/css";
@@ -144,5 +144,5 @@ export function configure(aurelia: Aurelia) {
 
   aurelia.start()
     .then(() => aurelia.setRoot())
-    .then(() => document.querySelector('.ui-splash').remove());
+    .then(() => DOM.removeNode(document.querySelector('.ui-splash')));
 }

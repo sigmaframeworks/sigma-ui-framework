@@ -50,7 +50,7 @@ export class UIContent {
 }
 @autoinject()
 @customElement('ui-sidebar')
-@inlineView(`<template class="ui-sidebar ui-row-column ui-align-stretch \${position}" click.trigger="__showOverlay($event)">
+@inlineView(`<template class="ui-sidebar ui-row-column ui-align-stretch \${collapsed?'ui-collapse':''} \${position}" click.trigger="__showOverlay($event)">
   <div class="ui-col-auto ui-row ui-align-end ui-sidebar-head \${position=='start'?'':'ui-reverse'}" if.bind="__collapsible || label">
   <h5 class="ui-col-fill ui-sidebar-title">\${label}</h5>
   <a click.trigger="__toggleCollapse($event)" class="ui-col-auto ui-pad-all" if.bind="__collapsible"><span class="fi-ui ui-sidebar-close"></span></a></div>
@@ -60,11 +60,17 @@ export class UISidebar {
   constructor(public element: Element) {
     if (element.hasAttribute('scroll')) this.__class += ' ui-scroll';
     if (element.hasAttribute('padded')) this.__class += ' ui-pad-all';
+    if (this.__miniDisplay = element.hasAttribute('mini-display'))
+      this.element.classList.add('ui-mini-display');
     this.__collapsible = element.hasAttribute('collapsible');
 
     this.__obClick = UIEvent.subscribe('mouseclick', () => {
       this.element.classList.remove('ui-show-overlay');
     });
+  }
+
+  bind() {
+    this.collapsed = isTrue(this.collapsed);
   }
 
   detached() {
@@ -73,24 +79,23 @@ export class UISidebar {
 
   __obClick;
   __class = '';
+  __miniDisplay = false;
   __collapsible = false;
 
   @bindable() label = "";
+  @bindable() collapsed = false;
   @bindable() position = "start";
 
   __toggleCollapse($event) {
+    this.collapsed = !this.collapsed;
     this.element.classList.remove('ui-show-overlay');
-    if (this.element.classList.contains('ui-collapse'))
-      this.element.classList.remove('ui-collapse');
-    else
-      this.element.classList.add('ui-collapse');
     $event.cancelBubble = true;
     return true;
   }
 
   __showOverlay($event) {
-    if ($event.target != this.element) return true;
-    if (this.element.classList.contains('ui-collapse'))
+    if (this.__miniDisplay || $event.target != this.element) return true;
+    if (this.collapsed)
       this.element.classList.add('ui-show-overlay');
     else
       this.element.classList.remove('ui-show-overlay');

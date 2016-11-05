@@ -3,7 +3,7 @@
 // @author      : Adarsh Pastakia
 // @copyright   : 2016
 // @license     : MIT
-import {autoinject, bindable, containerless, customElement, children, inlineView, TemplatingEngine} from "aurelia-framework";
+import {autoinject, bindable, containerless, customElement, children, inlineView, TemplatingEngine, DOM} from "aurelia-framework";
 import {UIEvent} from "../../utils/ui-event";
 import * as _ from "lodash";
 
@@ -74,6 +74,6 @@ export class UITab {
   @bindable() disabled = false;
 
   remove() {
-    this.element.remove();
+    DOM.removeNode(this.element);
   }
 }

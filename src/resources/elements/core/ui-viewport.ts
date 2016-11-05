@@ -14,7 +14,6 @@ import {UIEvent} from "../../utils/ui-event";
 <template class="ui-viewport">
   <slot name="app-header"></slot>
   <slot></slot>
-  <router-view class="ui-router-view"></router-view>
   <slot name="app-taskbar" ref="__taskbar"></slot>
   <slot name="app-footer"></slot>
 

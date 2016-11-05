@@ -5,6 +5,11 @@
 // @license     : MIT
 import * as _ from "lodash";
 
+export class SplitValueConverter {
+  toView(object: any, char = ',') {
+    return (object || '').split(new RegExp(`[${char}]`));
+  }
+}
 export class KeysValueConverter {
   toView(object: any) {
     if (isEmpty(object)) return [];

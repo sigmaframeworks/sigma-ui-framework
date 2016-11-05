@@ -26,8 +26,16 @@
             <ui-content scroll padded>
               <compose view="home/lipsum-big.html"></compose>
             </ui-content>
-            <ui-sidebar scroll padded collapsible label="Sidebar">
-              <compose view="home/lipsum-small.html"></compose>
+            <ui-sidebar scroll mini-display collapsible label="Sidebar">
+              <ui-menu>
+                <ui-menu-section>Display</ui-menu-section>
+                <ui-menu-item icon="fi-ui-calendar" active.bind="menu=='cal'" click.trigger="menu='cal'">Calendar</ui-menu-item>
+                <ui-menu-item icon="fi-ui-image" active.bind="menu=='img'" click.trigger="menu='img'">Images</ui-menu-item>
+                <ui-menu-item icon="fi-ui-edit" active.bind="menu=='edt'" click.trigger="menu='edt'">Inputs</ui-menu-item>
+                <ui-menu-section>Charts</ui-menu-section>
+                <ui-menu-item icon="fi-ui-chart-bar" active.bind="menu=='bar'" click.trigger="menu='bar'">Bar</ui-menu-item>
+                <ui-menu-item icon="fi-ui-chart-pie" active.bind="menu=='pie'" click.trigger="menu='pie'">Pie</ui-menu-item>
+              </ui-menu>
             </ui-sidebar>
           </ui-section>
         </ui-page>
@@ -56,7 +64,7 @@
         ```html
         <ui-page page-title[bindable]="string">
           <ui-section row-layout>
-            <ui-sidebar [scroll] [padded] [collapsible] label[bindable]="string" position="start | end">
+            <ui-sidebar [scroll] [padded] [collapsible] [mini-display] collapsed[bindable]="bool" label[bindable]="string" position="start | end">
               ....
             </ui-sidebar>              
             <ui-content [scroll] [padded]>
@@ -65,6 +73,9 @@
           </ui-section>
         </ui-page>
         ```
+        
+        * `mini-display`: Use with menu content, on collapse will display enlarged icons only.
+        * `collapsible`: Collapse sidebar, slide out content when clicking on the collapsed bar.
         </xmp>
       </pre>
       </div>

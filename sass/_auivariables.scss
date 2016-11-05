@@ -36,8 +36,8 @@ $base-border-radius          : .25em !default;
 
 $base-bg                     : $white-sp !default;
 $base-text                   : $cg-10 !default;
-$base-shadow                 : rgba($wg-4, .75) !default;
-$base-shadow-dark            : rgba($wg-9, .75) !default;
+$base-shadow                 : rgba($wg-4, .5) !default;
+$base-shadow-dark            : rgba($wg-9, .5) !default;
 $base-border-color           : rgba($wg-6, .75) !default;
 
 $link-text                   : $primary !default;
@@ -91,8 +91,8 @@ $menu-link-text              : $primary !default;
 $menu-link-disabled          : $cg-5 !default;
 $menu-link-hover-bg          : $cg-0 !default;
 $menu-link-hover-text        : $primary !default;
-$menu-link-active-bg         : desaturate(lighten($primary, 30%),10%) !default;
-$menu-link-active-text       : contrast-color($menu-link-active-bg) !default;
+$menu-link-active-bg         : $smoky-blue !default;
+$menu-link-active-text       : $white !default;
 
 /** Drawer Element **/
 $drawer-width                : 18em !default;
@@ -109,6 +109,8 @@ $input-focus                 : $ultramarine !default;
 $input-invalid               : $redwood !default;
 $input-addon-bg              : lighten($cg-00, 5%) !default;
 $input-addon-text            : $cg-7 !default;
+$input-readonly-bg           : $wg-00!default;
+$input-disabled-bg           : $ng-0 !default;
 
 /** Button Elements **/
 $button-default-bg           : $cg-00 !default;

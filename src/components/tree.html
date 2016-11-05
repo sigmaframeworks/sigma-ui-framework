@@ -1,0 +1,81 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <style>
+    .page-container {
+      position: relative;
+      height: 450px;
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      justify-items: stretch;
+      border: 1px solid #e5e5e5;
+    }
+
+  </style>
+  <ui-page page-title="Tree Panel">
+    <ui-content padded scroll>
+      <div class="ui-container">
+        <h1>Tree Panel</h1>
+        <hr/>
+        <div class="page-container">
+          <ui-section row-layout>
+            <ui-sidebar scroll>
+              <ui-tree options.bind="treeOpts" model.bind="treeModel" value.bind="treeSelected"></ui-tree>
+            </ui-sidebar>
+            <ui-content scroll padded>
+              <h4>Single Select</h4>
+              <p>
+                <small>${countries[treeSelected].name}</small>
+              </p>
+              <hr/>
+              <h4>Multiple Select</h4>
+              <p repeat.for="v of treeChecked | split">
+                <small>${countries[v].name}</small>
+              </p>
+            </ui-content>
+            <ui-sidebar scroll position="end">
+              <ui-tree searchable options.bind="treeOpts2" model.bind="treeModel" value.bind="treeChecked"></ui-tree>
+            </ui-sidebar>
+          </ui-section>
+        </div>
+
+        <hr/>
+        <h5>Markup</h5>
+        <div class="ui-margin-v">
+          <pre markdown>
+          <xmp>
+          ```html
+          <ui-tree options[bindable]="UITreeOptions" model[bindable]="UITreeModel" 
+            value[bindable]="string"></ui-tree>
+          ```
+          * UITreeOptions
+            - `showCheckbox`: Checkable items
+            - `checkboxLevel`: Checkable tree level. -1 to have all levels checkable. 
+
+            - `showRoot`: Display root node
+            - `rootLabel`: Root node label
+
+            - `selectionLevel`: Selectable tree level. -1 to have all levels selectable.
+            
+          * UITreeModel
+            - `id`
+            - `text`
+            - `icon`
+
+            - `leaf`
+            - `checked`
+            - `disabled`
+            - `expanded`
+            
+            - `children`: `Array<UITreeModel>`
+          </xmp>
+          </pre>
+        </div>
+      </div>
+    </ui-content>
+  </ui-page>
+</template>

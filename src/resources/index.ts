@@ -23,6 +23,8 @@ export var numeral = nm;
 export * from "./utils/ui-event";
 export * from "./utils/ui-format";
 
+export * from "./utils/ui-tree-model";
+
 export interface AuiConfig {
 
 }
@@ -37,12 +39,14 @@ export function configure(config: FrameworkConfiguration, configCallback) {
     './elements/components/ui-tab',
     './elements/components/ui-menu',
     './elements/components/ui-panel',
-    './elements/components/ui-drawer'
+    './elements/components/ui-drawer',
+    './elements/components/ui-tree'
   ]);
   config.globalResources([
     './elements/inputs/ui-button',
     './elements/inputs/ui-input',
-    './elements/inputs/ui-option'
+    './elements/inputs/ui-option',
+    './elements/inputs/ui-list'
   ]);
   config.globalResources([
     './attributes/ui-marked',
@@ -74,5 +78,68 @@ export function configure(config: FrameworkConfiguration, configCallback) {
     smartLists: true,
     smartypants: false,
     renderer: rend
+  });
+
+  // LoDash Mixins
+  _.mixin({
+    'findByValues': function(collection, property, values) {
+      if (_.isArray(collection)) {
+        return _.filter(collection, function(item) {
+          return _.indexOf(values, item[property] + '') > -1;
+        });
+      }
+      else {
+        let ret = [];
+        _.forEach(collection, function(list) {
+          ret.concat(_.filter(list, function(item) {
+            return _.indexOf(values, item[property] + '') > -1;
+          }));
+        });
+        return ret;
+      }
+    },
+    'removeByValues': function(collection, property, values) {
+      if (_.isArray(collection)) {
+        return _.remove(collection, function(item) {
+          return _.indexOf(values, item[property] + '') > -1;
+        }) || [];
+      }
+      else {
+        let ret = [];
+        _.forEach(collection, function(list, key) {
+          ret = ret.concat(_.remove(list, function(item) {
+            return _.indexOf(values, item[property] + '') > -1;
+          }));
+        });
+        return ret;
+      }
+    },
+    'findDeep': function(collection, property, value) {
+      if (_.isArray(collection)) {
+        return _.find(collection, function(item) {
+          return item[property] + '' === value + '';
+        });
+      }
+      else {
+        let ret;
+        _.forEach(collection, function(item) {
+          ret = _.find(item, v => {
+            return v[property] + '' === value + '';
+          });
+          return ret === undefined;
+        });
+        return ret || {};
+      }
+    },
+    'findChildren': function(collection, listProperty, property, value) {
+      let ret;
+      _.forEach(collection, function(item) {
+        ret = _.find(item[listProperty], v => {
+          return v[property] + '' === value + '';
+        });
+        return ret === undefined;
+      });
+      return ret || {};
+    }
   });
 }

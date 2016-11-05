@@ -17,26 +17,35 @@
   @include margin(end, 1em);
   @include flex-row($display: inline-flex, $wrap:false);
 
+  &.ui-disabled {
+    cursor        : not-allowed;
+    pointer-events: none;
+    opacity       : .5;
+
+    .ui-option-handle {
+      color: $button-disabled-bg !important;
+    }
+
+    .ui-option-label {
+      color: rgba($input-text, .75) !important;
+    }
+  }
+
   .ui-option-label {
     @include ellipsis();
     font-size: .9em;
     color    : $input-label;
   }
 
-  &:hover {
-    .ui-option-handle {
-      color     : $primary;
-      box-shadow: 0 0 4px 0 $input-focus, 0 0 0 1px $input-border;
-    }
-  }
-
   .ui-option {
     position: relative;
 
-    &.ui-disabled {
-      cursor        : not-allowed;
-      pointer-events: none;
-      opacity       : .5;
+    &:hover,
+    .ui-option-input:focus {
+      .ui-option-handle {
+        color     : $primary;
+        box-shadow: 0 0 4px 0 $input-focus, 0 0 0 1px $input-border;
+      }
     }
 
     .ui-option-input {
@@ -51,17 +60,17 @@
       margin       : .25em;
       border-radius: .12em;
       cursor       : pointer;
+      color        : $input-text;
 
       &:before {
         font-family: Framework;
         line-height: 1em;
         display    : block;
-        color      : $input-text;
       }
     }
 
     .ui-option-input:checked ~ .ui-option-handle:before {
-      color: $primary;
+      // color: $primary;
     }
 
     &.checkbox {
@@ -116,7 +125,13 @@
     &.ui-disabled {
       cursor        : not-allowed;
       pointer-events: none;
-      opacity       : .5;
+
+      &:after {
+        content      : ' ';
+        border-radius: inherit;
+        background   : rgba($button-disabled-bg, .75);
+        @include position(absolute, 0);
+      }
     }
 
     .ui-switch-input {
@@ -127,39 +142,37 @@
 
     .ui-switch-label {
       font-size       : .8em;
-      position        : relative;
       display         : block;
       height          : inherit;
       cursor          : pointer;
       text-transform  : uppercase;
       border-radius   : inherit;
       background-color: $input-bg;
-      @include transition(opacity .25s ease-out, background .25s ease-out);
+      @include transition(background .25s ease-out);
     }
 
     .ui-switch-label:after,
     .ui-switch-label:before {
       line-height: 1.5em;
-
-      padding    : .25em .75em;
+      text-align : center;
+      padding    : .25em .5em;
       @include transition(inherit);
       @include position(absolute, 0);
     }
 
     .ui-switch-label:before {
       content    : attr(data-off);
-      text-align : right;
-
       color      : $muted;
       text-shadow: 0 1px rgba($white, .5);
+      @include padding(start, 2em);
     }
 
     .ui-switch-label:after {
       content    : attr(data-on);
-      text-align : left;
       opacity    : 0;
       color      : $muted;
       text-shadow: 0 1px rgba($black, .2);
+      @include padding(end, 2em);
     }
 
     .ui-switch-input:checked ~ .ui-switch-label {
@@ -183,7 +196,7 @@
       background   : white linear-gradient(top, $white-sp, $white);
       border       : 1px solid $input-border;
       box-shadow   : 1px 0 2px 0 rgba(0, 0, 0, .2);
-      @include transition(all .25s ease-out);
+      @include transition(all .5s ease-out);
       @include position(absolute, 0 auto auto 0);
     }
 
@@ -250,3 +263,27 @@
     }
   }
 }
+
+//
+@mixin switch-theme($theme, $offBg: $white, $offText: $black, $onBg: $black, $onText: $white) {
+  .ui-switch.ui-switch-#{$theme} {
+    > .ui-switch-input ~ .ui-switch-label {
+      background-color: $offBg;
+
+      &:before {
+        color: $offText;
+      }
+    }
+
+    > .ui-switch-input:checked ~ .ui-switch-label {
+      background-color: $onBg;
+
+      &:after {
+        color: $onText;
+      }
+    }
+  }
+}
+//
+@include switch-theme(ampm, $honey, $black, $cg-7, $white);
+@include switch-theme(gender, $cobalt-blue, $white, $shock-pink, $white);

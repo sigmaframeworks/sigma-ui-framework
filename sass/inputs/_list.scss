@@ -1,0 +1,138 @@
+// 
+// @description : 
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+
+.ui-combo {
+  .ui-dropdown-handle {
+    cursor: pointer;
+
+    span {
+      pointer-events: none;
+    }
+
+    span:before {
+      font-size: .8rem !important;
+    }
+  }
+
+  .ui-input {
+    cursor: text;
+  }
+}
+
+.ui-list {
+  flex-wrap: wrap !important;
+
+  .ui-list-container {
+    @include flex(1 1 100%);
+    border-radius: 0;
+    min-height   : 5em;
+    max-height   : 9em;
+    border-width : 1px 0 0;
+    background   : none !important;
+    box-shadow   : none !important;
+  }
+
+  .ui-input.ui-remove {
+    position: absolute;
+    top     : -100%;
+
+    & ~ .ui-list-container {
+      border: none;
+    }
+  }
+}
+
+.ui-tag {
+  flex-wrap: wrap !important;
+
+  .ui-input {
+    flex-basis: 5em !important;
+  }
+
+  .ui-tag-item {
+    background   : darken($input-bg, 1%);
+    border-radius: $base-border-radius;
+    border       : 1px solid rgba($base-border-color, .5);
+    padding      : $base-padding;
+    font-size    : .8rem;
+    position     : relative;
+    line-height  : 1;
+    margin       : .2rem;
+    max-width    : 10em;
+    @include padding(end, 1.5em);
+    @include ellipsis();
+
+    .ui-clear {
+      font-size  : 1rem;
+      line-height: .5;
+      right      : 0;
+      position   : absolute;
+    }
+  }
+}
+
+.ui-dropdown,
+.ui-list-container {
+  overflow     : auto;
+  background   : $base-bg;
+  font-size    : .9em;
+  max-height   : 12em;
+  border       : 1px solid $base-border-color;
+  border-radius: $base-border-radius;
+  @include box-shadow(0 0 2px 0 $base-shadow);
+
+  &.tether-target-attached-bottom {
+    border-top-left-radius : 0;
+    border-top-right-radius: 0;
+  }
+
+  &.tether-target-attached-top {
+    border-bottom-left-radius : 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .ui-list-group-label {
+    color      : $muted;
+    padding    : $base-padding;
+    font-size  : .9em;
+    margin     : .2em .1em 0;
+    line-height: 1;
+    background : $base-bg;
+    @include sticky();
+    top        : 0;
+    z-index    : 2;
+  }
+
+  .ui-list-item {
+    @include flex-row($wrap:false, $align:center);
+    padding    : $base-padding;
+    cursor     : pointer;
+    line-height: 1.2;
+
+    > span {
+      pointer-events: none;
+    }
+
+    .ui-icon {
+      margin: 0 .2em;
+    }
+
+    &.ui-disabled {
+      color         : $muted;
+      background    : none !important;
+      pointer-events: none;
+    }
+
+    &.ui-highlight {
+      background: rgba($primary,.25);
+    }
+
+    &.ui-selected {
+      background: $primary;
+      color     : $primary-text;
+    }
+  }
+}

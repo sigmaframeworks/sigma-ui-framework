@@ -58,8 +58,16 @@
               <compose view="home/lipsum-small.html"></compose>
             </ui-drawer>
             <ui-section row-layout>
-              <ui-sidebar scroll padded collapsible label="Sidebar">
-                <compose view="home/lipsum-small.html"></compose>
+              <ui-sidebar scroll mini-display collapsed="true" label="Sidebar">
+                <ui-menu>
+                  <ui-menu-section>Display</ui-menu-section>
+                  <ui-menu-item icon="fi-ui-calendar" active.bind="menu=='cal'" click.trigger="menu='cal'">Calendar</ui-menu-item>
+                  <ui-menu-item icon="fi-ui-image" active.bind="menu=='img'" click.trigger="menu='img'">Images</ui-menu-item>
+                  <ui-menu-item icon="fi-ui-edit" active.bind="menu=='edt'" click.trigger="menu='edt'">Inputs</ui-menu-item>
+                  <ui-menu-section>Charts</ui-menu-section>
+                  <ui-menu-item icon="fi-ui-chart-bar" active.bind="menu=='bar'" click.trigger="menu='bar'">Bar</ui-menu-item>
+                  <ui-menu-item icon="fi-ui-chart-pie" active.bind="menu=='pie'" click.trigger="menu='pie'">Pie</ui-menu-item>
+                </ui-menu>
               </ui-sidebar>
               <ui-content scroll padded>
                 <compose view="home/lipsum-big.html"></compose>
@@ -97,32 +105,6 @@
       </div>
 
       <hr/>
-      <h5>Markup</h5>
-      <div class="ui-margin-v">
-        <pre markdown>
-        <xmp>
-        ```html
-        <ui-page page-title[bindable]="string">
-          <ui-section column-layout>
-            <ui-toolbar>
-              ....
-            </ui-toolbar>              
-            <ui-section row-layout>
-              <ui-sidebar [scroll] [padded] [collapsible] label[bindable]="string" position="start | end">
-                ....
-              </ui-sidebar>              
-              <ui-content [scroll] [padded]>
-                ....
-              </ui-content>
-            </ui-section>
-          </ui-section>
-        </ui-page>
-        ```
-        </xmp>
-      </pre>
-      </div>
-
-      <hr/>
       <h5>Examples</h5>
       <div class="ui-margin-v">
         <pre markdown>
@@ -134,7 +116,7 @@
               ....
             </ui-toolbar>
             <ui-section row-layout>
-              <ui-sidebar scroll padded collapsible label="Sidebar">
+              <ui-sidebar scroll mini-display collapsed="true" label="Sidebar">
                 ....
               </ui-sidebar>
               <ui-content scroll padded>

@@ -34,7 +34,7 @@ export class UIMenubar {
     window.setTimeout(() => this.arrange(), 500);
     this.__tether = new Tether({
       element: this.__overflow,
-      target: this.__overflowToggle,
+      target: this.element,
       attachment: 'top right',
       targetAttachment: 'bottom right',
       offset: '0 10px',
@@ -43,7 +43,10 @@ export class UIMenubar {
           to: 'window',
           attachment: 'together'
         }
-      ]
+      ],
+      optimizations: {
+        moveElement: false
+      }
     });
   }
 
@@ -51,7 +54,7 @@ export class UIMenubar {
     this.__tether.destroy();
     this.__obClick.dispose();
     this.__obResize.dispose();
-    this.__overflow.remove();
+    DOM.removeNode(this.__overflow);
   }
 
   arrange() {
@@ -113,7 +116,7 @@ export class UIMenuDivider {
 @containerless()
 @customElement('ui-menu-item')
 @inlineView(`<template><a class="ui-menu-item \${active?'ui-active':''} \${disabled?'ui-disabled':''}" href.bind="href" click.trigger="click($event)">
-    <span if.bind="icon" class="fi-ui \${icon}"></span><slot></slot></a></template>`)
+    <span if.bind="icon" class="ui-menu-icon fi-ui \${icon}"></span><span class="ui-menu-label"><slot></slot></span></a></template>`)
 export class UIMenuLink {
   constructor(public element: Element) { }
 
@@ -129,6 +132,8 @@ export class UIMenuLink {
 
   click(evt) {
     if (evt.button != 0) return true;
+    evt.cancelBubble = true;
+    evt.stopPropagation();
     return UIEvent.fireEvent('click', this.element);
   }
 }

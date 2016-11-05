@@ -21,6 +21,7 @@
   }
 
   .ui-app-header {
+    z-index         : 5;
     min-height      : 2em;
     padding         : .25em .5em;
     @include flex(0 0 auto);
@@ -50,6 +51,7 @@
   }
 
   .ui-app-footer {
+    z-index         : 5;
     font-size       : .5em;
     padding         : .25em 1em;
     @include flex(0 0 auto);

@@ -7,7 +7,6 @@ import {autoinject, bindable, containerless, customElement, inlineView, bindingM
 import {UIEvent} from "../../utils/ui-event";
 
 @autoinject()
-@containerless()
 @customElement('ui-form')
 @inlineView(`<template><form class="ui-form \${class}" enterpressed.trigger="fireSubmit()"><slot></slot></form></template>`)
 export class UIForm {
@@ -48,16 +47,25 @@ export class UIInputGroup {
 @autoinject()
 @containerless()
 @customElement('ui-input-label')
-@inlineView(`<template><label class="ui-input-label \${__labelClass} \${class}" for.bind="for" slot="inputLabel"><slot></slot></label></template>`)
+@inlineView(`<template><label class="ui-input-label \${__labelClass} \${class}" ref="__label" for.bind="__for" slot="inputLabel"><slot></slot></label></template>`)
 export class UIInputLabel {
+  static seed = 1;
+
   constructor(public element: Element) {
     if (element.hasAttribute('required')) this.__labelClass += ' ui-required';
     if (element.hasAttribute('align-top')) this.__labelClass += ' ui-align-top';
   }
 
-  __labelClass = '';
+  attached() {
+    UIEvent.queueTask(() => {
+      (this.__label.parentElement.querySelector('input,textarea') || {}).id = this.__for;
+    });
+  }
 
-  @bindable() for = '';
+  __label;
+  __labelClass = '';
+  __for = 'ui-input-' + (UIInputLabel.seed++);
+
   @bindable() class = '';
 }
 
@@ -107,10 +115,11 @@ export class UIInputDisplay {
 
 @autoinject()
 @customElement('ui-input')
-@inlineView(`<template class="ui-input-wrapper \${__focus?'ui-focus':''}"><span class="ui-invalid-icon fi-ui"></span>
+@inlineView(`<template class="ui-input-wrapper \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
+  <span class="ui-invalid-errors"><ul><li>Value required</li></ul></span>
   <input class="ui-input" size="1" keypress.trigger="keyDown($event)" input.trigger="format($event)" change.trigger="fireChange()"
     value.bind="__value" placeholder.bind="placeholder" focus.trigger="__focus=true" blur.trigger="__focus=false" 
-    type.bind="__type" id.bind="id" maxlength.bind="maxlength" ref="__input" \${disabled?'disabled':''} \${readonly?'readonly':''}/>
+    type.bind="__type" maxlength.bind="maxlength" ref="__input" disabled.bind="disabled" readonly.bind="readonly"/>
   <span class="ui-in-counter" if.bind="__counter">\${(maxlength-__value.length)}</span>
   <span class="ui-clear" if.bind="__clear && __value" click.trigger="clear()">&times;</span></template>`)
 export class UIInput {
@@ -166,10 +175,9 @@ export class UIInput {
   @bindable({ defaultBindingMode: bindingMode.twoWay })
   decimal = NaN;
 
-  @bindable() id;
   @bindable() maxlength = 999;
   @bindable() placeholder = '';
-  @bindable() disabled = true;
+  @bindable() disabled = false;
   @bindable() readonly = false;
 
   clear() {
@@ -202,7 +210,7 @@ export class UIInput {
 
   keyDown(evt) {
     let code = evt.keyCode || evt.which;
-    if (evt.ctrlKey || evt.metaKey || evt.altKey) return true;
+    if (evt.ctrlKey || evt.metaKey || evt.altKey || code == 9 || code == 8) return true;
     if (code == 13) return UIEvent.fireEvent('enterpressed', this.element);
     if (this.__format == 'email') return /[a-zA-Z0-9\@\-\.\_\&\+]/.test(String.fromCharCode(code));
     if (this.__format == 'url') return /[a-zA-Z0-9\/\-\.\_\?\#\%\=\;\:\{\[\]\}\&\+]/.test(String.fromCharCode(code));
@@ -221,9 +229,9 @@ export class UIInput {
 
 @autoinject()
 @customElement('ui-textarea')
-@inlineView(`<template class="ui-input-wrapper \${__focus?'ui-focus':''} \${__counter?'ui-ta-counter':''}"><span class="ui-invalid-icon fi-ui"></span>
-  <textarea class="ui-input" rows.bind="rows" value.bind="value" placeholder.bind="placeholder" \${disabled?'disabled':''} \${readonly?'readonly':''}
-    focus.trigger="__focus=true" blur.trigger="__focus=false" id.bind="id" maxlength.bind="maxlength" ref="__input" change.trigger="fireChange()"></textarea>
+@inlineView(`<template class="ui-input-wrapper \${__focus?'ui-focus':''} \${__counter?'ui-ta-counter':''} \${disabled?'ui-disabled':''} \${readonly?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
+  <textarea class="ui-input" rows.bind="rows" value.bind="value" placeholder.bind="placeholder" disabled.bind="disabled" readonly.bind="readonly"
+    focus.trigger="__focus=true" blur.trigger="__focus=false" maxlength.bind="maxlength" ref="__input" change.trigger="fireChange()"></textarea>
   <span class="ui-ta-counter" if.bind="__counter">\${value.length & debounce} of \${maxlength}</span>
   <span class="ui-clear" if.bind="__clear && value" click.trigger="clear()">&times;</span></template>`)
 export class UITextarea {
@@ -248,11 +256,10 @@ export class UITextarea {
   @bindable({ defaultBindingMode: bindingMode.twoWay })
   value = '';
 
-  @bindable() id;
   @bindable() rows = 5;
   @bindable() maxlength = 10000;
   @bindable() placeholder = '';
-  @bindable() disabled = true;
+  @bindable() disabled = false;
   @bindable() readonly = false;
 
   clear() {
@@ -270,10 +277,10 @@ export class UITextarea {
 @containerless()
 @customElement('ui-phone')
 @inlineView(`<template><div class="ui-input-addon"><span class="ui-flag \${__ctry}" if.bind="!country"></span>\${__prefix}</div>
-  <div class="ui-input-wrapper \${class} \${__focus?'ui-focus':''}"><span class="ui-invalid-icon fi-ui"></span>
+  <div class="ui-input-wrapper \${class} \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
   <input class="ui-input" size="1" keypress.trigger="keyDown($event)" input.trigger="format($event)" change.trigger="fireChange()"
     value.bind="__value" placeholder.bind="__placeholder" focus.trigger="__focus=true" blur.trigger="__focus=false" 
-    type.bind="__type" id.bind="id" ref="__input" \${disabled?'disabled':''} \${readonly?'readonly':''}/>
+    type.bind="__type" ref="__input" disabled.bind="disabled" readonly.bind="readonly"/>
   <span class="ui-clear" if.bind="__clear && __value" click.trigger="clear()">&times;</span></div></template>`)
 export class UIPhone {
   constructor(public element: Element) {
@@ -309,9 +316,8 @@ export class UIPhone {
   @bindable({ defaultBindingMode: bindingMode.twoWay })
   phone;
 
-  @bindable() id;
   @bindable() country = '';
-  @bindable() disabled = true;
+  @bindable() disabled = false;
   @bindable() readonly = false;
 
   clear() {
@@ -342,7 +348,7 @@ export class UIPhone {
 
   keyDown(evt) {
     let code = evt.keyCode || evt.which;
-    if (evt.ctrlKey || evt.metaKey || evt.altKey) return true;
+    if (evt.ctrlKey || evt.metaKey || evt.altKey || code == 9 || code == 8) return true;
     if (code == 13) return UIEvent.fireEvent('enterpressed', this.element);
     return /[0-9]/.test(String.fromCharCode(code));
   }
