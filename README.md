@@ -13,7 +13,7 @@ A bespoke UI Framework built on Aurelia for desktop business application
 
 ### Browser Support
 
-||![Safari](images/browsers/safari.png)|![Chrome](images/browsers/chrome.png)|![Opera](images/browsers/opera.png)|![Firefox](images/browsers/firefox.png)|![Edge](images/browsers/edge.png)|![IE11](images/browsers/ie.png)|
+|  |![Safari](images/browsers/safari.png)|![Chrome](images/browsers/chrome.png)|![Opera](images/browsers/opera.png)|![Firefox](images/browsers/firefox.png)|![Edge](images/browsers/edge.png)|![IE11](images/browsers/ie.png)|
 |---|:---:|:---:|:---:|:---:|:---:|
 |Responsive Grid|![Working](images/browsers/success.png)|![Working](images/browsers/success.png)|![Working](images/browsers/success.png)|![Working](images/browsers/success.png)|![Working](images/browsers/success.png)|![Working](images/browsers/warning.png)|
 |Page Layouts|![Working](images/browsers/success.png)|![Working](images/browsers/success.png)|![Working](images/browsers/success.png)|![Working](images/browsers/success.png)|![Working](images/browsers/success.png)|![Working](images/browsers/warning.png)|
