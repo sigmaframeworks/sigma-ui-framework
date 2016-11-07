@@ -102,7 +102,7 @@ export class App {
         name: 'markdown'
       }, {
         route: 'button',
-        moduleId: './components/button',
+        moduleId: './inputs/button',
         title: 'Buttons',
         nav: true,
         auth: false,
@@ -157,8 +157,5 @@ export class App {
         settings: { section: 'UI Components' },
         name: 'tree'
       }]);
-  }
-  doalert() {
-    alert('Hello');
   }
 }

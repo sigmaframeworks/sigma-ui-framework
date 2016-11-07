@@ -25,7 +25,7 @@ export * from "./utils/ui-format";
 
 export * from "./utils/ui-tree-model";
 
-export interface AuiConfig {
+export interface UIConfig {
 
 }
 

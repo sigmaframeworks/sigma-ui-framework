@@ -196,6 +196,21 @@
           </ui-column>
           <ui-column fill>
             <h5 class="ui-margin-v ui-text-muted">Button Group Toggle</h5>
+            <div class="ui-pad-all">
+              <ui-button-group toggle value="1">
+                <ui-button icon="fi-ui-bell" value="0" dark>Click Me!</ui-button>
+                <ui-button icon="fi-ui-bell" value="1" danger>Click Me!</ui-button>
+                <ui-button icon="fi-ui-bell" value="2" secondary>Click Me!</ui-button>
+                <ui-button icon="fi-ui-bell" value="3" warning>Click Me!</ui-button>
+              </ui-button-group>
+              <br/><br/>
+              <ui-button-group toggle value="2">
+                <ui-button icon="fi-ui-bell" value="0" primary>Click Me!</ui-button>
+                <ui-button icon="fi-ui-bell" value="1" primary>Click Me!</ui-button>
+                <ui-button icon="fi-ui-bell" value="2" primary>Click Me!</ui-button>
+                <ui-button icon="fi-ui-bell" value="3" primary>Click Me!</ui-button>
+              </ui-button-group>
+            </div>
           </ui-column>
         </ui-row>
 
@@ -206,7 +221,7 @@
             <ui-button icon="fi-ui-bell" dropdown.bind="__menu">Open Me!</ui-button>
             <ui-menu ref="__menu">
               <ui-menu-section>Edit Options</ui-menu-section>
-              <ui-menu-item>Add</ui-menu-item>
+              <ui-menu-item click.trigger="alert('add')">Add</ui-menu-item>
               <ui-menu-item>Edit</ui-menu-item>
               <ui-menu-item>Delete</ui-menu-item>
               <ui-menu-divider></ui-menu-divider>
@@ -240,6 +255,7 @@
           
           <!-- Badges -->
           <ui-button badge-primary="10">Click</ui-button>
+          
           <!-- Any relative positioned element -->
           <div badge="Value"></div>
           ```

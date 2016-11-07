@@ -59,12 +59,12 @@ small {
 // Styles
 .ui-strong,
 strong {
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .ui-bold,
 b {
-  font-weight: 600;
+  font-weight: 800;
 }
 
 .ui-thin {
@@ -104,7 +104,7 @@ small {
 
 .ui-font-big,
 big {
-  font-size: 1.15em;
+  font-size: 1.2em;
 }
 
 .ui-font-large {
@@ -167,24 +167,6 @@ big {
   color: $white;
 }
 
-[dir='rtl'] {
-  [class*='fi-'],
-  [class^='fi-'] {
-    transform: scale(-1, 1);
-  }
-
-  .ui-flip {
-    transform: scale(1, 1);
-  }
-}
-
-[dir='ltr'] {
-  [class*='fi-'],
-  [class^='fi-'] {
-    transform: scale(1, 1);
-  }
-
-  .ui-flip {
-    transform: scale(-1, 1);
-  }
+.ui-flip {
+  transform: scale(-1, 1);
 }

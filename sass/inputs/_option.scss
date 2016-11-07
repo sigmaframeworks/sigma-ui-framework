@@ -116,6 +116,7 @@
     border-radius: 1.5em;
     width        : 4em;
     height       : 1.5em;
+    direction    : ltr;
     @include box-shadow(0 0 0 1px $input-border);
 
     &:hover {

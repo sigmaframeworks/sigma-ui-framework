@@ -9,7 +9,7 @@ import * as kramed from "kramed";
 
 @autoinject()
 @customAttribute('markdown')
-export class UIMarkdown {
+export class UIMarkdownView {
   constructor(public element: Element, public taskQueue: TaskQueue) { }
   attached() {
     this.taskQueue.queueMicroTask(() => {

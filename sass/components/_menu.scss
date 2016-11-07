@@ -177,6 +177,19 @@ a.ui-menu-item {
     }
   }
 }
+
+.rtl,
+[dir="rtl"] {
+  .ui-menu-item {
+    &:hover {
+      @include box-shadow(-4px 0 0 0 $menu-link-active-bg inset);
+    }
+
+    &.ui-active {
+      @include box-shadow(-4px 0 0 0 $primary inset);
+    }
+  }
+}
 @if $enable-blur {
   .ua-safari .ui-menu.ui-floating {
     background-color: rgba($menu-dropdown-bg, .6);

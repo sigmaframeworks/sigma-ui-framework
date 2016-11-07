@@ -8,7 +8,7 @@ import {_} from "../resources/index";
 export class InputList {
   canActivate() {
     return new Promise(res => {
-      setTimeout(() => res(), 1000);
+      setTimeout(() => res(), 500);
     });
   }
 

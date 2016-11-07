@@ -3,15 +3,16 @@
 // @author      : Adarsh Pastakia
 // @copyright   : 2016
 // @license     : MIT
-import {autoinject, bindable, containerless, customElement, children, inlineView, DOM} from "aurelia-framework";
+import {autoinject, bindable, bindingMode, containerless, customElement, children, inlineView, DOM} from "aurelia-framework";
 import {UIEvent} from "../../utils/ui-event";
+import * as _ from "lodash";
 import * as Tether from "tether";
 
 // Drawer
 @autoinject()
 @customElement('ui-button')
-@inlineView(`<template role="button" class="ui-button \${disabled?'ui-disabled':''}" click.trigger="click($event)">
-    <span if.bind="icon" class="fi-ui \${icon}"></span><span class="ui-label"><slot>\${label}</slot></span></template>`)
+@inlineView(`<template role="button" class="ui-button \${disabled?'ui-disabled':''}" click.trigger="click($event)" data-value="\${value}" css.bind="{width: width}">
+    <span if.bind="icon" class="fi-ui \${icon}"></span><span class="ui-label"><slot>\${label}</slot></span></button></template>`)
 export class UIButton {
   constructor(public element: Element) {
     if (this.element.hasAttribute('primary')) this.element.classList.add('ui-button-primary');
@@ -72,13 +73,15 @@ export class UIButton {
     if (this.dropdown) DOM.removeNode(this.dropdown);
   }
 
+  button;
   __tether;
-
   __obClick;
 
   @bindable() icon = '';
   @bindable() label = '';
   @bindable() class = '';
+  @bindable() value = '';
+  @bindable() width = 'auto';
   @bindable() dropdown;
   @bindable() disabled = false;
 
@@ -95,6 +98,7 @@ export class UIButton {
         this.element.classList.remove('ui-open');
         this.dropdown.classList.add('ui-hidden');
       }
+      return false;
     }
     return true;
   }
@@ -106,21 +110,39 @@ export class UIButton {
 
 @autoinject()
 @customElement('ui-button-group')
-@inlineView(`<template class="ui-button-group \${disabled?'ui-disabled':''}"><slot></slot></template>`)
+@inlineView(`<template class="ui-button-group \${disabled?'ui-disabled':''}" click.trigger="__click($event)"><slot></slot></template>`)
 export class UIButtonGroup {
   constructor(public element: Element) {
     if (this.element.hasAttribute('vertical')) this.element.classList.add('ui-vertical');
     else this.element.classList.add('ui-horizontal');
+
+    if (this.element.hasAttribute('toggle')) this.element.classList.add('ui-toggle');
   }
 
   bind() {
     this.disabled = isTrue(this.disabled);
   }
 
-  @children('ui-button') buttons;
+  @children('ui-button') buttons = [];
+  @bindable({ defaultBindingMode: bindingMode.twoWay }) value = '';
   @bindable() disabled = false;
 
   disabledChanged(newValue) {
     this.disabled = isTrue(newValue);
+  }
+
+  buttonsChanged() {
+    this.valueChanged(this.value);
+  }
+
+  __active;
+  valueChanged(newValue) {
+    if (this.__active) this.__active.element.classList.remove('ui-active');
+    if (this.buttons.length > 0 && (this.__active = _.find(this.buttons, (b: any) => b.value === this.value)))
+      this.__active.element.classList.add('ui-active');
+  }
+
+  __click(evt) {
+    if (evt.target.dataset['value']) this.value = evt.target.dataset['value'];
   }
 }

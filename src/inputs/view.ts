@@ -6,7 +6,7 @@
 export class Inputs {
   canActivate() {
     return new Promise(res => {
-      setTimeout(() => res(), 1000);
+      setTimeout(() => res(), 500);
     });
   }
 }

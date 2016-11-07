@@ -66,10 +66,8 @@
     @include ellipsis();
 
     .ui-clear {
-      font-size  : 1rem;
-      line-height: .5;
-      right      : 0;
-      position   : absolute;
+      right   : 0;
+      position: absolute;
     }
   }
 }
@@ -134,5 +132,13 @@
       background: $primary;
       color     : $primary-text;
     }
+  }
+}
+
+.rtl,
+[dir="rtl"] {
+  .ui-tag .ui-clear {
+    left : 0;
+    right: auto;
   }
 }

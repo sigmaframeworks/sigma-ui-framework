@@ -51,7 +51,7 @@
           <div class="color" css.bind="{background:colors[k][c]}">&nbsp;
             <!-- <button data-clipboard-text.bind="optVal==1?c:colors[k][c]" tabindex="-1"></button> -->
           </div>
-          <p class="ui-text-center ui-selectable">${c}</p>
+          <p class="ui-text-center ui-selectable">${optVal==1?c:colors[k][c]}</p>
         </div>
       </div>
     </ui-content>

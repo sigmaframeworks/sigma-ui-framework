@@ -8,7 +8,7 @@ import {UITreeOptions, UIEvent} from "../resources/index";
 export class CompTree {
   canActivate() {
     return new Promise(res => {
-      setTimeout(() => res(), 1000);
+      setTimeout(() => res(), 500);
     });
   }
 

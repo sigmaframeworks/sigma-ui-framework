@@ -6,7 +6,7 @@
 export class Grid {
   canActivate() {
     return new Promise(res => {
-      setTimeout(() => res(), 1000);
+      setTimeout(() => res(), 500);
     });
   }
 }

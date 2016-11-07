@@ -6,7 +6,7 @@
 export class Home {
   canActivate() {
     return new Promise(res => {
-      setTimeout(() => res(), 1000);
+      setTimeout(() => res(), 500);
     });
   }
 
@@ -18,6 +18,7 @@ export class Home {
   inputs = [
     { label: 'Textual', s: 1, c: 1, o: 1, f: 1, e: 1, i: 1 },
     { label: 'List', s: 1, c: 1, o: 1, f: 1, e: 1, i: 2 },
+    { label: 'Tag', s: 1, c: 1, o: 1, f: 1, e: 2, i: 2 },
     { label: 'Option', s: 1, c: 1, o: 1, f: 1, e: 1, i: 1 },
     { label: 'Button', s: 1, c: 1, o: 1, f: 1, e: 1, i: 1 }
   ]

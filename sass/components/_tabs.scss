@@ -11,10 +11,9 @@
 
   .ui-tab-bar {
     @include flex-row($align:stretch);
-    overflow     : hidden;
-    height       : 2rem;
-    padding      : 2px 4px 0;
-    border-bottom: 1px solid $base-border-color;
+    overflow: hidden;
+    height  : 2rem;
+    padding : 2px 4px 0;
 
     > .ui-tab-button {
       @include flex-row($align:center);
@@ -64,13 +63,15 @@
 
   .ui-tab {
     @include flex-fill();
-    display         : none;
-    border          : 1px solid $base-border-color;
-    border-top-width: 0;
+    border: 1px solid $base-border-color;
 
-    &.ui-active {
-      display: block;
+    &:not(.ui-active) {
+      display: none;
     }
+  }
+
+  &.noborder .ui-tab {
+    border: none;
   }
 
   &.bottom {
@@ -79,7 +80,6 @@
     .ui-tab-bar {
       padding      : 0 4px 2px;
       border-bottom: none;
-      border-top   : 1px solid $base-border-color;
 
       > .ui-tab-button {
         margin                    : 0 2px 4px;
@@ -99,11 +99,6 @@
           @include box-shadow(0 -1px 0 0 $primary);
         }
       }
-    }
-
-    .ui-tab {
-      border-top-width   : 1px;
-      border-bottom-width: 0;
     }
   }
 }

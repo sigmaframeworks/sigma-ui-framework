@@ -235,9 +235,9 @@
 
     .ui-clear {
       cursor     : pointer;
-      padding    : 0 .25em;
+      padding    : .1em .25em;
       font-size  : 1rem;
-      line-height: 1;
+      line-height: .5;
       color      : rgba($input-text, .5);
       @include align-self(center);
 
@@ -280,5 +280,13 @@
         left: 1.5rem;
       }
     }
+  }
+}
+
+.rtl,
+[dir="rtl"] {
+  .ui-input-label:after {
+    margin-right: 2px;
+    margin-left : -7px;
   }
 }

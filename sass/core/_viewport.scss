@@ -73,6 +73,7 @@
     @include position(absolute, 0);
     background: rgba($base-bg, .25);
     cursor    : wait;
+    direction : ltr;
 
     .ui-loader-div {
       @include box-shadow(0 0 20px 0 $base-shadow-dark);

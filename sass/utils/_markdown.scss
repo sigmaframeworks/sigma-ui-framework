@@ -17,9 +17,12 @@
     font-style: italic;
   }
 
-  b,
+  b {
+    font-weight: 800;
+  }
+
   strong {
-    font-weight: bold;
+    font-weight: 600;
   }
 
   blockquote {

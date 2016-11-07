@@ -40,6 +40,12 @@
   }
 }
 
+.ui-content {
+  position: relative;
+  display : block;
+  @include flex-fill();
+}
+
 .ui-toolbar {
   z-index         : 5;
   font-size       : .8rem;
@@ -193,16 +199,68 @@
     }
   }
 }
+
+.rtl,
+[dir="rtl"] {
+  .ui-sidebar {
+    &.start {
+      .ui-sidebar-close:before {
+        content: $fi-ui-arrow-thin-right;
+      }
+
+      &.ui-collapse {
+        .ui-sidebar-close:before {
+          content: $fi-ui-arrow-thin-left;
+        }
+
+        &:not(.ui-mini-display) {
+          .ui-sidebar-content {
+            left : auto;
+            right: -1 * $sidebar-width;
+            @include transition(right .5s);
+          }
+
+          &.ui-show-overlay {
+            .ui-sidebar-content {
+              right: 2rem;
+              @include box-shadow(-25px 0 50px 5px rgba($base-shadow-dark, .25));
+            }
+          }
+        }
+      }
+    }
+
+    &.end {
+      .ui-sidebar-close:before {
+        content: $fi-ui-arrow-thin-left;
+      }
+
+      &.ui-collapse {
+        .ui-sidebar-close:before {
+          content: $fi-ui-arrow-thin-right;
+        }
+
+        &:not(.ui-mini-display) {
+          .ui-sidebar-content {
+            right: auto;
+            left : -1 * $sidebar-width;
+            @include transition(left .5s);
+          }
+
+          &.ui-show-overlay {
+            .ui-sidebar-content {
+              left: 2rem;
+              @include box-shadow(25px 0 50px 5px rgba($base-shadow-dark, .25));
+            }
+          }
+        }
+      }
+    }
+  }
+}
 @if $enable-blur {
   .ua-safari .ui-sidebar.ui-collapse > .ui-sidebar-content {
     // background-color: rgba($drawer-bg, .9);
     // @include backdrop-blur(50px);
   }
-}
-
-.ui-content {
-  position: relative;
-  display : block;
-  // background: $white-sp;
-  @include flex-fill();
 }

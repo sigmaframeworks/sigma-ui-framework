@@ -74,6 +74,12 @@ textarea {
   outline: none !important;
 }
 
+caption,
+td,
+th {
+  text-align: start;
+}
+
 .ui-link {
   color: $link-text;
 
@@ -194,6 +200,10 @@ hr {
 }
 
 // BORDERS
+.ui-no-border {
+  border: none !important;
+}
+
 .ui-border-all {
   border: 1px solid $base-border-color;
 }
@@ -281,4 +291,12 @@ hr {
 .ui-bg-warning {
   background-color: $warning;
   color           : $warning-text;
+}
+
+.rtl,
+[dir="rtl"] {
+  .ui-badge {
+    left : -.5em;
+    right: auto;
+  }
 }

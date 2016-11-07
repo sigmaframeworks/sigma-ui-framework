@@ -92,6 +92,43 @@
     }
   }
 }
+
+.rtl,
+[dir="rtl"] {
+  .ui-drawer.start {
+    > .ui-drawer-content {
+      right: -1 * $drawer-width;
+      left : auto;
+
+      > .ui-drawer-close {}
+
+      > .ui-drawer-close:before {
+        content: $fi-ui-arrow-thin-right;
+      }
+    }
+
+    &.show > .ui-drawer-content {
+      right: 0;
+    }
+  }
+
+  .ui-drawer.end {
+    > .ui-drawer-content {
+      left : -1 * $drawer-width;
+      right: auto;
+
+      > .ui-drawer-close {}
+
+      > .ui-drawer-close:before {
+        content: $fi-ui-arrow-thin-left;
+      }
+    }
+
+    &.show > .ui-drawer-content {
+      left: 0;
+    }
+  }
+}
 @if $enable-blur {
   .ua-safari .ui-drawer > .ui-drawer-content {
     background-color: rgba($drawer-bg, .6);

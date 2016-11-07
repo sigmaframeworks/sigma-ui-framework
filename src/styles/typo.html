@@ -5,7 +5,7 @@
 -->
 <template>
   <ui-page page-title="Typography">
-    <ui-content scroll padded>
+    <ui-content scroll padded class="ui-markdown">
       <ui-row class="ui-margin-v">
         <ui-column fill padded>
           <h5>Headers</h5>
@@ -20,60 +20,179 @@
         <ui-column fill padded>
           <h5>Styles</h5>
           <hr/>
-          <p class="ui-margin-v">
+          <div class="ui-margin-v">
             <b>Bold Text</b>
-          </p>
-          <p class="ui-margin-v">
+          </div>
+          <div class="ui-margin-v">
             <strong>Strong Text</strong>
-          </p>
-          <p class="ui-margin-v">
+          </div>
+          <div class="ui-margin-v">
             Normal Text
-          </p>
-          <p class="ui-margin-v ui-thin">
+          </div>
+          <div class="ui-margin-v ui-thin">
             Thin Text
-          </p>
-          <p class="ui-margin-v">
+          </div>
+          <div class="ui-margin-v">
             <em>Italic Text</em>
-          </p>
-          <p class="ui-text-muted">
-            <u>Sizes</u>
-          </p>
-          <p class="ui-font-large ui-margin-v">Large Text</p>
-          <p class="ui-font-big ui-margin-v">Big Text</p>
-          <p class="ui-font-thin ui-margin-v">Thin Text</p>
-          <p class="ui-font-small ui-margin-v">Small Text</p>
-          <p class="ui-text-muted">
-            <u>Transformations</u>
-          </p>
-          <p class="ui-small-caps ui-margin-v">Small Caps</p>
-          <p class="ui-titlecase ui-margin-v">Titlecase</p>
-          <p class="ui-uppercase ui-margin-v">Uppercase</p>
-          <p class="ui-lowercase ui-margin-v">Lowercase</p>
+          </div>
+        </ui-column>
+      </ui-row>
+      <ui-row class="ui-margin-v">
+        <ui-column fill padded>
+          <h5>Text Size</h5>
+          <hr/>
+          <ui-row middle>
+            <ui-column width="8em">
+              <code class="ui-font-small ui-block">ui-font-large</code>
+            </ui-column>
+            <div class="ui-column-fill ui-font-large ui-margin-v">Large Text</div>
+          </ui-row>
+          <ui-row middle>
+            <ui-column width="8em">
+              <code class="ui-font-small ui-block">ui-font-big</code>
+            </ui-column>
+            <div class="ui-font-big ui-margin-v">Big Text</div>
+          </ui-row>
+          <ui-row middle>
+            <ui-column width="8em">
+              <code class="ui-font-small ui-block">ui-font-thin</code>
+            </ui-column>
+            <div class="ui-font-thin ui-margin-v">Thin Text</div>
+          </ui-row>
+          <ui-row middle>
+            <ui-column width="8em">
+              <code class="ui-font-small ui-block">ui-font-small</code>
+            </ui-column>
+            <div class="ui-font-small ui-margin-v">Small Text</div>
+          </ui-row>
+        </ui-column>
+        <ui-column fill padded>
+          <h5>Text Transformation</h5>
+          <hr/>
+          <ui-row middle>
+            <ui-column width="8em">
+              <code class="ui-font-small ui-block">ui-small-caps</code>
+            </ui-column>
+            <div class="ui-small-caps ui-margin-v">Small Caps</div>
+          </ui-row>
+          <ui-row middle>
+            <ui-column width="8em">
+              <code class="ui-font-small ui-block">ui-titlecase</code>
+            </ui-column>
+            <div class="ui-titlecase ui-margin-v">Titlecase</div>
+          </ui-row>
+          <ui-row middle>
+            <ui-column width="8em">
+              <code class="ui-font-small ui-block">ui-uppercase</code>
+            </ui-column>
+            <div class="ui-uppercase ui-margin-v">Uppercase</div>
+          </ui-row>
+          <ui-row middle>
+            <ui-column width="8em">
+              <code class="ui-font-small ui-block">ui-lowercase</code>
+            </ui-column>
+            <div class="ui-lowercase ui-margin-v">Lowercase</div>
+          </ui-row>
         </ui-column>
       </ui-row>
       <ui-row class="ui-margin-v">
         <ui-column fill padded>
           <h5>Text Colors</h5>
           <hr/>
-          <p class="ui-text-primary ui-margin-v">Primary Text</p>
-          <p class="ui-text-secondary ui-margin-v">Secondary Text</p>
-          <p class="ui-text-info ui-margin-v">Info Text</p>
-          <p class="ui-text-danger ui-margin-v">Danger Text</p>
-          <p class="ui-text-success ui-margin-v">Success Text</p>
-          <p class="ui-text-warning ui-margin-v">Warning Text</p>
-          <p class="ui-text-muted ui-margin-v">Muted Text</p>
-          <p class="ui-margin-v">Normal Text</p>
+          <ui-row middle>
+            <ui-column width="9em">
+              <code class="ui-font-small ui-block">ui-text-primary</code>
+            </ui-column>
+            <div class="ui-text-primary ui-margin-v">Primary Text</div>
+          </ui-row>
+          <ui-row middle>
+            <ui-column width="9em">
+              <code class="ui-font-small ui-block">ui-text-secondary</code>
+            </ui-column>
+            <div class="ui-text-secondary ui-margin-v">Secondary Text</div>
+          </ui-row>
+          <ui-row middle>
+            <ui-column width="9em">
+              <code class="ui-font-small ui-block">ui-text-info</code>
+            </ui-column>
+            <div class="ui-text-info ui-margin-v">Info Text</div>
+          </ui-row>
+          <ui-row middle>
+            <ui-column width="9em">
+              <code class="ui-font-small ui-block">ui-text-danger</code>
+            </ui-column>
+            <div class="ui-text-danger ui-margin-v">Danger Text</div>
+          </ui-row>
+          <ui-row middle>
+            <ui-column width="9em">
+              <code class="ui-font-small ui-block">ui-text-success</code>
+            </ui-column>
+            <div class="ui-text-success ui-margin-v">Success Text</div>
+          </ui-row>
+          <ui-row middle>
+            <ui-column width="9em">
+              <code class="ui-font-small ui-block">ui-text-warning</code>
+            </ui-column>
+            <div class="ui-text-warning ui-margin-v">Warning Text</div>
+          </ui-row>
+          <ui-row middle>
+            <ui-column width="9em">
+              <code class="ui-font-small ui-block">ui-text-muted</code>
+            </ui-column>
+            <div class="ui-text-muted ui-margin-v">Muted Text</div>
+          </ui-row>
+          <ui-row middle>
+            <ui-column width="9em">
+              <code class="ui-font-small ui-block"></code>
+            </ui-column>
+            <div class="ui-margin-v">Normal Text</div>
+          </ui-row>
         </ui-column>
         <ui-column fill padded>
           <h5>Background Colors</h5>
           <hr/>
-          <p class="ui-bg-primary ui-margin-v ui-pad-all ui-text-white ui-font-small">Primary Bg</p>
-          <p class="ui-bg-secondary ui-margin-v ui-pad-all ui-text-white ui-font-small">Secondary Bg</p>
-          <p class="ui-bg-info ui-margin-v ui-pad-all ui-text-white ui-font-small">Info Bg</p>
-          <p class="ui-bg-danger ui-margin-v ui-pad-all ui-text-white ui-font-small">Danger Bg</p>
-          <p class="ui-bg-success ui-margin-v ui-pad-all ui-text-white ui-font-small">Success Bg</p>
-          <p class="ui-bg-warning ui-margin-v ui-pad-all ui-text-white ui-font-small">Warning Bg</p>
-          <p class="ui-bg-dark ui-margin-v ui-pad-all ui-text-white ui-font-small">Dark Bg</p>
+          <ui-row middle>
+            <ui-column width="9em">
+              <code class="ui-font-small ui-block">ui-bg-primary</code>
+            </ui-column>
+            <div class="ui-bg-primary ui-col-fill ui-margin-v ui-pad-all ui-text-white ui-font-small">Primary Bg</div>
+          </ui-row>
+          <ui-row middle>
+            <ui-column width="9em">
+              <code class="ui-font-small ui-block">ui-bg-secondary</code>
+            </ui-column>
+            <div class="ui-bg-secondary ui-col-fill ui-margin-v ui-pad-all ui-text-white ui-font-small">Secondary Bg</div>
+          </ui-row>
+          <ui-row middle>
+            <ui-column width="9em">
+              <code class="ui-font-small ui-block">ui-bg-info</code>
+            </ui-column>
+            <div class="ui-bg-info ui-col-fill ui-margin-v ui-pad-all ui-text-white ui-font-small">Info Bg</div>
+          </ui-row>
+          <ui-row middle>
+            <ui-column width="9em">
+              <code class="ui-font-small ui-block">ui-bg-danger</code>
+            </ui-column>
+            <div class="ui-bg-danger ui-col-fill ui-margin-v ui-pad-all ui-text-white ui-font-small">Danger Bg</div>
+          </ui-row>
+          <ui-row middle>
+            <ui-column width="9em">
+              <code class="ui-font-small ui-block">ui-bg-success</code>
+            </ui-column>
+            <div class="ui-bg-success ui-col-fill ui-margin-v ui-pad-all ui-text-white ui-font-small">Success Bg</div>
+          </ui-row>
+          <ui-row middle>
+            <ui-column width="9em">
+              <code class="ui-font-small ui-block">ui-bg-warning</code>
+            </ui-column>
+            <div class="ui-bg-warning ui-col-fill ui-margin-v ui-pad-all ui-text-white ui-font-small">Warning Bg</div>
+          </ui-row>
+          <ui-row middle>
+            <ui-column width="9em">
+              <code class="ui-font-small ui-block">ui-bg-dark</code>
+            </ui-column>
+            <div class="ui-bg-dark ui-col-fill ui-margin-v ui-pad-all ui-text-white ui-font-small">Dark Bg</div>
+          </ui-row>
         </ui-column>
       </ui-row>
     </ui-content>

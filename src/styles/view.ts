@@ -22,13 +22,13 @@ export class StylesView {
         auth: false,
         name: 'typo'
       }, {
-        route: 'sass',
-        moduleId: './sass',
-        title: 'Using SASS',
+        route: 'css',
+        moduleId: './css',
+        title: 'CSS Helpers',
         settings: { icon: 'fi-ui-st-css' },
         nav: true,
         auth: false,
-        name: 'sass'
+        name: 'css'
       }, {
         route: 'colors',
         moduleId: './colors',
@@ -50,7 +50,7 @@ export class StylesView {
 
   canActivate() {
     return new Promise(res => {
-      setTimeout(() => res(), 1000);
+      setTimeout(() => res(), 500);
     });
   }
 
