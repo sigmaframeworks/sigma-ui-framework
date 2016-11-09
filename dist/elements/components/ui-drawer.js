@@ -13,7 +13,7 @@ define(["require", "exports", "aurelia-framework"], function (require, exports, 
         function UIAppDrawer(element) {
             var _this = this;
             this.element = element;
-            this.class = '';
+            this.__class = '';
             this.position = "start";
             if (element.hasAttribute('close-on-click'))
                 element.addEventListener('mouseup', function (e) { if (e.button == 0)
@@ -21,9 +21,9 @@ define(["require", "exports", "aurelia-framework"], function (require, exports, 
         }
         UIAppDrawer.prototype.bind = function () {
             if (this.element.hasAttribute('scroll'))
-                this.class += ' ui-scroll';
+                this.__class += ' ui-scroll';
             if (this.element.hasAttribute('padded'))
-                this.class += ' ui-pad-all';
+                this.__class += ' ui-pad-all';
         };
         UIAppDrawer.prototype.__closeDrawer = function () {
             this.element.classList.remove('show');
@@ -31,15 +31,11 @@ define(["require", "exports", "aurelia-framework"], function (require, exports, 
         __decorate([
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
-        ], UIAppDrawer.prototype, "class", void 0);
-        __decorate([
-            aurelia_framework_1.bindable(), 
-            __metadata('design:type', Object)
         ], UIAppDrawer.prototype, "position", void 0);
         UIAppDrawer = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-drawer'),
-            aurelia_framework_1.inlineView("\n<template class=\"ui-drawer ${position}\">\n  <div class=\"ui-drawer-content ui-row-column ui-align-stretch\">\n    <a class=\"fi-ui ui-drawer-close ui-col-auto\" click.trigger=\"__closeDrawer()\"></a>\n    <div class=\"ui-col-fill ${class}\"><slot></slot></div>\n  </div>\n  <div class=\"ui-drawer-shim\" click.trigger=\"__closeDrawer()\"></div>\n</template>"), 
+            aurelia_framework_1.inlineView("\n<template class=\"ui-drawer ${position}\">\n  <div class=\"ui-drawer-content ui-row-column ui-align-stretch\">\n    <a class=\"fi-ui ui-drawer-close ui-col-auto\" click.trigger=\"__closeDrawer()\"></a>\n    <div class=\"ui-drawer-body ui-col-fill ${__class}\"><slot></slot></div>\n  </div>\n  <div class=\"ui-drawer-shim\" click.trigger=\"__closeDrawer()\"></div>\n</template>"), 
             __metadata('design:paramtypes', [Element])
         ], UIAppDrawer);
         return UIAppDrawer;

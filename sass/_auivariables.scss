@@ -32,7 +32,7 @@ $base-font-family-input      : 'Lato', 'Trebuchet MS', Tahoma, san-serif !defaul
 $base-font-size              : 1rem !default;
 
 $base-padding                : .25em .5em !default;
-$base-border-radius          : .25em !default;
+$base-border-radius          : 3px !default;
 
 $base-bg                     : $white-sp !default;
 $base-text                   : $cg-10 !default;
@@ -170,3 +170,11 @@ $button-warning-hover-bg     : darken($button-warning-bg, 10%) !default;
 $button-warning-hover-text   : $button-warning-text !default;
 $button-warning-active-bg    : darken($button-warning-bg, 20%) !default;
 $button-warning-active-text  : $button-warning-text !default;
+
+/** Datagrid **/
+$dg-header-bg                : #8FCFF0 !default;
+$dg-header-text              : $base-text !default;
+$dg-footer-bg                : #ECF6FC !default;
+$dg-footer-text              : $base-text !default;
+$dg-row-odd                  : $white-sp !default;
+$dg-row-even                 : $white !default;

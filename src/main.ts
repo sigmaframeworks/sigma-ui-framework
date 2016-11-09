@@ -3,7 +3,7 @@
 // @author      : Adarsh Pastakia
 // @copyright   : 2016
 // @license     : MIT
-import {Aurelia, DOM} from 'aurelia-framework'
+import {Aurelia, DOM} from 'aurelia-framework';
 import environment from './environment';
 import "highlight.js";
 import "highlight.js/languages/css";
@@ -132,6 +132,7 @@ hljs.registerLanguage('typescript', function(hljs) {
 export function configure(aurelia: Aurelia) {
   aurelia.use
     .standardConfiguration()
+    .plugin('aurelia-validation')
     .feature('resources');
 
   if (environment.debug) {

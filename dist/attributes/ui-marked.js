@@ -9,12 +9,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 define(["require", "exports", "aurelia-framework", "kramed"], function (require, exports, aurelia_framework_1, kramed) {
     "use strict";
-    var UIMarkdown = (function () {
-        function UIMarkdown(element, taskQueue) {
+    var UIMarkdownView = (function () {
+        function UIMarkdownView(element, taskQueue) {
             this.element = element;
             this.taskQueue = taskQueue;
         }
-        UIMarkdown.prototype.attached = function () {
+        UIMarkdownView.prototype.attached = function () {
             var _this = this;
             this.taskQueue.queueMicroTask(function () {
                 _this.element.parentElement.classList.add('ui-markdown');
@@ -24,12 +24,12 @@ define(["require", "exports", "aurelia-framework", "kramed"], function (require,
                 _this.element.parentElement.innerHTML = kramed(code, kramed.defaults);
             });
         };
-        UIMarkdown = __decorate([
+        UIMarkdownView = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customAttribute('markdown'), 
             __metadata('design:paramtypes', [Element, aurelia_framework_1.TaskQueue])
-        ], UIMarkdown);
-        return UIMarkdown;
+        ], UIMarkdownView);
+        return UIMarkdownView;
     }());
-    exports.UIMarkdown = UIMarkdown;
+    exports.UIMarkdownView = UIMarkdownView;
 });

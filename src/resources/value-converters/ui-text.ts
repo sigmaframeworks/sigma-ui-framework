@@ -23,6 +23,11 @@ export class DateValueConverter {
     return UIFormat.date(value, format);
   }
 }
+export class TimeValueConverter {
+  toView(value: string, format?: string) {
+    return UIFormat.time(value, format);
+  }
+}
 export class DatetimeValueConverter {
   toView(value: string, format?: string) {
     return UIFormat.datetime(value, format);

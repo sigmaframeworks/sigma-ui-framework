@@ -26,7 +26,6 @@ define(["require", "exports", "aurelia-framework"], function (require, exports, 
                 element.previousSibling.appendChild(this.__el);
         }
         UIBadgeBase.prototype.valueChanged = function (newValue) {
-            console.log(newValue);
             this.__el.classList[newValue ? 'remove' : 'add']('ui-hidden');
             this.__el.innerHTML = newValue;
         };

@@ -4,6 +4,8 @@
 // @copyright   : 2016
 // @license     : MIT
 import {FrameworkConfiguration} from 'aurelia-framework';
+import {ValidationRules} from 'aurelia-validation';
+import {UIValidationRenderer} from "./utils/ui-validator";
 
 import 'lodash';
 import 'moment';
@@ -30,6 +32,8 @@ export interface UIConfig {
 }
 
 export function configure(config: FrameworkConfiguration, configCallback) {
+  config.container.registerHandler('ui-validator', container => container.get(UIValidationRenderer));
+
   config.globalResources([
     './elements/core/ui-viewport',
     './elements/core/ui-page',
@@ -40,13 +44,15 @@ export function configure(config: FrameworkConfiguration, configCallback) {
     './elements/components/ui-menu',
     './elements/components/ui-panel',
     './elements/components/ui-drawer',
-    './elements/components/ui-tree'
+    './elements/components/ui-tree',
+    './elements/components/ui-datagrid'
   ]);
   config.globalResources([
     './elements/inputs/ui-button',
     './elements/inputs/ui-input',
     './elements/inputs/ui-option',
-    './elements/inputs/ui-list'
+    './elements/inputs/ui-list',
+    './elements/inputs/ui-date'
   ]);
   config.globalResources([
     './attributes/ui-marked',
@@ -56,6 +62,30 @@ export function configure(config: FrameworkConfiguration, configCallback) {
     './value-converters/ui-text',
     './value-converters/ui-lodash'
   ]);
+
+  // Validation Rules
+  ValidationRules
+    .customRule('phone', (value, obj) => value === null || value === undefined || value == '' || PhoneLib.isValid(value), '\${$displayName } is not a valid phone number.');
+  ValidationRules
+    .customRule('integer', (value, obj, min, max) => value === null || value === undefined || value == '' || Number.isInteger(value) && value >= (min || Number.MIN_VALUE) && value <= (max || Number.MAX_VALUE),
+    '\${$displayName} must be an integer value between \${$config.min || "MIN_VALUE"} and \${$config.max || "MAX_VALUE"}.', (min, max) => ({ min, max }));
+  ValidationRules
+    .customRule('decimal', (value, obj, min, max) => value === null || value === undefined || value == '' || Math.floor(value % 1) === 0 && value >= (min || Number.MIN_VALUE) && value <= (max || Number.MAX_VALUE),
+    '\${$displayName} must be a decimal value between \${$config.min || "MIN_VALUE"} and \${$config.max || "MAX_VALUE"}.', (min, max) => ({ min, max }));
+  ValidationRules
+    .customRule('language', (map, obj, controller, langInput) => {
+      if (!(langInput && langInput.clearErrors && langInput.addError)) throw new Error('Language validation must have reference to ui-language');
+      let promises = [];
+      langInput.clearErrors();
+      _.forEach(map, (model, key) => {
+        promises.push(controller.validator.validateObject(model)
+          .then(e => {
+            if (e.length > 0) langInput.addError(key);
+            return e.length > 0 ? key : '';
+          }));
+      });
+      return Promise.all(promises).then(e => e.join('').length == 0);
+    }, 'Some language entries contain invalid values');
 
   // Setup kramed
   let rend = new kramed.Renderer();

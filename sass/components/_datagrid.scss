@@ -5,18 +5,203 @@
 // @license     : MIT
 
 .ui-datagrid {
-  @include flex(1 1 auto);
-  position: relative;
-  overflow: hidden;
+  @include flex(0 0 auto);
+  @include flex-column();
+  position : relative;
+  overflow : hidden;
+  font-size: .9em;
+
+  &:not(.ui-auto-size) {
+    @include flex(1 1 1em);
+    height: 100%;
+
+    .ui-dg-wrapper.scrolling {
+      height: 100%;
+      @include flex(1 1 1em);
+    }
+  }
+
+  .ui-dg-empty {
+    padding   : .5em 1em;
+    position  : absolute;
+    left      : 0;
+    right     : 0;
+    z-index   : 30;
+    top       : 2em;
+    background: $base-bg;
+  }
+
+  .ui-dg-wrapper {
+    @include flex(0 0 auto);
+    overflow: hidden;
+
+    table {
+      min-width: 100%;
+    }
+  }
+
+  .ui-dg-wrapper.scrolling {
+    overflow: auto;
+
+    table {
+      min-width: 100%;
+      height   : 100%;
+    }
+  }
+
+  &.ui-auto-size .ui-dg-wrapper {
+    @include flex(0 0 auto);
+  }
 
   table {
     table-layout: fixed;
-    min-width   : 100%;
-    min-height  : 100%;
 
-    td.ui-expander {
-      min-width: 20px;
-      content  : ' ';
+    td {
+      height: 2em;
+
+      > div {
+        height      : 2em;
+        font-weight : 300;
+        padding     : $base-padding;
+        border-right: 1px solid rgba($base-border-color, .1);
+        @include ellipsis();
+
+        &.no-padding {
+          padding: 0;
+        }
+      }
+
+      &.ui-locked {
+        @include sticky();
+        z-index: 10;
+      }
     }
+
+    td.ui-expander > div {
+      min-width   : 20px;
+      content     : ' ';
+      border-right: none;
+    }
+
+    tfoot,
+    thead {
+      @include sticky();
+      z-index: 15;
+
+      td.ui-expander > div {
+        min-width: 40px;
+      }
+    }
+
+    tfoot {
+      bottom: 0;
+
+      tr {}
+
+      td > div {
+        background : $dg-footer-bg;
+        color      : $dg-footer-text;
+        padding    : .35em .5em;
+        font-weight: 500;
+      }
+    }
+
+    tbody {
+      tr:last-child {
+         > td,
+        > td > div {
+          height     : 100%;
+          padding    : 0;
+          line-height: 0;
+          min-height : 0;
+          background : $dg-row-odd;
+        }
+      }
+
+      tr:nth-of-type(odd) td > div {
+        background: $dg-row-odd;
+      }
+
+      tr:nth-of-type(even) td > div {
+        background: $dg-row-even;
+      }
+
+      tr:not(:last-child):hover > td > div {
+        background: lighten($secondary,35%);
+      }
+
+      tr.ui-selected > td > div {
+        background: lighten($secondary,25%);
+      }
+    }
+
+    thead {
+      top: 0;
+
+      td {
+        &.ui-sortable:hover > div {
+          cursor    : pointer;
+          background: darken($dg-header-bg, 5%);
+        }
+
+        > div {
+          padding     : 0;
+          background  : $dg-header-bg;
+          color       : $dg-header-text;
+          border-color: rgba($dg-header-text, .1);
+          @include flex-row($align:stretch,$wrap:false);
+
+          .ui-dg-header {
+            font-weight: 500;
+            padding    : .35em .5em;
+            @include ellipsis();
+            @include flex(1 1 1em);
+          }
+
+          .ui-sort {
+            position: relative;
+            @include flex(0 0 1em);
+
+            &:before {
+              content    : $fi-ui-tri-up;
+              font-family: Framework;
+              font-size  : .6em;
+              position   : absolute;
+              top        : .6em;
+              color      : rgba($muted,.5);
+            }
+
+            &:after {
+              content    : $fi-ui-tri-down;
+              font-family: Framework;
+              font-size  : .6em;
+              position   : absolute;
+              bottom     : .6em;
+              color      : rgba($muted,.5);
+            }
+
+            &.asc:before {
+              color: $dg-header-text;
+            }
+
+            &.desc:after {
+              color: $dg-header-text;
+            }
+          }
+
+          .ui-resizer {
+            border-left  : 1px solid rgba($base-border-color, .5);
+            padding-right: 2px;
+            cursor       : col-resize;
+          }
+        }
+      }
+    }
+  }
+}
+
+.ua-safari {
+  .ui-datagrid:not(.ui-auto-size) .ui-dg-wrapper.scrolling table {
+    padding-top: 4em;
   }
 }

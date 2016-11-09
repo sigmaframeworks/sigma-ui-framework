@@ -10,6 +10,7 @@
   overflow: hidden;
 
   .ui-tab-bar {
+    @include flex-auto();
     @include flex-row($align:stretch);
     overflow: hidden;
     height  : 2rem;
@@ -74,12 +75,19 @@
     border: none;
   }
 
+  &.noborder:not(.bottom) .ui-tab-bar {
+    border-bottom: 1px solid $base-border-color;
+  }
+
+  &.noborder.bottom .ui-tab-bar {
+    border-top: 1px solid $base-border-color;
+  }
+
   &.bottom {
     @include flex-direction(column-reverse);
 
     .ui-tab-bar {
-      padding      : 0 4px 2px;
-      border-bottom: none;
+      padding: 0 4px 2px;
 
       > .ui-tab-button {
         margin                    : 0 2px 4px;

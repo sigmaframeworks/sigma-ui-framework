@@ -33,8 +33,6 @@ export class UIOptionGroup {
   @bindable() name = '';
 
   changed($event) {
-    $event.cancelBubble = true;
-    $event.stopPropagation();
     this.value = $event.detail;
   }
 }
@@ -65,7 +63,7 @@ export class UICheckbox {
   __changed($event) {
     $event.cancelBubble = true;
     $event.stopPropagation();
-    return UIEvent.fireEvent('change', this.element, this.checked);
+    return UIEvent.fireEvent('checked', this.element, this.checked);
   }
 }
 
@@ -81,12 +79,11 @@ export class UIRadio {
   constructor(public element: Element) { }
 
   bind() {
-    this.checked = isTrue(this.checked);
     this.disabled = isTrue(this.disabled);
   }
 
   @bindable({ defaultBindingMode: bindingMode.twoWay })
-  checked: boolean = false;
+  checked: any = false;
 
   @bindable() size = 'auto';
   @bindable() name = '';
@@ -95,6 +92,7 @@ export class UIRadio {
   @bindable() disabled = false;
 
   checkedChanged($event) {
+    return UIEvent.fireEvent('checked', this.element, this.checked);
   }
 
   changed($event) {
@@ -108,7 +106,7 @@ export class UIRadio {
 @containerless()
 @customElement('ui-switch')
 @inlineView(`<template><label class="ui-switch-control">
-<div class="ui-switch \${disabled?'ui-disabled':''} \${__theme} \${class}" css.bind="{width: size}">
+<div class="ui-switch \${disabled?'ui-disabled':''} ui-switch-\${theme} \${class}" css.bind="{width: size}">
   <input class="ui-switch-input" type="checkbox" disabled.bind="disabled" checked.bind="checked" change.trigger="changed($event)"/>
   <div class="ui-switch-label" data-on="\${onLabel}" data-off="\${offLabel}"></div>
   <div class="ui-switch-handle"></div>
@@ -116,13 +114,13 @@ export class UIRadio {
 </label></template>`)
 export class UISwitch {
   constructor(public element: Element) {
-    if (this.element.hasAttribute('primary')) this.__theme = 'ui-switch-primary';
-    else if (this.element.hasAttribute('secondary')) this.__theme = 'ui-switch-secondary';
-    else if (this.element.hasAttribute('dark')) this.__theme = 'ui-switch-dark';
-    else if (this.element.hasAttribute('info')) this.__theme = 'ui-switch-info';
-    else if (this.element.hasAttribute('danger')) this.__theme = 'ui-switch-danger';
-    else if (this.element.hasAttribute('success')) this.__theme = 'ui-switch-success';
-    else if (this.element.hasAttribute('warning')) this.__theme = 'ui-switch-warning';
+    if (this.element.hasAttribute('primary')) this.theme = 'primary';
+    else if (this.element.hasAttribute('secondary')) this.theme = 'secondary';
+    else if (this.element.hasAttribute('dark')) this.theme = 'dark';
+    else if (this.element.hasAttribute('info')) this.theme = 'info';
+    else if (this.element.hasAttribute('danger')) this.theme = 'danger';
+    else if (this.element.hasAttribute('success')) this.theme = 'success';
+    else if (this.element.hasAttribute('warning')) this.theme = 'warning';
   }
 
   bind() {
@@ -150,8 +148,8 @@ export class UISwitch {
   @bindable() onValue = true;
   @bindable() offValue = false;
   @bindable() disabled = false;
+  @bindable() theme = 'default';
 
-  __theme = '';
   changed($event) {
     $event.cancelBubble = true;
     $event.stopPropagation();

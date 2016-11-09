@@ -138,7 +138,7 @@ export class App {
         title: 'Datagrid',
         nav: true,
         auth: false,
-        settings: { section: 'UI Components', disabled: true },
+        settings: { section: 'UI Components' },
         name: 'datagrid'
       }, {
         route: 'tab',

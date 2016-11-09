@@ -19,6 +19,11 @@ export module UIFormat {
     return dt === null || !(x = moment(dt)).isValid() ? null : x.format(ft);
   }
 
+  export function time(dt: any, ft: string = 'hh:mm A') {
+    let x;
+    return dt === null || !(x = moment(dt)).isValid() ? null : x.format(ft);
+  }
+
   export function datetime(dt: any, ft: string = 'DD MMM YYYY hh:mm A') {
     let x;
     return dt === null || !(x = moment(dt)).isValid() ? null : x.format(ft);
@@ -27,6 +32,11 @@ export module UIFormat {
   export function dateToISO(dt) {
     let x;
     return dt === null || !(x = moment(dt)).isValid() ? null : x.toISOString();
+  }
+
+  export function age(dt: any): string {
+    let x;
+    return dt === null || !(x = moment(dt)).isValid() ? '' : x.fromNow(true);
   }
 
   export function fromNow(dt: any): string {

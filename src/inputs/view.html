@@ -9,90 +9,152 @@
       <div class="ui-container">
         <h1>Inputs</h1>
         <hr/>
-        <ui-form>
-          <ui-row>
-            <ui-column fill padded>
-              <ui-input-group display>
-                <ui-input-label required>Display Only</ui-input-label>
-                <ui-display value="Sigma Frameworks"></ui-display>
-              </ui-input-group>
-              <ui-input-group>
-                <ui-input-label required>Text</ui-input-label>
-                <!-- <ui-input-addon icon="fi-ui-bell"></ui-input-addon> -->
-                <ui-input class="ui-invalid" placeholder="Any text..." maxlength="25" clear charcount></ui-input>
-              </ui-input-group>
-              <ui-input-group>
-                <ui-input-label required>Password</ui-input-label>
-                <!-- <ui-input-addon icon="fi-ui-bell"></ui-input-addon> -->
-                <ui-input placeholder="Any text..." maxlength="25" password clear charcount></ui-input>
-              </ui-input-group>
-              <ui-input-group>
-                <ui-input-label required>Email</ui-input-label>
-                <!-- <ui-input-addon icon="fi-ui-bell"></ui-input-addon> -->
-                <ui-input placeholder="Any email..." maxlength="50" value.bind="valEmail" clear email charcount></ui-input>
-                <ui-input-info class="ui-text-center">Value: ${valEmail}</ui-input-info>
-              </ui-input-group>
-              <ui-input-group>
-                <ui-input-label required>URL</ui-input-label>
-                <!-- <ui-input-addon icon="fi-ui-bell"></ui-input-addon> -->
-                <ui-input placeholder="Any URL..." maxlength="50" value.bind="valUrl" clear url charcount></ui-input>
-                <ui-input-info class="ui-text-center">Value: ${valUrl}</ui-input-info>
-              </ui-input-group>
-              <ui-input-group>
-                <ui-input-label required>Number</ui-input-label>
-                <!-- <ui-input-addon icon="fi-ui-bell"></ui-input-addon> -->
-                <ui-input placeholder="Any number..." number.bind="valNumber" clear></ui-input>
-                <ui-input-info class="ui-text-center">Value: ${valNumber}</ui-input-info>
-              </ui-input-group>
-              <ui-input-group>
-                <ui-input-label required>Decimal</ui-input-label>
-                <!-- <ui-input-addon icon="fi-ui-bell"></ui-input-addon> -->
-                <ui-input placeholder="Any decimal..." decimal.bind="valDecimal" clear></ui-input>
-                <ui-input-info class="ui-text-center">Value: ${valDecimal}</ui-input-info>
-              </ui-input-group>
-              <ui-input-group>
-                <ui-input-label required>File</ui-input-label>
-                <!-- <ui-input-addon icon="fi-ui-bell"></ui-input-addon> -->
-                <ui-input placeholder="Any File..." clear file></ui-input>
-                <ui-input-info class="ui-text-center">Value: ${valUrl}</ui-input-info>
-              </ui-input-group>
-              <ui-input-group>
-                <ui-input-label required>Double Input</ui-input-label>
-                <ui-input-addon icon="fi-ui-days"></ui-input-addon>
-                <ui-input placeholder="Any text..."></ui-input>
-                <ui-input-addon class="ui-small-caps">to</ui-input-addon>
-                <ui-input placeholder="Any text..."></ui-input>
-                <ui-button success>Go!</ui-button>
-              </ui-input-group>
-            </ui-column>
-            <ui-column fill padded>
-              <ui-input-group>
-                <ui-input-label required align-top>Textarea</ui-input-label>
-                <ui-input-addon icon="fi-ui-bell"></ui-input-addon>
-                <ui-textarea placeholder="Any text..." charcount clear></ui-textarea>
-                <ui-button success>Go!</ui-button>
-              </ui-input-group>
-              <ui-fieldset legend="Phone Inputs">
-                <ui-input-group>
-                  <ui-input-label required>International</ui-input-label>
-                  <!-- <ui-input-addon icon="fi-ui-bell"></ui-input-addon> -->
-                  <ui-phone clear value.bind="valueInt" phone.bind="phoneInt"></ui-phone>
-                  <ui-input-info class="ui-text-center">Value: ${valueInt}</ui-input-info>
-                </ui-input-group>
-                <ui-input-group>
-                  <ui-input-label required>National</ui-input-label>
-                  <!-- <ui-input-addon icon="fi-ui-bell"></ui-input-addon> -->
-                  <ui-phone clear country="ae" value.bind="valueNat" phone.bind="phoneNat"></ui-phone>
-                  <ui-input-info class="ui-text-center">Value: ${valueNat}</ui-input-info>
-                </ui-input-group>
-              </ui-fieldset>
-            </ui-column>
-          </ui-row>
-          <ui-row>
-            <ui-column fill padded></ui-column>
-            <ui-column fill padded></ui-column>
-          </ui-row>
-        </ui-form>
+        <ui-panel>
+          <ui-panel-body>
+            <ui-form submit.trigger="submit()">
+              <ui-row>
+                <ui-column fill padded>
+                  <ui-input-group display>
+                    <ui-input-label required>Display Only</ui-input-label>
+                    <ui-display value="Sigma Frameworks"></ui-display>
+                  </ui-input-group>
+                  <ui-input-group>
+                    <ui-input-label required>Text</ui-input-label>
+                    <ui-input placeholder="Any text..." maxlength="25" value.bind="model.text & validate" clear charcount></ui-input>
+                  </ui-input-group>
+                  <ui-input-group>
+                    <ui-input-label required>Password</ui-input-label>
+                    <ui-input placeholder="Any text..." maxlength="25" value.bind="model.password & validate" password clear charcount></ui-input>
+                  </ui-input-group>
+                  <ui-input-group>
+                    <ui-input-label required>Email</ui-input-label>
+                    <ui-input placeholder="Any email..." maxlength="50" value.bind="model.email & validate" clear email charcount></ui-input>
+                    <ui-input-info class="ui-text-center">Value: ${model.email}</ui-input-info>
+                  </ui-input-group>
+                  <ui-input-group>
+                    <ui-input-label required>URL</ui-input-label>
+                    <ui-input placeholder="Any URL..." maxlength="50" value.bind="valUrl" clear url charcount></ui-input>
+                    <ui-input-info class="ui-text-center">Value: ${valUrl}</ui-input-info>
+                  </ui-input-group>
+                  <ui-input-group>
+                    <ui-input-label required>Number</ui-input-label>
+                    <ui-input placeholder="Any number..." number.bind="model.number & validate" clear></ui-input>
+                    <ui-input-info class="ui-text-center">Value: ${valNumber}</ui-input-info>
+                  </ui-input-group>
+                  <ui-input-group>
+                    <ui-input-label required>Decimal</ui-input-label>
+                    <ui-input placeholder="Any decimal..." decimal.bind="model.decimal & validate" clear></ui-input>
+                    <ui-input-info class="ui-text-center">Value: ${valDecimal}</ui-input-info>
+                  </ui-input-group>
+                  <ui-input-group>
+                    <ui-input-label required>File</ui-input-label>
+                    <ui-input placeholder="Any File..." clear file></ui-input>
+                    <ui-input-info class="ui-text-center">Value: ${valUrl}</ui-input-info>
+                  </ui-input-group>
+                  <ui-input-group>
+                    <ui-input-label required>Double Input</ui-input-label>
+                    <ui-input-addon icon="fi-ui-days"></ui-input-addon>
+                    <ui-input placeholder="Any text..."></ui-input>
+                    <ui-input-addon class="ui-small-caps">to</ui-input-addon>
+                    <ui-input placeholder="Any text..."></ui-input>
+                    <ui-button success>Go!</ui-button>
+                  </ui-input-group>
+                </ui-column>
+                <ui-column fill padded>
+                  <ui-input-group>
+                    <ui-input-label required align-top>Textarea</ui-input-label>
+                    <ui-input-addon icon="fi-ui-bell"></ui-input-addon>
+                    <ui-textarea placeholder="Any text..." charcount clear></ui-textarea>
+                    <ui-button success>Go!</ui-button>
+                  </ui-input-group>
+                  <ui-fieldset legend="Phone Inputs">
+                    <ui-input-group>
+                      <ui-input-label required>International</ui-input-label>
+                      <ui-phone clear value.bind="model.phone & validate" phone.bind="phoneInt"></ui-phone>
+                      <ui-input-info class="ui-text-center">Value: ${model.phone}</ui-input-info>
+                    </ui-input-group>
+                    <ui-input-group>
+                      <ui-input-label required>National</ui-input-label>
+                      <ui-phone clear country="ae" value.bind="valueNat" phone.bind="phoneNat"></ui-phone>
+                      <ui-input-info class="ui-text-center">Value: ${valueNat}</ui-input-info>
+                    </ui-input-group>
+                  </ui-fieldset>
+                  <ui-fieldset legend="Dates">
+                    <ui-input-group>
+                      <ui-input-label required>Date</ui-input-label>
+                      <ui-input-addon icon="fi-ui-calendar"></ui-input-addon>
+                      <ui-date value.bind="dt" time="true"></ui-date>
+                      <ui-input-info class="ui-text-center">Value: ${dt}</ui-input-info>
+                    </ui-input-group>
+                    <ui-input-group>
+                      <ui-input-label required>Date Range</ui-input-label>
+                      <ui-input-addon icon="fi-ui-calendar"></ui-input-addon>
+                      <ui-date value.bind="model.dateStart & validate"></ui-date>
+                      <ui-input-addon>to</ui-input-addon>
+                      <ui-date value.bind="model.dateEnd & validate" min-date.bind="model.dateStart"></ui-date>
+                      <ui-input-info class="ui-text-center">Value: ${model.dateStart} - ${model.dateEnd}</ui-input-info>
+                    </ui-input-group>
+                  </ui-fieldset>
+                </ui-column>
+              </ui-row>
+              <ui-row>
+                <ui-column fill padded>
+                  <ui-fieldset legend="Optional Inputs">
+                    <ui-input-group>
+                      <ui-input-label required>Text</ui-input-label>
+                      <ui-input-addon>
+                        <ui-checkbox checked.bind="in1" checked.trigger="inval1=''"></ui-checkbox>
+                      </ui-input-addon>
+                      <ui-input placeholder="Any text..." maxlength="25" ref="_in1" value.bind="inval1" disabled.bind="!in1" clear charcount></ui-input>
+                    </ui-input-group>
+                    <ui-input-group>
+                      <ui-input-label required>Text</ui-input-label>
+                      <ui-input-addon>
+                        <ui-checkbox checked.bind="in2"></ui-checkbox>
+                      </ui-input-addon>
+                      <ui-input placeholder="Any text..." maxlength="25" disabled.bind="!in2" clear charcount></ui-input>
+                    </ui-input-group>
+                    <ui-input-group>
+                      <ui-input-label required>Text</ui-input-label>
+                      <ui-input-addon>
+                        <ui-checkbox checked.bind="in3"></ui-checkbox>
+                      </ui-input-addon>
+                      <ui-input placeholder="Any text..." maxlength="25" disabled.bind="!in3" clear charcount></ui-input>
+                    </ui-input-group>
+                  </ui-fieldset>
+                </ui-column>
+                <ui-column fill padded>
+                  <ui-fieldset legend="Optional Inputs">
+                    <ui-input-group>
+                      <ui-input-label required>Text</ui-input-label>
+                      <ui-input-addon>
+                        <ui-radio name="rdin" value="1" checked.bind="rdin" checked.trigger="rdval1=''"></ui-radio>
+                      </ui-input-addon>
+                      <ui-input placeholder="Any text..." maxlength="25" disabled.bind="rdin!=1" value.bind="rdval1" clear charcount></ui-input>
+                    </ui-input-group>
+                    <ui-input-group>
+                      <ui-input-label required>Text</ui-input-label>
+                      <ui-input-addon>
+                        <ui-radio name="rdin" value="2" checked.bind="rdin" checked.trigger="rdval2=''"></ui-radio>
+                      </ui-input-addon>
+                      <ui-input placeholder="Any text..." maxlength="25" disabled.bind="rdin!=2" value.bind="rdval2" clear charcount></ui-input>
+                    </ui-input-group>
+                    <ui-input-group>
+                      <ui-input-label required>Text</ui-input-label>
+                      <ui-input-addon>
+                        <ui-radio name="rdin" value="3" checked.bind="rdin" checked.trigger="rdval3=''"></ui-radio>
+                      </ui-input-addon>
+                      <ui-input placeholder="Any text..." maxlength="25" disabled.bind="rdin!=3" value.bind="rdval3" clear charcount></ui-input>
+                    </ui-input-group>
+                  </ui-fieldset>
+                </ui-column>
+              </ui-row>
+            </ui-form>
+          </ui-panel-body>
+          <ui-toolbar>
+            <ui-button click.trigger="submit()">Validate</ui-button>
+          </ui-toolbar>
+        </ui-panel>
 
         <hr/>
         <h5>Markup</h5>

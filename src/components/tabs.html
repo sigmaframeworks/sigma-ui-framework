@@ -39,13 +39,13 @@
         <hr/>
         <h5 class="ui-text-muted">Breadcrumbs</h5>
         <ui-panel>
-          <ui-breadcrumb >
-            <ui-crumb repeat.for="c of activeTab+1" index.bind="c" click.trigger="changeTab($event)">${crumbs[c]}</ui-crumb>
+          <ui-breadcrumb change.trigger="changeTab($event)">
+            <ui-crumb repeat.for="c of activeTab+1" id.bind="c">${crumbs[c]}</ui-crumb>
           </ui-breadcrumb>
-          <ui-breadcrumb primary>
-            <ui-crumb repeat.for="c of activeTab+1" index.bind="c" click.trigger="changeTab($event)">${crumbs[c]}</ui-crumb>
+          <ui-breadcrumb primary change.trigger="changeTab($event)">
+            <ui-crumb repeat.for="c of activeTab+1" id.bind="c">${crumbs[c]}</ui-crumb>
           </ui-breadcrumb>
-          <ui-tab-panel active-tab.bind="activeTab" hide-tabs css.bind="{'flex-basis':'10em'}" noborder>
+          <ui-tab-panel active-tab.bind="activeTab" hide-tabs height="10em" noborder>
             <ui-tab padded scroll>
               <h1>Personal Information...</h1>
             </ui-tab>
@@ -66,6 +66,32 @@
             <ui-button if.bind="activeTab+1==crumbs.length" primary disabled.bind="!agree">Finish</ui-button>
           </ui-toolbar>
         </ui-panel>
+
+        <hr/>
+        <h5>Markup</h5>
+        <div class="ui-margin-v">
+          <pre markdown>
+          <xmp>
+          ```html
+          <ui-tab-panel active-tab[bindable]="number" height[bindable]="px | em" 
+            [hide-tabs] [noborder]>
+          
+            <ui-tab label[bindable]="string" icon[bindable]="glyph" disabled[bindable]="boolean"
+              [closeable] [padded] [scroll]>
+              ....
+            </ui-tab>
+          
+          </ui-tab-panel>
+          
+          <ui-breadcrumb [theme] change.trigger="fn()">
+            <ui-crumb id[bindable]="any" href[bindable]="route">Label</ui-crumb>
+          <ui-breadcrumb>
+          ```
+          * UIBreadcrumb
+            - `change`: crumb id will be passed in `event.detail`
+          </xmp>
+          </pre>
+        </div>
       </div>
     </ui-content>
   </ui-page>

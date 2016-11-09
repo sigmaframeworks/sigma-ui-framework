@@ -3,7 +3,7 @@ export declare class UIAppDrawer {
     constructor(element: Element);
     bind(): void;
     __closeOnClick: any;
-    class: string;
+    __class: string;
     position: string;
     __closeDrawer(): void;
 }

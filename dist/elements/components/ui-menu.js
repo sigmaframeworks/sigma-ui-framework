@@ -18,12 +18,12 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
         }
         UIMenubar.prototype.attached = function () {
             var _this = this;
-            ui_event_1.UIEvent.subscribe('windowresize', function () { return _this.arrange(); });
-            ui_event_1.UIEvent.subscribe('mouseclick', function () { return _this.__overflow.classList.add('ui-hidden'); });
+            this.__obResize = ui_event_1.UIEvent.subscribe('windowresize', function () { return _this.arrange(); });
+            this.__obClick = ui_event_1.UIEvent.subscribe('mouseclick', function () { return _this.__overflow.classList.add('ui-hidden'); });
             window.setTimeout(function () { return _this.arrange(); }, 500);
             this.__tether = new Tether({
                 element: this.__overflow,
-                target: this.__overflowToggle,
+                target: this.element,
                 attachment: 'top right',
                 targetAttachment: 'bottom right',
                 offset: '0 10px',
@@ -32,11 +32,17 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
                         to: 'window',
                         attachment: 'together'
                     }
-                ]
+                ],
+                optimizations: {
+                    moveElement: false
+                }
             });
         };
-        UIMenubar.prototype.unbind = function () {
+        UIMenubar.prototype.detached = function () {
             this.__tether.destroy();
+            this.__obClick.dispose();
+            this.__obResize.dispose();
+            aurelia_framework_1.DOM.removeNode(this.__overflow);
         };
         UIMenubar.prototype.arrange = function () {
             this.__overflow.classList.add('ui-hidden');
@@ -86,19 +92,32 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
         return UIMenu;
     }());
     exports.UIMenu = UIMenu;
-    var UIMenuSection = (function () {
-        function UIMenuSection(element) {
+    var UIMenuGroup = (function () {
+        function UIMenuGroup(element) {
             this.element = element;
             this.label = '';
         }
         __decorate([
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
-        ], UIMenuSection.prototype, "label", void 0);
+        ], UIMenuGroup.prototype, "label", void 0);
+        UIMenuGroup = __decorate([
+            aurelia_framework_1.autoinject(),
+            aurelia_framework_1.customElement('ui-menu-group'),
+            aurelia_framework_1.inlineView('<template class="ui-menu-section"><div class="ui-menu-section-title" innerhtml.bind="label"></div><slot></slot></template>'), 
+            __metadata('design:paramtypes', [Element])
+        ], UIMenuGroup);
+        return UIMenuGroup;
+    }());
+    exports.UIMenuGroup = UIMenuGroup;
+    var UIMenuSection = (function () {
+        function UIMenuSection(element) {
+            this.element = element;
+        }
         UIMenuSection = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-menu-section'),
-            aurelia_framework_1.inlineView('<template class="ui-menu-section"><div class="ui-menu-section-title" innerhtml.bind="label"></div><slot></slot></template>'), 
+            aurelia_framework_1.inlineView('<template class="ui-menu-section-title"><slot></slot></template>'), 
             __metadata('design:paramtypes', [Element])
         ], UIMenuSection);
         return UIMenuSection;
@@ -125,9 +144,15 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
             this.disabled = false;
             this.href = 'javascript:void(0)';
         }
+        UIMenuLink.prototype.bind = function () {
+            this.active = isTrue(this.active);
+            this.disabled = isTrue(this.disabled);
+        };
         UIMenuLink.prototype.click = function (evt) {
             if (evt.button != 0)
                 return true;
+            evt.cancelBubble = true;
+            evt.stopPropagation();
             return ui_event_1.UIEvent.fireEvent('click', this.element);
         };
         __decorate([
@@ -150,7 +175,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.containerless(),
             aurelia_framework_1.customElement('ui-menu-item'),
-            aurelia_framework_1.inlineView("<template><a class=\"ui-menu-item ${active?'ui-active':''} ${disabled?'ui-disabled':''}\" href.bind=\"href\" click.trigger=\"click($event)\">\n    <span if.bind=\"icon\" class=\"fi-ui ${icon}\"></span><slot></slot></a></template>"), 
+            aurelia_framework_1.inlineView("<template><a class=\"ui-menu-item ${active?'ui-active':''} ${disabled?'ui-disabled':''}\" href.bind=\"href\" click.trigger=\"click($event)\">\n    <span if.bind=\"icon\" class=\"ui-menu-icon fi-ui ${icon}\"></span><span class=\"ui-menu-label\"><slot></slot></span></a></template>"), 
             __metadata('design:paramtypes', [Element])
         ], UIMenuLink);
         return UIMenuLink;

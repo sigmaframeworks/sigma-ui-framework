@@ -1,5 +1,15 @@
 define(["require", "exports", "lodash"], function (require, exports, _) {
     "use strict";
+    var SplitValueConverter = (function () {
+        function SplitValueConverter() {
+        }
+        SplitValueConverter.prototype.toView = function (object, char) {
+            if (char === void 0) { char = ','; }
+            return (object || '').split(new RegExp("[" + char + "]"));
+        };
+        return SplitValueConverter;
+    }());
+    exports.SplitValueConverter = SplitValueConverter;
     var KeysValueConverter = (function () {
         function KeysValueConverter() {
         }

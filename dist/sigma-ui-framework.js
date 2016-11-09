@@ -1,4 +1,4 @@
-define(["require", "exports", "lodash", "kramed", "moment", "numeral", "./utils/ui-event", 'lodash', 'moment', 'numeral', 'tether'], function (require, exports, ld, km, mm, nm, ui_event_1) {
+define(["require", "exports", "aurelia-validation", './utils/ui-validator', "lodash", "kramed", "moment", "numeral", "./utils/ui-event", "./utils/ui-format", "./utils/ui-tree-model", 'lodash', 'moment', 'numeral', 'tether'], function (require, exports, aurelia_validation_1, ui_validator_1, ld, km, mm, nm, ui_event_1, ui_format_1, ui_tree_model_1) {
     "use strict";
     function __export(m) {
         for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -8,25 +8,36 @@ define(["require", "exports", "lodash", "kramed", "moment", "numeral", "./utils/
     exports.moment = mm;
     exports.numeral = nm;
     __export(ui_event_1);
+    __export(ui_format_1);
+    __export(ui_tree_model_1);
     function configure(config, configCallback) {
+        config.container.registerHandler('ui-validator', function (container) { return container.get(ui_validator_1.UIValidationRenderer); });
         config.globalResources([
             './elements/core/ui-viewport',
             './elements/core/ui-page',
             './elements/core/ui-grid'
         ]);
         config.globalResources([
+            './elements/components/ui-tab',
             './elements/components/ui-menu',
             './elements/components/ui-panel',
-            './elements/components/ui-drawer'
+            './elements/components/ui-drawer',
+            './elements/components/ui-datagrid',
+            './elements/components/ui-tree'
         ]);
         config.globalResources([
-            './elements/inputs/ui-button'
+            './elements/inputs/ui-button',
+            './elements/inputs/ui-input',
+            './elements/inputs/ui-option',
+            './elements/inputs/ui-list',
+            './elements/inputs/ui-date'
         ]);
         config.globalResources([
             './attributes/ui-marked',
             './attributes/ui-badge'
         ]);
         config.globalResources([
+            './value-converters/ui-text',
             './value-converters/ui-lodash'
         ]);
         var rend = new exports.kramed.Renderer();
@@ -49,6 +60,90 @@ define(["require", "exports", "lodash", "kramed", "moment", "numeral", "./utils/
             smartLists: true,
             smartypants: false,
             renderer: rend
+        });
+        aurelia_validation_1.ValidationController.prototype.validateTrigger = aurelia_validation_1.validateTrigger.change;
+        aurelia_validation_1.ValidationRules
+            .customRule('phone', function (value, obj) { return value === null || value === undefined || value === '' || PhoneLib.isValid(value); }, '\${$displayName } is not a valid phone number.');
+        aurelia_validation_1.ValidationRules
+            .customRule('integer', function (value, obj, min, max) { return value === null || value === undefined || value === '' || Number.isInteger(value) && value >= (min || Number.MIN_VALUE) && value <= (max || Number.MAX_VALUE); }, '\${$displayName} must be an integer value between \${$config.min || "MIN_VALUE"} and \${$config.max || "MAX_VALUE"}.', function (min, max) { return ({ min: min, max: max }); });
+        aurelia_validation_1.ValidationRules
+            .customRule('decimal', function (value, obj, min, max) { return value === null || value === undefined || value === '' || Math.floor(value % 1) === 0 && value >= (min || Number.MIN_VALUE) && value <= (max || Number.MAX_VALUE); }, '\${$displayName} must be a decimal value between \${$config.min || "MIN_VALUE"} and \${$config.max || "MAX_VALUE"}.', function (min, max) { return ({ min: min, max: max }); });
+        aurelia_validation_1.ValidationRules
+            .customRule('language', function (map, obj, controller, langInput) {
+            if (!(langInput && langInput.clearErrors && langInput.addError))
+                throw new Error('Language validation must have reference to ui-language');
+            var promises = [];
+            langInput.clearErrors();
+            exports._.forEach(map, function (model, key) {
+                promises.push(controller.validator.validateObject(model)
+                    .then(function (e) {
+                    if (e.length > 0)
+                        langInput.addError(key);
+                    return e.length > 0 ? key : '';
+                }));
+            });
+            return Promise.all(promises).then(function (e) { return e.join('').length == 0; });
+        }, 'Some language entries contain invalid values');
+        exports._.mixin({
+            'findByValues': function (collection, property, values) {
+                if (exports._.isArray(collection)) {
+                    return exports._.filter(collection, function (item) {
+                        return exports._.indexOf(values, item[property] + '') > -1;
+                    });
+                }
+                else {
+                    var ret_1 = [];
+                    exports._.forEach(collection, function (list) {
+                        ret_1.concat(exports._.filter(list, function (item) {
+                            return exports._.indexOf(values, item[property] + '') > -1;
+                        }));
+                    });
+                    return ret_1;
+                }
+            },
+            'removeByValues': function (collection, property, values) {
+                if (exports._.isArray(collection)) {
+                    return exports._.remove(collection, function (item) {
+                        return exports._.indexOf(values, item[property] + '') > -1;
+                    }) || [];
+                }
+                else {
+                    var ret_2 = [];
+                    exports._.forEach(collection, function (list, key) {
+                        ret_2 = ret_2.concat(exports._.remove(list, function (item) {
+                            return exports._.indexOf(values, item[property] + '') > -1;
+                        }));
+                    });
+                    return ret_2;
+                }
+            },
+            'findDeep': function (collection, property, value) {
+                if (exports._.isArray(collection)) {
+                    return exports._.find(collection, function (item) {
+                        return item[property] + '' === value + '';
+                    });
+                }
+                else {
+                    var ret_3;
+                    exports._.forEach(collection, function (item) {
+                        ret_3 = exports._.find(item, function (v) {
+                            return v[property] + '' === value + '';
+                        });
+                        return ret_3 === undefined;
+                    });
+                    return ret_3 || {};
+                }
+            },
+            'findChildren': function (collection, listProperty, property, value) {
+                var ret;
+                exports._.forEach(collection, function (item) {
+                    ret = exports._.find(item[listProperty], function (v) {
+                        return v[property] + '' === value + '';
+                    });
+                    return ret === undefined;
+                });
+                return ret || {};
+            }
         });
     }
     exports.configure = configure;

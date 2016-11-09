@@ -81,7 +81,7 @@
       font-size  : .9rem;
       color      : $input-text;
       padding    : .35em .5em;
-      line-height: 1.25em;
+      line-height: 1.4em;
     }
   }
 }
@@ -117,7 +117,7 @@
   .ui-button,
   .ui-input-addon {
     @include flex(0 0 auto);
-    padding  : .25em;
+    padding  : .2em .3em;
     font-size: 1rem;
   }
 
@@ -134,6 +134,10 @@
 
     .ui-flag {
       min-height: 12px;
+    }
+
+    .ui-option-control {
+      margin: 0;
     }
   }
 
@@ -157,10 +161,9 @@
     line-height: 1.5rem;
     background : $input-bg;
     border     : 0 solid transparent;
-    @include box-shadow(0 0 2px 0 $base-shadow inset);
 
     &.ui-focus {
-      @include box-shadow(0 -4px 0 0 $input-focus inset, 0 0 0 1px $input-focus inset, 0 0 2px 0 $base-shadow inset);
+      @include box-shadow(0 -4px 0 0 $input-focus inset, 0 0 0 1px $input-focus inset);
     }
 
     &.ui-readonly:after {
@@ -187,6 +190,7 @@
       background : none;
       padding    : .35em .5em;
       font-family: $base-font-family-input;
+      // @include box-shadow(0 0 2px 0 $base-shadow inset);
     }
 
     .ui-invalid-icon {
@@ -208,12 +212,11 @@
       }
 
       &:hover ~ .ui-invalid-errors {
-        display       : block;
         position      : fixed;
         font-size     : .8em;
         z-index       : 500;
-        line-height   : 1;
-        margin        : 3px 5px;
+        line-height   : 1.2;
+        margin        : 2px 5px;
         pointer-events: none;
         padding       : $base-padding;
         color         : $input-invalid;
@@ -269,11 +272,15 @@
     &.ui-invalid {
       .ui-invalid-icon {
         display: inline-block;
+
+        &:hover ~ .ui-invalid-errors {
+          display: block;
+        }
       }
-      @include box-shadow(0 0 0 1px $input-invalid inset,0 1px 2px 0 $base-shadow inset);
+      @include box-shadow(0 0 0 1px $input-invalid inset);
 
       &.ui-focus {
-        @include box-shadow(0 -3px 0 0 $input-invalid inset, 0 0 0 1px $input-invalid inset,0 1px 2px 0 $base-shadow inset);
+        @include box-shadow(0 -3px 0 0 $input-invalid inset, 0 0 0 1px $input-invalid inset);
       }
 
       &.ui-ta-counter .ui-ta-counter {

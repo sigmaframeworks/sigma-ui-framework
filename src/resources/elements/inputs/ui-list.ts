@@ -97,6 +97,7 @@ export class ListGeneric {
       this.scrollIntoView();
       this.input.select();
     });
+    UIEvent.fireEvent('focus', this.element);
   }
   stopUnfocus() {
     clearTimeout(this.__unfocus);
@@ -113,6 +114,7 @@ export class ListGeneric {
       this.scrollIntoView();
     });
     this.__unfocus = setTimeout(() => this.__focus = false, 200);
+    UIEvent.fireEvent('blur', this.element);
   }
 
   openDropdown(force) {
@@ -240,15 +242,16 @@ export class ListGeneric {
 @autoinject()
 @customElement('ui-combo')
 @inlineView(`<template class="ui-input-wrapper ui-combo \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
+  <span class="ui-invalid-errors"><ul><li repeat.for="e of errors">\${e.message}</li></ul></span>
   <input class="ui-input" size="1" value.bind="__value" placeholder.bind="placeholder" 
     click.trigger="openDropdown(true)"
     keydown.trigger="keyDown($event)" 
     input.trigger="search() & debounce:200"
     focus.trigger="focusing()" blur.trigger="unfocusing()"
-    ref="input" disabled.bind="disabled" readonly.bind="!__allowSearch"/>
+    ref="input" disabled.bind="disabled" readonly.bind="!__allowSearch" type="text"/>
   <span class="ui-clear" if.bind="__clear && __value" click.trigger="clear()">&times;</span>
   <span class="ui-input-addon ui-dropdown-handle" click.trigger="openDropdown()"><span class="fi-ui-angle-down"></span></span>
-  <div class="ui-dropdown" show.bind="__focus && __showDropdown" ref="dropdown" mousedown.trigger="stopUnfocus()">
+  <div class="ui-list-dropdown" show.bind="__focus && __showDropdown" ref="dropdown" mousedown.trigger="stopUnfocus()">
     <p if.bind="__listGroups.length==0" class="ui-list-group-label">\${emptyText}</p>
     <template repeat.for="group of __listGroups"><p if.bind="group.label" class="ui-list-group-label">\${group.label}</p>
     <div class="ui-list-item \${item.value==value?'ui-selected':''} \${item.disabled?'ui-disabled':''}" repeat.for="item of group.items" 
@@ -311,6 +314,7 @@ export class UICombo extends ListGeneric {
   clear() {
     this.__value = '';
     this.value = null;
+    UIEvent.fireEvent('change', this.element, this.value);
   }
 
   fireSelect(model?) {
@@ -330,14 +334,15 @@ export class UICombo extends ListGeneric {
 @autoinject()
 @customElement('ui-tag')
 @inlineView(`<template class="ui-input-wrapper ui-tag \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
-  <div class="ui-tag-item" repeat.for="tag of value | split" if.bind="tag">\${getDisplay(tag)}<span class="ui-clear" click.trigger="removeValue(tag)">&times;</span></div>
+  <span class="ui-invalid-errors"><ul><li repeat.for="e of errors">\${e.message}</li></ul></span>
+  <div class="ui-tag-item" repeat.for="tag of value | split" if.bind="tag!=''">\${getDisplay(tag)}<span class="ui-clear" click.trigger="removeValue(tag)">&times;</span></div>
   <input class="ui-input" size="1" value.bind="__value" placeholder.bind="placeholder" 
     click.trigger="openDropdown(true)"
     keydown.trigger="keyDown($event)" 
     input.trigger="search() & debounce:200"
     focus.trigger="focusing()" blur.trigger="unfocusing()"
-    ref="input" disabled.bind="disabled" readonly.bind="!__allowSearch"/>
-  <div class="ui-dropdown" show.bind="!__noList && __focus && __showDropdown" ref="dropdown" mousedown.trigger="stopUnfocus()">
+    ref="input" disabled.bind="disabled" readonly.bind="!__allowSearch" type="text"/>
+  <div class="ui-list-dropdown" show.bind="!__noList && __focus && __showDropdown" ref="dropdown" mousedown.trigger="stopUnfocus()">
     <p if.bind="__listGroups.length==0" class="ui-list-group-label">\${emptyText}</p>
     <template repeat.for="group of __listGroups"><p if.bind="group.label" class="ui-list-group-label">\${group.label}</p>
     <div class="ui-list-item \${item.disabled?'ui-disabled':''}" repeat.for="item of group.items" 
@@ -448,11 +453,12 @@ export class UITag extends ListGeneric {
 @autoinject()
 @customElement('ui-list')
 @inlineView(`<template class="ui-input-wrapper ui-list \${disabled?'ui-disabled':''} \${readonly?'ui-readonly':''} \${__focus?'ui-focus':''}"><span class="ui-invalid-icon fi-ui"></span>
+  <span class="ui-invalid-errors"><ul><li repeat.for="e of errors">\${e.message}</li></ul></span>
   <input class="ui-input \${!__allowSearch?'ui-remove':''}" size="1" value.bind="__value" placeholder.bind="placeholder" 
     keydown.trigger="keyDown($event)" 
     input.trigger="search() & debounce:200"
     focus.trigger="focusing()" blur.trigger="unfocusing()"
-    ref="input" disabled.bind="disabled" readonly.bind="!__allowSearch"/>
+    ref="input" disabled.bind="disabled" readonly.bind="!__allowSearch" type="text"/>
   <div class="ui-list-container" ref="dropdown">
     <p if.bind="__listGroups.length==0" class="ui-list-group-label">\${emptyText}</p>
     <template repeat.for="group of __listGroups"><p if.bind="group.label" class="ui-list-group-label">\${group.label}</p>

@@ -9,7 +9,7 @@ import * as _ from "lodash";
 
 @autoinject()
 @customElement('ui-tab-panel')
-@inlineView(`<template class="ui-tab-panel"><div class="ui-tab-bar" if.bind="!__hideTabs">
+@inlineView(`<template class="ui-tab-panel" css.bind="{'flex-basis': height}"><div class="ui-tab-bar" if.bind="!__hideTabs">
     <a click.trigger="activateTab(tab)" repeat.for="tab of tabs" class="ui-tab-button \${tab.active?'ui-active':''} \${tab.disabled?'ui-disabled':''}">
       <span if.bind="tab.icon" class="fi-ui \${tab.icon}"></span>
       <span class="ui-label">\${tab.label}</span>
@@ -22,6 +22,8 @@ export class UITabPanel {
     if (element.hasAttribute('noborder')) element.classList.add('noborder');
     this.__hideTabs = element.hasAttribute('hide-tabs');
   }
+
+  @bindable() height = "auto";
 
   tabsChanged() {
     if (this.tabs.length > 0 && _.find(this.tabs, ['active', true]) == null)
@@ -91,7 +93,7 @@ export class UITab {
 
 @autoinject()
 @customElement('ui-breadcrumb')
-@inlineView(`<template class="ui-breadcrumb"><slot></slot></template>`)
+@inlineView(`<template class="ui-breadcrumb" click.delegate="fireChange($event)"><slot></slot></template>`)
 export class UIBreadcrumb {
   constructor(public element: Element) {
     if (element.hasAttribute('primary')) element.classList.add('ui-theme');
@@ -100,10 +102,11 @@ export class UIBreadcrumb {
     if (element.hasAttribute('secondary')) element.classList.add('secondary');
   }
 
-  @bindable() crumbs = [];
-
-  fireChange(index, crumb) {
-    UIEvent.fireEvent('change', this.element, index);
+  fireChange($event) {
+    $event.cancelBubble = true;
+    $event.stopPropagation();
+    UIEvent.fireEvent('change', this.element, $event.detail);
+    return false;
   }
 }
 
@@ -113,11 +116,11 @@ export class UIBreadcrumb {
 export class UICrumb {
   constructor(public element: Element) { }
 
-  @bindable() index = '';
+  @bindable() id = '';
   @bindable() href = 'javascript:;';
 
   fireClick($event) {
     $event.stopPropagation();
-    UIEvent.fireEvent('click', this.element, this.index);
+    UIEvent.fireEvent('click', this.element, this.id);
   }
 }

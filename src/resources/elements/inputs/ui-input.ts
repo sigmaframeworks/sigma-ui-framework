@@ -8,7 +8,7 @@ import {UIEvent} from "../../utils/ui-event";
 
 @autoinject()
 @customElement('ui-form')
-@inlineView(`<template><form class="ui-form \${class}" enterpressed.trigger="fireSubmit()"><slot></slot></form></template>`)
+@inlineView(`<template><form class="ui-form \${class}" validation-renderer="ui-validator" enterpressed.trigger="fireSubmit()" submit.trigger="return false"><slot></slot></form></template>`)
 export class UIForm {
   constructor(public element: Element) { }
 
@@ -58,7 +58,7 @@ export class UIInputLabel {
 
   attached() {
     UIEvent.queueTask(() => {
-      (this.__label.parentElement.querySelector('input,textarea') || {}).id = this.__for;
+      (this.__label.parentElement.querySelector('input[type="text"],input[type="password"],input[type="number"],input[type="email"],input[type="search"],input[type="url"],input[type="file"],input[type="tel"],textarea') || {}).id = this.__for;
     });
   }
 
@@ -71,10 +71,17 @@ export class UIInputLabel {
 
 @autoinject()
 @customElement('ui-input-addon')
-@inlineView(`<template class="ui-input-addon"><slot><span class="\${icon}"></span></slot></template>`)
+@inlineView(`<template class="ui-input-addon" click.delegate="__focus()"><slot><span class="\${icon}"></span></slot></template>`)
 export class UIInputAddon {
   constructor(public element: Element) { }
 
+  __focus() {
+    let inp;
+    UIEvent.queueTask(() => {
+      if (inp = this.element.nextElementSibling.querySelector('input,textarea')) inp.focus();
+    });
+    return true;
+  }
   @bindable() icon;
 }
 
@@ -116,9 +123,9 @@ export class UIInputDisplay {
 @autoinject()
 @customElement('ui-input')
 @inlineView(`<template class="ui-input-wrapper \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
-  <span class="ui-invalid-errors"><ul><li>Value required</li></ul></span>
-  <input class="ui-input" size="1" keypress.trigger="keyDown($event)" input.trigger="format($event)" change.trigger="fireChange()"
-    value.bind="__value" placeholder.bind="placeholder" focus.trigger="__focus=true" blur.trigger="__focus=false" 
+  <span class="ui-invalid-errors"><ul><li repeat.for="e of errors">\${e.message}</li></ul></span>
+  <input class="ui-input" size="1" keypress.trigger="keyDown($event)" input.trigger="format($event)" change.trigger="fireChange($event)"
+    value.bind="__value" placeholder.bind="placeholder" focus.trigger="fireFocus()" blur.trigger="fireBlur()" 
     type.bind="__type" maxlength.bind="maxlength" ref="__input" disabled.bind="disabled" readonly.bind="readonly"/>
   <span class="ui-in-counter" if.bind="__counter">\${(maxlength-__value.length)}</span>
   <span class="ui-clear" if.bind="__clear && __value" click.trigger="clear()">&times;</span></template>`)
@@ -156,6 +163,8 @@ export class UIInput {
   __input;
   __value = '';
 
+  errors = [];
+
   /**
    * @property    
    * @type        
@@ -182,6 +191,7 @@ export class UIInput {
 
   clear() {
     this.__value = this.value = ''; this.__input.focus();
+    UIEvent.fireEvent('change', this.element, this.value);
   }
 
   __ignoreChange = false;
@@ -200,6 +210,7 @@ export class UIInput {
   }
 
   format(evt) {
+    evt.stopPropagation();
     this.__ignoreChange = true;
     if (this.__format == 'email' || this.__format == 'url') this.value = evt.target.value = evt.target.value.toLowerCase();
     else if (this.__format == 'number') this.number = evt.target.valueAsNumber || '';
@@ -209,6 +220,7 @@ export class UIInput {
   }
 
   keyDown(evt) {
+    evt.stopPropagation();
     let code = evt.keyCode || evt.which;
     if (evt.ctrlKey || evt.metaKey || evt.altKey || code == 9 || code == 8) return true;
     if (code == 13) return UIEvent.fireEvent('enterpressed', this.element);
@@ -222,16 +234,30 @@ export class UIInput {
     return true;
   }
 
-  fireChange() {
-    UIEvent.fireEvent('change', this.element, this.value);
+  fireChange(evt) {
+    evt.stopPropagation();
+    if (this.__format == 'number') UIEvent.fireEvent('change', this.element, this.number);
+    else if (this.__format == 'decimal') UIEvent.fireEvent('change', this.element, this.decimal);
+    else UIEvent.fireEvent('change', this.element, this.value);
+  }
+
+  __focus;
+  fireBlur() {
+    this.__focus = false;
+    UIEvent.fireEvent('blur', this.element);
+  }
+  fireFocus() {
+    this.__focus = true;
+    UIEvent.fireEvent('focus', this.element);
   }
 }
 
 @autoinject()
 @customElement('ui-textarea')
 @inlineView(`<template class="ui-input-wrapper \${__focus?'ui-focus':''} \${__counter?'ui-ta-counter':''} \${disabled?'ui-disabled':''} \${readonly?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
+  <span class="ui-invalid-errors"><ul><li repeat.for="e of errors">\${e.message}</li></ul></span>
   <textarea class="ui-input" rows.bind="rows" value.bind="value" placeholder.bind="placeholder" disabled.bind="disabled" readonly.bind="readonly"
-    focus.trigger="__focus=true" blur.trigger="__focus=false" maxlength.bind="maxlength" ref="__input" change.trigger="fireChange()"></textarea>
+    focus.trigger="fireFocus()" blur.trigger="fireBlur()" maxlength.bind="maxlength" ref="__input" change.trigger="fireChange($event)"></textarea>
   <span class="ui-ta-counter" if.bind="__counter">\${value.length & debounce} of \${maxlength}</span>
   <span class="ui-clear" if.bind="__clear && value" click.trigger="clear()">&times;</span></template>`)
 export class UITextarea {
@@ -249,6 +275,8 @@ export class UITextarea {
   __clear;
   __input;
 
+  errors = [];
+
   /**
    * @property    
    * @type        
@@ -264,24 +292,36 @@ export class UITextarea {
 
   clear() {
     this.value = ''; this.__input.focus();
+    UIEvent.fireEvent('change', this.element, this.value);
   }
 
-  fireChange() {
+  fireChange(evt) {
+    evt.stopPropagation();
     UIEvent.fireEvent('change', this.element, this.value);
+  }
+
+  __focus;
+  fireBlur() {
+    this.__focus = false;
+    UIEvent.fireEvent('blur', this.element);
+  }
+  fireFocus() {
+    this.__focus = true;
+    UIEvent.fireEvent('focus', this.element);
   }
 }
 
 
 
 @autoinject()
-@containerless()
 @customElement('ui-phone')
-@inlineView(`<template><div class="ui-input-addon"><span class="ui-flag \${__ctry}" if.bind="!country"></span>\${__prefix}</div>
-  <div class="ui-input-wrapper \${class} \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
-  <input class="ui-input" size="1" keypress.trigger="keyDown($event)" input.trigger="format($event)" change.trigger="fireChange()"
-    value.bind="__value" placeholder.bind="__placeholder" focus.trigger="__focus=true" blur.trigger="__focus=false" 
-    type.bind="__type" ref="__input" disabled.bind="disabled" readonly.bind="readonly"/>
-  <span class="ui-clear" if.bind="__clear && __value" click.trigger="clear()">&times;</span></div></template>`)
+@inlineView(`<template class="ui-input-wrapper \${class} \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly?'ui-readonly':''}">
+  <div class="ui-input-addon" click.trigger="__input.focus()"><span class="ui-flag \${__ctry}" if.bind="!country"></span>\${__prefix}</div><span class="ui-invalid-icon fi-ui"></span>
+  <span class="ui-invalid-errors"><ul><li repeat.for="e of errors">\${e.message}</li></ul></span>
+  <input class="ui-input" size="1" keypress.trigger="keyDown($event)" input.trigger="format($event)" change.trigger="fireChange($event)"
+    value.bind="__value" placeholder.bind="__placeholder" focus.trigger="fireFocus()" blur.trigger="fireBlur()" 
+    type="tel" ref="__input" disabled.bind="disabled" readonly.bind="readonly"/>
+  <span class="ui-clear" if.bind="__clear && __value" click.trigger="clear()">&times;</span></template>`)
 export class UIPhone {
   constructor(public element: Element) {
     this.__clear = element.hasAttribute('clear');
@@ -303,6 +343,8 @@ export class UIPhone {
   __national = false;
   __placeholder = '';
 
+  errors = [];
+
   /**
    * @property    
    * @type        
@@ -322,6 +364,7 @@ export class UIPhone {
 
   clear() {
     this.__value = this.value = ''; this.__input.focus();
+    UIEvent.fireEvent('change', this.element, this.value);
   }
 
   __ignoreChange = false;
@@ -347,13 +390,25 @@ export class UIPhone {
   }
 
   keyDown(evt) {
+    evt.stopPropagation();
     let code = evt.keyCode || evt.which;
     if (evt.ctrlKey || evt.metaKey || evt.altKey || code == 9 || code == 8) return true;
     if (code == 13) return UIEvent.fireEvent('enterpressed', this.element);
     return /[0-9]/.test(String.fromCharCode(code));
   }
 
-  fireChange() {
+  fireChange(evt) {
+    evt.stopPropagation();
     UIEvent.fireEvent('change', this.element, this.value);
+  }
+
+  __focus;
+  fireBlur() {
+    this.__focus = false;
+    UIEvent.fireEvent('blur', this.element);
+  }
+  fireFocus() {
+    this.__focus = true;
+    UIEvent.fireEvent('focus', this.element);
   }
 }

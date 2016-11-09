@@ -1,0 +1,173 @@
+// 
+// @description : 
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+
+.ui-date-view {
+  border       : 1px solid $base-border-color;
+  border-radius: $base-border-radius;
+  overflow     : hidden;
+  display      : inline-block;
+  font-size    : .9em;
+  position     : relative;
+  @include flex-row($display:inline-flex, $wrap:false, $align:stretch, $justify:center);
+
+  .ui-dv-time-wrapper {
+    padding    : .25em .5em;
+    border-left: 1px solid rgba($base-border-color, .5);
+    @include flex-row($wrap:false, $align:center, $justify:center);
+
+    > div {
+      @include flex-column($align:center, $justify:center);
+    }
+
+    > div > a {
+      position     : relative;
+      padding      : .45em 1em;
+      text-align   : center;
+      color        : $primary;
+      border-radius: $base-border-radius;
+
+      &:hover {
+        color     : $primary-text;
+        background: $primary;
+      }
+
+      span {
+        pointer-events: none;
+      }
+    }
+
+    .ui-hour,
+    .ui-min,
+    .ui-sep {
+      font-size : 1.5em;
+      padding   : .45em 1rem;
+      text-align: center;
+    }
+  }
+
+  .ui-dv-date-wrapper {
+    > div {
+      @include flex-row($wrap:false, $align:stretch);
+    }
+
+    > div > span {
+      position     : relative;
+      padding      : .45em .2em;
+      text-align   : center;
+      border-radius: $base-border-radius;
+
+      &.hover {
+        cursor: pointer;
+      }
+
+      &.hover:hover {
+        background: rgba($primary,.3);
+      }
+
+      &.today {
+        &:before {
+          content          : ' ';
+          border           : 4px solid transparent;
+          border-top-color : $primary;
+          border-left-color: $primary;
+          @include position(absolute, 1px auto auto 1px);
+        }
+      }
+
+      &.muted {
+        color: $muted;
+      }
+
+      &.selected {
+        background: $primary !important;
+        color     : $primary-text !important;
+
+        &:before {
+          border-top-color : $primary-text;
+          border-left-color: $primary-text;
+        }
+      }
+
+      &.disabled {
+        color         : rgba($muted, .6) !important;
+        cursor        : not-allowed;
+        pointer-events: none;
+      }
+    }
+
+    .dates,
+    .weekdays {
+      span {
+        width: 2em;
+        @include flex(1 1 0em);
+      }
+    }
+
+    .months {
+      span {
+        line-height: 200%;
+        margin     : .1em .2em;
+        @include flex(1 1 0em);
+      }
+    }
+
+    .years {
+      span {
+        line-height: 150%;
+        width      : 3.6em;
+        margin     : .1em .2em;
+        @include flex(1 1 0em);
+      }
+    }
+
+    span.week {
+      font-weight: 600;
+      color      : $secondary;
+    }
+
+    .ui-dv-foot,
+    .ui-dv-head {
+      a {
+        @include flex(0 0 auto);
+        color        : $primary;
+        padding      : .45em .2em;
+        margin       : .1em .2em;
+        min-width    : 2em;
+        text-align   : center;
+        border-radius: $base-border-radius;
+
+        &:hover {
+          color     : $primary-text;
+          background: $primary;
+        }
+
+        &.disabled {
+          color         : rgba($primary, .4) !important;
+          cursor        : not-allowed;
+          pointer-events: none;
+        }
+
+        span {
+          pointer-events: none;
+        }
+      }
+
+      .cancel,
+      .title,
+      .today {
+        @include flex(1 1 1em);
+      }
+    }
+
+    .weekdays {
+      background: rgba($secondary, .5);
+    }
+  }
+}
+
+.ui-date-dropdown {
+  background: $base-bg;
+}

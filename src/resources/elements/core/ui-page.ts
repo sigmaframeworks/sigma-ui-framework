@@ -26,6 +26,9 @@ export class UIPage {
 export class UISection {
   constructor(public element: Element) {
     this.__columnLayout = !element.hasAttribute('row-layout');
+
+    if (element.hasAttribute('center')) element.classList.add('ui-align-center');
+    if (element.hasAttribute('middle')) element.classList.add('ui-align-middle');
   }
 
   __columnLayout = true;

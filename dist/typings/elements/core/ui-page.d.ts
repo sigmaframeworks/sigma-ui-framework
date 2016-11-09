@@ -1,7 +1,7 @@
 export declare class UIPage {
     element: Element;
     constructor(element: Element);
-    class: string;
+    pageClass: string;
     pageTitle: any;
 }
 export declare class UISection {
@@ -18,6 +18,21 @@ export declare class UIContent {
     constructor(element: Element);
 }
 export declare class UISidebar {
+    element: Element;
+    constructor(element: Element);
+    bind(): void;
+    detached(): void;
+    __obClick: any;
+    __class: string;
+    __miniDisplay: boolean;
+    __collapsible: boolean;
+    label: string;
+    collapsed: boolean;
+    position: string;
+    __toggleCollapse($event: any): boolean;
+    __showOverlay($event: any): boolean;
+}
+export declare class UIDivider {
     element: Element;
     constructor(element: Element);
 }

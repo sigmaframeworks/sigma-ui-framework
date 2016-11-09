@@ -1,3 +1,6 @@
+export declare class SplitValueConverter {
+    toView(object: any, char?: string): any;
+}
 export declare class KeysValueConverter {
     toView(object: any): string[];
 }

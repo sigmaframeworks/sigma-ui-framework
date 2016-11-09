@@ -4,11 +4,70 @@
 // @license     : MIT
 -->
 <template>
+  <style>
+    .dg-container {
+      position: relative;
+      height: 480px;
+      display: flex;
+      border: 1px solid #e5e5e5;
+      flex-direction: column;
+      align-items: stretch;
+      justify-items: stretch;
+    }
+
+  </style>
   <ui-page page-title="Datagrid">
     <ui-content padded scroll>
       <div class="ui-container">
         <h1>Datagrid</h1>
         <hr/>
+        <h5 class="ui-text-muted">Flexed Display</h5>
+        <div class="dg-container">
+          <ui-datagrid data.bind="data">
+            <ui-dg-empty>
+              <h4 class="ui-text-muted">No Records Available</h4>
+              <div>
+                <ui-button>Clear Filters</ui-button>
+                <ui-button>Try Again</ui-button>
+              </div>
+            </ui-dg-empty>
+            <ui-dg-column data-id="id" width="2rem" locked>ID</ui-dg-column>
+            <ui-dg-column data-id="name" sortable locked>Name</ui-dg-column>
+            <ui-dg-button data-id="name" width="2rem" locked icon="fi-ui-edit" click.trigger="$event.detail.record.switch=true"></ui-dg-button>
+            <ui-dg-button data-id="name" width="2rem" locked icon="fi-ui-delete" theme="danger" click.trigger="$event.detail.record.switch=false"></ui-dg-button>
+            <ui-dg-column data-id="dob" width="8em" date format="DD MMM" center resizeable locked>Birthday</ui-dg-column>
+            <ui-dg-column data-id="dob" width="8em" age center resizeable locked>Age</ui-dg-column>
+            <ui-dg-switch data-id="switch" width="5em" theme="primary" change.trigger="$event.detail.record.gender=$event.detail.value?'F':'M'">Switch</ui-dg-switch>
+            <ui-dg-column data-id="gender" width="5em" center display.call="genderDisplay(value, record)">Gender</ui-dg-column>
+            <ui-dg-column data-id="address">Address</ui-dg-column>
+            <ui-dg-column data-id="city">City</ui-dg-column>
+            <ui-dg-column data-id="country" display.call="countryDisplay(value, record)">Country</ui-dgcolumn>
+          </ui-datagrid>
+        </div>
+        <hr/>
+        <h5 class="ui-text-muted">Auto Height Display</h5>
+        <div class="dg-container" style="height:auto">
+          <ui-datagrid data.bind="data2" auto-height>
+            <ui-dg-empty>
+              <h4 class="ui-text-muted">No Records Available</h4>
+              <div>
+                <ui-button>Clear Filters</ui-button>
+                <ui-button>Try Again</ui-button>
+              </div>
+            </ui-dg-empty>
+            <ui-dg-column data-id="id" width="2rem" locked>ID</ui-dg-column>
+            <ui-dg-column data-id="name" sortable locked>Name</ui-dg-column>
+            <ui-dg-button data-id="name" width="2rem" locked icon="fi-ui-edit" click.trigger="$event.detail.record.switch=true"></ui-dg-button>
+            <ui-dg-button data-id="name" width="2rem" locked icon="fi-ui-delete" theme="danger" click.trigger="$event.detail.record.switch=false"></ui-dg-button>
+            <ui-dg-column data-id="dob" width="8em" date format="DD MMM" center resizeable locked>Birthday</ui-dg-column>
+            <ui-dg-column data-id="dob" width="8em" age center resizeable locked>Age</ui-dg-column>
+            <ui-dg-switch data-id="switch" width="5em" theme="primary" change.trigger="$event.detail.record.gender=$event.detail.value?'F':'M'">Switch</ui-dg-switch>
+            <ui-dg-column data-id="gender" width="5em" center display.call="genderDisplay(value, record)">Gender</ui-dg-column>
+            <ui-dg-column data-id="address">Address</ui-dg-column>
+            <ui-dg-column data-id="city">City</ui-dg-column>
+            <ui-dg-column data-id="country" display.call="countryDisplay(value, record)">Country</ui-dgcolumn>
+          </ui-datagrid>
+        </div>
       </div>
     </ui-content>
   </ui-page>

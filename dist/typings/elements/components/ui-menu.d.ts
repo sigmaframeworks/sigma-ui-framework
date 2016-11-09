@@ -6,8 +6,10 @@ export declare class UIMenubar {
     __overflowToggle: Element;
     __isOverflow: boolean;
     __tether: any;
+    __obResize: any;
+    __obClick: any;
     attached(): void;
-    unbind(): void;
+    detached(): void;
     arrange(): void;
     showOverflow(evt: any): boolean;
 }
@@ -15,10 +17,14 @@ export declare class UIMenu {
     element: Element;
     constructor(element: Element);
 }
-export declare class UIMenuSection {
+export declare class UIMenuGroup {
     element: Element;
     constructor(element: Element);
     label: string;
+}
+export declare class UIMenuSection {
+    element: Element;
+    constructor(element: Element);
 }
 export declare class UIMenuDivider {
     element: Element;
@@ -27,6 +33,7 @@ export declare class UIMenuDivider {
 export declare class UIMenuLink {
     element: Element;
     constructor(element: Element);
+    bind(): void;
     icon: string;
     active: boolean;
     disabled: boolean;

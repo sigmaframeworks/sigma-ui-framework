@@ -55,11 +55,11 @@
     }
 
     .ui-option-handle {
-      width        : 1em;
-      height       : 1em;
+      font-size    : 1em;
       margin       : .25em;
       border-radius: .12em;
       cursor       : pointer;
+      background   : $input-bg;
       color        : $input-text;
 
       &:before {

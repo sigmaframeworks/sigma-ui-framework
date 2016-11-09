@@ -11,18 +11,17 @@ import * as Tether from "tether";
 // Drawer
 @autoinject()
 @customElement('ui-button')
-@inlineView(`<template role="button" class="ui-button \${disabled?'ui-disabled':''}" click.trigger="click($event)" data-value="\${value}" css.bind="{width: width}">
+@inlineView(`<template role="button" class="ui-button ui-button-\${theme} \${disabled?'ui-disabled':''}" click.trigger="click($event)" data-value="\${value}" css.bind="{width: width}">
     <span if.bind="icon" class="fi-ui \${icon}"></span><span class="ui-label"><slot>\${label}</slot></span></button></template>`)
 export class UIButton {
   constructor(public element: Element) {
-    if (this.element.hasAttribute('primary')) this.element.classList.add('ui-button-primary');
-    else if (this.element.hasAttribute('secondary')) this.element.classList.add('ui-button-secondary');
-    else if (this.element.hasAttribute('dark')) this.element.classList.add('ui-button-dark');
-    else if (this.element.hasAttribute('info')) this.element.classList.add('ui-button-info');
-    else if (this.element.hasAttribute('danger')) this.element.classList.add('ui-button-danger');
-    else if (this.element.hasAttribute('success')) this.element.classList.add('ui-button-success');
-    else if (this.element.hasAttribute('warning')) this.element.classList.add('ui-button-warning');
-    else this.element.classList.add('ui-button-default');
+    if (this.element.hasAttribute('primary')) this.theme = 'primary';
+    else if (this.element.hasAttribute('secondary')) this.theme = 'secondary';
+    else if (this.element.hasAttribute('dark')) this.theme = 'dark';
+    else if (this.element.hasAttribute('info')) this.theme = 'info';
+    else if (this.element.hasAttribute('danger')) this.theme = 'danger';
+    else if (this.element.hasAttribute('success')) this.theme = 'success';
+    else if (this.element.hasAttribute('warning')) this.theme = 'warning';
 
     if (this.element.hasAttribute('icon-top')) this.element.classList.add('ui-icon-top');
     if (this.element.hasAttribute('big')) this.element.classList.add('ui-big');
@@ -81,6 +80,7 @@ export class UIButton {
   @bindable() label = '';
   @bindable() class = '';
   @bindable() value = '';
+  @bindable() theme = 'default';
   @bindable() width = 'auto';
   @bindable() dropdown;
   @bindable() disabled = false;
@@ -90,11 +90,13 @@ export class UIButton {
     if (this.dropdown) {
       this.dropdown.style.minWidth = this.element.offsetWidth + 'px';
       if (this.dropdown.classList.contains('ui-hidden')) {
+        UIEvent.fireEvent('menuopen', this.element);
         this.element.classList.add('ui-open');
         this.dropdown.classList.remove('ui-hidden');
         this.__tether.position();
       }
       else {
+        UIEvent.fireEvent('menuhide', this.element);
         this.element.classList.remove('ui-open');
         this.dropdown.classList.add('ui-hidden');
       }

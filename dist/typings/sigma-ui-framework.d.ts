@@ -9,6 +9,8 @@ export declare var kramed: KramedStatic;
 export declare var moment: moment.MomentStatic;
 export declare var numeral: Numeral;
 export * from "./utils/ui-event";
-export interface AuiConfig {
+export * from "./utils/ui-format";
+export * from "./utils/ui-tree-model";
+export interface UIConfig {
 }
 export declare function configure(config: FrameworkConfiguration, configCallback: any): void;

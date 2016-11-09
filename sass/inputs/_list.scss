@@ -62,6 +62,7 @@
     line-height  : 1;
     margin       : .2rem;
     max-width    : 10em;
+    padding-right: 1.5em;
     @include padding(end, 1.5em);
     @include ellipsis();
 
@@ -72,8 +73,8 @@
   }
 }
 
-.ui-dropdown,
-.ui-list-container {
+.ui-list-container,
+.ui-list-dropdown {
   overflow     : auto;
   background   : $base-bg;
   font-size    : .9em;

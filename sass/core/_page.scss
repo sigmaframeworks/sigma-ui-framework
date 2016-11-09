@@ -38,6 +38,14 @@
   &.ui-row-layout {
     @include flex-row($align:stretch, $wrap:false);
   }
+
+  &.ui-align-middle {
+    @include justify-content(center);
+  }
+
+  &.ui-align-center {
+    @include align-items(center);
+  }
 }
 
 .ui-content {
