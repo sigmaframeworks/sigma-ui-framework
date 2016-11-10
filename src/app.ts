@@ -3,15 +3,16 @@
 // @author      : Adarsh Pastakia
 // @copyright   : 2016
 // @license     : MIT
-import {autoinject} from "aurelia-framework";
+import {autoinject, useView} from "aurelia-framework";
 import {Router} from "aurelia-router";
+import {UIConstants} from "./resources/utils/ui-constants";
 
 @autoinject()
 export class App {
   router: Router;
   configureRouter(config, router: Router) {
     this.router = router;
-    config.title = "Sigma UI";
+    config.title = UIConstants.App.Title;
     config.map([
       {
         route: ['', 'home'],
@@ -132,6 +133,14 @@ export class App {
         auth: false,
         settings: { section: 'UI Components' },
         name: 'panel'
+      }, {
+        route: 'dialog',
+        moduleId: './components/dialog',
+        title: 'Dialogs',
+        nav: true,
+        auth: false,
+        settings: { section: 'UI Components' },
+        name: 'dialog'
       }, {
         route: 'datagrid',
         moduleId: './components/datagrid',

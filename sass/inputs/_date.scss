@@ -11,37 +11,44 @@
   display      : inline-block;
   font-size    : .9em;
   position     : relative;
-  @include flex-row($display:inline-flex, $wrap:false, $align:stretch, $justify:center);
+  @include flex-column($display:inline-flex, $align:stretch, $justify:center);
 
   .ui-dv-time-wrapper {
-    padding    : .25em .5em;
-    border-left: 1px solid rgba($base-border-color, .5);
-    @include flex-row($wrap:false, $align:center, $justify:center);
+    padding   : .25em .5em;
+    border-top: 1px solid rgba($base-border-color, .5);
 
     > div {
-      @include flex-column($align:center, $justify:center);
-    }
+      @include flex-row($wrap:true, $align:center, $justify:center);
 
-    > div > a {
-      position     : relative;
-      padding      : .45em 1em;
-      text-align   : center;
-      color        : $primary;
-      border-radius: $base-border-radius;
-
-      &:hover {
-        color     : $primary-text;
-        background: $primary;
+      > div {
+        @include flex-column($align:center, $justify:center);
       }
 
-      span {
-        pointer-events: none;
+      a {
+        position     : relative;
+        padding      : .45em 1em;
+        text-align   : center;
+        color        : $primary;
+        border-radius: $base-border-radius;
+
+        &:hover {
+          color     : $primary-text;
+          background: $primary;
+        }
+
+        span {
+          pointer-events: none;
+        }
+
+        &.disabled {
+          color         : rgba($muted, .6) !important;
+          cursor        : not-allowed;
+          pointer-events: none;
+        }
       }
     }
 
-    .ui-hour,
-    .ui-min,
-    .ui-sep {
+    .big-text {
       font-size : 1.5em;
       padding   : .45em 1rem;
       text-align: center;

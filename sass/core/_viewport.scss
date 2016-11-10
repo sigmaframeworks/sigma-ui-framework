@@ -112,13 +112,27 @@
 
   .ui-overlay-container {
     overflow      : hidden;
-    padding       : 5em 0 1.5em;
+    padding       : 3em 0 1em;
     pointer-events: none;
     z-index       : $z-index-toast;
     @include position(absolute, 0);
     @include flex-column(flex-end, flex-start);
   }
 
+  .ui-app-taskbar {
+    border-top: 1px solid rgba($wg-9,.25);
+
+    .ui-button {
+      box-shadow: none;
+      margin    : .2em .1em;
+    }
+
+    .ui-button.ui-active {
+      background: $primary;
+      color     : $primary-text;
+      box-shadow: 0 0 3px 0 $base-shadow-dark inset;
+    }
+  }
 }
 @if $enable-blur {
   .ua-safari .ui-viewport .ui-loader-div {

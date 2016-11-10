@@ -18,7 +18,10 @@ a.ui-menu-item {
   }
 
   .ui-menu-icon {
-    margin: 0 .15em;
+    margin             : 0 .15em;
+    background-position: left center;
+    background-repeat  : no-repeat;
+    background-size    : 1em 1em;
     @include transition(all 0.5s);
   }
 

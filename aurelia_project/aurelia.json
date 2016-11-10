@@ -127,6 +127,7 @@
       "name": "vendor-bundle.js",
       "prepend": [
         "node_modules/bluebird/js/browser/bluebird.core.js",
+        "node_modules/whatwg-fetch/fetch.js",
         "scripts/require.js"
       ],
       "dependencies": [
@@ -134,6 +135,7 @@
         "aurelia-bootstrapper",
         "aurelia-dependency-injection",
         "aurelia-event-aggregator",
+        "aurelia-fetch-client",
         "aurelia-framework",
         "aurelia-history",
         "aurelia-history-browser",
@@ -174,8 +176,7 @@
         {
           "name": "aurelia-validation",
           "path": "../node_modules/aurelia-validation/dist/amd",
-          "main": "aurelia-validation",
-          "env": "dev"
+          "main": "aurelia-validation"
         }
       ]
     }]

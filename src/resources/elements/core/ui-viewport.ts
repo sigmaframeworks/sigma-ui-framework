@@ -14,7 +14,7 @@ import {UIEvent} from "../../utils/ui-event";
 <template class="ui-viewport">
   <slot name="app-header"></slot>
   <slot></slot>
-  <slot name="app-taskbar" ref="__taskbar"></slot>
+  <slot name="app-taskbar"></slot>
   <slot name="app-footer"></slot>
 
   <div class="ui-dialog-container" ref="__dialogContainer"></div>
@@ -41,12 +41,11 @@ export class UIViewport {
     }
 
     UIUtils.auContainer = container;
-    UIUtils.taskbar = this.__taskbar;
-    UIUtils.dialogContainer = this.__dialogContainer;
-    UIUtils.overlayContainer = this.__overlayContainer;
   }
 
   attached() {
+    UIUtils.dialogContainer = this.__dialogContainer;
+    UIUtils.overlayContainer = this.__overlayContainer;
     UIEvent.broadcast('appready');
   }
 
@@ -95,10 +94,14 @@ export class UIAppFooter {
 @autoinject()
 @containerless()
 @customElement('ui-app-taskbar')
-@inlineView('<template><div class="ui-app-taskbar ${class}" slot="app-taskbar"><slot></slot></div></template>')
+@inlineView('<template><div class="ui-app-taskbar ${class}" slot="app-taskbar" ref="__taskbar"><slot></slot></div></template>')
 export class UIAppTaskbar {
   constructor(public element: Element) { }
 
+  attached() {
+    UIUtils.taskbar = this.__taskbar;
+  }
+  __taskbar;
   @bindable() class = '';
 }
 

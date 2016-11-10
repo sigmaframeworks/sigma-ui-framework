@@ -186,6 +186,12 @@
     @include ellipsis();
   }
 
+  .ui-button-icon {
+    background-position: left center;
+    background-repeat  : no-repeat;
+    background-size    : 1em 1em;
+  }
+
   &.ui-open,
   &:active {
     @include box-shadow(1px 1px 2px 0 $base-shadow, 1px 1px 2px 0 rgba($base-shadow-dark,.5) inset);

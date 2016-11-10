@@ -105,12 +105,14 @@
     @include border(end, 1px solid rgba($base-border-color, .5));
 
     .ui-sidebar-close:before {
-      content: $fi-ui-arrow-thin-left;
+      font-family: Framework;
+      content    : $fi-ui-arrow-thin-left;
     }
 
     &.ui-collapse {
       .ui-sidebar-close:before {
-        content: $fi-ui-arrow-thin-right;
+        font-family: Framework;
+        content    : $fi-ui-arrow-thin-right;
       }
 
       &:not(.ui-mini-display) {
@@ -135,12 +137,14 @@
     @include border(start, 1px solid rgba($base-border-color, .5));
 
     .ui-sidebar-close:before {
-      content: $fi-ui-arrow-thin-right;
+      font-family: Framework;
+      content    : $fi-ui-arrow-thin-right;
     }
 
     &.ui-collapse {
       .ui-sidebar-close:before {
-        content: $fi-ui-arrow-thin-left;
+        font-family: Framework;
+        content    : $fi-ui-arrow-thin-left;
       }
 
       &:not(.ui-mini-display) {
@@ -164,7 +168,8 @@
     overflow: visible;
 
     .ui-sidebar-close span:before {
-      content: $fi-ui-arrow-thin-right;
+      font-family: Framework;
+      content    : $fi-ui-arrow-thin-right;
     }
 
     &:not(.ui-mini-display) {
@@ -194,6 +199,7 @@
 
       .ui-menu-item {
         text-overflow: clip;
+        margin-bottom: 1em;
 
         .ui-menu-icon {
           font-size: 2rem;
@@ -213,12 +219,14 @@
   .ui-sidebar {
     &.start {
       .ui-sidebar-close:before {
-        content: $fi-ui-arrow-thin-right;
+        font-family: Framework;
+        content    : $fi-ui-arrow-thin-right;
       }
 
       &.ui-collapse {
         .ui-sidebar-close:before {
-          content: $fi-ui-arrow-thin-left;
+          font-family: Framework;
+          content    : $fi-ui-arrow-thin-left;
         }
 
         &:not(.ui-mini-display) {

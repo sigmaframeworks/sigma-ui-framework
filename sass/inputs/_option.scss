@@ -75,11 +75,13 @@
 
     &.checkbox {
       .ui-option-handle:before {
-        content: $fi-ui-check-off;
+        font-family: Framework;
+        content    : $fi-ui-check-off;
       }
 
       .ui-option-input:checked ~ .ui-option-handle:before {
-        content: $fi-ui-check-on;
+        font-family: Framework;
+        content    : $fi-ui-check-on;
       }
     }
 
@@ -89,11 +91,13 @@
       }
 
       .ui-option-handle:before {
-        content: $fi-ui-radio-off;
+        font-family: Framework;
+        content    : $fi-ui-radio-off;
       }
 
       .ui-option-input:checked ~ .ui-option-handle:before {
-        content: $fi-ui-radio-on;
+        font-family: Framework;
+        content    : $fi-ui-radio-on;
       }
     }
   }

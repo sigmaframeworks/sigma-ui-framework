@@ -29,6 +29,10 @@ define(["require", "exports", "aurelia-framework"], function (require, exports, 
             this.__el.classList[newValue ? 'remove' : 'add']('ui-hidden');
             this.__el.innerHTML = newValue;
         };
+        UIBadgeBase = __decorate([
+            aurelia_framework_1.noView(), 
+            __metadata('design:paramtypes', [Element, String])
+        ], UIBadgeBase);
         return UIBadgeBase;
     }());
     exports.UIBadgeBase = UIBadgeBase;

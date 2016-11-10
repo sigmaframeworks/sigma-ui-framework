@@ -133,7 +133,11 @@ export function configure(aurelia: Aurelia) {
   aurelia.use
     .standardConfiguration()
     .plugin('aurelia-validation')
-    .feature('resources');
+    .feature('resources', config => {
+      config
+        .title('Sigma UI')
+        .version('2.00');
+    });
 
   if (environment.debug) {
     aurelia.use.developmentLogging();

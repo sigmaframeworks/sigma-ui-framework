@@ -35,16 +35,25 @@ import * as Tether from "tether";
     <a class="cancel" if.bind="level!=0">Cancel</a>
   </div>
 </div><div class="ui-dv-time-wrapper" if.bind="time">
-  <div>
-    <a class="uphour"><span class="fi-ui-angle-up"></span></a>
-    <span class="ui-hour">\${__hour | number:'{00}'}</span>
-    <a class="downhour"><span class="fi-ui-angle-down"></span></a>
+  <div if.bind="timeLevel==0">
+    <div>
+      <a class="uphour"><span class="fi-ui-angle-up"></span></a>
+      <a class="big-text hours">\${__hour==0?12:(__hour>12?__hour-12:__hour) | number:'{00}'}</a>
+      <a class="downhour"><span class="fi-ui-angle-down"></span></a>
+    </div>
+    <div class="big-text">:</div>
+    <div>
+      <a class="upmin"><span class="fi-ui-angle-up"></span></a>
+      <a class="big-text mins">\${__minute | number:'{00}'}</a>
+      <a class="downmin"><span class="fi-ui-angle-down"></span></a>
+    </div>
+    <div><a class="big-text ampm">\${__hour<12?'AM':'PM'}</a></div>
   </div>
-  <div class="ui-sep">:</div>
-  <div>
-    <a class="upmin"><span class="fi-ui-angle-up"></span></a>
-    <span class="ui-min">\${__minute | number:'{00}'}</span>
-    <a class="downmin"><span class="fi-ui-angle-down"></span></a>
+  <div if.bind="timeLevel==1" repeat.for="r of 4">
+    <a class="hour \${getHourClass(x)" repeat.for="c of 4" hour.bind="x=(r*3)+c">\${x | number:'{00}'}</a>
+  </div>
+  <div if.bind="timeLevel==2" repeat.for="r of 4">
+    <a class="minute \${getMinuteClass(x)" repeat.for="c of 4" minute.bind="x=((r*3)+c) * 5">\${x | number:'{00}'}</a>
   </div>
 </div></template>`)
 export class UIDateView {
@@ -60,6 +69,7 @@ export class UIDateView {
     this.__minute -= this.__minute % 5;
 
     this.level = 0;
+    this.timeLevel = 0;
     this.changeDatePage();
   }
 
@@ -69,9 +79,10 @@ export class UIDateView {
 
     this.__hour = moment(this.__current).hour();
     this.__minute = moment(this.__current).minute();
-    this.__minute -= this.__minute % 5;
+    // this.__minute -= this.__minute % 5;
 
     this.level = 0;
+    this.timeLevel = 0;
     this.changeDatePage();
   }
 
@@ -88,8 +99,9 @@ export class UIDateView {
   @bindable() minDate;
   @bindable() maxDate;
 
-  level = 0;
   title = '';
+  level = 0;
+  timeLevel = 0;
 
   __start;
   __current;
@@ -144,6 +156,14 @@ export class UIDateView {
     return c;
   }
 
+  getHourClass(hour) {
+    return '';
+  }
+
+  getMinuteClass(minute) {
+    return '';
+  }
+
   changeDatePage() {
     let __start = moment(this.__current).startOf('month');
     let __end = moment(this.__current).endOf('month');
@@ -176,71 +196,93 @@ export class UIDateView {
   }
 
   clicked(evt) {
+    let changed = false
     if (evt.target.classList.contains('today')) {
-      this.date = moment(this.__current = moment()).hour(this.__hour).minute(this.__minute).toISOString();
-      UIEvent.fireEvent('change', this.element, moment(this.date));
+      this.__current = moment();
+      changed = true;
     }
-    if (evt.target.classList.contains('date')) {
-      this.date = moment(this.__current = evt.target['date']).hour(this.__hour).minute(this.__minute).toISOString();
-      UIEvent.fireEvent('change', this.element, moment(this.date));
+    else if (evt.target.classList.contains('date')) {
+      this.__current = evt.target['date'];
+      changed = true;
     }
-    if (evt.target.classList.contains('month')) {
+    else if (evt.target.classList.contains('month')) {
       this.__current = evt.target['month'];
       this.level = 0;
     }
-    if (evt.target.classList.contains('year')) {
+    else if (evt.target.classList.contains('year')) {
       this.__current = evt.target['year'];
       this.level = 1;
     }
-    if (evt.target.classList.contains('next')) {
+    else if (evt.target.classList.contains('next')) {
       if (this.level == 0) {
         this.__current = moment(this.__current).add(1, 'month');
       }
-      if (this.level == 1) {
+      else if (this.level == 1) {
         this.__current = moment(this.__current).add(1, 'year');
       }
-      if (this.level == 2) {
+      else if (this.level == 2) {
         this.__current = moment(this.__current).add(20, 'year');
       }
     }
-    if (evt.target.classList.contains('prev')) {
+    else if (evt.target.classList.contains('prev')) {
       if (this.level == 0) {
         this.__current = moment(this.__current).add(-1, 'month');
       }
-      if (this.level == 1) {
+      else if (this.level == 1) {
         this.__current = moment(this.__current).add(-1, 'year');
       }
-      if (this.level == 2) {
+      else if (this.level == 2) {
         this.__current = moment(this.__current).add(-20, 'year');
       }
     }
-    if (evt.target.classList.contains('title')) {
+    else if (evt.target.classList.contains('title')) {
       if (this.level != 2) this.level++;
     }
-    if (evt.target.classList.contains('cancel')) {
+    else if (evt.target.classList.contains('cancel')) {
       this.level = 0;
     }
-    if (evt.target.classList.contains('uphour')) {
-      this.__hour++; if (this.__hour > 23) this.__hour = 0;
-      this.date = moment(this.__current).hour(this.__hour).minute(this.__minute).toISOString();
-      UIEvent.fireEvent('change', this.element, moment(this.date));
+    else if (evt.target.classList.contains('hours')) {
+      this.timeLevel = 1;
     }
-    if (evt.target.classList.contains('upmin')) {
-      this.__minute += 5; if (this.__minute > 55) this.__minute = 0;
-      this.date = moment(this.__current).hour(this.__hour).minute(this.__minute).toISOString();
-      UIEvent.fireEvent('change', this.element, moment(this.date));
+    else if (evt.target.classList.contains('mins')) {
+      this.timeLevel = 2;
     }
-    if (evt.target.classList.contains('downhour')) {
-      this.__hour--; if (this.__hour < 0) this.__hour = 23;
-      this.date = moment(this.__current).hour(this.__hour).minute(this.__minute).toISOString();
-      UIEvent.fireEvent('change', this.element, moment(this.date));
+    else if (evt.target.classList.contains('ampm')) {
+      if (this.__hour > 11) this.__hour -= 12;
+      else this.__hour += 12;
+      changed = true;
     }
-    if (evt.target.classList.contains('downmin')) {
-      this.__minute -= 5; if (this.__minute < 0) this.__minute = 55;
-      this.date = moment(this.__current).hour(this.__hour).minute(this.__minute).toISOString();
-      UIEvent.fireEvent('change', this.element, moment(this.date));
+    else if (evt.target.classList.contains('hour')) {
+      this.__hour = evt.target['hour'] + (this.__hour > 11 ? 12 : 0);
+      this.timeLevel = 0;
+      changed = true;
+    }
+    else if (evt.target.classList.contains('minute')) {
+      this.__minute = evt.target['minute'];
+      this.timeLevel = 0;
+      changed = true;
+    }
+    else if (evt.target.classList.contains('uphour')) {
+      if (++this.__hour > 23) this.__hour = 0;
+      changed = true;
+    }
+    else if (evt.target.classList.contains('upmin')) {
+      if (++this.__minute > 59) this.__minute = 0;
+      changed = true;
+    }
+    else if (evt.target.classList.contains('downhour')) {
+      if (--this.__hour < 0) this.__hour = 23;
+      changed = true;
+    }
+    else if (evt.target.classList.contains('downmin')) {
+      if (--this.__minute < 0) this.__minute = 59;
+      changed = true;
     }
     this.changeDatePage();
+    if (changed) {
+      this.date = moment(this.__current).hour(this.__hour).minute(this.__minute).toISOString();
+      UIEvent.fireEvent('change', this.element, moment(this.date));
+    }
   }
 }
 
@@ -334,6 +376,7 @@ export class UIDate {
     clearTimeout(this.__unfocus);
     this.__focus = true;
     this.dropdown.level = 0;
+    this.dropdown.timeLevel = 0;
     UIEvent.fireEvent('focus', this.element);
   }
   stopUnfocus() {

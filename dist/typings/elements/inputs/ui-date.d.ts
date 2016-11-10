@@ -9,8 +9,9 @@ export declare class UIDateView {
     time: boolean;
     minDate: any;
     maxDate: any;
-    level: number;
     title: string;
+    level: number;
+    timeLevel: number;
     __start: any;
     __current: any;
     __decade: any;
@@ -26,6 +27,8 @@ export declare class UIDateView {
     getDateClass(dt: any): string;
     getMonthClass(dt: any): string;
     getYearClass(dt: any): string;
+    getHourClass(hour: any): string;
+    getMinuteClass(minute: any): string;
     changeDatePage(): void;
     clicked(evt: any): void;
 }

@@ -59,11 +59,13 @@
       @include flex(0 0 auto);
 
       & span:before {
-        content: $fi-ui-tree-expand;
+        font-family: Framework;
+        content    : $fi-ui-tree-expand;
       }
 
       &.expanded span:before {
-        content: $fi-ui-tree-collapse;
+        font-family: Framework;
+        content    : $fi-ui-tree-collapse;
       }
 
       &:hover {
@@ -82,15 +84,18 @@
       }
 
       &.off span:before {
-        content: $fi-ui-tree-check-off;
+        font-family: Framework;
+        content    : $fi-ui-tree-check-off;
       }
 
       &.on span:before {
-        content: $fi-ui-tree-check-on;
+        font-family: Framework;
+        content    : $fi-ui-tree-check-on;
       }
 
       &.partial span:before {
-        content: $fi-ui-tree-check-partial;
+        font-family: Framework;
+        content    : $fi-ui-tree-check-partial;
       }
 
       &.on {

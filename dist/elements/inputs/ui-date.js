@@ -14,8 +14,9 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "mome
             this.element = element;
             this.date = '';
             this.time = false;
-            this.level = 0;
             this.title = '';
+            this.level = 0;
+            this.timeLevel = 0;
             this.__hour = 0;
             this.__minute = 0;
             this.m = moment;
@@ -33,6 +34,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "mome
             this.__minute = moment(this.__current).minute();
             this.__minute -= this.__minute % 5;
             this.level = 0;
+            this.timeLevel = 0;
             this.changeDatePage();
         };
         UIDateView.prototype.dateChanged = function (newValue) {
@@ -42,8 +44,8 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "mome
                 (this.__current = moment()).startOf('day');
             this.__hour = moment(this.__current).hour();
             this.__minute = moment(this.__current).minute();
-            this.__minute -= this.__minute % 5;
             this.level = 0;
+            this.timeLevel = 0;
             this.changeDatePage();
         };
         UIDateView.prototype.minDateChanged = function () {
@@ -95,6 +97,12 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "mome
                 c += ' disabled';
             return c;
         };
+        UIDateView.prototype.getHourClass = function (hour) {
+            return '';
+        };
+        UIDateView.prototype.getMinuteClass = function (minute) {
+            return '';
+        };
         UIDateView.prototype.changeDatePage = function () {
             var __start = moment(this.__current).startOf('month');
             var __end = moment(this.__current).endOf('month');
@@ -130,80 +138,100 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "mome
                 this.__disableNext = this.__disableToday || moment().isAfter(this.maxDate, 'date');
         };
         UIDateView.prototype.clicked = function (evt) {
+            var changed = false;
             if (evt.target.classList.contains('today')) {
-                this.date = moment(this.__current = moment()).hour(this.__hour).minute(this.__minute).toISOString();
-                ui_event_1.UIEvent.fireEvent('change', this.element, moment(this.date));
+                this.__current = moment();
+                changed = true;
             }
-            if (evt.target.classList.contains('date')) {
-                this.date = moment(this.__current = evt.target['date']).hour(this.__hour).minute(this.__minute).toISOString();
-                ui_event_1.UIEvent.fireEvent('change', this.element, moment(this.date));
+            else if (evt.target.classList.contains('date')) {
+                this.__current = evt.target['date'];
+                changed = true;
             }
-            if (evt.target.classList.contains('month')) {
+            else if (evt.target.classList.contains('month')) {
                 this.__current = evt.target['month'];
                 this.level = 0;
             }
-            if (evt.target.classList.contains('year')) {
+            else if (evt.target.classList.contains('year')) {
                 this.__current = evt.target['year'];
                 this.level = 1;
             }
-            if (evt.target.classList.contains('next')) {
+            else if (evt.target.classList.contains('next')) {
                 if (this.level == 0) {
                     this.__current = moment(this.__current).add(1, 'month');
                 }
-                if (this.level == 1) {
+                else if (this.level == 1) {
                     this.__current = moment(this.__current).add(1, 'year');
                 }
-                if (this.level == 2) {
+                else if (this.level == 2) {
                     this.__current = moment(this.__current).add(20, 'year');
                 }
             }
-            if (evt.target.classList.contains('prev')) {
+            else if (evt.target.classList.contains('prev')) {
                 if (this.level == 0) {
                     this.__current = moment(this.__current).add(-1, 'month');
                 }
-                if (this.level == 1) {
+                else if (this.level == 1) {
                     this.__current = moment(this.__current).add(-1, 'year');
                 }
-                if (this.level == 2) {
+                else if (this.level == 2) {
                     this.__current = moment(this.__current).add(-20, 'year');
                 }
             }
-            if (evt.target.classList.contains('title')) {
+            else if (evt.target.classList.contains('title')) {
                 if (this.level != 2)
                     this.level++;
             }
-            if (evt.target.classList.contains('cancel')) {
+            else if (evt.target.classList.contains('cancel')) {
                 this.level = 0;
             }
-            if (evt.target.classList.contains('uphour')) {
-                this.__hour++;
-                if (this.__hour > 23)
+            else if (evt.target.classList.contains('hours')) {
+                this.timeLevel = 1;
+            }
+            else if (evt.target.classList.contains('mins')) {
+                this.timeLevel = 2;
+            }
+            else if (evt.target.classList.contains('ampm')) {
+                if (this.__hour > 11)
+                    this.__hour -= 12;
+                else
+                    this.__hour += 12;
+                changed = true;
+            }
+            else if (evt.target.classList.contains('hour')) {
+                this.__hour = evt.target['hour'] + (this.__hour > 11 ? 12 : 0);
+                this.timeLevel = 0;
+                changed = true;
+            }
+            else if (evt.target.classList.contains('minute')) {
+                this.__minute = evt.target['minute'];
+                this.timeLevel = 0;
+                changed = true;
+            }
+            else if (evt.target.classList.contains('uphour')) {
+                if (++this.__hour > 23)
                     this.__hour = 0;
-                this.date = moment(this.__current).hour(this.__hour).minute(this.__minute).toISOString();
-                ui_event_1.UIEvent.fireEvent('change', this.element, moment(this.date));
+                changed = true;
             }
-            if (evt.target.classList.contains('upmin')) {
-                this.__minute += 5;
-                if (this.__minute > 55)
+            else if (evt.target.classList.contains('upmin')) {
+                if (++this.__minute > 59)
                     this.__minute = 0;
-                this.date = moment(this.__current).hour(this.__hour).minute(this.__minute).toISOString();
-                ui_event_1.UIEvent.fireEvent('change', this.element, moment(this.date));
+                changed = true;
             }
-            if (evt.target.classList.contains('downhour')) {
-                this.__hour--;
-                if (this.__hour < 0)
+            else if (evt.target.classList.contains('downhour')) {
+                if (--this.__hour < 0)
                     this.__hour = 23;
-                this.date = moment(this.__current).hour(this.__hour).minute(this.__minute).toISOString();
-                ui_event_1.UIEvent.fireEvent('change', this.element, moment(this.date));
+                changed = true;
             }
-            if (evt.target.classList.contains('downmin')) {
-                this.__minute -= 5;
-                if (this.__minute < 0)
-                    this.__minute = 55;
-                this.date = moment(this.__current).hour(this.__hour).minute(this.__minute).toISOString();
-                ui_event_1.UIEvent.fireEvent('change', this.element, moment(this.date));
+            else if (evt.target.classList.contains('downmin')) {
+                if (--this.__minute < 0)
+                    this.__minute = 59;
+                changed = true;
             }
             this.changeDatePage();
+            if (changed) {
+                this.date = moment(this.__current).hour(this.__hour).minute(this.__minute).toISOString();
+                ui_event_1.UIEvent.fireEvent('change', this.element, moment(this.date));
+            }
         };
         __decorate([
             aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }), 
@@ -224,7 +252,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "mome
         UIDateView = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-date-view'),
-            aurelia_framework_1.inlineView("<template class=\"ui-date-view\" click.trigger=\"clicked($event)\"><div class=\"ui-dv-date-wrapper\">\n  <div class=\"ui-dv-head\">\n    <a class=\"prev ${__disablePrev?'disabled':''}\"><span class=\"fi-ui-angle-left\"></span></a>\n    <a class=\"title\"><span class=\"ui-font-small fi-ui-tri-up\" if.bind=\"level!=2\"></span> ${title}</a>\n    <a class=\"next ${__disableNext?'disabled':''}\"><span class=\"fi-ui-angle-right\"></span></a>\n  </div>\n  <div class=\"weekdays\" if.bind=\"level==0\">\n    <span class=\"week\">#</span>\n    <span repeat.for=\"d of 7\">${weekday(d, __current)}</span>\n  </div>\n  <div repeat.for=\"w of 6\" class=\"dates\" if.bind=\"level==0\">\n    <span class=\"week\">${weekNumber(w, __current)}</span>\n    <span repeat.for=\"d of 7\" date.bind=\"x\" class.bind=\"getDateClass(x=m(__start).add(w,'week').add(d,'day'), __current, minDate, maxDate)\">${x.date()}</span>\n  </div>\n  <div repeat.for=\"w of 4\" class=\"months\" if.bind=\"level==1\">\n    <span repeat.for=\"d of 3\" month.bind=\"x\" class.bind=\"getMonthClass(x=m().set('year',__current.year()).set('month',(w*3)+d), __current, mindate, maxDate)\">${m.months(x.month())}</span>\n  </div>\n  <div repeat.for=\"w of 5\" class=\"years\" if.bind=\"level==2\">\n      <span repeat.for=\"d of 4\" year.bind=\"x\" class.bind=\"getYearClass(x=m().set('year',__decade+((w*4)+d)), __current, __decade, minDate, maxDate)\">${x.year()}</span>\n  </div>\n  <div class=\"ui-dv-foot\">\n    <a class=\"today\" if.bind=\"level==0 && !__disableToday\">Today</a>\n    <a class=\"cancel\" if.bind=\"level!=0\">Cancel</a>\n  </div>\n</div><div class=\"ui-dv-time-wrapper\" if.bind=\"time\">\n  <div>\n    <a class=\"uphour\"><span class=\"fi-ui-angle-up\"></span></a>\n    <span class=\"ui-hour\">${__hour | number:'{00}'}</span>\n    <a class=\"downhour\"><span class=\"fi-ui-angle-down\"></span></a>\n  </div>\n  <div class=\"ui-sep\">:</div>\n  <div>\n    <a class=\"upmin\"><span class=\"fi-ui-angle-up\"></span></a>\n    <span class=\"ui-min\">${__minute | number:'{00}'}</span>\n    <a class=\"downmin\"><span class=\"fi-ui-angle-down\"></span></a>\n  </div>\n</div></template>"), 
+            aurelia_framework_1.inlineView("<template class=\"ui-date-view\" click.trigger=\"clicked($event)\"><div class=\"ui-dv-date-wrapper\">\n  <div class=\"ui-dv-head\">\n    <a class=\"prev ${__disablePrev?'disabled':''}\"><span class=\"fi-ui-angle-left\"></span></a>\n    <a class=\"title\"><span class=\"ui-font-small fi-ui-tri-up\" if.bind=\"level!=2\"></span> ${title}</a>\n    <a class=\"next ${__disableNext?'disabled':''}\"><span class=\"fi-ui-angle-right\"></span></a>\n  </div>\n  <div class=\"weekdays\" if.bind=\"level==0\">\n    <span class=\"week\">#</span>\n    <span repeat.for=\"d of 7\">${weekday(d, __current)}</span>\n  </div>\n  <div repeat.for=\"w of 6\" class=\"dates\" if.bind=\"level==0\">\n    <span class=\"week\">${weekNumber(w, __current)}</span>\n    <span repeat.for=\"d of 7\" date.bind=\"x\" class.bind=\"getDateClass(x=m(__start).add(w,'week').add(d,'day'), __current, minDate, maxDate)\">${x.date()}</span>\n  </div>\n  <div repeat.for=\"w of 4\" class=\"months\" if.bind=\"level==1\">\n    <span repeat.for=\"d of 3\" month.bind=\"x\" class.bind=\"getMonthClass(x=m().set('year',__current.year()).set('month',(w*3)+d), __current, mindate, maxDate)\">${m.months(x.month())}</span>\n  </div>\n  <div repeat.for=\"w of 5\" class=\"years\" if.bind=\"level==2\">\n      <span repeat.for=\"d of 4\" year.bind=\"x\" class.bind=\"getYearClass(x=m().set('year',__decade+((w*4)+d)), __current, __decade, minDate, maxDate)\">${x.year()}</span>\n  </div>\n  <div class=\"ui-dv-foot\">\n    <a class=\"today\" if.bind=\"level==0 && !__disableToday\">Today</a>\n    <a class=\"cancel\" if.bind=\"level!=0\">Cancel</a>\n  </div>\n</div><div class=\"ui-dv-time-wrapper\" if.bind=\"time\">\n  <div if.bind=\"timeLevel==0\">\n    <div>\n      <a class=\"uphour\"><span class=\"fi-ui-angle-up\"></span></a>\n      <a class=\"big-text hours\">${__hour==0?12:(__hour>12?__hour-12:__hour) | number:'{00}'}</a>\n      <a class=\"downhour\"><span class=\"fi-ui-angle-down\"></span></a>\n    </div>\n    <div class=\"big-text\">:</div>\n    <div>\n      <a class=\"upmin\"><span class=\"fi-ui-angle-up\"></span></a>\n      <a class=\"big-text mins\">${__minute | number:'{00}'}</a>\n      <a class=\"downmin\"><span class=\"fi-ui-angle-down\"></span></a>\n    </div>\n    <div><a class=\"big-text ampm\">${__hour<12?'AM':'PM'}</a></div>\n  </div>\n  <div if.bind=\"timeLevel==1\" repeat.for=\"r of 4\">\n    <a class=\"hour ${getHourClass(x)\" repeat.for=\"c of 4\" hour.bind=\"x=(r*3)+c\">${x | number:'{00}'}</a>\n  </div>\n  <div if.bind=\"timeLevel==2\" repeat.for=\"r of 4\">\n    <a class=\"minute ${getMinuteClass(x)\" repeat.for=\"c of 4\" minute.bind=\"x=((r*3)+c) * 5\">${x | number:'{00}'}</a>\n  </div>\n</div></template>"), 
             __metadata('design:paramtypes', [Element])
         ], UIDateView);
         return UIDateView;
@@ -294,6 +322,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "mome
             clearTimeout(this.__unfocus);
             this.__focus = true;
             this.dropdown.level = 0;
+            this.dropdown.timeLevel = 0;
             ui_event_1.UIEvent.fireEvent('focus', this.element);
         };
         UIDate.prototype.stopUnfocus = function () {

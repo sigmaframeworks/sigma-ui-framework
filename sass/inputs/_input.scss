@@ -122,10 +122,11 @@
   }
 
   .ui-input-addon {
-    font-size  : .9rem;
-    line-height: 1.5em;
-    color      : $input-addon-text;
-    background : $input-addon-bg;
+    font-size      : .9rem;
+    line-height    : 1.5em;
+    color          : $input-addon-text;
+    background     : $input-addon-bg no-repeat left center;
+    background-size: 1em 1em;
 
     [class*=' fi-ui-']:before,
     [class^='fi-ui-']:before {
@@ -204,7 +205,8 @@
       font-size  : 1rem;
 
       &:before {
-        content: $fi-ui-exclaim-wavy;
+        font-family: Framework;
+        content    : $fi-ui-exclaim-wavy;
       }
 
       & ~ .ui-invalid-errors {

@@ -5,6 +5,7 @@
 // @license     : MIT
 import {FrameworkConfiguration} from 'aurelia-framework';
 import {ValidationRules} from 'aurelia-validation';
+import {UIConstants} from "./utils/ui-constants";
 import {UIValidationRenderer} from "./utils/ui-validator";
 
 import 'lodash';
@@ -25,10 +26,24 @@ export var numeral = nm;
 export * from "./utils/ui-event";
 export * from "./utils/ui-format";
 
+export * from "./utils/ui-application";
+export * from "./utils/ui-constants";
+export * from "./utils/ui-http-service";
+export * from "./utils/ui-dialog";
+
+export * from "./utils/ui-model";
 export * from "./utils/ui-tree-model";
 
 export interface UIConfig {
+  title(t: string): UIConfig;
+  version(t: string): UIConfig;
+  appKey(t: string): UIConfig;
 
+  apiUrl(t: string): UIConfig;
+  apiHeaders(t: any): UIConfig;
+  addAuthHeader(t: boolean): UIConfig;
+
+  languages(l: Array<any>): UIConfig;
 }
 
 export function configure(config: FrameworkConfiguration, configCallback) {
@@ -62,6 +77,41 @@ export function configure(config: FrameworkConfiguration, configCallback) {
     './value-converters/ui-text',
     './value-converters/ui-lodash'
   ]);
+
+  var Configure = {
+    title: (t) => {
+      UIConstants.App.Title = t;
+      return Configure;
+    },
+    version: (t) => {
+      UIConstants.App.Version = t;
+      return Configure;
+    },
+    appKey: (t) => {
+      UIConstants.App.Key = t;
+      return Configure;
+    },
+    apiUrl: (t) => {
+      UIConstants.Http.BaseUrl = t;
+      return Configure;
+    },
+    apiHeaders: (t) => {
+      UIConstants.Http.Headers = t;
+      return Configure;
+    },
+    sendAuthHeader: (t) => {
+      UIConstants.Http.AuthorizationHeader = t;
+      return Configure;
+    },
+    languages: (l) => {
+      UIConstants.Languages = l;
+      return Configure;
+    }
+  };
+
+  if (configCallback !== undefined && typeof configCallback === 'function') {
+    configCallback(Configure);
+  }
 
   // Validation Rules
   ValidationRules

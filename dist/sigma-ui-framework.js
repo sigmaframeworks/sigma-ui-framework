@@ -1,4 +1,4 @@
-define(["require", "exports", "aurelia-validation", './utils/ui-validator', "lodash", "kramed", "moment", "numeral", "./utils/ui-event", "./utils/ui-format", "./utils/ui-tree-model", 'lodash', 'moment', 'numeral', 'tether'], function (require, exports, aurelia_validation_1, ui_validator_1, ld, km, mm, nm, ui_event_1, ui_format_1, ui_tree_model_1) {
+define(["require", "exports", 'aurelia-validation', "./utils/ui-validator", "lodash", "kramed", "moment", "numeral", "./utils/ui-event", "./utils/ui-format", "./utils/ui-tree-model", 'lodash', 'moment', 'numeral', 'tether'], function (require, exports, aurelia_validation_1, ui_validator_1, ld, km, mm, nm, ui_event_1, ui_format_1, ui_tree_model_1) {
     "use strict";
     function __export(m) {
         for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -22,8 +22,8 @@ define(["require", "exports", "aurelia-validation", './utils/ui-validator', "lod
             './elements/components/ui-menu',
             './elements/components/ui-panel',
             './elements/components/ui-drawer',
-            './elements/components/ui-datagrid',
-            './elements/components/ui-tree'
+            './elements/components/ui-tree',
+            './elements/components/ui-datagrid'
         ]);
         config.globalResources([
             './elements/inputs/ui-button',
@@ -40,6 +40,28 @@ define(["require", "exports", "aurelia-validation", './utils/ui-validator', "lod
             './value-converters/ui-text',
             './value-converters/ui-lodash'
         ]);
+        aurelia_validation_1.ValidationRules
+            .customRule('phone', function (value, obj) { return value === null || value === undefined || value == '' || PhoneLib.isValid(value); }, '\${$displayName } is not a valid phone number.');
+        aurelia_validation_1.ValidationRules
+            .customRule('integer', function (value, obj, min, max) { return value === null || value === undefined || value == '' || Number.isInteger(value) && value >= (min || Number.MIN_VALUE) && value <= (max || Number.MAX_VALUE); }, '\${$displayName} must be an integer value between \${$config.min || "MIN_VALUE"} and \${$config.max || "MAX_VALUE"}.', function (min, max) { return ({ min: min, max: max }); });
+        aurelia_validation_1.ValidationRules
+            .customRule('decimal', function (value, obj, min, max) { return value === null || value === undefined || value == '' || Math.floor(value % 1) === 0 && value >= (min || Number.MIN_VALUE) && value <= (max || Number.MAX_VALUE); }, '\${$displayName} must be a decimal value between \${$config.min || "MIN_VALUE"} and \${$config.max || "MAX_VALUE"}.', function (min, max) { return ({ min: min, max: max }); });
+        aurelia_validation_1.ValidationRules
+            .customRule('language', function (map, obj, controller, langInput) {
+            if (!(langInput && langInput.clearErrors && langInput.addError))
+                throw new Error('Language validation must have reference to ui-language');
+            var promises = [];
+            langInput.clearErrors();
+            exports._.forEach(map, function (model, key) {
+                promises.push(controller.validator.validateObject(model)
+                    .then(function (e) {
+                    if (e.length > 0)
+                        langInput.addError(key);
+                    return e.length > 0 ? key : '';
+                }));
+            });
+            return Promise.all(promises).then(function (e) { return e.join('').length == 0; });
+        }, 'Some language entries contain invalid values');
         var rend = new exports.kramed.Renderer();
         rend.code = function (code, lang) {
             if (window.hljs) {
@@ -61,29 +83,6 @@ define(["require", "exports", "aurelia-validation", './utils/ui-validator', "lod
             smartypants: false,
             renderer: rend
         });
-        aurelia_validation_1.ValidationController.prototype.validateTrigger = aurelia_validation_1.validateTrigger.change;
-        aurelia_validation_1.ValidationRules
-            .customRule('phone', function (value, obj) { return value === null || value === undefined || value === '' || PhoneLib.isValid(value); }, '\${$displayName } is not a valid phone number.');
-        aurelia_validation_1.ValidationRules
-            .customRule('integer', function (value, obj, min, max) { return value === null || value === undefined || value === '' || Number.isInteger(value) && value >= (min || Number.MIN_VALUE) && value <= (max || Number.MAX_VALUE); }, '\${$displayName} must be an integer value between \${$config.min || "MIN_VALUE"} and \${$config.max || "MAX_VALUE"}.', function (min, max) { return ({ min: min, max: max }); });
-        aurelia_validation_1.ValidationRules
-            .customRule('decimal', function (value, obj, min, max) { return value === null || value === undefined || value === '' || Math.floor(value % 1) === 0 && value >= (min || Number.MIN_VALUE) && value <= (max || Number.MAX_VALUE); }, '\${$displayName} must be a decimal value between \${$config.min || "MIN_VALUE"} and \${$config.max || "MAX_VALUE"}.', function (min, max) { return ({ min: min, max: max }); });
-        aurelia_validation_1.ValidationRules
-            .customRule('language', function (map, obj, controller, langInput) {
-            if (!(langInput && langInput.clearErrors && langInput.addError))
-                throw new Error('Language validation must have reference to ui-language');
-            var promises = [];
-            langInput.clearErrors();
-            exports._.forEach(map, function (model, key) {
-                promises.push(controller.validator.validateObject(model)
-                    .then(function (e) {
-                    if (e.length > 0)
-                        langInput.addError(key);
-                    return e.length > 0 ? key : '';
-                }));
-            });
-            return Promise.all(promises).then(function (e) { return e.join('').length == 0; });
-        }, 'Some language entries contain invalid values');
         exports._.mixin({
             'findByValues': function (collection, property, values) {
                 if (exports._.isArray(collection)) {
