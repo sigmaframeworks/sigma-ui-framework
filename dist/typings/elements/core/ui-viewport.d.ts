@@ -28,5 +28,7 @@ export declare class UIAppFooter {
 export declare class UIAppTaskbar {
     element: Element;
     constructor(element: Element);
+    attached(): void;
+    __taskbar: any;
     class: string;
 }

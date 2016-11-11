@@ -45,7 +45,7 @@
     }
 
     .ui-resizer {
-      font-size: 1.5em;
+      font-size: 1.25em;
       position : absolute;
       z-index  : 10;
       right    : 0;
@@ -129,7 +129,7 @@
     }
 
     .ui-button-bar {
-      border-top: 1px solid rgba($base-border-color, .5);
+      border-top: 1px solid rgba($base-border-color, .1);
       @include flex-row($justify: center);
       padding   : .5em 1em;
 
@@ -138,14 +138,16 @@
         min-width    : 5em;
         padding      : .2em .5em;
         margin       : .2em .4em;
-        font-size    : 1.1em;
-        border       : 1px solid $primary;
+        font-size    : .9em;
+        background   : none;
+        color        : $primary;
+        border       : 1px solid rgba($primary,.1);
         border-radius: $base-border-radius;
 
         &.default {}
 
         &:hover {
-          background: rgba($secondary, .2);
+          background: rgba($primary, .1);
         }
       }
     }

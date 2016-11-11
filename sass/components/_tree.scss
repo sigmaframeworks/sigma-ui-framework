@@ -111,9 +111,8 @@
       @include flex-row($wrap: false);
 
       span.ui-icon {
-        font-weight    : normal;
-        margin         : 0 .25em;
-        background-size: auto 1.2em;
+        font-weight: normal;
+        margin     : 0 .25em;
       }
 
       b {

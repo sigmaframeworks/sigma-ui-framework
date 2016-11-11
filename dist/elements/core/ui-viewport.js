@@ -21,11 +21,10 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../../util
                 window.setTimeout(function () { return ui_event_1.UIEvent.broadcast('windowresize'); }, 500);
             };
             ui_utils_1.UIUtils.auContainer = container;
-            ui_utils_1.UIUtils.taskbar = this.__taskbar;
-            ui_utils_1.UIUtils.dialogContainer = this.__dialogContainer;
-            ui_utils_1.UIUtils.overlayContainer = this.__overlayContainer;
         }
         UIViewport.prototype.attached = function () {
+            ui_utils_1.UIUtils.dialogContainer = this.__dialogContainer;
+            ui_utils_1.UIUtils.overlayContainer = this.__overlayContainer;
             ui_event_1.UIEvent.broadcast('appready');
         };
         __decorate([
@@ -35,7 +34,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../../util
         UIViewport = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-viewport'),
-            aurelia_framework_1.inlineView("\n<template class=\"ui-viewport\">\n  <slot name=\"app-header\"></slot>\n  <slot></slot>\n  <slot name=\"app-taskbar\" ref=\"__taskbar\"></slot>\n  <slot name=\"app-footer\"></slot>\n\n  <div class=\"ui-dialog-container\" ref=\"__dialogContainer\"></div>\n  <div class=\"ui-overlay-container\" ref=\"__overlayContainer\"></div>\n\n  <div class=\"ui-loader\" show.bind=\"router.isNavigating\">\n    <div class=\"ui-loader-div\">\n      <span class=\"fi-ui-settings ui-spin\"></span>\n      <span class=\"fi-ui-settings ui-spin-opp\"></span>\n    </div>\n  </div>\n</template>"), 
+            aurelia_framework_1.inlineView("\n<template class=\"ui-viewport\">\n  <slot name=\"app-header\"></slot>\n  <slot></slot>\n  <slot name=\"app-taskbar\"></slot>\n  <slot name=\"app-footer\"></slot>\n\n  <div class=\"ui-dialog-container\" ref=\"__dialogContainer\"></div>\n  <div class=\"ui-overlay-container\" ref=\"__overlayContainer\"></div>\n\n  <div class=\"ui-loader\" show.bind=\"router.isNavigating\">\n    <div class=\"ui-loader-div\">\n      <span class=\"fi-ui-settings ui-spin\"></span>\n      <span class=\"fi-ui-settings ui-spin-opp\"></span>\n    </div>\n  </div>\n</template>"), 
             __metadata('design:paramtypes', [Element, aurelia_framework_1.Container])
         ], UIViewport);
         return UIViewport;
@@ -107,6 +106,9 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../../util
             this.element = element;
             this.class = '';
         }
+        UIAppTaskbar.prototype.attached = function () {
+            ui_utils_1.UIUtils.taskbar = this.__taskbar;
+        };
         __decorate([
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
@@ -115,7 +117,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../../util
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.containerless(),
             aurelia_framework_1.customElement('ui-app-taskbar'),
-            aurelia_framework_1.inlineView('<template><div class="ui-app-taskbar ${class}" slot="app-taskbar"><slot></slot></div></template>'), 
+            aurelia_framework_1.inlineView('<template><div class="ui-app-taskbar ${class}" slot="app-taskbar" ref="__taskbar"><slot></slot></div></template>'), 
             __metadata('design:paramtypes', [Element])
         ], UIAppTaskbar);
         return UIAppTaskbar;

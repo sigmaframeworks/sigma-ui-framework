@@ -22,7 +22,7 @@ export class UIForm {
 @autoinject()
 @containerless()
 @customElement('ui-fieldset')
-@inlineView(`<template><fieldset class="ui-fieldset \${class}"><legend>\${legend}</legend><div class="ui-fieldset-wrapper"><slot></slot></div></fieldset></template>`)
+@inlineView(`<template><fieldset class="ui-fieldset \${class}"><legend if.bind="legend">\${legend}</legend><div class="ui-fieldset-wrapper"><slot></slot></div></fieldset></template>`)
 export class UIFieldset {
   constructor(public element: Element) {
     this.__collapsable = element.hasAttribute('collapsable');

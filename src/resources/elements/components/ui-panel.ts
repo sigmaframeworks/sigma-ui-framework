@@ -69,7 +69,7 @@ export class UIHeaderTool {
     if (element.hasAttribute('maximize')) this.__type = "maximize";
     if (element.hasAttribute('maximize')) this.__icon = "fi-ui-dialog-maximize";
     if (element.hasAttribute('close')) this.__type = "close";
-    if (element.hasAttribute('close')) this.__icon = "fi-ui-cross";
+    if (element.hasAttribute('close')) this.__icon = "fi-ui-close";
     if (element.hasAttribute('refresh')) this.__type = "refresh";
     if (element.hasAttribute('refresh')) this.__icon = "fi-ui-refresh";
   }
@@ -85,7 +85,7 @@ export class UIHeaderTool {
 
 @autoinject()
 @customElement('ui-header-icon')
-@inlineView(`<template class="ui-inline-block"><span class="\${icon}"></span>&nbsp;</template>`)
+@inlineView(`<template class="ui-inline-block"><span class="ui-icon \${icon}"></span>&nbsp;</template>`)
 export class UIHeaderIcon {
   constructor(public element: Element) { }
 

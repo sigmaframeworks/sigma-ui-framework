@@ -1,0 +1,86 @@
+// 
+// @description :
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+
+.ui-toast {
+  position     : relative;
+  z-index      : $z-index-toast;
+  border-radius: $base-border-radius;
+  @include box-shadow(1px 1px 2px 0 $base-shadow);
+
+  overflow     : hidden;
+
+  max-width    : 18em;
+  max-height   : 0;
+  background   : $wg-00;
+  margin       : .3em;
+  @include transition(all 1s);
+
+  &.ui-toast-show {
+    max-height: 8em;
+  }
+
+  .ui-toast-wrapper {
+    padding       : .3em .8em;
+
+    cursor        : pointer;
+    pointer-events: all;
+
+    color         : $white;
+    border        : 1px solid $primary;
+    background    : rgba($primary,.75);
+    border-radius : $base-border-radius;
+    @include flex-row(flex-start, $wrap: false);
+
+    .ui-icon {
+      font-size : 1.2em;
+
+      margin-top: .3em;
+    }
+
+    .ui-message {
+      padding: .2em .8em;
+      @include flex(1 1 0em);
+    }
+
+    .ui-close {
+      opacity    : .6;
+      color      : $white;
+      text-shadow: 0 -1px 0 $wg-10;
+
+      &:hover {
+        opacity: .9;
+      }
+    }
+  }
+
+  &.ui-page-toast {
+    display  : block;
+
+    max-width: 50em;
+    margin   : 0 auto;
+    @include position(absolute, .3em .3em 0 .3em);
+  }
+
+  &.info .ui-toast-wrapper {
+    border-color: $info;
+    background  : rgba($info,.75);
+  }
+
+  &.danger .ui-toast-wrapper {
+    border-color: $danger;
+    background  : rgba($danger,.75);
+  }
+
+  &.success .ui-toast-wrapper {
+    border-color: $success;
+    background  : rgba($success,.75);
+  }
+
+  &.warning .ui-toast-wrapper {
+    border-color: $warning;
+    background  : rgba($warning,.75);
+  }
+}

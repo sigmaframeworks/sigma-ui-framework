@@ -54,7 +54,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event"], func
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.containerless(),
             aurelia_framework_1.customElement('ui-fieldset'),
-            aurelia_framework_1.inlineView("<template><fieldset class=\"ui-fieldset ${class}\"><legend>${legend}</legend><div class=\"ui-fieldset-wrapper\"><slot></slot></div></fieldset></template>"), 
+            aurelia_framework_1.inlineView("<template><fieldset class=\"ui-fieldset ${class}\"><legend if.bind=\"legend\">${legend}</legend><div class=\"ui-fieldset-wrapper\"><slot></slot></div></fieldset></template>"), 
             __metadata('design:paramtypes', [Element])
         ], UIFieldset);
         return UIFieldset;

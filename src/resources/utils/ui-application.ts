@@ -136,6 +136,36 @@ export class UIApplication {
     this.__logger.error(`${tag}::${msg}`, rest);
   }
 
+  /** Toasts / Alerts **/
+  toast(config) {
+    UIUtils.showToast(config);
+  }
+
+  toastSuccess(config) {
+    if (typeof config === 'string') config = { message: config };
+    config.theme = 'success';
+    UIUtils.showToast(config);
+  }
+
+  toastError(config) {
+    if (typeof config === 'string') config = { message: config };
+    config.theme = 'danger';
+    UIUtils.showToast(config);
+  }
+
+
+  alert(config) {
+    if (typeof config === 'string') config = { message: config };
+    config.type = config.type || "info";
+    config.button = config.okLabel || "OK";
+    return UIUtils.alert(config);
+  }
+  confirm(config) {
+    if (typeof config === 'string') config = { message: config };
+    config.yesLabel = config.yesLabel || "Yes";
+    config.noLabel = config.noLabel || "No";
+    return UIUtils.confirm(config);
+  }
 }
 
 

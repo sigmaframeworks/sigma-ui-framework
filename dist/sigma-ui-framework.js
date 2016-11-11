@@ -1,4 +1,4 @@
-define(["require", "exports", 'aurelia-validation', "./utils/ui-validator", "lodash", "kramed", "moment", "numeral", "./utils/ui-event", "./utils/ui-format", "./utils/ui-tree-model", 'lodash', 'moment', 'numeral', 'tether'], function (require, exports, aurelia_validation_1, ui_validator_1, ld, km, mm, nm, ui_event_1, ui_format_1, ui_tree_model_1) {
+define(["require", "exports", 'aurelia-validation', "./utils/ui-constants", "./utils/ui-validator", "lodash", "kramed", "moment", "numeral", "./utils/ui-event", "./utils/ui-format", "./utils/ui-application", "./utils/ui-constants", "./utils/ui-http-service", "./utils/ui-dialog", "./utils/ui-model", "./utils/ui-tree-model", 'lodash', 'moment', 'numeral', 'tether'], function (require, exports, aurelia_validation_1, ui_constants_1, ui_validator_1, ld, km, mm, nm, ui_event_1, ui_format_1, ui_application_1, ui_constants_2, ui_http_service_1, ui_dialog_1, ui_model_1, ui_tree_model_1) {
     "use strict";
     function __export(m) {
         for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -9,6 +9,11 @@ define(["require", "exports", 'aurelia-validation', "./utils/ui-validator", "lod
     exports.numeral = nm;
     __export(ui_event_1);
     __export(ui_format_1);
+    __export(ui_application_1);
+    __export(ui_constants_2);
+    __export(ui_http_service_1);
+    __export(ui_dialog_1);
+    __export(ui_model_1);
     __export(ui_tree_model_1);
     function configure(config, configCallback) {
         config.container.registerHandler('ui-validator', function (container) { return container.get(ui_validator_1.UIValidationRenderer); });
@@ -40,6 +45,39 @@ define(["require", "exports", 'aurelia-validation', "./utils/ui-validator", "lod
             './value-converters/ui-text',
             './value-converters/ui-lodash'
         ]);
+        var Configure = {
+            title: function (t) {
+                ui_constants_1.UIConstants.App.Title = t;
+                return Configure;
+            },
+            version: function (t) {
+                ui_constants_1.UIConstants.App.Version = t;
+                return Configure;
+            },
+            appKey: function (t) {
+                ui_constants_1.UIConstants.App.Key = t;
+                return Configure;
+            },
+            apiUrl: function (t) {
+                ui_constants_1.UIConstants.Http.BaseUrl = t;
+                return Configure;
+            },
+            apiHeaders: function (t) {
+                ui_constants_1.UIConstants.Http.Headers = t;
+                return Configure;
+            },
+            sendAuthHeader: function (t) {
+                ui_constants_1.UIConstants.Http.AuthorizationHeader = t;
+                return Configure;
+            },
+            languages: function (l) {
+                ui_constants_1.UIConstants.Languages = l;
+                return Configure;
+            }
+        };
+        if (configCallback !== undefined && typeof configCallback === 'function') {
+            configCallback(Configure);
+        }
         aurelia_validation_1.ValidationRules
             .customRule('phone', function (value, obj) { return value === null || value === undefined || value == '' || PhoneLib.isValid(value); }, '\${$displayName } is not a valid phone number.');
         aurelia_validation_1.ValidationRules

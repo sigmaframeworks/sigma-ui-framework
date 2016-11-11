@@ -5,7 +5,7 @@
 // @license     : MIT
 @import "compass/css3";
 @import 'compass/utilities';
-@import "utils/copic";
+@import "colors";
 
 $primary                     : $lapis-lazuli !default;
 $secondary                   : $blue-violet !default;
@@ -91,7 +91,7 @@ $menu-link-text              : $primary !default;
 $menu-link-disabled          : $cg-5 !default;
 $menu-link-hover-bg          : $cg-0 !default;
 $menu-link-hover-text        : $primary !default;
-$menu-link-active-bg         : $smoky-blue !default;
+$menu-link-active-bg         : lighten($primary, 10%) !default;
 $menu-link-active-text       : $white !default;
 
 /** Drawer Element **/
@@ -172,7 +172,7 @@ $button-warning-active-bg    : darken($button-warning-bg, 20%) !default;
 $button-warning-active-text  : $button-warning-text !default;
 
 /** Datagrid **/
-$dg-header-bg                : #8FCFF0 !default;
+$dg-header-bg                : desaturate(lighten($primary, 30%),10%) !default;
 $dg-header-text              : $base-text !default;
 $dg-footer-bg                : #ECF6FC !default;
 $dg-footer-text              : $base-text !default;

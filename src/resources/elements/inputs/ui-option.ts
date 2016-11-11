@@ -11,9 +11,10 @@ import {UIEvent} from "../../utils/ui-event";
 @inlineView(`<template class="ui-input-group ui-option-group ui-display" change.trigger="changed($event)"><slot name="inputLabel"></slot>
 <div class="ui-group-wrapper"><slot></slot></div></template>`)
 export class UIOptionGroup {
+  static seed = 0;
   constructor(public element: Element) {
     if (element.hasAttribute('vertical')) element.classList.add('ui-vertical');
-    this.name = "opt" + (new Date().getTime());
+    this.name = "opt" + (UIOptionGroup.seed++);
   }
 
   attached() {

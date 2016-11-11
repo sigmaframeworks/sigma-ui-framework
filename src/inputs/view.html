@@ -108,18 +108,18 @@
                       <ui-input placeholder="Any text..." maxlength="25" ref="_in1" value.bind="inval1" disabled.bind="!in1" clear charcount></ui-input>
                     </ui-input-group>
                     <ui-input-group>
-                      <ui-input-label required>Text</ui-input-label>
+                      <ui-input-label required>Combo</ui-input-label>
                       <ui-input-addon>
-                        <ui-checkbox checked.bind="in2"></ui-checkbox>
+                        <ui-checkbox checked.bind="in2" checked.trigger="inval2=''"></ui-checkbox>
                       </ui-input-addon>
-                      <ui-input placeholder="Any text..." maxlength="25" disabled.bind="!in2" clear charcount></ui-input>
+                      <ui-combo placeholder="Any option..." value.bind="inval2" disabled.bind="!in2" clear></ui-combo>
                     </ui-input-group>
                     <ui-input-group>
-                      <ui-input-label required>Text</ui-input-label>
+                      <ui-input-label required>Date</ui-input-label>
                       <ui-input-addon>
-                        <ui-checkbox checked.bind="in3"></ui-checkbox>
+                        <ui-checkbox checked.bind="in3" checked.trigger="inval3=''"></ui-checkbox>
                       </ui-input-addon>
-                      <ui-input placeholder="Any text..." maxlength="25" disabled.bind="!in3" clear charcount></ui-input>
+                      <ui-date placeholder="Any date..." value.bind="inval3" disabled.bind="!in3" clear></ui-date>
                     </ui-input-group>
                   </ui-fieldset>
                 </ui-column>
@@ -133,18 +133,18 @@
                       <ui-input placeholder="Any text..." maxlength="25" disabled.bind="rdin!=1" value.bind="rdval1" clear charcount></ui-input>
                     </ui-input-group>
                     <ui-input-group>
-                      <ui-input-label required>Text</ui-input-label>
+                      <ui-input-label required>Combo</ui-input-label>
                       <ui-input-addon>
                         <ui-radio name="rdin" value="2" checked.bind="rdin" checked.trigger="rdval2=''"></ui-radio>
                       </ui-input-addon>
-                      <ui-input placeholder="Any text..." maxlength="25" disabled.bind="rdin!=2" value.bind="rdval2" clear charcount></ui-input>
+                      <ui-combo placeholder="Any option..." disabled.bind="rdin!=2" value.bind="rdval2" clear></ui-combo>
                     </ui-input-group>
                     <ui-input-group>
-                      <ui-input-label required>Text</ui-input-label>
+                      <ui-input-label required>Date</ui-input-label>
                       <ui-input-addon>
                         <ui-radio name="rdin" value="3" checked.bind="rdin" checked.trigger="rdval3=''"></ui-radio>
                       </ui-input-addon>
-                      <ui-input placeholder="Any text..." maxlength="25" disabled.bind="rdin!=3" value.bind="rdval3" clear charcount></ui-input>
+                      <ui-date placeholder="Any date..." disabled.bind="rdin!=3" value.bind="rdval3" clear></ui-date>
                     </ui-input-group>
                   </ui-fieldset>
                 </ui-column>

@@ -26,7 +26,7 @@ export class ListGeneric {
   __options = [];
   __listGroups = [];
 
-  value = null;
+  value = '';
   options = [];
   readonly = false;
   disabled = false;
@@ -73,7 +73,7 @@ export class ListGeneric {
     if (!this.__tags) {
       this.__value = _['findChildren'](this.__listGroups = this.__options, 'items', 'value', newValue).text;
       if (!this.forceSelect && !this.__value) this.__value = newValue;
-      else if (!this.__value) this.value = null;
+      else if (!this.__value) this.value = '';
     }
     else {
       let v = (newValue || '').split(',');

@@ -81,6 +81,7 @@
   max-height   : 12em;
   border       : 1px solid $base-border-color;
   border-radius: $base-border-radius;
+  z-index      : $z-index-floating;
   @include box-shadow(0 0 2px 0 $base-shadow);
 
   &.tether-target-attached-bottom {

@@ -141,6 +141,15 @@ hr {
   box-shadow: 0 0 3px 0 $base-shadow;
 }
 
+.ui-icon {
+  background-position: left center;
+  background-repeat  : no-repeat;
+  background-size    : 1em 1em;
+  display            : inline-block;
+  width              : 1em;
+  height             : 1em;
+}
+
 // Padding
 .ui-pad-all {
   padding: .25em .5em;
@@ -264,32 +273,32 @@ hr {
 }
 
 .ui-bg-primary {
-  background-color: $primary;
+  background-color: darken($primary,2%);
   color           : $primary-text;
 }
 
 .ui-bg-secondary {
-  background-color: $secondary;
+  background-color: darken($secondary,2%);
   color           : $secondary-text;
 }
 
 .ui-bg-info {
-  background-color: $info;
+  background-color: darken($info,2%);
   color           : $info-text;
 }
 
 .ui-bg-danger {
-  background-color: $danger;
+  background-color: darken($danger,2%);
   color           : $danger-text;
 }
 
 .ui-bg-success {
-  background-color: $success;
+  background-color: darken($success,2%);
   color           : $success-text;
 }
 
 .ui-bg-warning {
-  background-color: $warning;
+  background-color: darken($warning,2%);
   color           : $warning-text;
 }
 

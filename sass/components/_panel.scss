@@ -79,7 +79,7 @@
 
   .ui-header-button {
     color        : rgba($base-text, .7);
-    background   : darken($base-bg, 5%);
+    background   : lighten($base-bg, 2%);
     border-radius: $base-border-radius;
     border       : 1px solid rgba($base-text, .3);
     text-shadow  : -1px -1px 0 rgba(0, 0, 0, .1);

@@ -147,7 +147,7 @@ export class UIDialogService {
       dialog.__taskButton.classList.add('ui-active');
       dialog.__taskButton.classList.add('ui-small');
       dialog.__taskButton.classList.add('ui-button-default');
-      dialog.__taskButton.innerHTML = `<span class="${dialog.icon}"></span><span class="ui-label">${dialog.title}</span>`;
+      dialog.__taskButton.innerHTML = `<span class="${dialog.icon}"></span>&nbsp;<span class="ui-label">${dialog.title}</span>`;
       dialog.__taskButton.window = dialog;
       if (UIUtils.taskbar) UIUtils.taskbar.appendChild(dialog.__taskButton);
 
@@ -347,6 +347,12 @@ export class UIDialog {
   public resize: boolean = true;
   public maximize: boolean = true;
 
+  static dlgService;
+  static show(model?) {
+    if (!UIDialog.dlgService) UIDialog.dlgService = UIUtils.lazy(UIDialogService);
+    UIDialog.dlgService.show(this, model);
+  }
+
   bind() {
     this.__current.width = this.width || this.__current.width;
     this.__current.height = this.height || this.__current.height;
@@ -377,6 +383,6 @@ export class UIDialog {
   toast(config) {
     if (typeof config === 'string') config = { message: config };
     config.extraClass = 'ui-page-toast';
-    UIUtils.showToast(this.__dialog, config);
+    UIUtils.showToast(config, this.__dialog);
   }
 }
