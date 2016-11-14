@@ -104,6 +104,7 @@ export declare class UITextarea {
     rows: number;
     maxlength: number;
     placeholder: string;
+    autoComplete: string;
     disabled: boolean;
     readonly: boolean;
     clear(): void;
@@ -111,6 +112,33 @@ export declare class UITextarea {
     __focus: any;
     fireBlur(): void;
     fireFocus(): void;
+    __list: any;
+    __tether: any;
+    __hilight: any;
+    __listCss: {
+        top: string;
+        left: string;
+        right: string;
+        width: string;
+        'max-height': string;
+    };
+    __acRegExp: any;
+    __showList: any;
+    __autoComplete: any;
+    attached(): void;
+    autoCompleteChanged(newValue: any): void;
+    showList(evt: any): boolean;
+    keyDown(evt: any): boolean;
+    __replace(selected: any): void;
+    __clicked($event: any): boolean;
+    __scrollIntoView(): void;
+    properties: string[];
+    isBrowser: boolean;
+    isFirefox: boolean;
+    getCaretCoordinates(): {
+        top: string;
+        left: string;
+    };
 }
 export declare class UIPhone {
     element: Element;

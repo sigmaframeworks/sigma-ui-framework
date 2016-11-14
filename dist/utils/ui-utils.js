@@ -36,11 +36,11 @@ define(["require", "exports", "aurelia-framework", "./ui-event"], function (requ
         UIUtils.compileView = compileView;
         function alert(config) {
             var _this = this;
-            var type = "fi-ui-info-black";
+            var type = "fi-ui-info";
             if (config.type == "error")
-                type = "fi-ui-error-black";
+                type = "fi-ui-error";
             if (config.type == "exclaim")
-                type = "fi-ui-exclaim-bold";
+                type = "fi-ui-exclamation";
             return new Promise(function (resolve, reject) {
                 var view = UIUtils.compileView("<div class=\"ui-dialog-wrapper ui-modal\" ref=\"__wrapper\">\n      <div class=\"ui-dialog ui-alert\">\n      <input style=\"position:fixed;top:-100%\" ref=\"__focusBlock\" keydown.trigger=\"checkKey($event)\" blur.trigger=\"cancelBlur($event)\"/>\n      <div class=\"ui-message-bar\">\n      <span class=\"" + (type || 'info') + "\"></span><p innerhtml.bind='message'></p></div>\n      <div class=\"ui-button-bar\"><button click.trigger=\"closeAlert()\">" + (config.okLabel || 'OK') + "</button></div>\n      </div></div>", _this.dialogContainer, {
                     __wrapper: null,
@@ -72,7 +72,7 @@ define(["require", "exports", "aurelia-framework", "./ui-event"], function (requ
         function confirm(config) {
             var _this = this;
             return new Promise(function (resolve, reject) {
-                var view = UIUtils.compileView("<div class=\"ui-dialog-wrapper ui-modal\" ref=\"__wrapper\">\n      <div class=\"ui-dialog ui-alert\">\n      <input style=\"position:fixed;top:-100%\" ref=\"__focusBlock\" keydown.trigger=\"checkKey($event)\" blur.trigger=\"cancelBlur($event)\"/>\n      <div class=\"ui-message-bar\">\n      <span class=\"fi-ui-md-help\"></span><p innerhtml.bind='message'></p></div>\n      <div class=\"ui-button-bar\"><button class=\"default\" click.trigger=\"closeAlert(true)\">" + (config.yesLabel || 'Yes') + "</button>\n      <button click.trigger=\"closeAlert(false)\">" + (config.noLabel || 'No') + "</button></div>\n      </div></div>", _this.dialogContainer, {
+                var view = UIUtils.compileView("<div class=\"ui-dialog-wrapper ui-modal\" ref=\"__wrapper\">\n      <div class=\"ui-dialog ui-alert\">\n      <input style=\"position:fixed;top:-100%\" ref=\"__focusBlock\" keydown.trigger=\"checkKey($event)\" blur.trigger=\"cancelBlur($event)\"/>\n      <div class=\"ui-message-bar\">\n      <span class=\"fi-ui-question\"></span><p innerhtml.bind='message'></p></div>\n      <div class=\"ui-button-bar\"><button class=\"default\" click.trigger=\"closeAlert(true)\">" + (config.yesLabel || 'Yes') + "</button>\n      <button click.trigger=\"closeAlert(false)\">" + (config.noLabel || 'No') + "</button></div>\n      </div></div>", _this.dialogContainer, {
                     __wrapper: null,
                     __focusBlock: null,
                     message: config.message,
@@ -109,7 +109,7 @@ define(["require", "exports", "aurelia-framework", "./ui-event"], function (requ
             toast.classList.add(opt.theme);
             if (!isEmpty(opt.extraClass))
                 toast.classList.add(opt.extraClass);
-            toast.innerHTML = "<div class=\"ui-toast-wrapper\">\n        <span class=\"ui-icon " + opt.icon + "\"></span>\n        <p class=\"ui-message\">" + opt.message + "</p>\n        <span class=\"ui-close\">&times;</span>\n      </div>";
+            toast.innerHTML = "<div class=\"ui-toast-wrapper\">\n        " + (opt.icon ? '<span class="ui-icon ' + opt.icon + '"></span>' : '') + "\n        <p class=\"ui-message\">" + opt.message + "</p>\n        <span class=\"ui-close\">&times;</span>\n      </div>";
             (container || this.overlayContainer).appendChild(toast);
             if (opt.autoHide > 0)
                 tmr = setTimeout(function () { return __removeToast(toast); }, opt.autoHide);

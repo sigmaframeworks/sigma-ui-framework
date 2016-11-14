@@ -1,5 +1,6 @@
 export declare class UIOptionGroup {
     element: Element;
+    static seed: number;
     constructor(element: Element);
     attached(): void;
     valueChanged(newValue: any): void;

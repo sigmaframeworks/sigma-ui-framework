@@ -98,7 +98,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "loda
             if (element.hasAttribute('close'))
                 this.__type = "close";
             if (element.hasAttribute('close'))
-                this.__icon = "fi-ui-cross";
+                this.__icon = "fi-ui-close";
             if (element.hasAttribute('refresh'))
                 this.__type = "refresh";
             if (element.hasAttribute('refresh'))

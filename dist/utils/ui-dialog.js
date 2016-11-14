@@ -108,7 +108,7 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
                 dialog.__taskButton.classList.add('ui-active');
                 dialog.__taskButton.classList.add('ui-small');
                 dialog.__taskButton.classList.add('ui-button-default');
-                dialog.__taskButton.innerHTML = "<span class=\"" + dialog.icon + "\"></span><span class=\"ui-label\">" + dialog.title + "</span>";
+                dialog.__taskButton.innerHTML = "<span class=\"" + dialog.icon + "\"></span>&nbsp;<span class=\"ui-label\">" + dialog.title + "</span>";
                 dialog.__taskButton.window = dialog;
                 if (ui_utils_1.UIUtils.taskbar)
                     ui_utils_1.UIUtils.taskbar.appendChild(dialog.__taskButton);

@@ -16,7 +16,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event"], func
             this.name = '';
             if (element.hasAttribute('vertical'))
                 element.classList.add('ui-vertical');
-            this.name = "opt" + (new Date().getTime());
+            this.name = "opt" + (UIOptionGroup.seed++);
         }
         UIOptionGroup.prototype.attached = function () {
             var opts = this.element.querySelectorAll('ui-radio');
@@ -34,6 +34,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event"], func
         UIOptionGroup.prototype.changed = function ($event) {
             this.value = $event.detail;
         };
+        UIOptionGroup.seed = 0;
         __decorate([
             aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }), 
             __metadata('design:type', Object)

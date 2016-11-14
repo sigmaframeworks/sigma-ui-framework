@@ -5,6 +5,7 @@
 // @license     : MIT
 import {autoinject, bindable, containerless, customElement, inlineView, bindingMode, DOM} from "aurelia-framework";
 import {UIEvent} from "../../utils/ui-event";
+import * as Tether from "tether";
 
 @autoinject()
 @customElement('ui-form')
@@ -76,9 +77,9 @@ export class UIInputAddon {
   constructor(public element: Element) { }
 
   __focus() {
-    let inp;
+    let inp: HTMLElement;
     UIEvent.queueTask(() => {
-      if (inp = this.element.nextElementSibling.querySelector('input,textarea')) inp.focus();
+      if (inp = <HTMLElement>this.element.nextElementSibling.querySelector('input,textarea')) inp.focus();
     });
     return true;
   }
@@ -258,6 +259,11 @@ export class UIInput {
   <span class="ui-invalid-errors"><ul><li repeat.for="e of errors">\${e.message}</li></ul></span>
   <textarea class="ui-input" rows.bind="rows" value.bind="value" placeholder.bind="placeholder" disabled.bind="disabled" readonly.bind="readonly"
     focus.trigger="fireFocus()" blur.trigger="fireBlur()" maxlength.bind="maxlength" ref="__input" change.trigger="fireChange($event)"></textarea>
+  <div class="ui-list ui-list-dropdown" css.bind="{width:'200px', 'max-height':'300px', right:'auto', left:__listCss.left, top:__listCss.top}" 
+    show.bind="__showList && !readonly" mousewheel.trigger="$event.cancelBubble = true" mousedown.trigger="__clicked($event)" ref="__list">
+    <div repeat.for="opt of __autoComplete" class="ui-list-item" data-value="\${opt}">
+      <span class="ui-text ui-col-fill" innerhtml.bind="opt"></span></div>
+  </div>
   <span class="ui-ta-counter" if.bind="__counter">\${value.length & debounce} of \${maxlength}</span>
   <span class="ui-clear" if.bind="__clear && value" click.trigger="clear()">&times;</span></template>`)
 export class UITextarea {
@@ -269,6 +275,7 @@ export class UITextarea {
   bind() {
     this.disabled = isTrue(this.disabled);
     this.readonly = isTrue(this.readonly);
+    if (!isEmpty(this.autoComplete)) this.autoCompleteChanged(this.autoComplete);
   }
 
   __counter;
@@ -287,6 +294,7 @@ export class UITextarea {
   @bindable() rows = 5;
   @bindable() maxlength = 10000;
   @bindable() placeholder = '';
+  @bindable() autoComplete = '';
   @bindable() disabled = false;
   @bindable() readonly = false;
 
@@ -308,6 +316,259 @@ export class UITextarea {
   fireFocus() {
     this.__focus = true;
     UIEvent.fireEvent('focus', this.element);
+  }
+
+  // autoComplete
+  __list;
+  __tether;
+  __hilight;
+  __listCss = { top: '0px', left: '0px', right: 'auto', width: '200px', 'max-height': '400px' };
+  __acRegExp;
+  __showList;
+  __autoComplete;
+  attached() {
+    if (!isEmpty(this.autoComplete)) {
+      this.__input.onkeyup = (evt) => this.showList(evt);
+      this.__input.onkeydown = (evt) => this.keyDown(evt);
+      this.__acRegExp = eval(`/\\b(\\w{1,})$/`);
+
+      this.__tether = new Tether({
+        element: this.__list,
+        target: this.element,
+        attachment: 'top left',
+        targetAttachment: 'top left',
+        // offset: '0 10px',
+        constraints: [
+          {
+            to: 'scrollParent',
+            attachment: 'together'
+          },
+          {
+            to: 'window',
+            attachment: 'together'
+          }
+        ],
+        optimizations: {
+          moveElement: false
+        }
+      });
+    }
+  }
+
+  autoCompleteChanged(newValue) {
+    if (_.isString(newValue)) newValue = newValue.split(',');
+    this.autoComplete = newValue.sort();
+  }
+
+  showList(evt) {
+    if (evt.ctrlKey || evt.altKey || evt.metaKey || (evt.keyCode || evt.which) === 0) return true;
+    let code = (evt.keyCode || evt.which);
+
+    if (code == 13) {
+      return false;
+    }
+
+    let text = this.__input.value.substring(0, this.__input.selectionEnd);
+    let query = text.match(this.__acRegExp);
+    this.__showList = false;
+    if (query !== null) {
+      var rx = new RegExp(getAscii(query[1]), 'i');
+      this.__autoComplete = _.filter(this.autoComplete, v => {
+        let asc = getAscii(v);
+        return rx.test(asc);
+      });
+      let pos = this.getCaretCoordinates();
+      this.__listCss = Object.assign(this.__listCss, pos);
+      this.__showList = this.__autoComplete.length > 0;
+    }
+    return true;
+  }
+
+  keyDown(evt) {
+    if (evt.ctrlKey || evt.altKey || evt.metaKey || (evt.keyCode || evt.which) === 0) return true;
+    let code = (evt.keyCode || evt.which);
+
+    if (this.__showList) {
+      if (code == 13) {
+        let h = this.__list.querySelector('.ui-list-item.ui-highlight');
+        if (h !== null)
+          this.__replace(h.dataset.value);
+        this.__showList = false;
+        return false;
+      }
+
+      if (code === 38) {
+        let h = this.__list.querySelector('.ui-list-item.ui-highlight');
+        // if found hilight or selected get previous
+        if (h !== null) h = <HTMLElement>h.previousElementSibling;
+        // if no hilight get first
+        if (h === null) h = this.__list.querySelector('.ui-list-item');
+        if (h != null) {
+          if (h !== null) {
+            if (this.__hilight != null) this.__hilight.classList.remove('ui-highlight');
+            (this.__hilight = h).classList.add('ui-highlight');
+            this.__scrollIntoView();
+          }
+        }
+        evt.preventDefault();
+        return false;
+      }
+      else if (code === 40) {
+        let h = this.__list.querySelector('.ui-list-item.ui-highlight');
+        // if found hilight or selected get next
+        if (h !== null) h = <HTMLElement>h.nextElementSibling;
+        // if no selected get first
+        if (h === null) h = this.__list.querySelector('.ui-list-item');
+        if (h !== null) {
+          if (this.__hilight != null) this.__hilight.classList.remove('ui-highlight');
+          (this.__hilight = h).classList.add('ui-highlight');
+          this.__scrollIntoView();
+        }
+        evt.preventDefault();
+        return false;
+      }
+    }
+    return true;
+  }
+
+  __replace(selected) {
+    var pre = this.__input.value.substring(0, this.__input.selectionEnd);
+    var post = this.__input.value.substring(this.__input.selectionEnd);
+    pre = pre.replace(this.__acRegExp, ' ' + selected + ' ');
+    this.__input.value = (pre + post);//.replace(/\s{2,}/g, ' ');
+    this.__input.selectionStart = this.__input.selectionEnd = pre.length;
+  }
+
+  __clicked($event) {
+    if ($event.button !== 0) return true;
+    let o: any = getParentByClass($event.target, 'ui-list-item', 'ui-list');
+    if (o !== null) {
+      this.__replace(o.dataset.value);
+      this.__showList = false;
+    }
+  }
+
+  __scrollIntoView() {
+    this.__list.scrollTop = (this.__hilight !== null ? this.__hilight.offsetTop - (this.__list.offsetHeight / 2) : 0);
+  }
+
+  // Compute autoComplete
+  properties = [
+    'direction', // RTL support
+    'boxSizing',
+    'width',
+    'height',
+    'overflowX',
+    'overflowY',
+
+    'borderTopWidth',
+    'borderRightWidth',
+    'borderBottomWidth',
+    'borderLeftWidth',
+    'borderStyle',
+
+    'paddingTop',
+    'paddingRight',
+    'paddingBottom',
+    'paddingLeft',
+
+    'fontStyle',
+    'fontVariant',
+    'fontWeight',
+    'fontStretch',
+    'fontSize',
+    'fontSizeAdjust',
+    'lineHeight',
+    'fontFamily',
+
+    'textAlign',
+    'textTransform',
+    'textIndent',
+    'textDecoration',
+
+    'letterSpacing',
+    'wordSpacing',
+
+    'tabSize',
+    'MozTabSize'
+
+  ];
+
+  isBrowser = (typeof window !== 'undefined');
+  isFirefox = (this.isBrowser && window['mozInnerScreenX'] != null);
+
+  getCaretCoordinates() {
+    let element: any = this.__input;
+    let position = this.__input.selectionStart;
+    if (!this.isBrowser) {
+      throw new Error('textarea-caret-position#getCaretCoordinates should only be called in a browser');
+    }
+
+    var debug = false;
+    if (debug) {
+      var el = document.querySelector('#input-textarea-caret-position-mirror-div');
+      if (el) {
+        el.parentNode.removeChild(el);
+      }
+    }
+
+    // mirrored div
+    var div = document.createElement('div');
+    div.id = 'input-textarea-caret-position-mirror-div';
+    document.body.appendChild(div);
+
+    var style = div.style;
+    var computed = window.getComputedStyle ? getComputedStyle(element) : element.currentStyle; // currentStyle for IE < 9
+
+    // default textarea styles
+    style.whiteSpace = 'pre-wrap';
+    if (element.nodeName !== 'INPUT')
+      style.wordWrap = 'break-word'; // only for textarea-s
+
+    // position off-screen
+    style.position = 'absolute'; // required to return coordinates properly
+    if (!debug)
+      style.visibility = 'hidden'; // not 'display: none' because we want rendering
+
+    // transfer the element's properties to the div
+    _.forEach(this.properties, prop => {
+      style[prop] = computed[prop];
+    });
+
+    if (this.isFirefox) {
+      // Firefox lies about the overflow property for textareas: https://bugzilla.mozilla.org/show_bug.cgi?id=984275
+      if (element.scrollHeight > parseInt(computed.height))
+        style.overflowY = 'scroll';
+    } else {
+      style.overflow = 'hidden'; // for Chrome to not render a scrollbar; IE keeps overflowY = 'scroll'
+    }
+
+    div.textContent = element.value.substring(0, position);
+    // the second special handling for input type="text" vs textarea: spaces need to be replaced with non-breaking spaces - http://stackoverflow.com/a/13402035/1269037
+    if (element.nodeName === 'INPUT')
+      div.textContent = div.textContent.replace(/\s/g, '\u00a0');
+
+    var span = document.createElement('span');
+    // Wrapping must be replicated *exactly*, including when a long word gets
+    // onto the next line, with whitespace at the end of the line before (#7).
+    // The  *only* reliable way to do that is to copy the *entire* rest of the
+    // textarea's content into the <span> created at the caret position.
+    // for inputs, just '.' would be enough, but why bother?
+    span.textContent = element.value.substring(position) || '.'; // || because a completely empty faux span doesn't render at all
+    div.appendChild(span);
+
+    var coordinates = {
+      top: (span.offsetTop + parseInt(computed['borderTopWidth']) + 20 - element.scrollTop) + 'px',
+      left: (span.offsetLeft + parseInt(computed['borderLeftWidth'])) + 'px'
+    };
+
+    if (debug) {
+      span.style.backgroundColor = '#aaa';
+    } else {
+      document.body.removeChild(div);
+    }
+
+    return coordinates;
   }
 }
 

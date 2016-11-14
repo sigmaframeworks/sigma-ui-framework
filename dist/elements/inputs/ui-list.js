@@ -22,7 +22,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "loda
             this.__allowSearch = true;
             this.__options = [];
             this.__listGroups = [];
-            this.value = null;
+            this.value = '';
             this.options = [];
             this.readonly = false;
             this.disabled = false;
@@ -72,7 +72,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "loda
                 if (!this.forceSelect && !this.__value)
                     this.__value = newValue;
                 else if (!this.__value)
-                    this.value = null;
+                    this.value = '';
             }
             else {
                 var v = (newValue || '').split(',');

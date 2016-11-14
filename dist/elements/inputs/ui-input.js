@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "aurelia-framework", "../../utils/ui-event"], function (require, exports, aurelia_framework_1, ui_event_1) {
+define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "tether"], function (require, exports, aurelia_framework_1, ui_event_1, Tether) {
     "use strict";
     var UIForm = (function () {
         function UIForm(element) {
@@ -363,14 +363,53 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event"], func
             this.rows = 5;
             this.maxlength = 10000;
             this.placeholder = '';
+            this.autoComplete = '';
             this.disabled = false;
             this.readonly = false;
+            this.__listCss = { top: '0px', left: '0px', right: 'auto', width: '200px', 'max-height': '400px' };
+            this.properties = [
+                'direction',
+                'boxSizing',
+                'width',
+                'height',
+                'overflowX',
+                'overflowY',
+                'borderTopWidth',
+                'borderRightWidth',
+                'borderBottomWidth',
+                'borderLeftWidth',
+                'borderStyle',
+                'paddingTop',
+                'paddingRight',
+                'paddingBottom',
+                'paddingLeft',
+                'fontStyle',
+                'fontVariant',
+                'fontWeight',
+                'fontStretch',
+                'fontSize',
+                'fontSizeAdjust',
+                'lineHeight',
+                'fontFamily',
+                'textAlign',
+                'textTransform',
+                'textIndent',
+                'textDecoration',
+                'letterSpacing',
+                'wordSpacing',
+                'tabSize',
+                'MozTabSize'
+            ];
+            this.isBrowser = (typeof window !== 'undefined');
+            this.isFirefox = (this.isBrowser && window['mozInnerScreenX'] != null);
             this.__counter = element.hasAttribute('charcount');
             this.__clear = element.hasAttribute('clear');
         }
         UITextarea.prototype.bind = function () {
             this.disabled = isTrue(this.disabled);
             this.readonly = isTrue(this.readonly);
+            if (!isEmpty(this.autoComplete))
+                this.autoCompleteChanged(this.autoComplete);
         };
         UITextarea.prototype.clear = function () {
             this.value = '';
@@ -388,6 +427,178 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event"], func
         UITextarea.prototype.fireFocus = function () {
             this.__focus = true;
             ui_event_1.UIEvent.fireEvent('focus', this.element);
+        };
+        UITextarea.prototype.attached = function () {
+            var _this = this;
+            if (!isEmpty(this.autoComplete)) {
+                this.__input.onkeyup = function (evt) { return _this.showList(evt); };
+                this.__input.onkeydown = function (evt) { return _this.keyDown(evt); };
+                this.__acRegExp = eval("/\\b(\\w{1,})$/");
+                this.__tether = new Tether({
+                    element: this.__list,
+                    target: this.element,
+                    attachment: 'top left',
+                    targetAttachment: 'top left',
+                    constraints: [
+                        {
+                            to: 'scrollParent',
+                            attachment: 'together'
+                        },
+                        {
+                            to: 'window',
+                            attachment: 'together'
+                        }
+                    ],
+                    optimizations: {
+                        moveElement: false
+                    }
+                });
+            }
+        };
+        UITextarea.prototype.autoCompleteChanged = function (newValue) {
+            if (_.isString(newValue))
+                newValue = newValue.split(',');
+            this.autoComplete = newValue.sort();
+        };
+        UITextarea.prototype.showList = function (evt) {
+            if (evt.ctrlKey || evt.altKey || evt.metaKey || (evt.keyCode || evt.which) === 0)
+                return true;
+            var code = (evt.keyCode || evt.which);
+            if (code == 13) {
+                return false;
+            }
+            var text = this.__input.value.substring(0, this.__input.selectionEnd);
+            var query = text.match(this.__acRegExp);
+            this.__showList = false;
+            if (query !== null) {
+                var rx = new RegExp(getAscii(query[1]), 'i');
+                this.__autoComplete = _.filter(this.autoComplete, function (v) {
+                    var asc = getAscii(v);
+                    return rx.test(asc);
+                });
+                var pos = this.getCaretCoordinates();
+                this.__listCss = Object.assign(this.__listCss, pos);
+                this.__showList = this.__autoComplete.length > 0;
+            }
+            return true;
+        };
+        UITextarea.prototype.keyDown = function (evt) {
+            if (evt.ctrlKey || evt.altKey || evt.metaKey || (evt.keyCode || evt.which) === 0)
+                return true;
+            var code = (evt.keyCode || evt.which);
+            if (this.__showList) {
+                if (code == 13) {
+                    var h = this.__list.querySelector('.ui-list-item.ui-highlight');
+                    if (h !== null)
+                        this.__replace(h.dataset.value);
+                    this.__showList = false;
+                    return false;
+                }
+                if (code === 38) {
+                    var h = this.__list.querySelector('.ui-list-item.ui-highlight');
+                    if (h !== null)
+                        h = h.previousElementSibling;
+                    if (h === null)
+                        h = this.__list.querySelector('.ui-list-item');
+                    if (h != null) {
+                        if (h !== null) {
+                            if (this.__hilight != null)
+                                this.__hilight.classList.remove('ui-highlight');
+                            (this.__hilight = h).classList.add('ui-highlight');
+                            this.__scrollIntoView();
+                        }
+                    }
+                    evt.preventDefault();
+                    return false;
+                }
+                else if (code === 40) {
+                    var h = this.__list.querySelector('.ui-list-item.ui-highlight');
+                    if (h !== null)
+                        h = h.nextElementSibling;
+                    if (h === null)
+                        h = this.__list.querySelector('.ui-list-item');
+                    if (h !== null) {
+                        if (this.__hilight != null)
+                            this.__hilight.classList.remove('ui-highlight');
+                        (this.__hilight = h).classList.add('ui-highlight');
+                        this.__scrollIntoView();
+                    }
+                    evt.preventDefault();
+                    return false;
+                }
+            }
+            return true;
+        };
+        UITextarea.prototype.__replace = function (selected) {
+            var pre = this.__input.value.substring(0, this.__input.selectionEnd);
+            var post = this.__input.value.substring(this.__input.selectionEnd);
+            pre = pre.replace(this.__acRegExp, ' ' + selected + ' ');
+            this.__input.value = (pre + post);
+            this.__input.selectionStart = this.__input.selectionEnd = pre.length;
+        };
+        UITextarea.prototype.__clicked = function ($event) {
+            if ($event.button !== 0)
+                return true;
+            var o = getParentByClass($event.target, 'ui-list-item', 'ui-list');
+            if (o !== null) {
+                this.__replace(o.dataset.value);
+                this.__showList = false;
+            }
+        };
+        UITextarea.prototype.__scrollIntoView = function () {
+            this.__list.scrollTop = (this.__hilight !== null ? this.__hilight.offsetTop - (this.__list.offsetHeight / 2) : 0);
+        };
+        UITextarea.prototype.getCaretCoordinates = function () {
+            var element = this.__input;
+            var position = this.__input.selectionStart;
+            if (!this.isBrowser) {
+                throw new Error('textarea-caret-position#getCaretCoordinates should only be called in a browser');
+            }
+            var debug = false;
+            if (debug) {
+                var el = document.querySelector('#input-textarea-caret-position-mirror-div');
+                if (el) {
+                    el.parentNode.removeChild(el);
+                }
+            }
+            var div = document.createElement('div');
+            div.id = 'input-textarea-caret-position-mirror-div';
+            document.body.appendChild(div);
+            var style = div.style;
+            var computed = window.getComputedStyle ? getComputedStyle(element) : element.currentStyle;
+            style.whiteSpace = 'pre-wrap';
+            if (element.nodeName !== 'INPUT')
+                style.wordWrap = 'break-word';
+            style.position = 'absolute';
+            if (!debug)
+                style.visibility = 'hidden';
+            _.forEach(this.properties, function (prop) {
+                style[prop] = computed[prop];
+            });
+            if (this.isFirefox) {
+                if (element.scrollHeight > parseInt(computed.height))
+                    style.overflowY = 'scroll';
+            }
+            else {
+                style.overflow = 'hidden';
+            }
+            div.textContent = element.value.substring(0, position);
+            if (element.nodeName === 'INPUT')
+                div.textContent = div.textContent.replace(/\s/g, '\u00a0');
+            var span = document.createElement('span');
+            span.textContent = element.value.substring(position) || '.';
+            div.appendChild(span);
+            var coordinates = {
+                top: (span.offsetTop + parseInt(computed['borderTopWidth']) + 20 - element.scrollTop) + 'px',
+                left: (span.offsetLeft + parseInt(computed['borderLeftWidth'])) + 'px'
+            };
+            if (debug) {
+                span.style.backgroundColor = '#aaa';
+            }
+            else {
+                document.body.removeChild(div);
+            }
+            return coordinates;
         };
         __decorate([
             aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }), 
@@ -408,6 +619,10 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event"], func
         __decorate([
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
+        ], UITextarea.prototype, "autoComplete", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
         ], UITextarea.prototype, "disabled", void 0);
         __decorate([
             aurelia_framework_1.bindable(), 
@@ -416,7 +631,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event"], func
         UITextarea = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-textarea'),
-            aurelia_framework_1.inlineView("<template class=\"ui-input-wrapper ${__focus?'ui-focus':''} ${__counter?'ui-ta-counter':''} ${disabled?'ui-disabled':''} ${readonly?'ui-readonly':''}\"><span class=\"ui-invalid-icon fi-ui\"></span>\n  <span class=\"ui-invalid-errors\"><ul><li repeat.for=\"e of errors\">${e.message}</li></ul></span>\n  <textarea class=\"ui-input\" rows.bind=\"rows\" value.bind=\"value\" placeholder.bind=\"placeholder\" disabled.bind=\"disabled\" readonly.bind=\"readonly\"\n    focus.trigger=\"fireFocus()\" blur.trigger=\"fireBlur()\" maxlength.bind=\"maxlength\" ref=\"__input\" change.trigger=\"fireChange($event)\"></textarea>\n  <span class=\"ui-ta-counter\" if.bind=\"__counter\">${value.length & debounce} of ${maxlength}</span>\n  <span class=\"ui-clear\" if.bind=\"__clear && value\" click.trigger=\"clear()\">&times;</span></template>"), 
+            aurelia_framework_1.inlineView("<template class=\"ui-input-wrapper ${__focus?'ui-focus':''} ${__counter?'ui-ta-counter':''} ${disabled?'ui-disabled':''} ${readonly?'ui-readonly':''}\"><span class=\"ui-invalid-icon fi-ui\"></span>\n  <span class=\"ui-invalid-errors\"><ul><li repeat.for=\"e of errors\">${e.message}</li></ul></span>\n  <textarea class=\"ui-input\" rows.bind=\"rows\" value.bind=\"value\" placeholder.bind=\"placeholder\" disabled.bind=\"disabled\" readonly.bind=\"readonly\"\n    focus.trigger=\"fireFocus()\" blur.trigger=\"fireBlur()\" maxlength.bind=\"maxlength\" ref=\"__input\" change.trigger=\"fireChange($event)\"></textarea>\n  <div class=\"ui-list ui-list-dropdown\" css.bind=\"{width:'200px', 'max-height':'300px', right:'auto', left:__listCss.left, top:__listCss.top}\" \n    show.bind=\"__showList && !readonly\" mousewheel.trigger=\"$event.cancelBubble = true\" mousedown.trigger=\"__clicked($event)\" ref=\"__list\">\n    <div repeat.for=\"opt of __autoComplete\" class=\"ui-list-item\" data-value=\"${opt}\">\n      <span class=\"ui-text ui-col-fill\" innerhtml.bind=\"opt\"></span></div>\n  </div>\n  <span class=\"ui-ta-counter\" if.bind=\"__counter\">${value.length & debounce} of ${maxlength}</span>\n  <span class=\"ui-clear\" if.bind=\"__clear && value\" click.trigger=\"clear()\">&times;</span></template>"), 
             __metadata('design:paramtypes', [Element])
         ], UITextarea);
         return UITextarea;

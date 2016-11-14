@@ -140,6 +140,10 @@
   }
 }
 
+.ui-list .ui-list-item:hover {
+  background: rgba($primary,.25);
+}
+
 .rtl,
 [dir="rtl"] {
   .ui-tag .ui-clear {

@@ -9,7 +9,7 @@ export declare class ListGeneric {
     __allowSearch: boolean;
     __options: any[];
     __listGroups: any[];
-    value: any;
+    value: string;
     options: any[];
     readonly: boolean;
     disabled: boolean;
