@@ -32,16 +32,16 @@
               </div>
             </ui-dg-empty>
             <ui-dg-column data-id="id" width="2rem" locked>ID</ui-dg-column>
-            <ui-dg-column data-id="name" sortable locked>Name</ui-dg-column>
+            <ui-dg-column data-id="name" width="10em" sortable locked resizeable>Name</ui-dg-column>
             <ui-dg-button data-id="name" width="2rem" locked icon="fi-ui-edit" click.trigger="$event.detail.record.switch=true"></ui-dg-button>
             <ui-dg-button data-id="name" width="2rem" locked icon="fi-ui-delete" theme="danger" click.trigger="$event.detail.record.switch=false"></ui-dg-button>
-            <ui-dg-column data-id="dob" width="8em" date format="DD MMM" center resizeable locked>Birthday</ui-dg-column>
-            <ui-dg-column data-id="dob" width="8em" age center resizeable locked>Age</ui-dg-column>
+            <ui-dg-column data-id="dob" width="6em" date format="DD MMM" center resizeable>Birthday</ui-dg-column>
+            <ui-dg-column data-id="dob" width="6em" age center resizeable>Age</ui-dg-column>
             <ui-dg-switch data-id="switch" width="5em" theme="primary" change.trigger="$event.detail.record.gender=$event.detail.value?'F':'M'">Switch</ui-dg-switch>
             <ui-dg-column data-id="gender" width="5em" center display.call="genderDisplay(value, record)">Gender</ui-dg-column>
-            <ui-dg-column data-id="address">Address</ui-dg-column>
-            <ui-dg-column data-id="city">City</ui-dg-column>
-            <ui-dg-column data-id="country" display.call="countryDisplay(value, record)">Country</ui-dgcolumn>
+            <ui-dg-column data-id="address" width="8em" resizeable>Address</ui-dg-column>
+            <ui-dg-column data-id="city" width="8em" resizeable>City</ui-dg-column>
+            <ui-dg-column data-id="country" width="8em" display.call="countryDisplay(value, record)" resizeable>Country</ui-dgcolumn>
           </ui-datagrid>
         </div>
         <hr/>

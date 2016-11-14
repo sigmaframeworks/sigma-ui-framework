@@ -11,31 +11,33 @@ import * as Tether from "tether";
 @autoinject()
 @customElement('ui-datagrid')
 @inlineView(`<template class="ui-datagrid"><div class="ui-hidden"><slot></slot></div>
+<div show.bind="__resizing" ref="__ghost" class="ui-dg-ghost"></div>
 <div show.bind="data.length==0" class="ui-dg-empty"><slot name="dg-empty"></slot></div>
 <div class="ui-dg-wrapper" ref="__dgWrapHead">
 <table width.bind="calculateWidth(__columns)" css.bind="{'table-layout': __tableWidth?'fixed':'auto' }">
   <colgroup>
-    <col repeat.for="col of __columns" data-index.bind="$index" width.bind="col.getWidth(__tableWidth)"/>
+    <col repeat.for="col of __columns" data-index.bind="$index" width.bind="col.width"/>
     <col/>
   </colgroup>
   <thead><tr>
     <td repeat.for="col of __columns" click.trigger="doSort(col)" class="\${col.sortable?'ui-sortable':''} \${col.locked==0?'ui-locked':''}" css.bind="{left: col.left+'px'}"><div>
       <span class="ui-dg-header" innerhtml.bind='col.getTitle()'></span>
       <span class="ui-sort \${col.dataId==sortColumn ? sortOrder:''}" if.bind="col.sortable"></span>
-      <span class="ui-resizer" if.bind="col.resize"></span>
+      <span class="ui-resizer" if.bind="col.resize" mousedown.trigger="resizeColumn($event,col, __columns[$index+1])"></span>
     </div></td>
     <td class="ui-expander"><div><span class="ui-dg-header">&nbsp;</span></div></td>
   </tr></thead>
 </table>
 </div>
-<div class="ui-dg-wrapper scrolling" scroll.trigger="scrolling($event)">
+<div class="ui-dg-wrapper scrolling" scroll.trigger="scrolling($event)" ref="__scroller">
 <table width.bind="calculateWidth(__columns)" css.bind="{'table-layout': __tableWidth?'fixed':'auto' }">
   <colgroup>
-    <col repeat.for="col of __columns" data-index.bind="$index" width.bind="col.getWidth(__tableWidth)"/>
+    <col repeat.for="col of __columns" data-index.bind="$index" width.bind="col.width"/>
     <col/>
   </colgroup>
   <tbody>
-    <tr repeat.for="record of data" mouseup.delegate="fireSelect($parent.selected=record)" class="\${$parent.__rowSelect && $parent.selected==record?'ui-selected':''}"><td repeat.for="col of __columns" class="\${col.locked==0?'ui-locked':''} \${col.align}" css.bind="{left: col.left+'px'}">
+    <tr repeat.for="record of data" mouseup.delegate="fireSelect($parent.selected=record)" class="\${$parent.__rowSelect && $parent.selected==record?'ui-selected':''}">
+    <td repeat.for="col of __columns" class="\${col.locked==0?'ui-locked':''} \${col.align}" css.bind="{left: col.left+'px'}">
       <div if.bind="col.type=='normal'" innerhtml.bind='col.getValue(record[col.dataId],record)'></div>
       <div if.bind="col.type=='button'" class="no-padding"><ui-button click.trigger="col.fireClick(record)" theme.bind="col.theme" small square icon.bind="col.icon" disabled.bind="col.isDisabled()">\${col.label}</ui-button></div>
       <div if.bind="col.type=='switch'" class="no-padding"><ui-switch change.trigger="col.fireChange($event.detail,record)" theme.bind="col.theme" checked.bind="record[col.dataId]" 
@@ -48,7 +50,7 @@ import * as Tether from "tether";
 <div class="ui-dg-wrapper" ref="__dgWrapFoot">
 <table width.bind="calculateWidth(__columns)" css.bind="{'table-layout': __tableWidth?'fixed':'auto' }">
   <colgroup>
-    <col repeat.for="col of __columns" data-index.bind="$index" width.bind="col.getWidth(__tableWidth)"/>
+    <col repeat.for="col of __columns" data-index.bind="$index" width.bind="col.width"/>
     <col/>
   </colgroup>
   <tfoot if.bind="summaryRow"><tr>
@@ -102,6 +104,44 @@ export class UIDatagrid {
     UIEvent.queueTask(() => _.orderBy(this.data, [this.sortColumn, 'ID', 'id'], [this.sortOrder, this.sortOrder, this.sortOrder]));
   }
 
+  __move;
+  __stop;
+  __diff;
+  __startX;
+  __column;
+  __colNext;
+  __ghost;
+  __scroller;
+  __resizing = false;
+  resizeColumn(evt, col, next) {
+    if (evt.button != 0) return true;
+    this.__diff = 0;
+    this.__column = col;
+    this.__colNext = next;
+    this.__resizing = true;
+    this.__startX = (evt.x || evt.clientX);
+    this.__ghost.style.left = (col.left + parseInt(col.width) - (col.locked == 0 ? 0 : this.__scroller.scrollLeft)) + 'px';
+    document.addEventListener('mouseup', this.__stop = evt => this.__resizeEnd(evt));
+    document.addEventListener('mousemove', this.__move = evt => this.__resize(evt));
+  }
+  __resize(evt) {
+    var x = (evt.x || evt.clientX) - this.__startX;
+    if (x < 0 && (parseInt(this.__column.width) + this.__diff) <= (this.__column.minWidth || 80)) return;
+    if (x > 0 && (parseInt(this.__column.width) + this.__diff) >= (500)) return;
+
+    this.__startX = (evt.x || evt.clientX);
+    this.__diff += x;
+    this.__ghost.style.left = (parseInt(this.__ghost.style.left) + x) + 'px';
+  }
+  __resizeEnd(evt) {
+    this.__resizing = false;
+    if (this.__colNext) this.__colNext.left += this.__diff;
+    this.__column.width = (parseInt(this.__column.width) + this.__diff);
+    this.calculateWidth(this.__columns);
+    document.removeEventListener('mousemove', this.__move);
+    document.removeEventListener('mouseup', this.__stop);
+  }
+
   fireSelect(record) {
     UIEvent.fireEvent('rowselect', this.element, ({ record }));
   }
@@ -149,10 +189,11 @@ export class UIDataColumn {
   locked = 1;
   resize = false;
   sortable = false;
+
   getWidth(tw) {
-    let w = convertToPx(this.width || this.minWidth || 250);
-    tw += w;
-    return w;
+    this.width = convertToPx(this.width || this.minWidth || 250);
+    tw += this.width;
+    return this.width;
   }
   getTitle() {
     return this.element.innerHTML;

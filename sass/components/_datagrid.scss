@@ -21,6 +21,14 @@
     }
   }
 
+  .ui-dg-ghost {
+    position   : absolute;
+    top        : 0;
+    bottom     : 0;
+    z-index    : 20;
+    border-left: 1px dashed #ccc;
+  }
+
   .ui-dg-empty {
     padding   : .5em 1em;
     position  : absolute;
