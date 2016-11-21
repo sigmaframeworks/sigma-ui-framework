@@ -109,6 +109,24 @@ hr {
   @include transform(scaleY(.5));
 }
 
+table {
+  td,
+  th {
+    padding: .25em .5em;
+  }
+
+  thead td,
+  thead th {
+    font-weight     : 600;
+    background-color: #f0f0f0;
+    border-bottom   : 1px solid #e5e5e5;
+  }
+
+  tr:nth-of-type(even) td {
+    background-color: #fafafa;
+  }
+}
+
 .ui-scroll {
   @include scroll();
 }
@@ -273,32 +291,32 @@ hr {
 }
 
 .ui-bg-primary {
-  background-color: darken($primary,2%);
+  background-color: lighten($primary,5%);
   color           : $primary-text;
 }
 
 .ui-bg-secondary {
-  background-color: darken($secondary,2%);
+  background-color: lighten($secondary,5%);
   color           : $secondary-text;
 }
 
 .ui-bg-info {
-  background-color: darken($info,2%);
+  background-color: lighten($info,5%);
   color           : $info-text;
 }
 
 .ui-bg-danger {
-  background-color: darken($danger,2%);
+  background-color: lighten($danger,5%);
   color           : $danger-text;
 }
 
 .ui-bg-success {
-  background-color: darken($success,2%);
+  background-color: lighten($success,5%);
   color           : $success-text;
 }
 
 .ui-bg-warning {
-  background-color: darken($warning,2%);
+  background-color: lighten($warning,5%);
   color           : $warning-text;
 }
 

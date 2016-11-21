@@ -2,6 +2,9 @@ export declare class UIForm {
     element: Element;
     constructor(element: Element);
     class: string;
+    busy: boolean;
+    attached(): void;
+    busyChanged(newValue: any): void;
     fireSubmit(): void;
 }
 export declare class UIFieldset {
@@ -15,6 +18,8 @@ export declare class UIFieldset {
 export declare class UIInputGroup {
     element: Element;
     constructor(element: Element);
+    bind(): void;
+    width: any;
 }
 export declare class UIInputLabel {
     element: Element;
@@ -76,7 +81,12 @@ export declare class UIInput {
     placeholder: string;
     disabled: boolean;
     readonly: boolean;
+    dir: string;
+    width: any;
     clear(): void;
+    widthChanged(newValue: any): void;
+    busy: any;
+    disable(disabled?: any): void;
     __ignoreChange: boolean;
     valueChanged(newValue: any): void;
     numberChanged(newValue: any): void;
@@ -102,12 +112,15 @@ export declare class UITextarea {
      */
     value: string;
     rows: number;
+    dir: string;
     maxlength: number;
     placeholder: string;
     autoComplete: string;
     disabled: boolean;
     readonly: boolean;
     clear(): void;
+    busy: any;
+    disable(disabled?: any): void;
     fireChange(evt: any): void;
     __focus: any;
     fireBlur(): void;
@@ -126,6 +139,7 @@ export declare class UITextarea {
     __showList: any;
     __autoComplete: any;
     attached(): void;
+    detached(): void;
     autoCompleteChanged(newValue: any): void;
     showList(evt: any): boolean;
     keyDown(evt: any): boolean;
@@ -166,6 +180,8 @@ export declare class UIPhone {
     disabled: boolean;
     readonly: boolean;
     clear(): void;
+    busy: any;
+    disable(disabled?: any): void;
     __ignoreChange: boolean;
     valueChanged(newValue: any): void;
     countryChanged(newValue: any): void;

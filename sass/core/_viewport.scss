@@ -48,6 +48,14 @@
       font-size: 1.25em;
       color    : $app-header-text;
     }
+
+    .ui-divider {
+      border-right: 1px solid $divider-hilight;
+      border-left : 1px solid $divider-shadow;
+      margin      : .5em .2em;
+      @include transform(scaleX(.5));
+      @include align-self(stretch);
+    }
   }
 
   .ui-app-footer {
@@ -71,9 +79,10 @@
 
   .ui-loader {
     @include position(absolute, 0);
-    background: rgba($base-bg, .25);
+    background: rgba($base-bg, .15);
     cursor    : wait;
     direction : ltr;
+    z-index   : $z-index-splash;
 
     .ui-loader-div {
       @include box-shadow(0 0 20px 0 $base-shadow-dark);

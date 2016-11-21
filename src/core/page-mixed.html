@@ -27,8 +27,8 @@
             <ui-toolbar>
               <ui-input-group>
                 <ui-input-label>Search</ui-input-label>
-                <ui-input placeholder="Search..."></ui-input>
-                <ui-button success>Go!</ui-button>
+                <ui-input placeholder="Search..." width.bind="w || '2em'" focus.trigger="w='15em'" blur.trigger="w='2em'"></ui-input>
+                <ui-button success show.bind="w=='15em'">Go!</ui-button>
               </ui-input-group>
               <ui-divider></ui-divider>
               <ui-button icon="fi-ui-bell" dropdown.bind="__menu">Open Me!</ui-button>

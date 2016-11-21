@@ -118,5 +118,6 @@ export class UIDivider {
 @inlineView(`<template class="ui-toolbar"><slot></slot></template>`)
 export class UIToolbar {
   constructor(public element: Element) {
+    if (element.hasAttribute('start')) element.classList.add('ui-start');
   }
 }

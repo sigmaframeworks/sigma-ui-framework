@@ -5,6 +5,7 @@
 // @license     : MIT
 import {autoinject, bindable, containerless, customElement, inlineView, bindingMode, DOM} from "aurelia-framework";
 import {UIEvent} from "../../utils/ui-event";
+import * as _ from "lodash";
 import * as Tether from "tether";
 
 @autoinject()
@@ -14,6 +15,25 @@ export class UIForm {
   constructor(public element: Element) { }
 
   @bindable() class = '';
+  @bindable() busy: boolean;
+
+  attached() {
+    UIEvent.queueTask(() => {
+      let el: any = this.element.querySelector('.ui-input');
+      if (el !== null) el.focus();
+      if (this.busy) this.busyChanged(true);
+    });
+  }
+
+  busyChanged(newValue: any) {
+    let els = this.element.querySelectorAll('ui-button,ui-combo,ui-date,ui-input,ui-textarea,ui-phone,ui-language,ui-markdown,ui-checkbox,ui-radio,ui-switch,ui-tag,ui-list');
+    _.forEach(els, el => {
+      try {
+        el.au.controller.viewModel.disable(isTrue(newValue));
+      } catch (e) {
+      }
+    });
+  }
 
   fireSubmit() {
     UIEvent.fireEvent('submit', this.element);
@@ -43,6 +63,11 @@ export class UIInputGroup {
   constructor(public element: Element) {
     if (this.element.hasAttribute('display')) this.element.classList.add('ui-display');
   }
+
+  bind() {
+    if (this.width) this.element['style'].width = this.width;
+  }
+  @bindable() width;
 }
 
 @autoinject()
@@ -100,15 +125,16 @@ export class UIInputButton {
 @inlineView(`<template class="ui-input-info-bar"><slot></slot></template>`)
 export class UIInputInfo {
   constructor(public element: Element) {
-    if (this.element.hasAttribute('primary')) this.element.classList.add('ui-bg-primary');
-    else if (this.element.hasAttribute('secondary')) this.element.classList.add('ui-bg-secondary');
-    else if (this.element.hasAttribute('dark')) this.element.classList.add('ui-bg-dark');
-    else if (this.element.hasAttribute('light')) this.element.classList.add('ui-bg-light');
-    else if (this.element.hasAttribute('info')) this.element.classList.add('ui-bg-info');
-    else if (this.element.hasAttribute('danger')) this.element.classList.add('ui-bg-danger');
-    else if (this.element.hasAttribute('success')) this.element.classList.add('ui-bg-success');
-    else if (this.element.hasAttribute('warning')) this.element.classList.add('ui-bg-warning');
+    if (this.element.hasAttribute('primary')) this.element.classList.add('ui-text-primary');
+    else if (this.element.hasAttribute('secondary')) this.element.classList.add('ui-text-secondary');
+    else if (this.element.hasAttribute('dark')) this.element.classList.add('ui-text-dark');
+    else if (this.element.hasAttribute('light')) this.element.classList.add('ui-text-light');
+    else if (this.element.hasAttribute('info')) this.element.classList.add('ui-text-info');
+    else if (this.element.hasAttribute('danger')) this.element.classList.add('ui-text-danger');
+    else if (this.element.hasAttribute('success')) this.element.classList.add('ui-text-success');
+    else if (this.element.hasAttribute('warning')) this.element.classList.add('ui-text-warning');
     else this.element.classList.add('ui-text-muted');
+    if (this.element.hasAttribute('center')) this.element.classList.add('ui-text-center');
   }
 }
 
@@ -123,13 +149,13 @@ export class UIInputDisplay {
 
 @autoinject()
 @customElement('ui-input')
-@inlineView(`<template class="ui-input-wrapper \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
-  <span class="ui-invalid-errors"><ul><li repeat.for="e of errors">\${e.message}</li></ul></span>
-  <input class="ui-input" size="1" keypress.trigger="keyDown($event)" input.trigger="format($event)" change.trigger="fireChange($event)"
-    value.bind="__value" placeholder.bind="placeholder" focus.trigger="fireFocus()" blur.trigger="fireBlur()" 
-    type.bind="__type" maxlength.bind="maxlength" ref="__input" disabled.bind="disabled" readonly.bind="readonly"/>
+@inlineView(`<template class="ui-input-wrapper \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly || busy?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
+  <span class="ui-invalid-errors"><ul><li repeat.for="e of __errors">\${e.message}</li></ul></span>
+  <div class="ui-input-div"><input class="ui-input" size="1" keypress.trigger="keyDown($event)" input.trigger="format($event)" change.trigger="fireChange($event)"
+    value.bind="__value" placeholder.bind="placeholder" focus.trigger="fireFocus()" blur.trigger="fireBlur()" dir.bind="dir" 
+    type.bind="__type" maxlength.bind="maxlength" ref="__input" disabled.bind="disabled || busy" readonly.bind="readonly"/>
   <span class="ui-in-counter" if.bind="__counter">\${(maxlength-__value.length)}</span>
-  <span class="ui-clear" if.bind="__clear && __value" click.trigger="clear()">&times;</span></template>`)
+  <span class="ui-clear" if.bind="__clear && __value" click.trigger="clear()">&times;</span></div></template>`)
 export class UIInput {
   constructor(public element: Element) {
     if (element.hasAttribute('email')) this.__type = 'email';
@@ -154,6 +180,11 @@ export class UIInput {
   bind() {
     this.disabled = isTrue(this.disabled);
     this.readonly = isTrue(this.readonly);
+    if (this.width) this.element['style'].width = this.width;
+
+    if (this.value) this.valueChanged(this.value);
+    if (this.number) this.numberChanged(this.number);
+    if (this.decimal) this.decimalChanged(this.decimal);
   }
 
   __type;
@@ -189,10 +220,21 @@ export class UIInput {
   @bindable() placeholder = '';
   @bindable() disabled = false;
   @bindable() readonly = false;
+  @bindable() dir = 'ltr';
+  @bindable() width;
 
   clear() {
     this.__value = this.value = ''; this.__input.focus();
     UIEvent.fireEvent('change', this.element, this.value);
+  }
+
+  widthChanged(newValue) {
+    this.element['style'].width = newValue;
+  }
+
+  busy;
+  disable(disabled?) {
+    this.busy = disabled;
   }
 
   __ignoreChange = false;
@@ -255,17 +297,17 @@ export class UIInput {
 
 @autoinject()
 @customElement('ui-textarea')
-@inlineView(`<template class="ui-input-wrapper \${__focus?'ui-focus':''} \${__counter?'ui-ta-counter':''} \${disabled?'ui-disabled':''} \${readonly?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
-  <span class="ui-invalid-errors"><ul><li repeat.for="e of errors">\${e.message}</li></ul></span>
-  <textarea class="ui-input" rows.bind="rows" value.bind="value" placeholder.bind="placeholder" disabled.bind="disabled" readonly.bind="readonly"
-    focus.trigger="fireFocus()" blur.trigger="fireBlur()" maxlength.bind="maxlength" ref="__input" change.trigger="fireChange($event)"></textarea>
-  <div class="ui-list ui-list-dropdown" css.bind="{width:'200px', 'max-height':'300px', right:'auto', left:__listCss.left, top:__listCss.top}" 
+@inlineView(`<template class="ui-input-wrapper ui-textarea \${__focus?'ui-focus':''} \${__counter?'ui-ta-counter':''} \${disabled?'ui-disabled':''} \${readonly || busy?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
+  <span class="ui-invalid-errors"><ul><li repeat.for="e of __errors">\${e.message}</li></ul></span>
+  <div class="ui-input-div"><textarea class="ui-input" rows.bind="rows" value.bind="value" placeholder.bind="placeholder" disabled.bind="disabled || busy" readonly.bind="readonly"
+    focus.trigger="fireFocus()" blur.trigger="fireBlur()" maxlength.bind="maxlength" ref="__input" change.trigger="fireChange($event)" dir.bind="dir"></textarea>
+  <div class="ui-auto-list ui-list-dropdown" css.bind="{width:'200px', 'max-height':'300px', right:'auto', left:__listCss.left, top:__listCss.top}" 
     show.bind="__showList && !readonly" mousewheel.trigger="$event.cancelBubble = true" mousedown.trigger="__clicked($event)" ref="__list">
     <div repeat.for="opt of __autoComplete" class="ui-list-item" data-value="\${opt}">
       <span class="ui-text ui-col-fill" innerhtml.bind="opt"></span></div>
   </div>
   <span class="ui-ta-counter" if.bind="__counter">\${value.length & debounce} of \${maxlength}</span>
-  <span class="ui-clear" if.bind="__clear && value" click.trigger="clear()">&times;</span></template>`)
+  <span class="ui-clear" if.bind="__clear && value" click.trigger="clear()">&times;</span></div></template>`)
 export class UITextarea {
   constructor(public element: Element) {
     this.__counter = element.hasAttribute('charcount');
@@ -292,6 +334,7 @@ export class UITextarea {
   value = '';
 
   @bindable() rows = 5;
+  @bindable() dir = 'ltr';
   @bindable() maxlength = 10000;
   @bindable() placeholder = '';
   @bindable() autoComplete = '';
@@ -303,6 +346,11 @@ export class UITextarea {
     UIEvent.fireEvent('change', this.element, this.value);
   }
 
+  busy;
+  disable(disabled?) {
+    this.busy = disabled;
+  }
+
   fireChange(evt) {
     evt.stopPropagation();
     UIEvent.fireEvent('change', this.element, this.value);
@@ -310,7 +358,7 @@ export class UITextarea {
 
   __focus;
   fireBlur() {
-    this.__focus = false;
+    this.__focus = this.__showList = false;
     UIEvent.fireEvent('blur', this.element);
   }
   fireFocus() {
@@ -353,6 +401,9 @@ export class UITextarea {
         }
       });
     }
+  }
+  detached() {
+    if (this.__tether) this.__tether.destroy();
   }
 
   autoCompleteChanged(newValue) {
@@ -435,7 +486,7 @@ export class UITextarea {
     var pre = this.__input.value.substring(0, this.__input.selectionEnd);
     var post = this.__input.value.substring(this.__input.selectionEnd);
     pre = pre.replace(this.__acRegExp, ' ' + selected + ' ');
-    this.__input.value = (pre + post);//.replace(/\s{2,}/g, ' ');
+    this.value = (pre + post);//.replace(/\s{2,}/g, ' ');
     this.__input.selectionStart = this.__input.selectionEnd = pre.length;
   }
 
@@ -576,13 +627,13 @@ export class UITextarea {
 
 @autoinject()
 @customElement('ui-phone')
-@inlineView(`<template class="ui-input-wrapper \${class} \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly?'ui-readonly':''}">
+@inlineView(`<template class="ui-input-wrapper \${class} \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly || busy?'ui-readonly':''}">
   <div class="ui-input-addon" click.trigger="__input.focus()"><span class="ui-flag \${__ctry}" if.bind="!country"></span>\${__prefix}</div><span class="ui-invalid-icon fi-ui"></span>
-  <span class="ui-invalid-errors"><ul><li repeat.for="e of errors">\${e.message}</li></ul></span>
-  <input class="ui-input" size="1" keypress.trigger="keyDown($event)" input.trigger="format($event)" change.trigger="fireChange($event)"
+  <span class="ui-invalid-errors"><ul><li repeat.for="e of __errors">\${e.message}</li></ul></span>
+  <div class="ui-input-div"><input class="ui-input" size="1" keypress.trigger="keyDown($event)" input.trigger="format($event)" change.trigger="fireChange($event)"
     value.bind="__value" placeholder.bind="__placeholder" focus.trigger="fireFocus()" blur.trigger="fireBlur()" 
-    type="tel" ref="__input" disabled.bind="disabled" readonly.bind="readonly"/>
-  <span class="ui-clear" if.bind="__clear && __value" click.trigger="clear()">&times;</span></template>`)
+    type="tel" ref="__input" disabled.bind="disabled || busy" readonly.bind="readonly"/>
+  <span class="ui-clear" if.bind="__clear && __value" click.trigger="clear()">&times;</span></div></template>`)
 export class UIPhone {
   constructor(public element: Element) {
     this.__clear = element.hasAttribute('clear');
@@ -626,6 +677,11 @@ export class UIPhone {
   clear() {
     this.__value = this.value = ''; this.__input.focus();
     UIEvent.fireEvent('change', this.element, this.value);
+  }
+
+  busy;
+  disable(disabled?) {
+    this.busy = disabled;
   }
 
   __ignoreChange = false;

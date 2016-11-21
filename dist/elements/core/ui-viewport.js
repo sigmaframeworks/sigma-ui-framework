@@ -7,11 +7,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "aurelia-framework", "aurelia-router", "../../utils/ui-utils", "../../utils/ui-event"], function (require, exports, aurelia_framework_1, aurelia_router_1, ui_utils_1, ui_event_1) {
+define(["require", "exports", "aurelia-framework", "aurelia-router", "../../utils/ui-utils", "../../utils/ui-event", "../../utils/ui-application"], function (require, exports, aurelia_framework_1, aurelia_router_1, ui_utils_1, ui_event_1, ui_application_1) {
     "use strict";
     var UIViewport = (function () {
-        function UIViewport(element, container) {
+        function UIViewport(element, appState, container) {
             this.element = element;
+            this.appState = appState;
             document.documentElement.classList.add(browserAgent());
             var __resizeTimer;
             document.ondragstart = function (e) { return getParentByClass(e.target, '.ui-draggable') != null; };
@@ -34,8 +35,8 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "../../util
         UIViewport = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-viewport'),
-            aurelia_framework_1.inlineView("\n<template class=\"ui-viewport\">\n  <slot name=\"app-header\"></slot>\n  <slot></slot>\n  <slot name=\"app-taskbar\"></slot>\n  <slot name=\"app-footer\"></slot>\n\n  <div class=\"ui-dialog-container\" ref=\"__dialogContainer\"></div>\n  <div class=\"ui-overlay-container\" ref=\"__overlayContainer\"></div>\n\n  <div class=\"ui-loader\" show.bind=\"router.isNavigating\">\n    <div class=\"ui-loader-div\">\n      <span class=\"fi-ui-settings ui-spin\"></span>\n      <span class=\"fi-ui-settings ui-spin-opp\"></span>\n    </div>\n  </div>\n</template>"), 
-            __metadata('design:paramtypes', [Element, aurelia_framework_1.Container])
+            aurelia_framework_1.inlineView("\n<template class=\"ui-viewport\">\n  <slot name=\"app-header\"></slot>\n  <slot></slot>\n  <slot name=\"app-taskbar\"></slot>\n  <slot name=\"app-footer\"></slot>\n\n  <div class=\"ui-dialog-container\" ref=\"__dialogContainer\"></div>\n  <div class=\"ui-overlay-container\" ref=\"__overlayContainer\"></div>\n\n  <div class=\"ui-loader\" show.bind=\"router.isNavigating || appState.IsHttpInUse\">\n    <div class=\"ui-loader-div\">\n      <span class=\"fi-ui-settings ui-spin\"></span>\n      <span class=\"fi-ui-settings ui-spin-opp\"></span>\n    </div>\n  </div>\n</template>"), 
+            __metadata('design:paramtypes', [Element, ui_application_1.UIApplication, aurelia_framework_1.Container])
         ], UIViewport);
         return UIViewport;
     }());

@@ -4,15 +4,16 @@
 // @copyright   : 2016
 // @license     : MIT
 import {autoinject, useView} from "aurelia-framework";
-import {Router} from "aurelia-router";
+import {Router, RouterConfiguration} from "aurelia-router";
 import {UIConstants} from "./resources/utils/ui-constants";
 
 @autoinject()
 export class App {
   router: Router;
-  configureRouter(config, router: Router) {
+  configureRouter(config: RouterConfiguration, router: Router) {
     this.router = router;
     config.title = UIConstants.App.Title;
+    config.mapUnknownRoutes('./home/404');
     config.map([
       {
         route: ['', 'home'],
@@ -64,7 +65,7 @@ export class App {
       }, {
         route: 'grid',
         moduleId: './core/grid',
-        title: 'Grid System',
+        title: 'Responsive Grid',
         nav: true,
         auth: false,
         settings: { section: 'Core Elements' },
@@ -99,7 +100,7 @@ export class App {
         title: 'Markdown Editor',
         nav: true,
         auth: false,
-        settings: { section: 'Input Elements', disabled: true },
+        settings: { section: 'Input Elements' },
         name: 'markdown'
       }, {
         route: 'button',

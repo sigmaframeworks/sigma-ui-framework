@@ -5,10 +5,7 @@
 // @license     : MIT
 import {autoinject, bindable, containerless, customAttribute, inlineView, noView} from "aurelia-framework";
 
-// @autoinject()
-// @customAttribute('badge')
-@noView()
-export class UIBadgeBase {
+class UIBadgeBase {
   constructor(element: Element, bg: string) {
     this.__el = document.createElement('div');
     this.__el.classList.add('ui-badge');
@@ -41,6 +38,14 @@ export class UIBadge extends UIBadgeBase {
 export class UIBadgePrimary extends UIBadgeBase {
   constructor(public element: Element) {
     super(element, 'ui-bg-primary')
+  }
+}
+
+@autoinject()
+@customAttribute('badge-secondary')
+export class UIBadgeSecondary extends UIBadgeBase {
+  constructor(public element: Element) {
+    super(element, 'ui-bg-secondary')
   }
 }
 

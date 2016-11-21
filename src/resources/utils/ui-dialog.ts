@@ -45,7 +45,7 @@ export class UIDialogService {
         UIUtils.dialogContainer.addEventListener('mousemove', (e) => this.move(e));
         UIUtils.dialogContainer.addEventListener('mouseup', () => this.moveEnd());
       }
-      if (UIUtils.taskbar) UIUtils.taskbar.addEventListener('click', (e) => this.__taskClick(e.target['window']));
+      if (UIUtils.taskbar) UIUtils.taskbar.addEventListener('click', (e) => this.__taskClick((getParentByTag(<HTMLElement>e.target, 'button') || {})['window']));
     }
     let instruction: any = {
       viewModel: vm,
@@ -226,7 +226,7 @@ export class UIDialogService {
 
   private moveStart($event) {
     this.__dialog = getParentByClass($event.target, 'ui-dialog');
-    if (this.__dialog === null) return;
+    if (this.__dialog === null || !this.__dialog.viewSlot) return;
     let dialog: any = this.__dialog.viewSlot.viewModel;
 
     if (getParentByClass($event.target, 'ui-header-button') !== null) {

@@ -7,6 +7,7 @@ import {autoinject, bindable, containerless, customElement, inlineView, Containe
 import {Router} from "aurelia-router";
 import {UIUtils} from "../../utils/ui-utils";
 import {UIEvent} from "../../utils/ui-event";
+import {UIApplication} from "../../utils/ui-application";
 
 @autoinject()
 @customElement('ui-viewport')
@@ -20,7 +21,7 @@ import {UIEvent} from "../../utils/ui-event";
   <div class="ui-dialog-container" ref="__dialogContainer"></div>
   <div class="ui-overlay-container" ref="__overlayContainer"></div>
 
-  <div class="ui-loader" show.bind="router.isNavigating">
+  <div class="ui-loader" show.bind="router.isNavigating || appState.IsHttpInUse">
     <div class="ui-loader-div">
       <span class="fi-ui-settings ui-spin"></span>
       <span class="fi-ui-settings ui-spin-opp"></span>
@@ -28,7 +29,7 @@ import {UIEvent} from "../../utils/ui-event";
   </div>
 </template>`)
 export class UIViewport {
-  constructor(public element: Element, container: Container) {
+  constructor(public element: Element, public appState: UIApplication, container: Container) {
     document.documentElement.classList.add(browserAgent());
 
     var __resizeTimer;

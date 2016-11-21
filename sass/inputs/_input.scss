@@ -88,12 +88,12 @@
 
 .ui-group-wrapper {
   @include flex-row($align:stretch);
-  @include flex(1 1 10rem);
+  @include flex(1 1 1rem);
   min-height   : 30px;
-  min-width    : 10rem;
+  min-width    : 2rem;
   border-radius: $base-border-radius;
   border       : 1px solid $input-border;
-  overflow     : hidden;
+  // overflow     : hidden;
 
   .ui-button,
   .ui-input-addon {
@@ -155,140 +155,210 @@
     border-top: 1px solid rgba($input-border, .75);
   }
 
-  .ui-input-wrapper {
+  .ui-md-editor .ui-input-wrapper {
+    flex: none;
+
+    textarea {
+      resize: vertical;
+    }
+  }
+}
+
+.ui-md-editor {
+  .ui-toolbar {
+    background: $input-bg;
+    border    : none;
+    margin    : 1px;
+  }
+
+  .ui-toolbar .ui-button-group {
+    flex-wrap: nowrap;
+  }
+
+  .ui-toolbar .ui-button {
+    font-size: .8rem;
+    padding  : .2em .5em;
+  }
+
+  .ui-input-div.ui-watermark {
+    &:before {
+      z-index       : 5;
+      color         : rgba($muted, .1);
+      font-size     : 3rem;
+      font-weight   : 800;
+      letter-spacing: 2rem;
+      pointer-events: none;
+      @include transform(translateX(-50%) translateY(-50%) rotate(-10deg));
+      @include position(absolute, 50% auto auto 50%);
+    }
+
+    &.p:before {
+      content: 'PREVIEW';
+    }
+
+    &.h:before {
+      content: 'HELP';
+    }
+  }
+
+  .ui-input-wrapper textarea {
+    resize: none;
+  }
+
+  .ui-md-preview {
+    overflow  : auto;
+    background: $input-bg;
+    @include position(absolute, 2em 1px 1px);
+  }
+}
+
+.ui-input-wrapper {
+  @include flex(1 1 1em);
+  @include transition(width .3s);
+  @include flex-row($align:stretch, $wrap:false);
+  line-height: 1.5rem;
+  background : $input-bg;
+  border     : 0 solid transparent;
+
+  &.ui-focus {
+    @include box-shadow(0 -4px 0 0 $input-focus inset, 0 0 0 1px $input-focus inset);
+  }
+
+  .ui-input-div {
     @include flex(1 1 1em);
     @include flex-row($align:stretch, $wrap:false);
-    position   : relative;
-    line-height: 1.5rem;
-    background : $input-bg;
-    border     : 0 solid transparent;
+    position: relative;
+    overflow: hidden;
 
-    &.ui-focus {
-      @include box-shadow(0 -4px 0 0 $input-focus inset, 0 0 0 1px $input-focus inset);
+    &.ui-inwrap-column {
+      @include flex-direction(column);
+    }
+  }
+
+  &.ui-readonly .ui-input-div:after {
+    content      : ' ';
+    border-radius: inherit;
+    background   : rgba($input-readonly-bg, .25);
+    @include position(absolute, 0);
+  }
+
+  &.ui-disabled .ui-input-div:after {
+    content      : ' ';
+    border-radius: inherit;
+    background   : rgba($input-disabled-bg, .75);
+    @include position(absolute, 0);
+  }
+
+  .ui-input {
+    @include flex(1 1 0em);
+    margin     : 0;
+    font-size  : .9rem;
+    outline    : none;
+    border     : none;
+    color      : $input-text;
+    background : none;
+    padding    : .35em .5em;
+    font-family: $base-font-family-input;
+    // @include box-shadow(0 0 2px 0 $base-shadow inset);
+  }
+
+  .ui-invalid-icon {
+    display    : none;
+    padding    : 0 .25em;
+    color      : $white;
+    background : $input-invalid;
+    height     : auto;
+    width      : auto;
+    line-height: 1.5em;
+    font-size  : 1rem;
+
+    &:before {
+      font-family: Framework;
+      content    : $fi-ui-exclamation;
     }
 
-    &.ui-readonly:after {
-      content      : ' ';
-      border-radius: inherit;
-      background   : rgba($input-readonly-bg, .25);
-      @include position(absolute, 0);
+    & ~ .ui-invalid-errors {
+      display: none;
     }
 
-    &.ui-disabled:after {
-      content      : ' ';
-      border-radius: inherit;
-      background   : rgba($input-disabled-bg, .75);
-      @include position(absolute, 0);
-    }
-
-    .ui-input {
-      @include flex(1 1 0em);
-      margin     : 0;
-      font-size  : .9rem;
-      outline    : none;
-      border     : none;
-      color      : $input-text;
-      background : none;
-      padding    : .35em .5em;
-      font-family: $base-font-family-input;
-      // @include box-shadow(0 0 2px 0 $base-shadow inset);
-    }
-
-    .ui-invalid-icon {
-      display    : none;
-      padding    : 0 .25em;
-      color      : $white;
-      background : $input-invalid;
-      height     : auto;
-      width      : auto;
-      line-height: 1.5em;
-      font-size  : 1rem;
+    &:hover ~ .ui-invalid-errors {
+      position      : absolute;
+      font-size     : .8em;
+      z-index       : 500;
+      line-height   : 1.2;
+      margin        : 2px 5px;
+      pointer-events: none;
+      padding       : $base-padding;
+      color         : $input-invalid;
+      background    : lighten($input-invalid, 45%);
+      border        : 1px solid $input-invalid;
 
       &:before {
-        font-family: Framework;
-        content    : $fi-ui-exclamation;
+        content           : ' ';
+        border            : 6px solid transparent;
+        border-right-color: $input-invalid;
+        width             : 6px;
+        height            : 6px;
+        display           : block;
+        position          : absolute;
+        left              : -12px;
       }
+    }
+  }
 
-      & ~ .ui-invalid-errors {
-        display: none;
-      }
+  .ui-clear {
+    cursor     : pointer;
+    padding    : .1em .25em;
+    font-size  : 1rem;
+    line-height: .5;
+    color      : rgba($input-text, .5);
+    @include align-self(center);
+
+    &:hover {
+      color: rgba($input-text, .75);
+    }
+  }
+
+  &.ui-textarea .ui-clear {
+    margin: .3em 0;
+    @include align-self(flex-start);
+  }
+
+  &.ui-ta-counter textarea {
+    margin-bottom: 1rem;
+  }
+
+  &.ui-ta-counter .ui-ta-counter {
+    position   : absolute;
+    left       : 0;
+    bottom     : 0;
+    color      : $muted;
+    font-size  : .7rem;
+    line-height: 1;
+    padding    : .2em .4em .4em;
+  }
+
+  .ui-in-counter {
+    color    : $muted;
+    font-size: .7rem;
+    padding  : .2rem .25rem 0;
+  }
+
+  &.ui-invalid {
+    .ui-invalid-icon {
+      display: inline-block;
 
       &:hover ~ .ui-invalid-errors {
-        position      : fixed;
-        font-size     : .8em;
-        z-index       : 500;
-        line-height   : 1.2;
-        margin        : 2px 5px;
-        pointer-events: none;
-        padding       : $base-padding;
-        color         : $input-invalid;
-        background    : lighten($input-invalid, 45%);
-        border        : 1px solid $input-invalid;
-
-        &:before {
-          content           : ' ';
-          border            : 6px solid transparent;
-          border-right-color: $input-invalid;
-          width             : 6px;
-          height            : 6px;
-          display           : block;
-          position          : absolute;
-          left              : -12px;
-        }
+        display: block;
       }
     }
+    @include box-shadow(0 0 0 1px $input-invalid inset);
 
-    .ui-clear {
-      cursor     : pointer;
-      padding    : .1em .25em;
-      font-size  : 1rem;
-      line-height: .5;
-      color      : rgba($input-text, .5);
-      @include align-self(center);
-
-      &:hover {
-        color: rgba($input-text, .75);
-      }
+    &.ui-focus {
+      @include box-shadow(0 -3px 0 0 $input-invalid inset, 0 0 0 1px $input-invalid inset);
     }
 
-    &.ui-ta-counter textarea {
-      margin-bottom: 1rem;
-    }
-
-    &.ui-ta-counter .ui-ta-counter {
-      position   : absolute;
-      left       : 0;
-      bottom     : 0;
-      color      : $muted;
-      font-size  : .7rem;
-      line-height: 1;
-      padding    : .2em .4em .4em;
-    }
-
-    .ui-in-counter {
-      color    : $muted;
-      font-size: .7rem;
-      padding  : .2rem .25rem 0;
-    }
-
-    &.ui-invalid {
-      .ui-invalid-icon {
-        display: inline-block;
-
-        &:hover ~ .ui-invalid-errors {
-          display: block;
-        }
-      }
-      @include box-shadow(0 0 0 1px $input-invalid inset);
-
-      &.ui-focus {
-        @include box-shadow(0 -3px 0 0 $input-invalid inset, 0 0 0 1px $input-invalid inset);
-      }
-
-      &.ui-ta-counter .ui-ta-counter {
-        left: 1.5rem;
-      }
-    }
+    &.ui-ta-counter .ui-ta-counter {}
   }
 }
 

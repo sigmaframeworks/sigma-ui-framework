@@ -40,6 +40,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-fetch-client", "aure
                                 var json = {};
                                 var error = 'Network Error!!';
                                 try {
+                                    console.log(resp);
                                     json = JSON.parse(resp);
                                     if (json.message)
                                         error = json.message;

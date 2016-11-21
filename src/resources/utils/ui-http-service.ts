@@ -48,6 +48,7 @@ export class UIHttpService {
                     let json: any = {};
                     let error = 'Network Error!!';
                     try {
+                      console.log(resp);
                       json = JSON.parse(resp);
                       if (json.message) error = json.message;
                       else if (json.error) error = json.error;

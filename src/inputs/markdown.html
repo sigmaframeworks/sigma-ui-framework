@@ -1,0 +1,52 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <style>
+    .md-container {
+      position: relative;
+      height: 320px;
+      display: flex;
+      border: 1px solid #e5e5e5;
+      flex-direction: column;
+      align-items: stretch;
+      justify-items: stretch;
+    }
+
+  </style>
+  <ui-page page-title="Markdown">
+    <ui-content padded scroll>
+      <div class="ui-container">
+        <h1>Markdown Editor</h1>
+        <hr/>
+        <ui-panel>
+          <ui-header>Editor</ui-header>
+          <ui-panel-body height="15em" flex>
+            <ui-markdown charcount value.bind="md"></ui-markdown>
+          </ui-panel-body>
+        </ui-panel>
+        <br/><br/>
+        <ui-panel>
+          <ui-panel-body>
+            <ui-form>
+              <ui-input-group width="24em">
+                <ui-input-label>Language</ui-input-label>
+                <ui-language view-model.ref="langList" languages.bind="langModels | keys & validate" add.trigger="addLang($event)" remove.trigger="removeLang($event)" select.trigger="changeLang($event)"></ui-language>
+              </ui-input-group>
+
+              <ui-input-group>
+                <ui-input-label>Markdown</ui-input-label>
+                <ui-markdown charcount rows="5" dir.bind="langDir" disabled.bind="!langModel" value.bind="langModel.summary & validate"></ui-markdown>
+              </ui-input-group>
+            </ui-form>
+          </ui-panel-body>
+          <ui-toolbar>
+            <ui-button click.trigger="submit()">Validate</ui-button>
+          </ui-toolbar>
+        </ui-panel>
+      </div>
+    </ui-content>
+  </ui-page>
+</template>

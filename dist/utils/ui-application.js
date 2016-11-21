@@ -47,11 +47,14 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "aurelia-lo
             enumerable: true,
             configurable: true
         });
-        UIApplication.prototype.login = function (authUser, authToken) {
+        UIApplication.prototype.login = function (authUser, authPass, authToken, route) {
             this.AuthUser = authUser;
             this.AuthToken = authToken;
             this.IsAuthenticated = true;
-            this.navigateTo('');
+            this.persist('AppUsername', authUser);
+            this.persist('AppPassword', authPass);
+            this.navigateTo(route || 'home');
+            ui_event_1.UIEvent.broadcast('login');
         };
         UIApplication.prototype.logout = function () {
             this.AuthUser = null;
@@ -59,6 +62,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "aurelia-lo
             this.persist('AppPassword', null);
             this.IsAuthenticated = false;
             this.navigateTo('login');
+            ui_event_1.UIEvent.broadcast('logout');
         };
         UIApplication.prototype.shared = function (key, value) {
             if (value === void 0) { value = '§'; }

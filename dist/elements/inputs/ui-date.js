@@ -293,11 +293,15 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "mome
         };
         UIDate.prototype.detached = function () {
             this.__tether.destroy();
+            aurelia_framework_1.DOM.removeNode(this.dropdown.element);
         };
         UIDate.prototype.clear = function () {
             this.__value = '';
             this.value = null;
             ui_event_1.UIEvent.fireEvent('change', this.element, this.value);
+        };
+        UIDate.prototype.disable = function (disabled) {
+            this.busy = disabled;
         };
         UIDate.prototype.valueChanged = function (newValue) {
             if (newValue && moment(newValue).isValid())
@@ -376,7 +380,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "mome
         UIDate = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-date'),
-            aurelia_framework_1.inlineView("<template class=\"ui-input-wrapper ui-date-input ${__focus?'ui-focus':''} ${disabled?'ui-disabled':''} ${readonly?'ui-readonly':''}\"><span class=\"ui-invalid-icon fi-ui\"></span>\n  <span class=\"ui-invalid-errors\"><ul><li repeat.for=\"e of errors\">${e.message}</li></ul></span>\n  <input class=\"ui-input\" size=\"1\" value.bind=\"__value\" placeholder.bind=\"placeholder\" \n    focus.trigger=\"focusing()\" blur.trigger=\"unfocusing()\" \n    click.trigger=\"showDropdown()\" keydown.trigger=\"showDropdown(true)\"\n    ref=\"input\" disabled.bind=\"disabled\" readonly.bind=\"true\" type=\"text\"/>\n  <span class=\"ui-clear\" if.bind=\"__clear && __value\" click.trigger=\"clear()\">&times;</span>\n  <ui-date-view class=\"ui-date-dropdown\" date.bind=\"value\" min-date.bind=\"minDate\" max-date.bind=\"maxDate\" time.bind=\"time\"\n    show.bind=\"__focus && __showDropdown\" view-model.ref=\"dropdown\" mousedown.trigger=\"stopUnfocus()\">\n  </ui-date-view></template>"), 
+            aurelia_framework_1.inlineView("<template class=\"ui-input-wrapper ui-date-input ${__focus?'ui-focus':''} ${disabled?'ui-disabled':''} ${readonly || busy?'ui-readonly':''}\"><span class=\"ui-invalid-icon fi-ui\"></span>\n  <span class=\"ui-invalid-errors\"><ul><li repeat.for=\"e of __errors\">${e.message}</li></ul></span>\n  <div class=\"ui-input-div\"><input class=\"ui-input\" size=\"1\" value.bind=\"__value\" placeholder.bind=\"placeholder\" \n    focus.trigger=\"focusing()\" blur.trigger=\"unfocusing()\" \n    click.trigger=\"showDropdown()\" keydown.trigger=\"showDropdown(true)\"\n    ref=\"__input\" disabled.bind=\"disabled || busy\" readonly.bind=\"true\" type=\"text\"/>\n  <span class=\"ui-clear\" if.bind=\"__clear && __value\" click.trigger=\"clear()\">&times;</span></div>\n  <ui-date-view class=\"ui-date-dropdown\" date.bind=\"value\" min-date.bind=\"minDate\" max-date.bind=\"maxDate\" time.bind=\"time\"\n    show.bind=\"__focus && __showDropdown\" view-model.ref=\"dropdown\" mousedown.trigger=\"stopUnfocus()\">\n  </ui-date-view></template>"), 
             __metadata('design:paramtypes', [Element])
         ], UIDate);
         return UIDate;

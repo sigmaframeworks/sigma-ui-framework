@@ -29,27 +29,27 @@
                   <ui-input-group>
                     <ui-input-label required>Email</ui-input-label>
                     <ui-input placeholder="Any email..." maxlength="50" value.bind="model.email & validate" clear email charcount></ui-input>
-                    <ui-input-info class="ui-text-center">Value: ${model.email}</ui-input-info>
+                    <ui-input-info center>Value: ${model.email}</ui-input-info>
                   </ui-input-group>
                   <ui-input-group>
                     <ui-input-label required>URL</ui-input-label>
                     <ui-input placeholder="Any URL..." maxlength="50" value.bind="valUrl" clear url charcount></ui-input>
-                    <ui-input-info class="ui-text-center">Value: ${valUrl}</ui-input-info>
+                    <ui-input-info center>Value: ${valUrl}</ui-input-info>
                   </ui-input-group>
                   <ui-input-group>
                     <ui-input-label required>Number</ui-input-label>
                     <ui-input placeholder="Any number..." number.bind="model.number & validate" clear></ui-input>
-                    <ui-input-info class="ui-text-center">Value: ${valNumber}</ui-input-info>
+                    <ui-input-info center>Value: ${valNumber}</ui-input-info>
                   </ui-input-group>
                   <ui-input-group>
                     <ui-input-label required>Decimal</ui-input-label>
                     <ui-input placeholder="Any decimal..." decimal.bind="model.decimal & validate" clear></ui-input>
-                    <ui-input-info class="ui-text-center">Value: ${valDecimal}</ui-input-info>
+                    <ui-input-info center>Value: ${valDecimal}</ui-input-info>
                   </ui-input-group>
                   <ui-input-group>
                     <ui-input-label required>File</ui-input-label>
                     <ui-input placeholder="Any File..." clear file></ui-input>
-                    <ui-input-info class="ui-text-center">Value: ${valUrl}</ui-input-info>
+                    <ui-input-info center>Value: ${valUrl}</ui-input-info>
                   </ui-input-group>
                   <ui-input-group>
                     <ui-input-label required>Double Input</ui-input-label>
@@ -64,19 +64,19 @@
                   <ui-input-group>
                     <ui-input-label required align-top>Textarea</ui-input-label>
                     <ui-input-addon icon="fi-ui-bell"></ui-input-addon>
-                    <ui-textarea placeholder="Any text..." charcount clear auto-complete="Alfa,Beta,Theta,Gamma,Omega"></ui-textarea>
-                    <ui-button success>Go!</ui-button>
+                    <ui-textarea placeholder="Any text..." charcount clear auto-complete="Alpha,Beta,Theta,Gamma,Omega"></ui-textarea>
+                    <ui-input-info center info>Auto-Complete (Alpha, Beta, Gamma, Omega, Theta)</ui-input-info>
                   </ui-input-group>
                   <ui-fieldset legend="Phone Inputs">
                     <ui-input-group>
                       <ui-input-label required>International</ui-input-label>
                       <ui-phone clear value.bind="model.phone & validate" phone.bind="phoneInt"></ui-phone>
-                      <ui-input-info class="ui-text-center">Value: ${model.phone}</ui-input-info>
+                      <ui-input-info center>Value: ${model.phone}</ui-input-info>
                     </ui-input-group>
                     <ui-input-group>
                       <ui-input-label required>National</ui-input-label>
                       <ui-phone clear country="ae" value.bind="valueNat" phone.bind="phoneNat"></ui-phone>
-                      <ui-input-info class="ui-text-center">Value: ${valueNat}</ui-input-info>
+                      <ui-input-info center>Value: ${valueNat}</ui-input-info>
                     </ui-input-group>
                   </ui-fieldset>
                   <ui-fieldset legend="Dates">
@@ -84,7 +84,7 @@
                       <ui-input-label required>Date</ui-input-label>
                       <ui-input-addon icon="fi-ui-calendar"></ui-input-addon>
                       <ui-date value.bind="dt" time="true"></ui-date>
-                      <ui-input-info class="ui-text-center">Value: ${dt}</ui-input-info>
+                      <ui-input-info center>Value: ${dt}</ui-input-info>
                     </ui-input-group>
                     <ui-input-group>
                       <ui-input-label required>Date Range</ui-input-label>
@@ -92,7 +92,7 @@
                       <ui-date value.bind="model.dateStart & validate"></ui-date>
                       <ui-input-addon>to</ui-input-addon>
                       <ui-date value.bind="model.dateEnd & validate" min-date.bind="model.dateStart"></ui-date>
-                      <ui-input-info class="ui-text-center">Value: ${model.dateStart} - ${model.dateEnd}</ui-input-info>
+                      <ui-input-info center>Value: ${model.dateStart} - ${model.dateEnd}</ui-input-info>
                     </ui-input-group>
                   </ui-fieldset>
                 </ui-column>
@@ -112,7 +112,7 @@
                       <ui-input-addon>
                         <ui-checkbox checked.bind="in2" checked.trigger="inval2=''"></ui-checkbox>
                       </ui-input-addon>
-                      <ui-combo placeholder="Any option..." value.bind="inval2" disabled.bind="!in2" clear></ui-combo>
+                      <ui-combo placeholder="Any option..." force-select="false" value.bind="inval2" disabled.bind="!in2" clear></ui-combo>
                     </ui-input-group>
                     <ui-input-group>
                       <ui-input-label required>Date</ui-input-label>
@@ -137,7 +137,7 @@
                       <ui-input-addon>
                         <ui-radio name="rdin" value="2" checked.bind="rdin" checked.trigger="rdval2=''"></ui-radio>
                       </ui-input-addon>
-                      <ui-combo placeholder="Any option..." disabled.bind="rdin!=2" value.bind="rdval2" clear></ui-combo>
+                      <ui-combo placeholder="Any option..." force-select="false" disabled.bind="rdin!=2" value.bind="rdval2" clear></ui-combo>
                     </ui-input-group>
                     <ui-input-group>
                       <ui-input-label required>Date</ui-input-label>
@@ -179,7 +179,7 @@
                 [value[bindable]="string" | number[bindable]="number" | decimal[bindable]="float"]></ui-input>
                 
               <ui-textarea [clear] [charcount] value[bindable]="string"
-                disabled[bindable]="bool" readonly[bindable]="bool"
+                disabled[bindable]="bool" readonly[bindable]="bool" auto-complete[bindable]="csv | array<string>"
                 placeholder[bindable]="string" maxlength[bindable]="number"></ui-textarea>
               
               <!-- -->
@@ -187,7 +187,7 @@
               <!-- button as an addon -->
               <ui-button>Button</ui-button>
             
-              <ui-input-info>Text</ui-input-info>
+              <ui-input-info [center] [text theme]>Text</ui-input-info>
               
             </ui-input-group>
             ```

@@ -59,6 +59,15 @@
               </ui-input-group>
             </ui-column>
           </ui-row>
+          <ui-row>
+            <ui-column fill padded>
+              <ui-input-group>
+                <ui-input-label required>Reorder</ui-input-label>
+                <ui-reorder placeholder="Select one..." options.bind="options" display-property="text"></ui-reorder>
+              </ui-input-group>
+            </ui-column>
+            <ui-column fill padded></ui-column>
+          </ui-row>
         </ui-form>
 
         <hr/>

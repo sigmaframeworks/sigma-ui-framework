@@ -35,6 +35,7 @@
             <ui-dg-column data-id="name" width="10em" sortable locked resizeable>Name</ui-dg-column>
             <ui-dg-button data-id="name" width="2rem" locked icon="fi-ui-edit" click.trigger="$event.detail.record.switch=true"></ui-dg-button>
             <ui-dg-button data-id="name" width="2rem" locked icon="fi-ui-delete" theme="danger" click.trigger="$event.detail.record.switch=false"></ui-dg-button>
+            <ui-dg-link data-id="preview" width="6em" label="Preview" click.trigger="app.toast($event.detail.record.id+' '+$event.detail.record.name)"></ui-dg-link>
             <ui-dg-column data-id="dob" width="6em" date format="DD MMM" center resizeable>Birthday</ui-dg-column>
             <ui-dg-column data-id="dob" width="6em" age center resizeable>Age</ui-dg-column>
             <ui-dg-switch data-id="switch" width="5em" theme="primary" change.trigger="$event.detail.record.gender=$event.detail.value?'F':'M'">Switch</ui-dg-switch>

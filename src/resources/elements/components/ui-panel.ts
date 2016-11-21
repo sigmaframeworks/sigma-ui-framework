@@ -45,14 +45,16 @@ export class UIPanel {
 
 @autoinject()
 @customElement('ui-panel-body')
-@inlineView(`<template class="ui-panel-body" css.bind="{'max-height': maxHeight}"><slot></slot></template>`)
+@inlineView(`<template class="ui-panel-body" css.bind="{'max-height': maxHeight,'flex-basis':height}"><slot></slot></template>`)
 export class UIContent {
   constructor(public element: Element) {
+    if (element.hasAttribute('flex')) element.classList.add('ui-row-column');
     if (element.hasAttribute('scroll')) element.classList.add('ui-scroll');
     if (element.hasAttribute('padded')) element.classList.add('ui-pad-all');
   }
   __wrapperClass = '';
 
+  @bindable() height = 'auto';
   @bindable() maxHeight = 'auto';
 }
 
@@ -104,14 +106,14 @@ export class UIHeaderTitle {
 @inlineView(`<template class="ui-header"><slot></slot></template>`)
 export class UIHeader {
   constructor(public element: Element) {
-    if (this.element.hasAttribute('primary')) element.classList.add('ui-bg-primary');
-    else if (this.element.hasAttribute('secondary')) element.classList.add('ui-bg-secondary');
-    else if (this.element.hasAttribute('dark')) element.classList.add('ui-bg-dark');
-    else if (this.element.hasAttribute('light')) element.classList.add('ui-bg-light');
-    else if (this.element.hasAttribute('info')) element.classList.add('ui-bg-info');
-    else if (this.element.hasAttribute('danger')) element.classList.add('ui-bg-danger');
-    else if (this.element.hasAttribute('success')) element.classList.add('ui-bg-success');
-    else if (this.element.hasAttribute('warning')) element.classList.add('ui-bg-warning');
+    if (this.element.hasAttribute('primary')) element.classList.add('ui-primary');
+    else if (this.element.hasAttribute('secondary')) element.classList.add('ui-secondary');
+    else if (this.element.hasAttribute('dark')) element.classList.add('ui-dark');
+    else if (this.element.hasAttribute('light')) element.classList.add('ui-light');
+    else if (this.element.hasAttribute('info')) element.classList.add('ui-info');
+    else if (this.element.hasAttribute('danger')) element.classList.add('ui-danger');
+    else if (this.element.hasAttribute('success')) element.classList.add('ui-success');
+    else if (this.element.hasAttribute('warning')) element.classList.add('ui-warning');
   }
 }
 

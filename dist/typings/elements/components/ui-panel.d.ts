@@ -16,6 +16,7 @@ export declare class UIContent {
     element: Element;
     constructor(element: Element);
     __wrapperClass: string;
+    height: string;
     maxHeight: string;
 }
 export declare class UIHeaderTool {

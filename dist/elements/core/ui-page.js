@@ -160,6 +160,8 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event"], func
     var UIToolbar = (function () {
         function UIToolbar(element) {
             this.element = element;
+            if (element.hasAttribute('start'))
+                element.classList.add('ui-start');
         }
         UIToolbar = __decorate([
             aurelia_framework_1.autoinject(),

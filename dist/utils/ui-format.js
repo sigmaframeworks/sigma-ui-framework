@@ -3,7 +3,7 @@ define(["require", "exports", "kramed", "moment", "numeral"], function (require,
     var UIFormat;
     (function (UIFormat) {
         function toHTML(md) {
-            return kramed(md);
+            return kramed(md).replace(/(\<a href=)/gi, '<a target="_blank" href=');
         }
         UIFormat.toHTML = toHTML;
         function date(dt, ft) {

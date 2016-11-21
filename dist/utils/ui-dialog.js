@@ -33,7 +33,7 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
                     ui_utils_1.UIUtils.dialogContainer.addEventListener('mouseup', function () { return _this.moveEnd(); });
                 }
                 if (ui_utils_1.UIUtils.taskbar)
-                    ui_utils_1.UIUtils.taskbar.addEventListener('click', function (e) { return _this.__taskClick(e.target['window']); });
+                    ui_utils_1.UIUtils.taskbar.addEventListener('click', function (e) { return _this.__taskClick((getParentByTag(e.target, 'button') || {})['window']); });
             }
             var instruction = {
                 viewModel: vm,
@@ -175,7 +175,7 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
         };
         UIDialogService.prototype.moveStart = function ($event) {
             this.__dialog = getParentByClass($event.target, 'ui-dialog');
-            if (this.__dialog === null)
+            if (this.__dialog === null || !this.__dialog.viewSlot)
                 return;
             var dialog = this.__dialog.viewSlot.viewModel;
             if (getParentByClass($event.target, 'ui-header-button') !== null) {

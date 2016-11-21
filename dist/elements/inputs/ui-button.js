@@ -92,10 +92,11 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "loda
             if (this.dropdown) {
                 this.dropdown.style.minWidth = this.element.offsetWidth + 'px';
                 if (this.dropdown.classList.contains('ui-hidden')) {
-                    ui_event_1.UIEvent.fireEvent('menuopen', this.element);
-                    this.element.classList.add('ui-open');
-                    this.dropdown.classList.remove('ui-hidden');
-                    this.__tether.position();
+                    if (ui_event_1.UIEvent.fireEvent('menuopen', this.element) !== false) {
+                        this.element.classList.add('ui-open');
+                        this.dropdown.classList.remove('ui-hidden');
+                        this.__tether.position();
+                    }
                 }
                 else {
                     ui_event_1.UIEvent.fireEvent('menuhide', this.element);

@@ -49,8 +49,11 @@ export declare class UIDate {
     __clear: any;
     __tether: any;
     __value: any;
+    __input: any;
     dropdown: any;
     clear(): void;
+    busy: any;
+    disable(disabled?: any): void;
     valueChanged(newValue: any): void;
     minDateChanged(newValue: any): void;
     maxDateChanged(newValue: any): void;

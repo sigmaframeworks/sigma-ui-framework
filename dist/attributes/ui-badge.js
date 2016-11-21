@@ -29,13 +29,8 @@ define(["require", "exports", "aurelia-framework"], function (require, exports, 
             this.__el.classList[newValue ? 'remove' : 'add']('ui-hidden');
             this.__el.innerHTML = newValue;
         };
-        UIBadgeBase = __decorate([
-            aurelia_framework_1.noView(), 
-            __metadata('design:paramtypes', [Element, String])
-        ], UIBadgeBase);
         return UIBadgeBase;
     }());
-    exports.UIBadgeBase = UIBadgeBase;
     var UIBadge = (function (_super) {
         __extends(UIBadge, _super);
         function UIBadge(element) {
@@ -64,6 +59,20 @@ define(["require", "exports", "aurelia-framework"], function (require, exports, 
         return UIBadgePrimary;
     }(UIBadgeBase));
     exports.UIBadgePrimary = UIBadgePrimary;
+    var UIBadgeSecondary = (function (_super) {
+        __extends(UIBadgeSecondary, _super);
+        function UIBadgeSecondary(element) {
+            _super.call(this, element, 'ui-bg-secondary');
+            this.element = element;
+        }
+        UIBadgeSecondary = __decorate([
+            aurelia_framework_1.autoinject(),
+            aurelia_framework_1.customAttribute('badge-secondary'), 
+            __metadata('design:paramtypes', [Element])
+        ], UIBadgeSecondary);
+        return UIBadgeSecondary;
+    }(UIBadgeBase));
+    exports.UIBadgeSecondary = UIBadgeSecondary;
     var UIBadgeInfo = (function (_super) {
         __extends(UIBadgeInfo, _super);
         function UIBadgeInfo(element) {

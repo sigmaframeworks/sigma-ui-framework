@@ -30,8 +30,8 @@ export class UIValidationRenderer {
 
     try {
       let vm = element.au.controller.viewModel;
-      if (!vm.errors) vm.errors = [];
-      vm.errors.push(error);
+      if (!vm.__errors) vm.__errors = [];
+      vm.__errors.push(error);
     } catch (E) { }
   }
 
@@ -41,15 +41,15 @@ export class UIValidationRenderer {
 
     try {
       let vm = element.au.controller.viewModel;
-      let i = vm.errors.length;
+      let i = vm.__errors.length;
       while (i--) {
-        let message: any = vm.errors[i];
+        let message: any = vm.__errors[i];
         if (message.id == error.id) {
-          vm.errors.splice(i, 1);
+          vm.__errors.splice(i, 1);
           break;
         }
       }
-      if (vm.errors.length == 0) {
+      if (vm.__errors.length == 0) {
         element.classList.remove('ui-invalid');
         element.classList.add('ui-valid');
       }

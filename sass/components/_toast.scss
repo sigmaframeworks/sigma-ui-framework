@@ -7,16 +7,14 @@
 .ui-toast {
   position     : relative;
   z-index      : $z-index-toast;
-  border-radius: $base-border-radius;
-  @include box-shadow(1px 1px 2px 0 $base-shadow);
-
   overflow     : hidden;
-
   max-width    : 18em;
   max-height   : 0;
   background   : $wg-00;
   margin       : .3em;
+  border-radius: $base-border-radius;
   @include transition(all 1s);
+  @include box-shadow(0 0 5px 0 $base-shadow-dark);
 
   &.ui-toast-show {
     max-height: 8em;
@@ -42,7 +40,7 @@
 
     .ui-message {
       padding: .2em .8em;
-      @include flex(1 1 0em);
+      @include flex(0 0 auto);
     }
 
     .ui-close {

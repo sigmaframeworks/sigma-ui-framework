@@ -35,7 +35,7 @@ export class Inputs {
       .ensure(m => m.dateEnd)
       .required()
       .then()
-      .satisfies((v, o) => moment(v).isSameOrAfter(o.dateStart))
+      .satisfies((v, o) => moment(v).isSameOrAfter(o.dateStart || v))
       .withMessage('${$displayName} must be after ${$object.dateStartDisplay()}')
       .on(this.model);
   }

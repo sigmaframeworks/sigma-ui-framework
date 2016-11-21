@@ -46,14 +46,17 @@
   }
 }
 @mixin header-theme($theme, $bg, $color) {
-  &.ui-bg-#{$theme} {
+  &.ui-#{$theme} {
+    background: darken($bg, 5%);
+    color     : $color;
+
     .ui-drawer-toggle {
       color: $color !important;
     }
 
     .ui-header-button {
       color     : rgba($color, .7);
-      background: darken($bg, 7%);
+      background: darken($bg, 2%);
       border    : 1px solid rgba($color, .3);
       padding   : .25em .5em;
 
@@ -63,7 +66,7 @@
       }
 
       &:active {
-        background: darken($bg, 14%);
+        background: darken($bg, 4%);
       }
     }
   }

@@ -7,13 +7,33 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "tether"], function (require, exports, aurelia_framework_1, ui_event_1, Tether) {
+define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "lodash", "tether"], function (require, exports, aurelia_framework_1, ui_event_1, _, Tether) {
     "use strict";
     var UIForm = (function () {
         function UIForm(element) {
             this.element = element;
             this.class = '';
         }
+        UIForm.prototype.attached = function () {
+            var _this = this;
+            ui_event_1.UIEvent.queueTask(function () {
+                var el = _this.element.querySelector('.ui-input');
+                if (el !== null)
+                    el.focus();
+                if (_this.busy)
+                    _this.busyChanged(true);
+            });
+        };
+        UIForm.prototype.busyChanged = function (newValue) {
+            var els = this.element.querySelectorAll('ui-button,ui-combo,ui-date,ui-input,ui-textarea,ui-phone,ui-language,ui-markdown,ui-checkbox,ui-radio,ui-switch,ui-tag,ui-list');
+            _.forEach(els, function (el) {
+                try {
+                    el.au.controller.viewModel.disable(isTrue(newValue));
+                }
+                catch (e) {
+                }
+            });
+        };
         UIForm.prototype.fireSubmit = function () {
             ui_event_1.UIEvent.fireEvent('submit', this.element);
         };
@@ -21,6 +41,10 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
         ], UIForm.prototype, "class", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Boolean)
+        ], UIForm.prototype, "busy", void 0);
         UIForm = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-form'),
@@ -66,6 +90,14 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
             if (this.element.hasAttribute('display'))
                 this.element.classList.add('ui-display');
         }
+        UIInputGroup.prototype.bind = function () {
+            if (this.width)
+                this.element['style'].width = this.width;
+        };
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UIInputGroup.prototype, "width", void 0);
         UIInputGroup = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-input-group'),
@@ -154,23 +186,25 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
         function UIInputInfo(element) {
             this.element = element;
             if (this.element.hasAttribute('primary'))
-                this.element.classList.add('ui-bg-primary');
+                this.element.classList.add('ui-text-primary');
             else if (this.element.hasAttribute('secondary'))
-                this.element.classList.add('ui-bg-secondary');
+                this.element.classList.add('ui-text-secondary');
             else if (this.element.hasAttribute('dark'))
-                this.element.classList.add('ui-bg-dark');
+                this.element.classList.add('ui-text-dark');
             else if (this.element.hasAttribute('light'))
-                this.element.classList.add('ui-bg-light');
+                this.element.classList.add('ui-text-light');
             else if (this.element.hasAttribute('info'))
-                this.element.classList.add('ui-bg-info');
+                this.element.classList.add('ui-text-info');
             else if (this.element.hasAttribute('danger'))
-                this.element.classList.add('ui-bg-danger');
+                this.element.classList.add('ui-text-danger');
             else if (this.element.hasAttribute('success'))
-                this.element.classList.add('ui-bg-success');
+                this.element.classList.add('ui-text-success');
             else if (this.element.hasAttribute('warning'))
-                this.element.classList.add('ui-bg-warning');
+                this.element.classList.add('ui-text-warning');
             else
                 this.element.classList.add('ui-text-muted');
+            if (this.element.hasAttribute('center'))
+                this.element.classList.add('ui-text-center');
         }
         UIInputInfo = __decorate([
             aurelia_framework_1.autoinject(),
@@ -211,6 +245,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
             this.placeholder = '';
             this.disabled = false;
             this.readonly = false;
+            this.dir = 'ltr';
             this.__ignoreChange = false;
             if (element.hasAttribute('email'))
                 this.__type = 'email';
@@ -244,11 +279,25 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
         UIInput.prototype.bind = function () {
             this.disabled = isTrue(this.disabled);
             this.readonly = isTrue(this.readonly);
+            if (this.width)
+                this.element['style'].width = this.width;
+            if (this.value)
+                this.valueChanged(this.value);
+            if (this.number)
+                this.numberChanged(this.number);
+            if (this.decimal)
+                this.decimalChanged(this.decimal);
         };
         UIInput.prototype.clear = function () {
             this.__value = this.value = '';
             this.__input.focus();
             ui_event_1.UIEvent.fireEvent('change', this.element, this.value);
+        };
+        UIInput.prototype.widthChanged = function (newValue) {
+            this.element['style'].width = newValue;
+        };
+        UIInput.prototype.disable = function (disabled) {
+            this.busy = disabled;
         };
         UIInput.prototype.valueChanged = function (newValue) {
             if (this.__ignoreChange)
@@ -346,10 +395,18 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
         ], UIInput.prototype, "readonly", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UIInput.prototype, "dir", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UIInput.prototype, "width", void 0);
         UIInput = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-input'),
-            aurelia_framework_1.inlineView("<template class=\"ui-input-wrapper ${__focus?'ui-focus':''} ${disabled?'ui-disabled':''} ${readonly?'ui-readonly':''}\"><span class=\"ui-invalid-icon fi-ui\"></span>\n  <span class=\"ui-invalid-errors\"><ul><li repeat.for=\"e of errors\">${e.message}</li></ul></span>\n  <input class=\"ui-input\" size=\"1\" keypress.trigger=\"keyDown($event)\" input.trigger=\"format($event)\" change.trigger=\"fireChange($event)\"\n    value.bind=\"__value\" placeholder.bind=\"placeholder\" focus.trigger=\"fireFocus()\" blur.trigger=\"fireBlur()\" \n    type.bind=\"__type\" maxlength.bind=\"maxlength\" ref=\"__input\" disabled.bind=\"disabled\" readonly.bind=\"readonly\"/>\n  <span class=\"ui-in-counter\" if.bind=\"__counter\">${(maxlength-__value.length)}</span>\n  <span class=\"ui-clear\" if.bind=\"__clear && __value\" click.trigger=\"clear()\">&times;</span></template>"), 
+            aurelia_framework_1.inlineView("<template class=\"ui-input-wrapper ${__focus?'ui-focus':''} ${disabled?'ui-disabled':''} ${readonly || busy?'ui-readonly':''}\"><span class=\"ui-invalid-icon fi-ui\"></span>\n  <span class=\"ui-invalid-errors\"><ul><li repeat.for=\"e of __errors\">${e.message}</li></ul></span>\n  <div class=\"ui-input-div\"><input class=\"ui-input\" size=\"1\" keypress.trigger=\"keyDown($event)\" input.trigger=\"format($event)\" change.trigger=\"fireChange($event)\"\n    value.bind=\"__value\" placeholder.bind=\"placeholder\" focus.trigger=\"fireFocus()\" blur.trigger=\"fireBlur()\" dir.bind=\"dir\" \n    type.bind=\"__type\" maxlength.bind=\"maxlength\" ref=\"__input\" disabled.bind=\"disabled || busy\" readonly.bind=\"readonly\"/>\n  <span class=\"ui-in-counter\" if.bind=\"__counter\">${(maxlength-__value.length)}</span>\n  <span class=\"ui-clear\" if.bind=\"__clear && __value\" click.trigger=\"clear()\">&times;</span></div></template>"), 
             __metadata('design:paramtypes', [Element])
         ], UIInput);
         return UIInput;
@@ -361,6 +418,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
             this.errors = [];
             this.value = '';
             this.rows = 5;
+            this.dir = 'ltr';
             this.maxlength = 10000;
             this.placeholder = '';
             this.autoComplete = '';
@@ -416,12 +474,15 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
             this.__input.focus();
             ui_event_1.UIEvent.fireEvent('change', this.element, this.value);
         };
+        UITextarea.prototype.disable = function (disabled) {
+            this.busy = disabled;
+        };
         UITextarea.prototype.fireChange = function (evt) {
             evt.stopPropagation();
             ui_event_1.UIEvent.fireEvent('change', this.element, this.value);
         };
         UITextarea.prototype.fireBlur = function () {
-            this.__focus = false;
+            this.__focus = this.__showList = false;
             ui_event_1.UIEvent.fireEvent('blur', this.element);
         };
         UITextarea.prototype.fireFocus = function () {
@@ -454,6 +515,10 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
                     }
                 });
             }
+        };
+        UITextarea.prototype.detached = function () {
+            if (this.__tether)
+                this.__tether.destroy();
         };
         UITextarea.prototype.autoCompleteChanged = function (newValue) {
             if (_.isString(newValue))
@@ -533,7 +598,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
             var pre = this.__input.value.substring(0, this.__input.selectionEnd);
             var post = this.__input.value.substring(this.__input.selectionEnd);
             pre = pre.replace(this.__acRegExp, ' ' + selected + ' ');
-            this.__input.value = (pre + post);
+            this.value = (pre + post);
             this.__input.selectionStart = this.__input.selectionEnd = pre.length;
         };
         UITextarea.prototype.__clicked = function ($event) {
@@ -611,6 +676,10 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
         __decorate([
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
+        ], UITextarea.prototype, "dir", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
         ], UITextarea.prototype, "maxlength", void 0);
         __decorate([
             aurelia_framework_1.bindable(), 
@@ -631,7 +700,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
         UITextarea = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-textarea'),
-            aurelia_framework_1.inlineView("<template class=\"ui-input-wrapper ${__focus?'ui-focus':''} ${__counter?'ui-ta-counter':''} ${disabled?'ui-disabled':''} ${readonly?'ui-readonly':''}\"><span class=\"ui-invalid-icon fi-ui\"></span>\n  <span class=\"ui-invalid-errors\"><ul><li repeat.for=\"e of errors\">${e.message}</li></ul></span>\n  <textarea class=\"ui-input\" rows.bind=\"rows\" value.bind=\"value\" placeholder.bind=\"placeholder\" disabled.bind=\"disabled\" readonly.bind=\"readonly\"\n    focus.trigger=\"fireFocus()\" blur.trigger=\"fireBlur()\" maxlength.bind=\"maxlength\" ref=\"__input\" change.trigger=\"fireChange($event)\"></textarea>\n  <div class=\"ui-list ui-list-dropdown\" css.bind=\"{width:'200px', 'max-height':'300px', right:'auto', left:__listCss.left, top:__listCss.top}\" \n    show.bind=\"__showList && !readonly\" mousewheel.trigger=\"$event.cancelBubble = true\" mousedown.trigger=\"__clicked($event)\" ref=\"__list\">\n    <div repeat.for=\"opt of __autoComplete\" class=\"ui-list-item\" data-value=\"${opt}\">\n      <span class=\"ui-text ui-col-fill\" innerhtml.bind=\"opt\"></span></div>\n  </div>\n  <span class=\"ui-ta-counter\" if.bind=\"__counter\">${value.length & debounce} of ${maxlength}</span>\n  <span class=\"ui-clear\" if.bind=\"__clear && value\" click.trigger=\"clear()\">&times;</span></template>"), 
+            aurelia_framework_1.inlineView("<template class=\"ui-input-wrapper ui-textarea ${__focus?'ui-focus':''} ${__counter?'ui-ta-counter':''} ${disabled?'ui-disabled':''} ${readonly || busy?'ui-readonly':''}\"><span class=\"ui-invalid-icon fi-ui\"></span>\n  <span class=\"ui-invalid-errors\"><ul><li repeat.for=\"e of __errors\">${e.message}</li></ul></span>\n  <div class=\"ui-input-div\"><textarea class=\"ui-input\" rows.bind=\"rows\" value.bind=\"value\" placeholder.bind=\"placeholder\" disabled.bind=\"disabled || busy\" readonly.bind=\"readonly\"\n    focus.trigger=\"fireFocus()\" blur.trigger=\"fireBlur()\" maxlength.bind=\"maxlength\" ref=\"__input\" change.trigger=\"fireChange($event)\" dir.bind=\"dir\"></textarea>\n  <div class=\"ui-auto-list ui-list-dropdown\" css.bind=\"{width:'200px', 'max-height':'300px', right:'auto', left:__listCss.left, top:__listCss.top}\" \n    show.bind=\"__showList && !readonly\" mousewheel.trigger=\"$event.cancelBubble = true\" mousedown.trigger=\"__clicked($event)\" ref=\"__list\">\n    <div repeat.for=\"opt of __autoComplete\" class=\"ui-list-item\" data-value=\"${opt}\">\n      <span class=\"ui-text ui-col-fill\" innerhtml.bind=\"opt\"></span></div>\n  </div>\n  <span class=\"ui-ta-counter\" if.bind=\"__counter\">${value.length & debounce} of ${maxlength}</span>\n  <span class=\"ui-clear\" if.bind=\"__clear && value\" click.trigger=\"clear()\">&times;</span></div></template>"), 
             __metadata('design:paramtypes', [Element])
         ], UITextarea);
         return UITextarea;
@@ -666,6 +735,9 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
             this.__value = this.value = '';
             this.__input.focus();
             ui_event_1.UIEvent.fireEvent('change', this.element, this.value);
+        };
+        UIPhone.prototype.disable = function (disabled) {
+            this.busy = disabled;
         };
         UIPhone.prototype.valueChanged = function (newValue) {
             if (this.__ignoreChange)
@@ -736,7 +808,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
         UIPhone = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-phone'),
-            aurelia_framework_1.inlineView("<template class=\"ui-input-wrapper ${class} ${__focus?'ui-focus':''} ${disabled?'ui-disabled':''} ${readonly?'ui-readonly':''}\">\n  <div class=\"ui-input-addon\" click.trigger=\"__input.focus()\"><span class=\"ui-flag ${__ctry}\" if.bind=\"!country\"></span>${__prefix}</div><span class=\"ui-invalid-icon fi-ui\"></span>\n  <span class=\"ui-invalid-errors\"><ul><li repeat.for=\"e of errors\">${e.message}</li></ul></span>\n  <input class=\"ui-input\" size=\"1\" keypress.trigger=\"keyDown($event)\" input.trigger=\"format($event)\" change.trigger=\"fireChange($event)\"\n    value.bind=\"__value\" placeholder.bind=\"__placeholder\" focus.trigger=\"fireFocus()\" blur.trigger=\"fireBlur()\" \n    type=\"tel\" ref=\"__input\" disabled.bind=\"disabled\" readonly.bind=\"readonly\"/>\n  <span class=\"ui-clear\" if.bind=\"__clear && __value\" click.trigger=\"clear()\">&times;</span></template>"), 
+            aurelia_framework_1.inlineView("<template class=\"ui-input-wrapper ${class} ${__focus?'ui-focus':''} ${disabled?'ui-disabled':''} ${readonly || busy?'ui-readonly':''}\">\n  <div class=\"ui-input-addon\" click.trigger=\"__input.focus()\"><span class=\"ui-flag ${__ctry}\" if.bind=\"!country\"></span>${__prefix}</div><span class=\"ui-invalid-icon fi-ui\"></span>\n  <span class=\"ui-invalid-errors\"><ul><li repeat.for=\"e of __errors\">${e.message}</li></ul></span>\n  <div class=\"ui-input-div\"><input class=\"ui-input\" size=\"1\" keypress.trigger=\"keyDown($event)\" input.trigger=\"format($event)\" change.trigger=\"fireChange($event)\"\n    value.bind=\"__value\" placeholder.bind=\"__placeholder\" focus.trigger=\"fireFocus()\" blur.trigger=\"fireBlur()\" \n    type=\"tel\" ref=\"__input\" disabled.bind=\"disabled || busy\" readonly.bind=\"readonly\"/>\n  <span class=\"ui-clear\" if.bind=\"__clear && __value\" click.trigger=\"clear()\">&times;</span></div></template>"), 
             __metadata('design:paramtypes', [Element])
         ], UIPhone);
         return UIPhone;

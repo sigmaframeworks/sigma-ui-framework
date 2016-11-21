@@ -12,7 +12,7 @@ export declare class UIApplication {
     private __authToken;
     AuthUser: any;
     AuthToken: any;
-    login(authUser: any, authToken?: any): void;
+    login(authUser: any, authPass?: any, authToken?: any, route?: any): void;
     logout(): void;
     private __sharedState;
     shared(key: any, value?: any): any;

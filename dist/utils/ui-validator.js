@@ -33,9 +33,9 @@ define(["require", "exports", "aurelia-framework"], function (require, exports, 
             element.classList.remove('ui-valid');
             try {
                 var vm = element.au.controller.viewModel;
-                if (!vm.errors)
-                    vm.errors = [];
-                vm.errors.push(error);
+                if (!vm.__errors)
+                    vm.__errors = [];
+                vm.__errors.push(error);
             }
             catch (E) { }
         };
@@ -44,15 +44,15 @@ define(["require", "exports", "aurelia-framework"], function (require, exports, 
             element.classList.add('ui-valid');
             try {
                 var vm = element.au.controller.viewModel;
-                var i = vm.errors.length;
+                var i = vm.__errors.length;
                 while (i--) {
-                    var message = vm.errors[i];
+                    var message = vm.__errors[i];
                     if (message.id == error.id) {
-                        vm.errors.splice(i, 1);
+                        vm.__errors.splice(i, 1);
                         break;
                     }
                 }
-                if (vm.errors.length == 0) {
+                if (vm.__errors.length == 0) {
                     element.classList.remove('ui-invalid');
                     element.classList.add('ui-valid');
                 }

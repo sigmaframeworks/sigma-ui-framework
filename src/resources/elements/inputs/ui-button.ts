@@ -90,10 +90,11 @@ export class UIButton {
     if (this.dropdown) {
       this.dropdown.style.minWidth = this.element.offsetWidth + 'px';
       if (this.dropdown.classList.contains('ui-hidden')) {
-        UIEvent.fireEvent('menuopen', this.element);
-        this.element.classList.add('ui-open');
-        this.dropdown.classList.remove('ui-hidden');
-        this.__tether.position();
+        if (UIEvent.fireEvent('menuopen', this.element) !== false) {
+          this.element.classList.add('ui-open');
+          this.dropdown.classList.remove('ui-hidden');
+          this.__tether.position();
+        }
       }
       else {
         UIEvent.fireEvent('menuhide', this.element);

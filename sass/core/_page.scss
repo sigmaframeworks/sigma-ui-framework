@@ -65,6 +65,10 @@
   // @include box-shadow(0 0 1px 0 $base-border-color);
   @include flex-row($align:center, $justify:flex-end, $wrap:false);
 
+  &.ui-start {
+    @include justify-content(flex-start);
+  }
+
   .ui-divider {
     border-right: 1px solid $divider-hilight;
     border-left : 1px solid $divider-shadow;
@@ -75,6 +79,11 @@
 
   .ui-input-group {
     margin: 0 .25rem;
+  }
+
+  .ui-button,
+  .ui-button-group {
+    margin: 0 .2rem;
   }
 }
 

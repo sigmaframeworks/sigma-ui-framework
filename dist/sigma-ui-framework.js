@@ -34,6 +34,7 @@ define(["require", "exports", 'aurelia-validation', "./utils/ui-constants", "./u
             './elements/inputs/ui-button',
             './elements/inputs/ui-input',
             './elements/inputs/ui-option',
+            './elements/inputs/ui-markdown',
             './elements/inputs/ui-list',
             './elements/inputs/ui-date'
         ]);
@@ -86,19 +87,20 @@ define(["require", "exports", 'aurelia-validation', "./utils/ui-constants", "./u
             .customRule('decimal', function (value, obj, min, max) { return value === null || value === undefined || value == '' || Math.floor(value % 1) === 0 && value >= (min || Number.MIN_VALUE) && value <= (max || Number.MAX_VALUE); }, '\${$displayName} must be a decimal value between \${$config.min || "MIN_VALUE"} and \${$config.max || "MAX_VALUE"}.', function (min, max) { return ({ min: min, max: max }); });
         aurelia_validation_1.ValidationRules
             .customRule('language', function (map, obj, controller, langInput) {
-            if (!(langInput && langInput.clearErrors && langInput.addError))
+            if (!(langInput && langInput.addError && langInput.removeError))
                 throw new Error('Language validation must have reference to ui-language');
             var promises = [];
-            langInput.clearErrors();
             exports._.forEach(map, function (model, key) {
                 promises.push(controller.validator.validateObject(model)
                     .then(function (e) {
+                    if (langInput.errors.indexOf(key) > -1)
+                        langInput.removeError(key);
                     if (e.length > 0)
                         langInput.addError(key);
-                    return e.length > 0 ? key : '';
+                    return e.length > 0 ? true : false;
                 }));
             });
-            return Promise.all(promises).then(function (e) { return e.join('').length == 0; });
+            return Promise.all(promises).then(function (e) { return exports._.filter(e).length == 0; });
         }, 'Some language entries contain invalid values');
         var rend = new exports.kramed.Renderer();
         rend.code = function (code, lang) {

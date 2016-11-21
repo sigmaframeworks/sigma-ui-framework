@@ -22,7 +22,7 @@ export interface UIConfig {
     appKey(t: string): UIConfig;
     apiUrl(t: string): UIConfig;
     apiHeaders(t: any): UIConfig;
-    addAuthHeader(t: boolean): UIConfig;
+    sendAuthHeader(t: boolean): UIConfig;
     languages(l: Array<any>): UIConfig;
 }
 export declare function configure(config: FrameworkConfiguration, configCallback: any): void;

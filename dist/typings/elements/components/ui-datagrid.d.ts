@@ -16,6 +16,18 @@ export declare class UIDatagrid {
     __dgWrapFoot: any;
     scrolling(evt: any): void;
     doSort(col: any): void;
+    __move: any;
+    __stop: any;
+    __diff: any;
+    __startX: any;
+    __column: any;
+    __colNext: any;
+    __ghost: any;
+    __scroller: any;
+    __resizing: boolean;
+    resizeColumn(evt: any, col: any, next: any): boolean;
+    __resize(evt: any): void;
+    __resizeEnd(evt: any): void;
     fireSelect(record: any): void;
 }
 export declare class UIDGEmpty {
@@ -35,7 +47,7 @@ export declare class UIDataColumn {
     locked: number;
     resize: boolean;
     sortable: boolean;
-    getWidth(tw: any): number;
+    getWidth(tw: any): any;
     getTitle(): string;
     getValue(value: any, record: any): string;
 }
@@ -50,6 +62,19 @@ export declare class UIDGColumn extends UIDataColumn {
     display: any;
     format: any;
 }
+export declare class UIDGLink extends UIDataColumn {
+    element: Element;
+    type: string;
+    constructor(element: Element);
+    dataId: any;
+    width: any;
+    minWidth: any;
+    icon: any;
+    label: any;
+    disabled: any;
+    isDisabled(value: any, record: any): any;
+    fireClick(record: any): void;
+}
 export declare class UIDGButton extends UIDataColumn {
     element: Element;
     type: string;
@@ -59,10 +84,12 @@ export declare class UIDGButton extends UIDataColumn {
     minWidth: any;
     icon: any;
     label: any;
+    dropdown: any;
     theme: string;
     disabled: any;
     isDisabled(value: any, record: any): any;
     fireClick(record: any): void;
+    fireMenuOpen($event: any, record: any): any;
 }
 export declare class UIDGSwitch extends UIDataColumn {
     element: Element;

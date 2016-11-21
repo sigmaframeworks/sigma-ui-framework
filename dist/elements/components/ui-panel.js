@@ -61,7 +61,10 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "loda
         function UIContent(element) {
             this.element = element;
             this.__wrapperClass = '';
+            this.height = 'auto';
             this.maxHeight = 'auto';
+            if (element.hasAttribute('flex'))
+                element.classList.add('ui-row-column');
             if (element.hasAttribute('scroll'))
                 element.classList.add('ui-scroll');
             if (element.hasAttribute('padded'))
@@ -70,11 +73,15 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "loda
         __decorate([
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
+        ], UIContent.prototype, "height", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
         ], UIContent.prototype, "maxHeight", void 0);
         UIContent = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-panel-body'),
-            aurelia_framework_1.inlineView("<template class=\"ui-panel-body\" css.bind=\"{'max-height': maxHeight}\"><slot></slot></template>"), 
+            aurelia_framework_1.inlineView("<template class=\"ui-panel-body\" css.bind=\"{'max-height': maxHeight,'flex-basis':height}\"><slot></slot></template>"), 
             __metadata('design:paramtypes', [Element])
         ], UIContent);
         return UIContent;
@@ -153,21 +160,21 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "loda
         function UIHeader(element) {
             this.element = element;
             if (this.element.hasAttribute('primary'))
-                element.classList.add('ui-bg-primary');
+                element.classList.add('ui-primary');
             else if (this.element.hasAttribute('secondary'))
-                element.classList.add('ui-bg-secondary');
+                element.classList.add('ui-secondary');
             else if (this.element.hasAttribute('dark'))
-                element.classList.add('ui-bg-dark');
+                element.classList.add('ui-dark');
             else if (this.element.hasAttribute('light'))
-                element.classList.add('ui-bg-light');
+                element.classList.add('ui-light');
             else if (this.element.hasAttribute('info'))
-                element.classList.add('ui-bg-info');
+                element.classList.add('ui-info');
             else if (this.element.hasAttribute('danger'))
-                element.classList.add('ui-bg-danger');
+                element.classList.add('ui-danger');
             else if (this.element.hasAttribute('success'))
-                element.classList.add('ui-bg-success');
+                element.classList.add('ui-success');
             else if (this.element.hasAttribute('warning'))
-                element.classList.add('ui-bg-warning');
+                element.classList.add('ui-warning');
         }
         UIHeader = __decorate([
             aurelia_framework_1.autoinject(),

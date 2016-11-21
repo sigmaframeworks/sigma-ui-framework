@@ -1,8 +1,10 @@
 import { Container } from "aurelia-framework";
 import { Router } from "aurelia-router";
+import { UIApplication } from "../../utils/ui-application";
 export declare class UIViewport {
     element: Element;
-    constructor(element: Element, container: Container);
+    appState: UIApplication;
+    constructor(element: Element, appState: UIApplication, container: Container);
     attached(): void;
     __taskbar: any;
     __dialogContainer: any;

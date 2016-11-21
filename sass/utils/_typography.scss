@@ -71,6 +71,10 @@ b {
   font-weight: 300;
 }
 
+.ui-ellipsis {
+  @include ellipsis();
+}
+
 .ui-italic,
 address,
 cite,

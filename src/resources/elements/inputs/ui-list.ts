@@ -5,6 +5,7 @@
 // @license     : MIT
 import {autoinject, bindable, containerless, children, customElement, inlineView, bindingMode, DOM} from "aurelia-framework";
 import {UIEvent} from "../../utils/ui-event";
+import {UIConstants} from "../../utils/ui-constants";
 import * as _ from "lodash";
 import * as Tether from "tether";
 
@@ -18,6 +19,7 @@ export class ListGeneric {
 
   __tether;
 
+  __list = false;
   __tags = false;
   __value = '';
   __hilight = null;
@@ -46,6 +48,11 @@ export class ListGeneric {
   attached() {
     this.valueChanged(this.value);
     if (this.__tether) this.dropdown.style.minWidth = this.element.offsetWidth + 'px';
+  }
+
+  busy;
+  disable(disabled?) {
+    this.busy = disabled;
   }
 
   optionsChanged(newValue) {
@@ -105,7 +112,7 @@ export class ListGeneric {
   }
   unfocusing() {
     if (this.__hilight) this.__hilight.classList.remove('ui-highlight');
-    if (!this.__tags) {
+    if (this.__list) {
       this.__value = _['findChildren'](this.__listGroups = this.__options, 'items', 'value', this.value).text;
       if (!this.forceSelect && !this.__value) this.__value = this.value;
     }
@@ -241,16 +248,16 @@ export class ListGeneric {
 
 @autoinject()
 @customElement('ui-combo')
-@inlineView(`<template class="ui-input-wrapper ui-combo \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
-  <span class="ui-invalid-errors"><ul><li repeat.for="e of errors">\${e.message}</li></ul></span>
-  <input class="ui-input" size="1" value.bind="__value" placeholder.bind="placeholder" 
+@inlineView(`<template class="ui-input-wrapper ui-combo \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly || busy?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
+  <span class="ui-invalid-errors"><ul><li repeat.for="e of __errors">\${e.message}</li></ul></span>
+  <div class="ui-input-div"><input class="ui-input" size="1" value.bind="__value" placeholder.bind="placeholder" 
     click.trigger="openDropdown(true)"
     keydown.trigger="keyDown($event)" 
     input.trigger="search() & debounce:200"
     focus.trigger="focusing()" blur.trigger="unfocusing()"
-    ref="input" disabled.bind="disabled" readonly.bind="!__allowSearch" type="text"/>
+    ref="input" disabled.bind="disabled || busy" readonly.bind="!__allowSearch" type="text"/>
   <span class="ui-clear" if.bind="__clear && __value" click.trigger="clear()">&times;</span>
-  <span class="ui-input-addon ui-dropdown-handle" click.trigger="openDropdown()"><span class="fi-ui-angle-down"></span></span>
+  <span class="ui-input-addon ui-dropdown-handle" click.trigger="openDropdown()"><span class="fi-ui-angle-down"></span></span></div>
   <div class="ui-list-dropdown" show.bind="__focus && __showDropdown" ref="dropdown" mousedown.trigger="stopUnfocus()">
     <p if.bind="__listGroups.length==0" class="ui-list-group-label">\${emptyText}</p>
     <template repeat.for="group of __listGroups"><p if.bind="group.label" class="ui-list-group-label">\${group.label}</p>
@@ -262,6 +269,7 @@ export class ListGeneric {
 export class UICombo extends ListGeneric {
   constructor(public element: Element) {
     super();
+    this.__list = true;
     this.__clear = element.hasAttribute('clear');
   }
 
@@ -290,6 +298,7 @@ export class UICombo extends ListGeneric {
   }
   detached() {
     this.__tether.destroy();
+    DOM.removeNode(this.dropdown);
   }
 
   __clear;
@@ -333,15 +342,15 @@ export class UICombo extends ListGeneric {
 
 @autoinject()
 @customElement('ui-tag')
-@inlineView(`<template class="ui-input-wrapper ui-tag \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
-  <span class="ui-invalid-errors"><ul><li repeat.for="e of errors">\${e.message}</li></ul></span>
-  <div class="ui-tag-item" repeat.for="tag of value | split" if.bind="tag!=''">\${getDisplay(tag)}<span class="ui-clear" click.trigger="removeValue(tag)">&times;</span></div>
+@inlineView(`<template class="ui-input-wrapper ui-tag \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly || busy?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
+  <span class="ui-invalid-errors"><ul><li repeat.for="e of __errors">\${e.message}</li></ul></span>
+  <div class="ui-input-div"><div class="ui-tag-item" repeat.for="tag of value | split" if.bind="tag!=''">\${getDisplay(tag)}<span class="ui-clear" click.trigger="removeValue(tag)">&times;</span></div>
   <input class="ui-input" size="1" value.bind="__value" placeholder.bind="placeholder" 
     click.trigger="openDropdown(true)"
     keydown.trigger="keyDown($event)" 
     input.trigger="search() & debounce:200"
     focus.trigger="focusing()" blur.trigger="unfocusing()"
-    ref="input" disabled.bind="disabled" readonly.bind="!__allowSearch" type="text"/>
+    ref="input" disabled.bind="disabled || busy" readonly.bind="!__allowSearch" type="text"/></div>
   <div class="ui-list-dropdown" show.bind="!__noList && __focus && __showDropdown" ref="dropdown" mousedown.trigger="stopUnfocus()">
     <p if.bind="__listGroups.length==0" class="ui-list-group-label">\${emptyText}</p>
     <template repeat.for="group of __listGroups"><p if.bind="group.label" class="ui-list-group-label">\${group.label}</p>
@@ -382,6 +391,7 @@ export class UITag extends ListGeneric {
   }
   detached() {
     this.__tether.destroy();
+    DOM.removeNode(this.dropdown);
   }
 
   __noList;
@@ -452,13 +462,13 @@ export class UITag extends ListGeneric {
 
 @autoinject()
 @customElement('ui-list')
-@inlineView(`<template class="ui-input-wrapper ui-list \${disabled?'ui-disabled':''} \${readonly?'ui-readonly':''} \${__focus?'ui-focus':''}"><span class="ui-invalid-icon fi-ui"></span>
-  <span class="ui-invalid-errors"><ul><li repeat.for="e of errors">\${e.message}</li></ul></span>
-  <input class="ui-input \${!__allowSearch?'ui-remove':''}" size="1" value.bind="__value" placeholder.bind="placeholder" 
+@inlineView(`<template class="ui-input-wrapper ui-list \${disabled?'ui-disabled':''} \${readonly || busy?'ui-readonly':''} \${__focus?'ui-focus':''}"><span class="ui-invalid-icon fi-ui"></span>
+  <span class="ui-invalid-errors"><ul><li repeat.for="e of __errors">\${e.message}</li></ul></span>
+  <div class="ui-input-div"><input class="ui-input \${!__allowSearch?'ui-remove':''}" size="1" value.bind="__value" placeholder.bind="placeholder" 
     keydown.trigger="keyDown($event)" 
     input.trigger="search() & debounce:200"
     focus.trigger="focusing()" blur.trigger="unfocusing()"
-    ref="input" disabled.bind="disabled" readonly.bind="!__allowSearch" type="text"/>
+    ref="input" disabled.bind="disabled || busy" readonly.bind="!__allowSearch" type="text"/>
   <div class="ui-list-container" ref="dropdown">
     <p if.bind="__listGroups.length==0" class="ui-list-group-label">\${emptyText}</p>
     <template repeat.for="group of __listGroups"><p if.bind="group.label" class="ui-list-group-label">\${group.label}</p>
@@ -466,10 +476,11 @@ export class UITag extends ListGeneric {
       mouseover.trigger="highlightItem($event)" mouseout.trigger="unhighlightItem($event)"
       click.trigger="fireSelect(item.model)"><span class="fi-ui \${iconClass} \${item.icon}" if.bind="item.icon"></span><span innerhtml.bind="item.display"></span></div>
     </template>
-  </div></template>`)
+  </div></div></template>`)
 export class UIList extends ListGeneric {
   constructor(public element: Element) {
     super();
+    this.__list = true;
     this.__showDropdown = true;
   }
 
@@ -492,5 +503,231 @@ export class UIList extends ListGeneric {
     super.fireSelect(model);
     this.value = model[this.valueProperty];
     UIEvent.fireEvent('select', this.element, model);
+  }
+}
+
+
+
+@autoinject()
+@customElement('ui-language')
+@inlineView(`<template class="ui-input-wrapper ui-language \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly || busy?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
+  <span class="ui-invalid-errors"><ul><li repeat.for="e of __errors">\${e.message}</li></ul></span>
+  <div class="ui-input-div"><input class="ui-input" size="1" value.bind="__value" 
+    click.trigger="openDropdown(true)"
+    keydown.trigger="keyDown($event)" 
+    focus.trigger="focusing()" blur.trigger="unfocusing()"
+    ref="input" disabled.bind="disabled" readonly.bind="true" type="text"/>
+  <span class="ui-input-addon ui-dropdown-handle" click.trigger="openDropdown()"><span class="fi-ui-angle-down"></span></span></div>
+  <div class="ui-list-dropdown" show.bind="__focus && __showDropdown" ref="dropdown" mousedown.trigger="stopUnfocus()">
+    <p class="ui-list-group-label">Added</p>
+    <p if.bind="__selected.length==0" class="ui-text-muted ui-pad-h">No Languages Added</p>
+    <div class="ui-lang-item" repeat.for="item of __selected | sort:'name'">
+        <div click.trigger="fireSelect(item)" class="ui-list-item \${item.id==value?'ui-selected':''}" 
+          mouseover.trigger="highlightItem($event)" mouseout.trigger="unhighlightItem($event)">
+          <span class="fi-ui-danger ui-text-warning" if.bind="errors.indexOf(item.id)>=0"></span>
+          <span innerhtml.bind="item.name"></span>
+        </div>
+        <div class="fi-ui fi-ui-tree-collapse ui-text-danger" show.bind="__selected.length>1" click.trigger="remove(item)"></div></div>
+    <p class="ui-list-group-label">Available</p>
+    <p if.bind="__available.length==0" class="ui-text-muted ui-pad-h">No Languages Available</p>
+    <div class="ui-lang-item" repeat.for="item of __available | sort:'name'">
+      <div innerhtml.bind="item.name" click.trigger="add(item)" class="ui-list-item"
+        mouseover.trigger="highlightItem($event)" mouseout.trigger="unhighlightItem($event)"></div>
+        <div class="fi-ui fi-ui-tree-expand ui-text-info"></div></div>
+    </template>
+  </div></template>`)
+export class UILanguage extends ListGeneric {
+  constructor(public element: Element) {
+    super();
+  }
+
+  attached() {
+    super.attached();
+    this.__tether = new Tether({
+      element: this.dropdown,
+      target: this.element,
+      attachment: 'top left',
+      targetAttachment: 'bottom left',
+      // offset: '0 10px',
+      constraints: [
+        {
+          to: 'scrollParent',
+          attachment: 'together'
+        },
+        {
+          to: 'window',
+          attachment: 'together'
+        }
+      ],
+      optimizations: {
+        moveElement: false
+      }
+    });
+  }
+  detached() {
+    this.__tether.destroy();
+    DOM.removeNode(this.dropdown);
+  }
+
+  bind() {
+    this.__available = _.clone(UIConstants.Languages);
+    _.forEach(this.languages, l => this.__selected = this.__selected.concat(_.remove(this.__available, ['id', l])));
+    if (this.width) this.element['style'].width = this.width;
+  }
+
+  __tether;
+  __selected = [];
+  __available = [];
+  errors = [];
+
+  @bindable({ defaultBindingMode: bindingMode.twoWay })
+  value: any = '';
+
+  @bindable() languages: any = [];
+  @bindable() disabled = false;
+  @bindable() readonly = false;
+  @bindable() width;
+
+  valueChanged(newValue) {
+  }
+
+  languagesChanged(newValue) {
+  }
+
+  addError(lang) {
+    this.errors.push(lang);
+    this.errors = [].concat(this.errors);
+  }
+  removeError(lang) {
+    if (this.errors.indexOf(lang) > -1) this.errors.splice(this.errors.indexOf(lang), 1);
+    this.errors = [].concat(this.errors);
+  }
+
+  busy;
+  disable(disabled?) {
+    this.busy = disabled;
+  }
+
+  fireSelect(model?) {
+    if (!model) return;
+    if (UIEvent.fireEvent('beforeselect', this.element, model.id) !== false) {
+      this.__showDropdown = false;
+      this.__value = model.name;
+      this.value = model.id;
+      UIEvent.fireEvent('select', this.element, model);
+    }
+  }
+
+  add(model) {
+    this.__showDropdown = false;
+    this.__value = model.name;
+    this.languages.push(this.value = model.id);
+    this.__selected = this.__selected.concat(_.remove(this.__available, ['id', model.id]));
+    UIEvent.fireEvent('add', this.element, model);
+    UIEvent.fireEvent('select', this.element, model);
+  }
+
+  remove(model) {
+    this.__showDropdown = false;
+    _.remove(this.languages, model.id);
+    this.__available = this.__available.concat(_.remove(this.__selected, ['id', model.id]));
+    UIEvent.fireEvent('remove', this.element, model);
+    if (this.__available.length > 0) UIEvent.fireEvent('select', this.element, this.__available[0]);
+  }
+}
+
+@autoinject()
+@inlineView(`<template class="ui-input-wrapper ui-list ui-reorder">
+    <div class="ui-list-container">
+        <div model.bind="opt" repeat.for="opt of options & oneTime" class="ui-list-item" data-value="\${$index}" mousedown.trigger="startDrag(opt, $event)">
+            <span class="fi-ui-drawer"></span>
+            <span class="ui-col-fill" innerhtml.bind="opt[displayProperty] || opt"></span>
+        </div>
+
+        <div class="ui-list-item ui-ghost" if.bind="ghostModel" ref="__ghostEl" css.bind="{top:__top+'px'}">
+            <span class="fi-ui-drawer"></span>
+            <span class="ui-col-fill" innerhtml.bind="ghostModel[displayProperty] || ghostModel"></span>
+        </div>
+    </div>
+</template>`)
+@customElement('ui-reorder')
+export class UIReorder {
+  private ghostModel;
+
+	/**
+	   * @property    list
+	   * @type        array
+	   */
+  @bindable({ defaultBindingMode: bindingMode.twoWay })
+  options: Array<any> = [];
+	/**
+	 * @property    display-property
+	 * @type        string
+	 */
+  @bindable()
+  displayProperty: any = 'name';
+
+
+  constructor(public element: Element) {
+  }
+
+  private __startY = 0;
+  private __ghostEl;
+  private __dragEl;
+  private __diff = 0
+  private __top = 0;
+
+  private __move;
+  private __stop;
+  private __list;
+
+  startDrag(opt, $event) {
+    if ($event.button != 0) return;
+    this.ghostModel = opt;
+
+    this.__dragEl = getParentByClass($event.target, 'ui-list-item', 'ui-list-group');
+    this.__top = this.__diff = this.__dragEl.offsetTop;
+    this.__dragEl.classList.add('dragging');
+    this.__list = this.element.querySelectorAll('.ui-list-item');
+
+    this.__startY = ($event.y || $event.clientY);
+
+    document.addEventListener('mousemove', this.__move = e => this.move(e));
+    document.addEventListener('mouseup', this.__stop = e => this.stopDrag(e));
+  }
+
+  move($event) {
+    var y = ($event.y || $event.clientY) - this.__startY;
+
+    this.__startY = ($event.y || $event.clientY);
+    this.__diff += y;
+
+    let sh = this.__dragEl.offsetParent.scrollHeight;
+    this.__top = this.__diff < 0 ? 0 : (this.__diff > sh ? sh : this.__diff);
+    this.__dragEl.offsetParent.scrollTop = this.__top - (sh / 2);
+
+    if (this.__top >= this.__dragEl.offsetTop + this.__dragEl.offsetHeight) {
+      let next = this.__dragEl.nextSibling;
+      if (next) this.__dragEl.parentElement.insertBefore(next, this.__dragEl);
+    }
+    if (this.__top + this.__dragEl.offsetHeight <= this.__dragEl.offsetTop) {
+      let prev = this.__dragEl.previousSibling;
+      if (prev) this.__dragEl.parentElement.insertBefore(this.__dragEl, prev);
+    }
+
+  }
+  stopDrag($event) {
+    this.__dragEl.classList.remove('dragging');
+    this.ghostModel = null;
+
+    let list = this.element.querySelectorAll('.ui-list-item');
+    let newList = [];
+    _.forEach(list, (l: any) => {
+      if (l.model) newList.push(l.model);
+    });
+    this.options = newList;
+
+    document.removeEventListener('mousemove', this.__move);
+    document.removeEventListener('mouseup', this.__stop);
   }
 }

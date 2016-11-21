@@ -109,7 +109,7 @@
     .weekdays {
       span {
         width: 2em;
-        @include flex(1 1 0em);
+        @include flex(1 1 2em);
       }
     }
 
@@ -117,7 +117,7 @@
       span {
         line-height: 200%;
         margin     : .1em .2em;
-        @include flex(1 1 0em);
+        @include flex(1 1 5em);
       }
     }
 
@@ -126,7 +126,7 @@
         line-height: 150%;
         width      : 3.6em;
         margin     : .1em .2em;
-        @include flex(1 1 0em);
+        @include flex(1 1 3.6em);
       }
     }
 

@@ -3,6 +3,7 @@ export declare class ListGeneric {
     element: any;
     dropdown: any;
     __tether: any;
+    __list: boolean;
     __tags: boolean;
     __value: string;
     __hilight: any;
@@ -19,6 +20,8 @@ export declare class ListGeneric {
     displayProperty: string;
     bind(): void;
     attached(): void;
+    busy: any;
+    disable(disabled?: any): void;
     optionsChanged(newValue: any): void;
     valueChanged(newValue: any): void;
     __unfocus: any;
@@ -97,4 +100,55 @@ export declare class UIList extends ListGeneric {
     disabled: boolean;
     readonly: boolean;
     fireSelect(model: any): void;
+}
+export declare class UILanguage extends ListGeneric {
+    element: Element;
+    constructor(element: Element);
+    attached(): void;
+    detached(): void;
+    bind(): void;
+    __tether: any;
+    __selected: any[];
+    __available: any[];
+    errors: any[];
+    value: any;
+    languages: any;
+    disabled: boolean;
+    readonly: boolean;
+    width: any;
+    valueChanged(newValue: any): void;
+    languagesChanged(newValue: any): void;
+    addError(lang: any): void;
+    removeError(lang: any): void;
+    busy: any;
+    disable(disabled?: any): void;
+    fireSelect(model?: any): void;
+    add(model: any): void;
+    remove(model: any): void;
+}
+export declare class UIReorder {
+    element: Element;
+    private ghostModel;
+    /**
+       * @property    list
+       * @type        array
+       */
+    options: Array<any>;
+    /**
+     * @property    display-property
+     * @type        string
+     */
+    displayProperty: any;
+    constructor(element: Element);
+    private __startY;
+    private __ghostEl;
+    private __dragEl;
+    private __diff;
+    private __top;
+    private __move;
+    private __stop;
+    private __list;
+    startDrag(opt: any, $event: any): void;
+    move($event: any): void;
+    stopDrag($event: any): void;
 }

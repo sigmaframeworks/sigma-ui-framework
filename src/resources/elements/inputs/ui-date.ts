@@ -288,13 +288,13 @@ export class UIDateView {
 
 @autoinject()
 @customElement('ui-date')
-@inlineView(`<template class="ui-input-wrapper ui-date-input \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
-  <span class="ui-invalid-errors"><ul><li repeat.for="e of errors">\${e.message}</li></ul></span>
-  <input class="ui-input" size="1" value.bind="__value" placeholder.bind="placeholder" 
+@inlineView(`<template class="ui-input-wrapper ui-date-input \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly || busy?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
+  <span class="ui-invalid-errors"><ul><li repeat.for="e of __errors">\${e.message}</li></ul></span>
+  <div class="ui-input-div"><input class="ui-input" size="1" value.bind="__value" placeholder.bind="placeholder" 
     focus.trigger="focusing()" blur.trigger="unfocusing()" 
     click.trigger="showDropdown()" keydown.trigger="showDropdown(true)"
-    ref="input" disabled.bind="disabled" readonly.bind="true" type="text"/>
-  <span class="ui-clear" if.bind="__clear && __value" click.trigger="clear()">&times;</span>
+    ref="__input" disabled.bind="disabled || busy" readonly.bind="true" type="text"/>
+  <span class="ui-clear" if.bind="__clear && __value" click.trigger="clear()">&times;</span></div>
   <ui-date-view class="ui-date-dropdown" date.bind="value" min-date.bind="minDate" max-date.bind="maxDate" time.bind="time"
     show.bind="__focus && __showDropdown" view-model.ref="dropdown" mousedown.trigger="stopUnfocus()">
   </ui-date-view></template>`)
@@ -327,6 +327,7 @@ export class UIDate {
   }
   detached() {
     this.__tether.destroy();
+    DOM.removeNode(this.dropdown.element);
   }
 
   @bindable({ defaultBindingMode: bindingMode.twoWay }) value = '';
@@ -343,12 +344,18 @@ export class UIDate {
   __clear;
   __tether;
   __value;
+  __input;
   dropdown;
 
   clear() {
     this.__value = '';
     this.value = null;
     UIEvent.fireEvent('change', this.element, this.value);
+  }
+
+  busy;
+  disable(disabled?) {
+    this.busy = disabled;
   }
 
   valueChanged(newValue) {

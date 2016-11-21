@@ -10,7 +10,7 @@ import * as numeral from "numeral";
 
 export module UIFormat {
   export function toHTML(md) {
-    return kramed(md);
+    return kramed(md).replace(/(\<a href=)/gi, '<a target="_blank" href=');
   }
 
   // Dates

@@ -41,7 +41,7 @@ export interface UIConfig {
 
   apiUrl(t: string): UIConfig;
   apiHeaders(t: any): UIConfig;
-  addAuthHeader(t: boolean): UIConfig;
+  sendAuthHeader(t: boolean): UIConfig;
 
   languages(l: Array<any>): UIConfig;
 }
@@ -66,6 +66,7 @@ export function configure(config: FrameworkConfiguration, configCallback) {
     './elements/inputs/ui-button',
     './elements/inputs/ui-input',
     './elements/inputs/ui-option',
+    './elements/inputs/ui-markdown',
     './elements/inputs/ui-list',
     './elements/inputs/ui-date'
   ]);
@@ -124,17 +125,17 @@ export function configure(config: FrameworkConfiguration, configCallback) {
     '\${$displayName} must be a decimal value between \${$config.min || "MIN_VALUE"} and \${$config.max || "MAX_VALUE"}.', (min, max) => ({ min, max }));
   ValidationRules
     .customRule('language', (map, obj, controller, langInput) => {
-      if (!(langInput && langInput.clearErrors && langInput.addError)) throw new Error('Language validation must have reference to ui-language');
+      if (!(langInput && langInput.addError && langInput.removeError)) throw new Error('Language validation must have reference to ui-language');
       let promises = [];
-      langInput.clearErrors();
       _.forEach(map, (model, key) => {
         promises.push(controller.validator.validateObject(model)
           .then(e => {
+            if (langInput.errors.indexOf(key) > -1) langInput.removeError(key);
             if (e.length > 0) langInput.addError(key);
-            return e.length > 0 ? key : '';
+            return e.length > 0 ? true : false;
           }));
       });
-      return Promise.all(promises).then(e => e.join('').length == 0);
+      return Promise.all(promises).then(e => _.filter(e).length == 0);
     }, 'Some language entries contain invalid values');
 
   // Setup kramed

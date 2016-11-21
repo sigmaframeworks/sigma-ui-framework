@@ -22,7 +22,49 @@
   }
 }
 
-.ui-list {
+.ui-list.ui-reorder {
+  display : block;
+  border  : none;
+  position: relative;
+
+  .ui-list-container {
+    border: none;
+  }
+
+  .ui-list-item {
+    cursor: move;
+
+    > span:first-child {
+      @include margin(end, .5em);
+      font-size: .8rem;
+      color    : $muted;
+    }
+
+    &:hover {
+      background: none;
+    }
+
+    &.dragging {
+      visibility: hidden;
+    }
+
+    > .ui-icon {
+      // cursor: pointer;
+    }
+  }
+
+  .ui-ghost {
+    color     : $secondary-text;
+    background: rgba($secondary, .5);
+    border    : 1px solid $secondary;
+
+    position  : absolute;
+    left      : 0;
+    right     : 0;
+  }
+}
+
+.ui-list .ui-input-div {
   flex-wrap: wrap !important;
 
   .ui-list-container {
@@ -45,7 +87,7 @@
   }
 }
 
-.ui-tag {
+.ui-tag .ui-input-div {
   flex-wrap: wrap !important;
 
   .ui-input {
@@ -70,6 +112,24 @@
       right   : 0;
       position: absolute;
     }
+  }
+}
+
+.ui-language {
+  min-width: 15em;
+}
+
+.ui-lang-item {
+  @include flex-row($wrap:false, $align:center);
+
+  > :first-child {
+    @include flex(1 1 1em);
+  }
+
+  > :last-child {
+    margin: 0 .4em;
+    cursor: pointer;
+    @include flex(0 0 auto);
   }
 }
 
@@ -140,7 +200,7 @@
   }
 }
 
-.ui-list .ui-list-item:hover {
+.ui-auto-list .ui-list-item:hover {
   background: rgba($primary,.25);
 }
 

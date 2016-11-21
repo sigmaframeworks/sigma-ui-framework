@@ -55,11 +55,16 @@ export class UIApplication {
     this.__authToken = v;
   }
 
-  login(authUser, authToken?) {
+  login(authUser, authPass?, authToken?, route?) {
     this.AuthUser = authUser;
     this.AuthToken = authToken;
     this.IsAuthenticated = true;
-    this.navigateTo('');
+
+    this.persist('AppUsername', authUser);
+    this.persist('AppPassword', authPass);
+
+    this.navigateTo(route || 'home');
+    UIEvent.broadcast('login');
   }
   logout() {
     this.AuthUser = null;
@@ -67,6 +72,7 @@ export class UIApplication {
     this.persist('AppPassword', null);
     this.IsAuthenticated = false;
     this.navigateTo('login');
+    UIEvent.broadcast('logout');
   }
 
   private __sharedState = {};
