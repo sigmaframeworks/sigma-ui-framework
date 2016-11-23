@@ -36,16 +36,25 @@ import * as Tether from "tether";
     <col/>
   </colgroup>
   <tbody>
-    <tr repeat.for="record of data" mouseup.delegate="fireSelect($parent.selected=record)" class="\${$parent.__rowSelect && $parent.selected==record?'ui-selected':''}">
+    <tr if.bind="!__virtual" repeat.for="record of data" click.delegate="fireSelect($parent.selected=record)" class="\${$parent.__rowSelect && $parent.selected==record?'ui-selected':''}">
     <td repeat.for="col of __columns" class="\${col.locked==0?'ui-locked':''} \${col.align}" css.bind="{left: col.left+'px'}">
-      <div if.bind="col.type=='normal'" innerhtml.bind='col.getValue(record[col.dataId],record)'></div>
-      <div if.bind="col.type=='link'"><a class="ui-link \${col.isDisabled(record[col.dataId],record)?'ui-disabled':''}" click.trigger="col.fireClick(record[col.dataId],record)"><span class="fi-ui \${col.getIcon(record[col.dataId],record)}" if.bind="col.icon"></span> \${col.getLabel(record[col.dataId],record)}</a></div>
-      <div if.bind="col.type=='button'" class="no-padding"><ui-button click.trigger="col.fireClick(record[col.dataId],record)" theme.bind="col.getTheme(record[col.dataId],record)" small square icon.bind="col.getIcon(record[col.dataId],record)" disabled.bind="col.isDisabled(record[col.dataId],record)" dropdown.bind="dropdown" menuopen.trigger="col.fireMenuOpen($event, record)">\${col.getLabel(record[col.dataId],record)}</ui-button></div>
+      <div if.bind="col.type=='normal'"><span class="\${col.class}" innerhtml.bind='col.getValue(record[col.dataId],record)'></span></div>
+      <div if.bind="col.type=='link'"><a class="ui-link \${col.class} \${col.isDisabled(record[col.dataId],record)?'ui-disabled':''}" click.trigger="col.fireClick($event,record[col.dataId],record)"><span class="fi-ui \${col.getIcon(record[col.dataId],record)}" if.bind="col.icon"></span> <span innerhtml.bind="col.getLabel(record[col.dataId],record)"></span></a></div>
+      <div if.bind="col.type=='button'" class="no-padding"><ui-button click.trigger="col.fireClick($event,record[col.dataId],record)" theme.bind="col.getTheme(record[col.dataId],record)" small square icon.bind="col.getIcon(record[col.dataId],record)" disabled.bind="col.isDisabled(record[col.dataId],record)" dropdown.bind="dropdown" menuopen.trigger="col.fireMenuOpen($event, record)"><span innerhtml.bind="col.getLabel(record[col.dataId],record)"></span></ui-button></div>
       <div if.bind="col.type=='switch'" class="no-padding"><ui-switch change.trigger="col.fireChange($event.detail,record)" theme.bind="col.theme" checked.bind="record[col.dataId]" 
         off-label.bind="col.offLabel" off-value.bind="col.offValue" on-label.bind="col.onLabel" on-value.bind="col.onValue" width.bind="col.width" disabled.bind="col.isDisabled(record[col.dataId],record)"></ui-switch></div>
     </td><td class="ui-expander"><div>&nbsp;</div></td></tr>
-    <tr if.bind="data.length==0"><td repeat.for="col of __columns" class="\${col.locked==0?'ui-locked':''}" css.bind="{left: col.left+'px'}"><div>&nbsp;</div></td><td class="ui-expander"><div>&nbsp;</div></td></tr>
-    <tr><td repeat.for="col of __columns" class="\${col.locked==0?'ui-locked':''}" css.bind="{left: col.left+'px'}"><div>&nbsp;</div></td><td class="ui-expander"><div>&nbsp;</div></td></tr>
+    
+    <tr if.bind="__virtual" virtual-repeat.for="record of data" click.delegate="fireSelect($parent.selected=record)" class="\${$parent.__rowSelect && $parent.selected==record?'ui-selected':''}">
+    <td repeat.for="col of __columns" class="\${col.locked==0?'ui-locked':''} \${col.align}" css.bind="{left: col.left+'px'}">
+      <div if.bind="col.type=='normal'"><span class="\${col.class}" innerhtml.bind='col.getValue(record[col.dataId],record)'></span></div>
+      <div if.bind="col.type=='link'"><a class="ui-link \${col.class} \${col.isDisabled(record[col.dataId],record)?'ui-disabled':''}" click.trigger="col.fireClick($event,record[col.dataId],record)"><span class="fi-ui \${col.getIcon(record[col.dataId],record)}" if.bind="col.icon"></span> <span innerhtml.bind="col.getLabel(record[col.dataId],record)"></span></a></div>
+      <div if.bind="col.type=='button'" class="no-padding"><ui-button click.trigger="col.fireClick($event,record[col.dataId],record)" theme.bind="col.getTheme(record[col.dataId],record)" small square icon.bind="col.getIcon(record[col.dataId],record)" disabled.bind="col.isDisabled(record[col.dataId],record)" dropdown.bind="dropdown" menuopen.trigger="col.fireMenuOpen($event, record)"><span innerhtml.bind="col.getLabel(record[col.dataId],record)"></span></ui-button></div>
+      <div if.bind="col.type=='switch'" class="no-padding"><ui-switch change.trigger="col.fireChange($event.detail,record)" theme.bind="col.theme" checked.bind="record[col.dataId]" 
+        off-label.bind="col.offLabel" off-value.bind="col.offValue" on-label.bind="col.onLabel" on-value.bind="col.onValue" width.bind="col.width" disabled.bind="col.isDisabled(record[col.dataId],record)"></ui-switch></div>
+    </td><td class="ui-expander"><div>&nbsp;</div></td></tr>
+    
+    <tr><td repeat.for="col of __columns" class="\${col.locked==0?'ui-locked':''}" css.bind="{left: col.left+'px'}"><div if.bind="!__virtual">&nbsp;</div></td><td class="ui-expander"><div if.bind="!__virtual">&nbsp;</div></td></tr>
   </tbody>
 </table></div>
 <div class="ui-dg-wrapper" ref="__dgWrapFoot">
@@ -63,6 +72,7 @@ export class UIDatagrid {
   constructor(public element: Element) {
     if (element.hasAttribute('auto-height')) this.element.classList.add('ui-auto-size');
     if (element.hasAttribute('rowselect')) this.__rowSelect = true;
+    if (element.hasAttribute('virtual')) this.__virtual = true;
   }
 
   bind() {
@@ -80,6 +90,7 @@ export class UIDatagrid {
   @bindable() sortColumn = '';
   @bindable() sortOrder = '';
 
+  __virtual = false;
   __rowSelect;
   __columns = [];
   __tableWidth = '';
@@ -88,6 +99,10 @@ export class UIDatagrid {
     let w = 0;
     _.forEach(cols, c => { c.left = w; w += c.getWidth(); });
     return (this.__tableWidth = (w + 20) + 'px');
+  }
+
+  dataChanged(newValue) {
+    UIEvent.queueTask(() => this.data = _.orderBy(this.data, [this.sortColumn, 'ID', 'id'], [this.sortOrder, this.sortOrder, this.sortOrder]));
   }
 
   __dgWrapHead;
@@ -240,6 +255,7 @@ export class UIDGColumn extends UIDataColumn {
   @bindable() width;
   @bindable() minWidth;
 
+  @bindable() class;
   @bindable() value;
   @bindable() display;
 
@@ -261,6 +277,7 @@ export class UIDGLink extends UIDataColumn {
 
   @bindable() icon;
   @bindable() label;
+  @bindable() class;
   @bindable() disabled = null;
 
   isDisabled(value, record) {
@@ -279,9 +296,12 @@ export class UIDGLink extends UIDataColumn {
     return this.label || this.processValue(value, record);
   }
 
-  fireClick(value, record) {
+  fireClick($event, value, record) {
+    $event.stopPropagation();
+    $event.preventDefault();
     if (this.isDisabled(value, record)) return;
     UIEvent.fireEvent('click', this.element, ({ value, record }));
+    return false;
   }
 }
 
@@ -326,12 +346,16 @@ export class UIDGButton extends UIDataColumn {
     return this.theme;
   }
 
-  fireClick(value, record) {
+  fireClick($event, value, record) {
+    $event.stopPropagation();
+    $event.preventDefault();
     if (this.isDisabled(value, record)) return;
     UIEvent.fireEvent('click', this.element, ({ value, record }));
+    return false;
   }
 
   fireMenuOpen($event, record) {
+    $event.stopPropagation();
     return UIEvent.fireEvent('menuopen', this.element, ({ record }));
   }
 }
