@@ -82,14 +82,14 @@ export class UIModel {
 
   serialize() {
     try {
-      return this.__serializeObject(this);
+      return UIModel.serializeObject(this);
     }
     catch (e) {
       throw new Error(`Error serializing object [${this.constructor.name}]`);
     }
   }
 
-  __serializeObject(o) {
+  static serializeObject(o) {
     let _pojo = {};
     if (o instanceof Map) {
       o.forEach((obj, key) => {
@@ -97,7 +97,7 @@ export class UIModel {
           _pojo[key] = obj.serialize();
         }
         if (_.isObject(obj)) {
-          _pojo[key] = this.__serializeObject(obj)
+          _pojo[key] = this.serializeObject(obj)
         }
         else if (_.isArray(obj)) {
           _pojo[key] = obj.join(',');
@@ -115,7 +115,7 @@ export class UIModel {
               _pojo[key] = o[key].serialize();
             }
             if (_.isObject(o[key])) {
-              _pojo[key] = this.__serializeObject(o[key])
+              _pojo[key] = this.serializeObject(o[key])
             }
             else if (_.isArray(o[key])) {
               _pojo[key] = o[key].join(',');
