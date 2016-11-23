@@ -35,7 +35,9 @@ a.ui-menu-item {
   }
 
   &.ui-active {
+    background    : none;
     pointer-events: none;
+    @include box-shadow(0 -4px 0 0 $primary inset);
   }
 }
 

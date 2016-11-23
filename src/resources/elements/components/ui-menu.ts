@@ -115,7 +115,7 @@ export class UIMenuDivider {
 @autoinject()
 @containerless()
 @customElement('ui-menu-item')
-@inlineView(`<template><a class="ui-menu-item \${active?'ui-active':''} \${disabled?'ui-disabled':''}" href.bind="href" click.trigger="click($event)">
+@inlineView(`<template><a class="ui-menu-item \${active?'ui-active':''} \${disabled?'ui-disabled':''} \${class}" href.bind="href" click.trigger="click($event)">
     <span if.bind="icon" class="ui-menu-icon fi-ui \${icon}"></span><span class="ui-menu-label"><slot></slot></span></a></template>`)
 export class UIMenuLink {
   constructor(public element: Element) { }
@@ -126,6 +126,7 @@ export class UIMenuLink {
   }
 
   @bindable() icon = '';
+  @bindable() class = '';
   @bindable() active = false;
   @bindable() disabled = false;
   @bindable() href = 'javascript:void(0)';
