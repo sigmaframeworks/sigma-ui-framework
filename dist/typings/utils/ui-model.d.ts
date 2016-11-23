@@ -14,8 +14,7 @@ export declare class UIModel {
     dispose(): void;
     deserialize(json: any): void;
     serialize(): {};
-    __serializeObject(o: any): {};
-    ___serializeKey(key: any, o: any): void;
+    static serializeObject(o: any): {};
     isDirty(): any;
     __checkDirty(o: any, t: any): any;
     saveChanges(): void;

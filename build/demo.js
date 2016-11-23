@@ -2,7 +2,7 @@ var gulp = require('gulp');
 var compass = require('gulp-compass'),
   plumber = require('gulp-plumber');
 var del = require('del');
-var distFolder = '../suf-dist-v2';
+var distFolder = '../ui-framework-kitchensink';
 
 
 gulp.task('clean-demo', function() {

@@ -143,20 +143,20 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "aurelia-lo
             }
             this.__logger.error(tag + "::" + msg, rest);
         };
-        UIApplication.prototype.toast = function (config) {
-            ui_utils_1.UIUtils.showToast(config);
+        UIApplication.prototype.toast = function (config, container) {
+            ui_utils_1.UIUtils.showToast(config, container);
         };
-        UIApplication.prototype.toastSuccess = function (config) {
+        UIApplication.prototype.toastSuccess = function (config, container) {
             if (typeof config === 'string')
                 config = { message: config };
             config.theme = 'success';
-            ui_utils_1.UIUtils.showToast(config);
+            ui_utils_1.UIUtils.showToast(config, container);
         };
-        UIApplication.prototype.toastError = function (config) {
+        UIApplication.prototype.toastError = function (config, container) {
             if (typeof config === 'string')
                 config = { message: config };
             config.theme = 'danger';
-            ui_utils_1.UIUtils.showToast(config);
+            ui_utils_1.UIUtils.showToast(config, container);
         };
         UIApplication.prototype.alert = function (config) {
             if (typeof config === 'string')

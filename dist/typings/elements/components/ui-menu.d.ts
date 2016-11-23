@@ -35,6 +35,7 @@ export declare class UIMenuLink {
     constructor(element: Element);
     bind(): void;
     icon: string;
+    class: string;
     active: boolean;
     disabled: boolean;
     href: string;

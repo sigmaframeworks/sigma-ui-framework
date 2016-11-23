@@ -122,6 +122,7 @@ export declare class UITextarea {
     busy: any;
     disable(disabled?: any): void;
     fireChange(evt: any): void;
+    fireInput(evt: any): void;
     __focus: any;
     fireBlur(): void;
     fireFocus(): void;

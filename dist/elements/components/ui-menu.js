@@ -140,6 +140,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
         function UIMenuLink(element) {
             this.element = element;
             this.icon = '';
+            this.class = '';
             this.active = false;
             this.disabled = false;
             this.href = 'javascript:void(0)';
@@ -162,6 +163,10 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
         __decorate([
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
+        ], UIMenuLink.prototype, "class", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
         ], UIMenuLink.prototype, "active", void 0);
         __decorate([
             aurelia_framework_1.bindable(), 
@@ -175,7 +180,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "teth
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.containerless(),
             aurelia_framework_1.customElement('ui-menu-item'),
-            aurelia_framework_1.inlineView("<template><a class=\"ui-menu-item ${active?'ui-active':''} ${disabled?'ui-disabled':''}\" href.bind=\"href\" click.trigger=\"click($event)\">\n    <span if.bind=\"icon\" class=\"ui-menu-icon fi-ui ${icon}\"></span><span class=\"ui-menu-label\"><slot></slot></span></a></template>"), 
+            aurelia_framework_1.inlineView("<template><a class=\"ui-menu-item ${active?'ui-active':''} ${disabled?'ui-disabled':''} ${class}\" href.bind=\"href\" click.trigger=\"click($event)\">\n    <span if.bind=\"icon\" class=\"ui-menu-icon fi-ui ${icon}\"></span><span class=\"ui-menu-label\"><slot></slot></span></a></template>"), 
             __metadata('design:paramtypes', [Element])
         ], UIMenuLink);
         return UIMenuLink;

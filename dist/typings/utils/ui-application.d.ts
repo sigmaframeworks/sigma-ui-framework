@@ -28,9 +28,9 @@ export declare class UIApplication {
     debug(tag: any, msg: any, ...rest: any[]): void;
     error(tag: any, msg: any, ...rest: any[]): void;
     /** Toasts / Alerts **/
-    toast(config: any): void;
-    toastSuccess(config: any): void;
-    toastError(config: any): void;
+    toast(config: any, container?: any): void;
+    toastSuccess(config: any, container?: any): void;
+    toastError(config: any, container?: any): void;
     alert(config: any): Promise<{}>;
     confirm(config: any): Promise<{}>;
 }

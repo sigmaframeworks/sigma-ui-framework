@@ -60,6 +60,7 @@ export declare class UIDate {
     __showDropdown: any;
     __unfocus: any;
     __focus: any;
+    keyDown(evt: any): any;
     showDropdown(force: any): void;
     focusing(): void;
     stopUnfocus(): void;

@@ -86,13 +86,13 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-http
         };
         UIModel.prototype.serialize = function () {
             try {
-                return this.__serializeObject(this);
+                return UIModel.serializeObject(this);
             }
             catch (e) {
                 throw new Error("Error serializing object [" + this.constructor.name + "]");
             }
         };
-        UIModel.prototype.__serializeObject = function (o) {
+        UIModel.serializeObject = function (o) {
             var _this = this;
             var _pojo = {};
             if (o instanceof Map) {
@@ -101,7 +101,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-http
                         _pojo[key] = obj.serialize();
                     }
                     if (_.isObject(obj)) {
-                        _pojo[key] = _this.__serializeObject(obj);
+                        _pojo[key] = _this.serializeObject(obj);
                     }
                     else if (_.isArray(obj)) {
                         _pojo[key] = obj.join(',');
@@ -119,7 +119,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-http
                             _pojo[key] = o[key].serialize();
                         }
                         if (_.isObject(o[key])) {
-                            _pojo[key] = _this.__serializeObject(o[key]);
+                            _pojo[key] = _this.serializeObject(o[key]);
                         }
                         else if (_.isArray(o[key])) {
                             _pojo[key] = o[key].join(',');
@@ -131,25 +131,6 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-http
                 });
             }
             return _pojo;
-        };
-        UIModel.prototype.___serializeKey = function (key, o) {
-            var _this = this;
-            (function (key) {
-                if (key !== 'undefined' && !/^__/.test(key)) {
-                    if (o[key] instanceof UIModel) {
-                        return o[key].serialize();
-                    }
-                    if (_.isObject(o[key])) {
-                        return _this.__serializeObject(o[key]);
-                    }
-                    else if (_.isArray(o[key])) {
-                        return o[key].join(',');
-                    }
-                    else {
-                        return isEmpty(o[key]) ? null : o[key];
-                    }
-                }
-            });
         };
         UIModel.prototype.isDirty = function () {
             var _this = this;

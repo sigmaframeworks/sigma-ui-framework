@@ -137,7 +137,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "loda
         UIHeaderIcon = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-header-icon'),
-            aurelia_framework_1.inlineView("<template class=\"ui-inline-block\"><span class=\"ui-icon ${icon}\"></span>&nbsp;</template>"), 
+            aurelia_framework_1.inlineView("<template class=\"ui-header-icon ui-inline-block\"><span class=\"ui-icon ${icon}\"></span>&nbsp;</template>"), 
             __metadata('design:paramtypes', [Element])
         ], UIHeaderIcon);
         return UIHeaderIcon;
@@ -150,7 +150,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "loda
         UIHeaderTitle = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-header-title'),
-            aurelia_framework_1.inlineView("<template class=\"ui-inline-block ui-col-fill\"><slot></slot></template>"), 
+            aurelia_framework_1.inlineView("<template class=\"ui-header-title ui-inline-block ui-col-fill\"><slot></slot></template>"), 
             __metadata('design:paramtypes', [Element])
         ], UIHeaderTitle);
         return UIHeaderTitle;

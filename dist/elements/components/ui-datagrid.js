@@ -21,6 +21,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "../.
             this.summaryRow = false;
             this.sortColumn = '';
             this.sortOrder = '';
+            this.__virtual = false;
             this.__columns = [];
             this.__tableWidth = '';
             this.__resizing = false;
@@ -28,6 +29,8 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "../.
                 this.element.classList.add('ui-auto-size');
             if (element.hasAttribute('rowselect'))
                 this.__rowSelect = true;
+            if (element.hasAttribute('virtual'))
+                this.__virtual = true;
         }
         UIDatagrid.prototype.bind = function () {
             this.__columns = _.sortBy(this.columns, 'locked');
@@ -39,6 +42,10 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "../.
             var w = 0;
             _.forEach(cols, function (c) { c.left = w; w += c.getWidth(); });
             return (this.__tableWidth = (w + 20) + 'px');
+        };
+        UIDatagrid.prototype.dataChanged = function (newValue) {
+            var _this = this;
+            ui_event_1.UIEvent.queueTask(function () { return _this.data = _.orderBy(_this.data, [_this.sortColumn, 'ID', 'id'], [_this.sortOrder, _this.sortOrder, _this.sortOrder]); });
         };
         UIDatagrid.prototype.scrolling = function (evt) {
             if (this.__dgWrapHead)
@@ -115,7 +122,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "../.
         UIDatagrid = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-datagrid'),
-            aurelia_framework_1.inlineView("<template class=\"ui-datagrid\"><div class=\"ui-hidden\"><slot></slot></div>\n<div show.bind=\"__resizing\" ref=\"__ghost\" class=\"ui-dg-ghost\"></div>\n<div show.bind=\"data.length==0\" class=\"ui-dg-empty\"><slot name=\"dg-empty\"></slot></div>\n<div class=\"ui-dg-wrapper\" ref=\"__dgWrapHead\">\n<table width.bind=\"calculateWidth(__columns)\" css.bind=\"{'table-layout': __tableWidth?'fixed':'auto' }\">\n  <colgroup>\n    <col repeat.for=\"col of __columns\" data-index.bind=\"$index\" width.bind=\"col.width\"/>\n    <col/>\n  </colgroup>\n  <thead><tr>\n    <td repeat.for=\"col of __columns\" click.trigger=\"doSort(col)\" class=\"${col.sortable?'ui-sortable':''} ${col.locked==0?'ui-locked':''}\" css.bind=\"{left: col.left+'px'}\"><div>\n      <span class=\"ui-dg-header\" innerhtml.bind='col.getTitle()'></span>\n      <span class=\"ui-sort ${col.dataId==sortColumn ? sortOrder:''}\" if.bind=\"col.sortable\"></span>\n      <span class=\"ui-resizer\" if.bind=\"col.resize\" mousedown.trigger=\"resizeColumn($event,col, __columns[$index+1])\"></span>\n    </div></td>\n    <td class=\"ui-expander\"><div><span class=\"ui-dg-header\">&nbsp;</span></div></td>\n  </tr></thead>\n</table>\n</div>\n<div class=\"ui-dg-wrapper scrolling\" scroll.trigger=\"scrolling($event)\" ref=\"__scroller\">\n<table width.bind=\"calculateWidth(__columns)\" css.bind=\"{'table-layout': __tableWidth?'fixed':'auto' }\">\n  <colgroup>\n    <col repeat.for=\"col of __columns\" data-index.bind=\"$index\" width.bind=\"col.width\"/>\n    <col/>\n  </colgroup>\n  <tbody>\n    <tr repeat.for=\"record of data\" mouseup.delegate=\"fireSelect($parent.selected=record)\" class=\"${$parent.__rowSelect && $parent.selected==record?'ui-selected':''}\">\n    <td repeat.for=\"col of __columns\" class=\"${col.locked==0?'ui-locked':''} ${col.align}\" css.bind=\"{left: col.left+'px'}\">\n      <div if.bind=\"col.type=='normal'\" innerhtml.bind='col.getValue(record[col.dataId],record)'></div>\n      <div if.bind=\"col.type=='link'\"><a class=\"ui-link\" click.trigger=\"col.fireClick(record[col.dataId],record)\" disabled.bind=\"col.isDisabled(record[col.dataId],record)\"><span class=\"fi-ui ${col.getIcon(record[col.dataId],record)}\" if.bind=\"col.icon\"></span> ${col.getLabel(record[col.dataId],record)}</a></div>\n      <div if.bind=\"col.type=='button'\" class=\"no-padding\"><ui-button click.trigger=\"col.fireClick(record[col.dataId],record)\" theme.bind=\"col.getTheme(record[col.dataId],record)\" small square icon.bind=\"col.getIcon(record[col.dataId],record)\" disabled.bind=\"col.isDisabled(record[col.dataId],record)\" dropdown.bind=\"dropdown\" menuopen.trigger=\"col.fireMenuOpen($event, record)\">${col.getLabel(record[col.dataId],record)}</ui-button></div>\n      <div if.bind=\"col.type=='switch'\" class=\"no-padding\"><ui-switch change.trigger=\"col.fireChange($event.detail,record)\" theme.bind=\"col.theme\" checked.bind=\"record[col.dataId]\" \n        off-label.bind=\"col.offLabel\" off-value.bind=\"col.offValue\" on-label.bind=\"col.onLabel\" on-value.bind=\"col.onValue\" width.bind=\"col.width\" disabled.bind=\"col.isDisabled(record[col.dataId],record)\"></ui-switch></div>\n    </td><td class=\"ui-expander\"><div>&nbsp;</div></td></tr>\n    <tr if.bind=\"data.length==0\"><td repeat.for=\"col of __columns\" class=\"${col.locked==0?'ui-locked':''}\" css.bind=\"{left: col.left+'px'}\"><div>&nbsp;</div></td><td class=\"ui-expander\"><div>&nbsp;</div></td></tr>\n    <tr><td repeat.for=\"col of __columns\" class=\"${col.locked==0?'ui-locked':''}\" css.bind=\"{left: col.left+'px'}\"><div>&nbsp;</div></td><td class=\"ui-expander\"><div>&nbsp;</div></td></tr>\n  </tbody>\n</table></div>\n<div class=\"ui-dg-wrapper\" ref=\"__dgWrapFoot\">\n<table width.bind=\"calculateWidth(__columns)\" css.bind=\"{'table-layout': __tableWidth?'fixed':'auto' }\">\n  <colgroup>\n    <col repeat.for=\"col of __columns\" data-index.bind=\"$index\" width.bind=\"col.width\"/>\n    <col/>\n  </colgroup>\n  <tfoot if.bind=\"summaryRow\"><tr>\n    <td repeat.for=\"col of __columns\" class=\"${col.locked==0?'ui-locked':''}\" css.bind=\"{left: col.left+'px'}\"><div innerhtml.bind='col.getSummary(summaryRow)'></div></td>\n    <td class=\"ui-expander\"><div>&nbsp;</div></td>\n  </tr></tfoot>\n</table></div></template>"), 
+            aurelia_framework_1.inlineView("<template class=\"ui-datagrid\"><div class=\"ui-hidden\"><slot></slot></div>\n<div show.bind=\"__resizing\" ref=\"__ghost\" class=\"ui-dg-ghost\"></div>\n<div show.bind=\"data.length==0\" class=\"ui-dg-empty\"><slot name=\"dg-empty\"></slot></div>\n<div class=\"ui-dg-wrapper\" ref=\"__dgWrapHead\">\n<table width.bind=\"calculateWidth(__columns)\" css.bind=\"{'table-layout': __tableWidth?'fixed':'auto' }\">\n  <colgroup>\n    <col repeat.for=\"col of __columns\" data-index.bind=\"$index\" width.bind=\"col.width\"/>\n    <col/>\n  </colgroup>\n  <thead><tr>\n    <td repeat.for=\"col of __columns\" click.trigger=\"doSort(col)\" class=\"${col.sortable?'ui-sortable':''} ${col.locked==0?'ui-locked':''}\" css.bind=\"{left: col.left+'px'}\"><div>\n      <span class=\"ui-dg-header\" innerhtml.bind='col.getTitle()'></span>\n      <span class=\"ui-sort ${col.dataId==sortColumn ? sortOrder:''}\" if.bind=\"col.sortable\"></span>\n      <span class=\"ui-resizer\" if.bind=\"col.resize\" mousedown.trigger=\"resizeColumn($event,col, __columns[$index+1])\"></span>\n    </div></td>\n    <td class=\"ui-expander\"><div><span class=\"ui-dg-header\">&nbsp;</span></div></td>\n  </tr></thead>\n</table>\n</div>\n<div class=\"ui-dg-wrapper scrolling\" scroll.trigger=\"scrolling($event)\" ref=\"__scroller\">\n<table width.bind=\"calculateWidth(__columns)\" css.bind=\"{'table-layout': __tableWidth?'fixed':'auto' }\">\n  <colgroup>\n    <col repeat.for=\"col of __columns\" data-index.bind=\"$index\" width.bind=\"col.width\"/>\n    <col/>\n  </colgroup>\n  <tbody>\n    <tr if.bind=\"!__virtual\" repeat.for=\"record of data\" click.delegate=\"fireSelect($parent.selected=record)\" class=\"${$parent.__rowSelect && $parent.selected==record?'ui-selected':''}\">\n    <td repeat.for=\"col of __columns\" class=\"${col.locked==0?'ui-locked':''} ${col.align}\" css.bind=\"{left: col.left+'px'}\">\n      <div if.bind=\"col.type=='normal'\"><span class=\"${col.class}\" innerhtml.bind='col.getValue(record[col.dataId],record)'></span></div>\n      <div if.bind=\"col.type=='link'\"><a class=\"ui-link ${col.class} ${col.isDisabled(record[col.dataId],record)?'ui-disabled':''}\" click.trigger=\"col.fireClick($event,record[col.dataId],record)\"><span class=\"fi-ui ${col.getIcon(record[col.dataId],record)}\" if.bind=\"col.icon\"></span> <span innerhtml.bind=\"col.getLabel(record[col.dataId],record)\"></span></a></div>\n      <div if.bind=\"col.type=='button'\" class=\"no-padding\"><ui-button click.trigger=\"col.fireClick($event,record[col.dataId],record)\" theme.bind=\"col.getTheme(record[col.dataId],record)\" small square icon.bind=\"col.getIcon(record[col.dataId],record)\" disabled.bind=\"col.isDisabled(record[col.dataId],record)\" dropdown.bind=\"dropdown\" menuopen.trigger=\"col.fireMenuOpen($event, record)\"><span innerhtml.bind=\"col.getLabel(record[col.dataId],record)\"></span></ui-button></div>\n      <div if.bind=\"col.type=='switch'\" class=\"no-padding\"><ui-switch change.trigger=\"col.fireChange($event.detail,record)\" theme.bind=\"col.theme\" checked.bind=\"record[col.dataId]\" \n        off-label.bind=\"col.offLabel\" off-value.bind=\"col.offValue\" on-label.bind=\"col.onLabel\" on-value.bind=\"col.onValue\" width.bind=\"col.width\" disabled.bind=\"col.isDisabled(record[col.dataId],record)\"></ui-switch></div>\n    </td><td class=\"ui-expander\"><div>&nbsp;</div></td></tr>\n    \n    <tr if.bind=\"__virtual\" virtual-repeat.for=\"record of data\" click.delegate=\"fireSelect($parent.selected=record)\" class=\"${$parent.__rowSelect && $parent.selected==record?'ui-selected':''}\">\n    <td repeat.for=\"col of __columns\" class=\"${col.locked==0?'ui-locked':''} ${col.align}\" css.bind=\"{left: col.left+'px'}\">\n      <div if.bind=\"col.type=='normal'\"><span class=\"${col.class}\" innerhtml.bind='col.getValue(record[col.dataId],record)'></span></div>\n      <div if.bind=\"col.type=='link'\"><a class=\"ui-link ${col.class} ${col.isDisabled(record[col.dataId],record)?'ui-disabled':''}\" click.trigger=\"col.fireClick($event,record[col.dataId],record)\"><span class=\"fi-ui ${col.getIcon(record[col.dataId],record)}\" if.bind=\"col.icon\"></span> <span innerhtml.bind=\"col.getLabel(record[col.dataId],record)\"></span></a></div>\n      <div if.bind=\"col.type=='button'\" class=\"no-padding\"><ui-button click.trigger=\"col.fireClick($event,record[col.dataId],record)\" theme.bind=\"col.getTheme(record[col.dataId],record)\" small square icon.bind=\"col.getIcon(record[col.dataId],record)\" disabled.bind=\"col.isDisabled(record[col.dataId],record)\" dropdown.bind=\"dropdown\" menuopen.trigger=\"col.fireMenuOpen($event, record)\"><span innerhtml.bind=\"col.getLabel(record[col.dataId],record)\"></span></ui-button></div>\n      <div if.bind=\"col.type=='switch'\" class=\"no-padding\"><ui-switch change.trigger=\"col.fireChange($event.detail,record)\" theme.bind=\"col.theme\" checked.bind=\"record[col.dataId]\" \n        off-label.bind=\"col.offLabel\" off-value.bind=\"col.offValue\" on-label.bind=\"col.onLabel\" on-value.bind=\"col.onValue\" width.bind=\"col.width\" disabled.bind=\"col.isDisabled(record[col.dataId],record)\"></ui-switch></div>\n    </td><td class=\"ui-expander\"><div>&nbsp;</div></td></tr>\n    \n    <tr><td repeat.for=\"col of __columns\" class=\"${col.locked==0?'ui-locked':''}\" css.bind=\"{left: col.left+'px'}\"><div if.bind=\"!__virtual\">&nbsp;</div></td><td class=\"ui-expander\"><div if.bind=\"!__virtual\">&nbsp;</div></td></tr>\n  </tbody>\n</table></div>\n<div class=\"ui-dg-wrapper\" ref=\"__dgWrapFoot\">\n<table width.bind=\"calculateWidth(__columns)\" css.bind=\"{'table-layout': __tableWidth?'fixed':'auto' }\">\n  <colgroup>\n    <col repeat.for=\"col of __columns\" data-index.bind=\"$index\" width.bind=\"col.width\"/>\n    <col/>\n  </colgroup>\n  <tfoot if.bind=\"summaryRow\"><tr>\n    <td repeat.for=\"col of __columns\" class=\"${col.locked==0?'ui-locked':''}\" css.bind=\"{left: col.left+'px'}\"><div innerhtml.bind='col.getSummary(summaryRow)'></div></td>\n    <td class=\"ui-expander\"><div>&nbsp;</div></td>\n  </tr></tfoot>\n</table></div></template>"), 
             __metadata('design:paramtypes', [Element])
         ], UIDatagrid);
         return UIDatagrid;
@@ -178,6 +185,9 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "../.
             return this.element.innerHTML;
         };
         UIDataColumn.prototype.getValue = function (value, record) {
+            return this.processValue(value, record) || '&nbsp;';
+        };
+        UIDataColumn.prototype.processValue = function (value, record) {
             var retVal = '';
             if (isFunction(this.value))
                 value = this.value(value, record);
@@ -217,7 +227,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "../.
                         break;
                 }
             }
-            return retVal || '&nbsp;';
+            return retVal;
         };
         return UIDataColumn;
     }());
@@ -241,6 +251,10 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "../.
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
         ], UIDGColumn.prototype, "minWidth", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UIDGColumn.prototype, "class", void 0);
         __decorate([
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
@@ -269,7 +283,6 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "../.
             this.element = element;
             this.type = 'link';
             this.disabled = null;
-            this.align = 'ui-text-center';
         }
         UIDGLink.prototype.isDisabled = function (value, record) {
             if (isFunction(this.disabled))
@@ -281,15 +294,20 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "../.
         UIDGLink.prototype.getIcon = function (value, record) {
             if (isFunction(this.icon))
                 return this.icon(({ value: value, record: record }));
-            return this.icon;
+            return record[this.icon] || this.icon;
         };
         UIDGLink.prototype.getLabel = function (value, record) {
             if (isFunction(this.label))
                 return this.label(({ value: value, record: record }));
-            return this.label;
+            return this.label || this.processValue(value, record);
         };
-        UIDGLink.prototype.fireClick = function (value, record) {
+        UIDGLink.prototype.fireClick = function ($event, value, record) {
+            $event.stopPropagation();
+            $event.preventDefault();
+            if (this.isDisabled(value, record))
+                return;
             ui_event_1.UIEvent.fireEvent('click', this.element, ({ value: value, record: record }));
+            return false;
         };
         __decorate([
             aurelia_framework_1.bindable(), 
@@ -311,6 +329,10 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "../.
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
         ], UIDGLink.prototype, "label", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UIDGLink.prototype, "class", void 0);
         __decorate([
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
@@ -344,22 +366,28 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "../.
         UIDGButton.prototype.getIcon = function (value, record) {
             if (isFunction(this.icon))
                 return this.icon(({ value: value, record: record }));
-            return this.icon;
+            return record[this.icon] || this.icon;
         };
         UIDGButton.prototype.getLabel = function (value, record) {
             if (isFunction(this.label))
                 return this.label(({ value: value, record: record }));
-            return this.label;
+            return this.label || this.processValue(value, record);
         };
         UIDGButton.prototype.getTheme = function (value, record) {
             if (isFunction(this.theme))
                 return this.theme(({ value: value, record: record }));
             return this.theme;
         };
-        UIDGButton.prototype.fireClick = function (value, record) {
+        UIDGButton.prototype.fireClick = function ($event, value, record) {
+            $event.stopPropagation();
+            $event.preventDefault();
+            if (this.isDisabled(value, record))
+                return;
             ui_event_1.UIEvent.fireEvent('click', this.element, ({ value: value, record: record }));
+            return false;
         };
         UIDGButton.prototype.fireMenuOpen = function ($event, record) {
+            $event.stopPropagation();
             return ui_event_1.UIEvent.fireEvent('menuopen', this.element, ({ record: record }));
         };
         __decorate([
