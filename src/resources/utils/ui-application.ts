@@ -148,20 +148,20 @@ export class UIApplication {
   }
 
   /** Toasts / Alerts **/
-  toast(config) {
-    UIUtils.showToast(config);
+  toast(config, container?) {
+    UIUtils.showToast(config, container);
   }
 
-  toastSuccess(config) {
+  toastSuccess(config, container?) {
     if (typeof config === 'string') config = { message: config };
     config.theme = 'success';
-    UIUtils.showToast(config);
+    UIUtils.showToast(config, container);
   }
 
-  toastError(config) {
+  toastError(config, container?) {
     if (typeof config === 'string') config = { message: config };
     config.theme = 'danger';
-    UIUtils.showToast(config);
+    UIUtils.showToast(config, container);
   }
 
 
