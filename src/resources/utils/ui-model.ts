@@ -15,7 +15,7 @@ export class UIModel {
   public httpClient: UIHttpService;
 
   private __original: any;
-  private __observers;
+  private __observers = [];
 
   constructor() {
     this.logger = getLogger(this.constructor.name);
@@ -58,6 +58,10 @@ export class UIModel {
 
   delete(...rest) {
     throw new Error('Not implemented [delete]');
+  }
+
+  addObserver(ob) {
+    this.__observers.push(ob);
   }
 
   dispose() {
@@ -123,25 +127,6 @@ export class UIModel {
         });
     }
     return _pojo;
-  }
-
-  ___serializeKey(key, o) {
-    (key) => {
-      if (key !== 'undefined' && !/^__/.test(key)) {
-        if (o[key] instanceof UIModel) {
-          return o[key].serialize();
-        }
-        if (_.isObject(o[key])) {
-          return this.__serializeObject(o[key])
-        }
-        else if (_.isArray(o[key])) {
-          return o[key].join(',');
-        }
-        else {
-          return isEmpty(o[key]) ? null : o[key];
-        }
-      }
-    }
   }
 
   isDirty() {

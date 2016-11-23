@@ -83,6 +83,11 @@ th {
 .ui-link {
   color: $link-text;
 
+  &.ui-disabled {
+    color     : $base-text !important;
+    box-shadow: none !important;
+  }
+
   &:focus,
   &:hover {
     color: $link-hover-text;
@@ -109,7 +114,7 @@ hr {
   @include transform(scaleY(.5));
 }
 
-table {
+table.ui-table {
   td,
   th {
     padding: .25em .5em;

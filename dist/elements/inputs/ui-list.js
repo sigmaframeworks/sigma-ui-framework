@@ -647,8 +647,11 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "../.
             this.busy = disabled;
         };
         UILanguage.prototype.fireSelect = function (model) {
-            if (!model)
-                return;
+            if (!model) {
+                this.__value = this.value = '';
+                ui_event_1.UIEvent.fireEvent('select', this.element, null);
+            }
+            ;
             if (ui_event_1.UIEvent.fireEvent('beforeselect', this.element, model.id) !== false) {
                 this.__showDropdown = false;
                 this.__value = model.name;
@@ -669,8 +672,8 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "../.
             _.remove(this.languages, model.id);
             this.__available = this.__available.concat(_.remove(this.__selected, ['id', model.id]));
             ui_event_1.UIEvent.fireEvent('remove', this.element, model);
-            if (this.__available.length > 0)
-                ui_event_1.UIEvent.fireEvent('select', this.element, this.__available[0]);
+            if (this.__selected.length > 0)
+                ui_event_1.UIEvent.fireEvent('select', this.element, this.__selected[0]);
         };
         __decorate([
             aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }), 

@@ -7,6 +7,7 @@ export declare class UIApplication {
     constructor(router: Router);
     navigate(hash: any, options?: any): void;
     navigateTo(route: any, params?: {}, options?: any): void;
+    routeActive(route: any): any;
     /** App Constants **/
     private __authUser;
     private __authToken;

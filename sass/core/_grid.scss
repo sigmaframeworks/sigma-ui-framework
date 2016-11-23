@@ -77,6 +77,10 @@
     @include flex-direction(row-reverse);
   }
 
+  &.ui-nowrap {
+    @include flex-wrap(nowrap);
+  }
+
   &.ui-align-top {
     @include align-items(flex-start);
   }

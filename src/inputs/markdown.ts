@@ -63,8 +63,10 @@ I can also be a link [Click Me](https://github.com/adam-p/markdown-here/wiki/Mar
   }
 
   changeLang($event) {
-    this.langModel = this.langModels[$event.detail.id] || {};
-    this.langDir = $event.detail.rtl ? 'rtl' : 'ltr';
+    let lang: any = {};
+    if ($event.detail != null) lang = $event.detail;
+    this.langModel = this.langModels[lang.id] || {};
+    this.langDir = lang.rtl ? 'rtl' : 'ltr';
   }
 
   addLang($event) {

@@ -35,6 +35,11 @@ export class UIApplication {
     this.router.navigateToRoute(route, params, options);
   }
 
+  routeActive(route) {
+    return route.isActive || route.href == location.hash ||
+      location.hash.indexOf(route.config.redirect || 'QWER') > -1;
+  }
+
   /** App Constants **/
   private __authUser;
   private __authToken;

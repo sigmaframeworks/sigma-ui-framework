@@ -35,7 +35,8 @@
     left      : 0;
     right     : 0;
     z-index   : 30;
-    top       : 2em;
+    top       : 2rem;
+    color     : $muted;
     background: $base-bg;
   }
 
@@ -116,8 +117,8 @@
 
     tbody {
       tr:last-child {
-         > td,
-        > td > div {
+         > td > div,
+        > td {
           height     : 100%;
           padding    : 0;
           line-height: 0;
@@ -210,6 +211,6 @@
 
 .ua-safari {
   .ui-datagrid:not(.ui-auto-size) .ui-dg-wrapper.scrolling table {
-    padding-top: 4em;
+    padding-top: 2em;
   }
 }

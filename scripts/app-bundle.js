@@ -561,6 +561,10 @@ define('resources/utils/ui-application',["require", "exports", "aurelia-framewor
             this.__logger.info("navigateTo::" + route);
             this.router.navigateToRoute(route, params, options);
         };
+        UIApplication.prototype.routeActive = function (route) {
+            return route.isActive || route.href == location.hash ||
+                location.hash.indexOf(route.config.redirect || 'QWER') > -1;
+        };
         Object.defineProperty(UIApplication.prototype, "AuthUser", {
             get: function () {
                 return this.__authUser;
@@ -750,18 +754,37 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define('components/datagrid',["require", "exports", "aurelia-framework", "../resources/utils/ui-application", "lodash"], function (require, exports, aurelia_framework_1, ui_application_1, _) {
+define('components/datagrid',["require", "exports", "aurelia-framework", "../resources/index", "lodash"], function (require, exports, aurelia_framework_1, index_1, _) {
     "use strict";
     var CompDatagrid = (function () {
         function CompDatagrid(app) {
             this.app = app;
             this.data = [];
             this.data2 = [];
+            this.crumbs = ['Root'];
             this.ctries = _.mapKeys(window.countries, 'iso2');
-            for (var i = 0; i < 25; i++)
-                this.data.push({ id: i + 1, name: 'Name', dob: '2010-01-01', gender: 'M', address: 'Address', city: 'City', country: 'AE' });
             for (var i = 0; i < 8; i++)
                 this.data2.push({ id: i + 1, name: 'Name', dob: '2010-01-01', gender: 'M', address: 'Address', city: 'City', country: 'AE' });
+            var names = [
+                'Alfred Grant',
+                'John Cagney',
+                'Henry Stewart',
+                'James Cooper',
+                'Cary Douglas',
+                'Olivia MacLaine',
+                'Lauren Carwford',
+                'Vivian Garland',
+                'Deborah Kelly',
+                'Jane Garner'
+            ];
+            for (var i = 0; i < names.length; i++)
+                this.data.push({
+                    id: i + 1,
+                    name: names[i],
+                    dob: (1940 + Math.round(Math.random() * 60)) + '-0' + (1 + Math.round(Math.random() * 9)) + '-' + (1 + Math.round(Math.random() * 30)),
+                    gender: i < 5 ? 'M' : 'F',
+                    country: window.countries[Math.round(Math.random() * 200)].iso2
+                });
         }
         CompDatagrid.prototype.canActivate = function () {
             return new Promise(function (res) {
@@ -772,11 +795,28 @@ define('components/datagrid',["require", "exports", "aurelia-framework", "../res
             return v == 'M' ? 'Male' : 'Female';
         };
         CompDatagrid.prototype.countryDisplay = function (v, r) {
-            return (this.ctries[v] || { name: '' }).name;
+            return '<div class="ui-row ui-nowrap"><span class="ui-flag ' + v + '"></span> ' + (this.ctries[v] || { name: '' }).name + '</div>';
+        };
+        CompDatagrid.prototype.changeTab = function ($event) {
+            var _this = this;
+            var d = _.clone(this.data);
+            this.data = [];
+            this.crumbs.splice($event.detail + 1);
+            index_1.UIEvent.queueTask(function () { return _this.data = d; });
+        };
+        CompDatagrid.prototype.drillDown = function ($event) {
+            var _this = this;
+            var d = _.clone(this.data);
+            this.data = [];
+            this.crumbs.push($event.detail.value);
+            index_1.UIEvent.queueTask(function () { return _this.data = d; });
+        };
+        CompDatagrid.prototype.isDisabled = function () {
+            return this.crumbs.length == 5;
         };
         CompDatagrid = __decorate([
             aurelia_framework_1.autoinject(), 
-            __metadata('design:paramtypes', [ui_application_1.UIApplication])
+            __metadata('design:paramtypes', [index_1.UIApplication])
         ], CompDatagrid);
         return CompDatagrid;
     }());
@@ -1602,6 +1642,7 @@ define('resources/utils/ui-model',["require", "exports", "aurelia-framework", "a
     "use strict";
     var UIModel = (function () {
         function UIModel() {
+            this.__observers = [];
             this.logger = aurelia_logging_1.getLogger(this.constructor.name);
             Object.defineProperties(this, {
                 'httpClient': {
@@ -1654,6 +1695,9 @@ define('resources/utils/ui-model',["require", "exports", "aurelia-framework", "a
                 rest[_i - 0] = arguments[_i];
             }
             throw new Error('Not implemented [delete]');
+        };
+        UIModel.prototype.addObserver = function (ob) {
+            this.__observers.push(ob);
         };
         UIModel.prototype.dispose = function () {
             this.logger.debug("Model Disposing");
@@ -1718,25 +1762,6 @@ define('resources/utils/ui-model',["require", "exports", "aurelia-framework", "a
                 });
             }
             return _pojo;
-        };
-        UIModel.prototype.___serializeKey = function (key, o) {
-            var _this = this;
-            (function (key) {
-                if (key !== 'undefined' && !/^__/.test(key)) {
-                    if (o[key] instanceof UIModel) {
-                        return o[key].serialize();
-                    }
-                    if (_.isObject(o[key])) {
-                        return _this.__serializeObject(o[key]);
-                    }
-                    else if (_.isArray(o[key])) {
-                        return o[key].join(',');
-                    }
-                    else {
-                        return isEmpty(o[key]) ? null : o[key];
-                    }
-                }
-            });
         };
         UIModel.prototype.isDirty = function () {
             var _this = this;
@@ -2364,8 +2389,11 @@ define('inputs/markdown',["require", "exports", "aurelia-framework", "aurelia-va
             this.controller.validate();
         };
         InputMarkdown.prototype.changeLang = function ($event) {
-            this.langModel = this.langModels[$event.detail.id] || {};
-            this.langDir = $event.detail.rtl ? 'rtl' : 'ltr';
+            var lang = {};
+            if ($event.detail != null)
+                lang = $event.detail;
+            this.langModel = this.langModels[lang.id] || {};
+            this.langDir = lang.rtl ? 'rtl' : 'ltr';
         };
         InputMarkdown.prototype.addLang = function ($event) {
             this.langModels[$event.detail.id] = new LangModel();
@@ -3330,7 +3358,7 @@ define('resources/elements/components/ui-datagrid',["require", "exports", "aurel
             if (this.sortColumn == col.dataId)
                 this.sortOrder = this.sortOrder == 'asc' ? 'desc' : 'asc';
             this.sortColumn = col.dataId;
-            ui_event_1.UIEvent.queueTask(function () { return _.orderBy(_this.data, [_this.sortColumn, 'ID', 'id'], [_this.sortOrder, _this.sortOrder, _this.sortOrder]); });
+            ui_event_1.UIEvent.queueTask(function () { return _this.data = _.orderBy(_this.data, [_this.sortColumn, 'ID', 'id'], [_this.sortOrder, _this.sortOrder, _this.sortOrder]); });
         };
         UIDatagrid.prototype.resizeColumn = function (evt, col, next) {
             var _this = this;
@@ -3390,7 +3418,7 @@ define('resources/elements/components/ui-datagrid',["require", "exports", "aurel
         UIDatagrid = __decorate([
             aurelia_framework_1.autoinject(),
             aurelia_framework_1.customElement('ui-datagrid'),
-            aurelia_framework_1.inlineView("<template class=\"ui-datagrid\"><div class=\"ui-hidden\"><slot></slot></div>\n<div show.bind=\"__resizing\" ref=\"__ghost\" class=\"ui-dg-ghost\"></div>\n<div show.bind=\"data.length==0\" class=\"ui-dg-empty\"><slot name=\"dg-empty\"></slot></div>\n<div class=\"ui-dg-wrapper\" ref=\"__dgWrapHead\">\n<table width.bind=\"calculateWidth(__columns)\" css.bind=\"{'table-layout': __tableWidth?'fixed':'auto' }\">\n  <colgroup>\n    <col repeat.for=\"col of __columns\" data-index.bind=\"$index\" width.bind=\"col.width\"/>\n    <col/>\n  </colgroup>\n  <thead><tr>\n    <td repeat.for=\"col of __columns\" click.trigger=\"doSort(col)\" class=\"${col.sortable?'ui-sortable':''} ${col.locked==0?'ui-locked':''}\" css.bind=\"{left: col.left+'px'}\"><div>\n      <span class=\"ui-dg-header\" innerhtml.bind='col.getTitle()'></span>\n      <span class=\"ui-sort ${col.dataId==sortColumn ? sortOrder:''}\" if.bind=\"col.sortable\"></span>\n      <span class=\"ui-resizer\" if.bind=\"col.resize\" mousedown.trigger=\"resizeColumn($event,col, __columns[$index+1])\"></span>\n    </div></td>\n    <td class=\"ui-expander\"><div><span class=\"ui-dg-header\">&nbsp;</span></div></td>\n  </tr></thead>\n</table>\n</div>\n<div class=\"ui-dg-wrapper scrolling\" scroll.trigger=\"scrolling($event)\" ref=\"__scroller\">\n<table width.bind=\"calculateWidth(__columns)\" css.bind=\"{'table-layout': __tableWidth?'fixed':'auto' }\">\n  <colgroup>\n    <col repeat.for=\"col of __columns\" data-index.bind=\"$index\" width.bind=\"col.width\"/>\n    <col/>\n  </colgroup>\n  <tbody>\n    <tr repeat.for=\"record of data\" mouseup.delegate=\"fireSelect($parent.selected=record)\" class=\"${$parent.__rowSelect && $parent.selected==record?'ui-selected':''}\">\n    <td repeat.for=\"col of __columns\" class=\"${col.locked==0?'ui-locked':''} ${col.align}\" css.bind=\"{left: col.left+'px'}\">\n      <div if.bind=\"col.type=='normal'\" innerhtml.bind='col.getValue(record[col.dataId],record)'></div>\n      <div if.bind=\"col.type=='link'\"><a class=\"ui-link\" click.trigger=\"col.fireClick(record)\" disabled.bind=\"col.isDisabled()\"><span class=\"fi-ui ${col.icon}\" if.bind=\"col.icon\"></span> ${col.label}</a></div>\n      <div if.bind=\"col.type=='button'\" class=\"no-padding\"><ui-button click.trigger=\"col.fireClick(record)\" theme.bind=\"col.theme\" small square icon.bind=\"col.icon\" disabled.bind=\"col.isDisabled()\" dropdown.bind=\"dropdown\" menuopen.trigger=\"col.fireMenuOpen($event, record)\">${col.label}</ui-button></div>\n      <div if.bind=\"col.type=='switch'\" class=\"no-padding\"><ui-switch change.trigger=\"col.fireChange($event.detail,record)\" theme.bind=\"col.theme\" checked.bind=\"record[col.dataId]\" \n        off-label.bind=\"col.offLabel\" off-value.bind=\"col.offValue\" on-label.bind=\"col.onLabel\" on-value.bind=\"col.onValue\" width.bind=\"col.width\" disabled.bind=\"col.isDisabled(record[col.dataId],record)\"></ui-switch></div>\n    </td><td class=\"ui-expander\"><div>&nbsp;</div></td></tr>\n    <tr if.bind=\"data.length==0\"><td repeat.for=\"col of __columns\" class=\"${col.locked==0?'ui-locked':''}\" css.bind=\"{left: col.left+'px'}\"><div>&nbsp;</div></td><td class=\"ui-expander\"><div>&nbsp;</div></td></tr>\n    <tr><td repeat.for=\"col of __columns\" class=\"${col.locked==0?'ui-locked':''}\" css.bind=\"{left: col.left+'px'}\"><div>&nbsp;</div></td><td class=\"ui-expander\"><div>&nbsp;</div></td></tr>\n  </tbody>\n</table></div>\n<div class=\"ui-dg-wrapper\" ref=\"__dgWrapFoot\">\n<table width.bind=\"calculateWidth(__columns)\" css.bind=\"{'table-layout': __tableWidth?'fixed':'auto' }\">\n  <colgroup>\n    <col repeat.for=\"col of __columns\" data-index.bind=\"$index\" width.bind=\"col.width\"/>\n    <col/>\n  </colgroup>\n  <tfoot if.bind=\"summaryRow\"><tr>\n    <td repeat.for=\"col of __columns\" class=\"${col.locked==0?'ui-locked':''}\" css.bind=\"{left: col.left+'px'}\"><div innerhtml.bind='col.getSummary(summaryRow)'></div></td>\n    <td class=\"ui-expander\"><div>&nbsp;</div></td>\n  </tr></tfoot>\n</table></div></template>"), 
+            aurelia_framework_1.inlineView("<template class=\"ui-datagrid\"><div class=\"ui-hidden\"><slot></slot></div>\n<div show.bind=\"__resizing\" ref=\"__ghost\" class=\"ui-dg-ghost\"></div>\n<div show.bind=\"data.length==0\" class=\"ui-dg-empty\"><slot name=\"dg-empty\"></slot></div>\n<div class=\"ui-dg-wrapper\" ref=\"__dgWrapHead\">\n<table width.bind=\"calculateWidth(__columns)\" css.bind=\"{'table-layout': __tableWidth?'fixed':'auto' }\">\n  <colgroup>\n    <col repeat.for=\"col of __columns\" data-index.bind=\"$index\" width.bind=\"col.width\"/>\n    <col/>\n  </colgroup>\n  <thead><tr>\n    <td repeat.for=\"col of __columns\" click.trigger=\"doSort(col)\" class=\"${col.sortable?'ui-sortable':''} ${col.locked==0?'ui-locked':''}\" css.bind=\"{left: col.left+'px'}\"><div>\n      <span class=\"ui-dg-header\" innerhtml.bind='col.getTitle()'></span>\n      <span class=\"ui-sort ${col.dataId==sortColumn ? sortOrder:''}\" if.bind=\"col.sortable\"></span>\n      <span class=\"ui-resizer\" if.bind=\"col.resize\" mousedown.trigger=\"resizeColumn($event,col, __columns[$index+1])\"></span>\n    </div></td>\n    <td class=\"ui-expander\"><div><span class=\"ui-dg-header\">&nbsp;</span></div></td>\n  </tr></thead>\n</table>\n</div>\n<div class=\"ui-dg-wrapper scrolling\" scroll.trigger=\"scrolling($event)\" ref=\"__scroller\">\n<table width.bind=\"calculateWidth(__columns)\" css.bind=\"{'table-layout': __tableWidth?'fixed':'auto' }\">\n  <colgroup>\n    <col repeat.for=\"col of __columns\" data-index.bind=\"$index\" width.bind=\"col.width\"/>\n    <col/>\n  </colgroup>\n  <tbody>\n    <tr repeat.for=\"record of data\" mouseup.delegate=\"fireSelect($parent.selected=record)\" class=\"${$parent.__rowSelect && $parent.selected==record?'ui-selected':''}\">\n    <td repeat.for=\"col of __columns\" class=\"${col.locked==0?'ui-locked':''} ${col.align}\" css.bind=\"{left: col.left+'px'}\">\n      <div if.bind=\"col.type=='normal'\" innerhtml.bind='col.getValue(record[col.dataId],record)'></div>\n      <div if.bind=\"col.type=='link'\"><a class=\"ui-link ${col.isDisabled(record[col.dataId],record)?'ui-disabled':''}\" click.trigger=\"col.fireClick(record[col.dataId],record)\"><span class=\"fi-ui ${col.getIcon(record[col.dataId],record)}\" if.bind=\"col.icon\"></span> ${col.getLabel(record[col.dataId],record)}</a></div>\n      <div if.bind=\"col.type=='button'\" class=\"no-padding\"><ui-button click.trigger=\"col.fireClick(record[col.dataId],record)\" theme.bind=\"col.getTheme(record[col.dataId],record)\" small square icon.bind=\"col.getIcon(record[col.dataId],record)\" disabled.bind=\"col.isDisabled(record[col.dataId],record)\" dropdown.bind=\"dropdown\" menuopen.trigger=\"col.fireMenuOpen($event, record)\">${col.getLabel(record[col.dataId],record)}</ui-button></div>\n      <div if.bind=\"col.type=='switch'\" class=\"no-padding\"><ui-switch change.trigger=\"col.fireChange($event.detail,record)\" theme.bind=\"col.theme\" checked.bind=\"record[col.dataId]\" \n        off-label.bind=\"col.offLabel\" off-value.bind=\"col.offValue\" on-label.bind=\"col.onLabel\" on-value.bind=\"col.onValue\" width.bind=\"col.width\" disabled.bind=\"col.isDisabled(record[col.dataId],record)\"></ui-switch></div>\n    </td><td class=\"ui-expander\"><div>&nbsp;</div></td></tr>\n    <tr if.bind=\"data.length==0\"><td repeat.for=\"col of __columns\" class=\"${col.locked==0?'ui-locked':''}\" css.bind=\"{left: col.left+'px'}\"><div>&nbsp;</div></td><td class=\"ui-expander\"><div>&nbsp;</div></td></tr>\n    <tr><td repeat.for=\"col of __columns\" class=\"${col.locked==0?'ui-locked':''}\" css.bind=\"{left: col.left+'px'}\"><div>&nbsp;</div></td><td class=\"ui-expander\"><div>&nbsp;</div></td></tr>\n  </tbody>\n</table></div>\n<div class=\"ui-dg-wrapper\" ref=\"__dgWrapFoot\">\n<table width.bind=\"calculateWidth(__columns)\" css.bind=\"{'table-layout': __tableWidth?'fixed':'auto' }\">\n  <colgroup>\n    <col repeat.for=\"col of __columns\" data-index.bind=\"$index\" width.bind=\"col.width\"/>\n    <col/>\n  </colgroup>\n  <tfoot if.bind=\"summaryRow\"><tr>\n    <td repeat.for=\"col of __columns\" class=\"${col.locked==0?'ui-locked':''}\" css.bind=\"{left: col.left+'px'}\"><div innerhtml.bind='col.getSummary(summaryRow)'></div></td>\n    <td class=\"ui-expander\"><div>&nbsp;</div></td>\n  </tr></tfoot>\n</table></div></template>"), 
             __metadata('design:paramtypes', [Element])
         ], UIDatagrid);
         return UIDatagrid;
@@ -3453,6 +3481,9 @@ define('resources/elements/components/ui-datagrid',["require", "exports", "aurel
             return this.element.innerHTML;
         };
         UIDataColumn.prototype.getValue = function (value, record) {
+            return this.processValue(value, record) || '&nbsp;';
+        };
+        UIDataColumn.prototype.processValue = function (value, record) {
             var retVal = '';
             if (isFunction(this.value))
                 value = this.value(value, record);
@@ -3492,7 +3523,7 @@ define('resources/elements/components/ui-datagrid',["require", "exports", "aurel
                         break;
                 }
             }
-            return retVal || '&nbsp;';
+            return retVal;
         };
         return UIDataColumn;
     }());
@@ -3544,7 +3575,6 @@ define('resources/elements/components/ui-datagrid',["require", "exports", "aurel
             this.element = element;
             this.type = 'link';
             this.disabled = null;
-            this.align = 'ui-text-center';
         }
         UIDGLink.prototype.isDisabled = function (value, record) {
             if (isFunction(this.disabled))
@@ -3553,8 +3583,20 @@ define('resources/elements/components/ui-datagrid',["require", "exports", "aurel
                 return record[this.disabled];
             return false;
         };
-        UIDGLink.prototype.fireClick = function (record) {
-            ui_event_1.UIEvent.fireEvent('click', this.element, ({ record: record }));
+        UIDGLink.prototype.getIcon = function (value, record) {
+            if (isFunction(this.icon))
+                return this.icon(({ value: value, record: record }));
+            return record[this.icon] || this.icon;
+        };
+        UIDGLink.prototype.getLabel = function (value, record) {
+            if (isFunction(this.label))
+                return this.label(({ value: value, record: record }));
+            return this.label || this.processValue(value, record);
+        };
+        UIDGLink.prototype.fireClick = function (value, record) {
+            if (this.isDisabled(value, record))
+                return;
+            ui_event_1.UIEvent.fireEvent('click', this.element, ({ value: value, record: record }));
         };
         __decorate([
             aurelia_framework_1.bindable(), 
@@ -3606,8 +3648,25 @@ define('resources/elements/components/ui-datagrid',["require", "exports", "aurel
                 return record[this.disabled];
             return false;
         };
-        UIDGButton.prototype.fireClick = function (record) {
-            ui_event_1.UIEvent.fireEvent('click', this.element, ({ record: record }));
+        UIDGButton.prototype.getIcon = function (value, record) {
+            if (isFunction(this.icon))
+                return this.icon(({ value: value, record: record }));
+            return record[this.icon] || this.icon;
+        };
+        UIDGButton.prototype.getLabel = function (value, record) {
+            if (isFunction(this.label))
+                return this.label(({ value: value, record: record }));
+            return this.label || this.processValue(value, record);
+        };
+        UIDGButton.prototype.getTheme = function (value, record) {
+            if (isFunction(this.theme))
+                return this.theme(({ value: value, record: record }));
+            return this.theme;
+        };
+        UIDGButton.prototype.fireClick = function (value, record) {
+            if (this.isDisabled(value, record))
+                return;
+            ui_event_1.UIEvent.fireEvent('click', this.element, ({ value: value, record: record }));
         };
         UIDGButton.prototype.fireMenuOpen = function ($event, record) {
             return ui_event_1.UIEvent.fireEvent('menuopen', this.element, ({ record: record }));
@@ -4591,6 +4650,441 @@ define('resources/elements/components/ui-tree',["require", "exports", "aurelia-f
         return TreeNode;
     }());
     exports.TreeNode = TreeNode;
+});
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+define('resources/elements/core/ui-grid',["require", "exports", "aurelia-framework"], function (require, exports, aurelia_framework_1) {
+    "use strict";
+    var UIFiller = (function () {
+        function UIFiller() {
+        }
+        UIFiller = __decorate([
+            aurelia_framework_1.customElement('ui-filler'),
+            aurelia_framework_1.inlineView('<template class="ui-col-fill"></template>'), 
+            __metadata('design:paramtypes', [])
+        ], UIFiller);
+        return UIFiller;
+    }());
+    exports.UIFiller = UIFiller;
+    var UIRow = (function () {
+        function UIRow(element) {
+            this.element = element;
+            if (element.hasAttribute('top'))
+                element.classList.add('ui-align-top');
+            if (element.hasAttribute('middle'))
+                element.classList.add('ui-align-middle');
+            if (element.hasAttribute('bottom'))
+                element.classList.add('ui-align-bottom');
+            if (element.hasAttribute('stretch'))
+                element.classList.add('ui-align-stretch');
+            if (element.hasAttribute('start'))
+                element.classList.add('ui-align-start');
+            if (element.hasAttribute('center'))
+                element.classList.add('ui-align-center');
+            if (element.hasAttribute('end'))
+                element.classList.add('ui-align-end');
+            if (element.hasAttribute('spaced'))
+                element.classList.add('ui-align-spaced');
+        }
+        UIRow = __decorate([
+            aurelia_framework_1.autoinject(),
+            aurelia_framework_1.customElement('ui-row'),
+            aurelia_framework_1.inlineView('<template class="ui-row"><slot></slot></template>'), 
+            __metadata('design:paramtypes', [Element])
+        ], UIRow);
+        return UIRow;
+    }());
+    exports.UIRow = UIRow;
+    var UIColumnRow = (function () {
+        function UIColumnRow(element) {
+            this.element = element;
+            if (element.hasAttribute('top'))
+                element.classList.add('ui-align-top');
+            if (element.hasAttribute('middle'))
+                element.classList.add('ui-align-middle');
+            if (element.hasAttribute('bottom'))
+                element.classList.add('ui-align-bottom');
+            if (element.hasAttribute('stretch'))
+                element.classList.add('ui-align-stretch');
+            if (element.hasAttribute('start'))
+                element.classList.add('ui-align-start');
+            if (element.hasAttribute('center'))
+                element.classList.add('ui-align-center');
+            if (element.hasAttribute('end'))
+                element.classList.add('ui-align-end');
+            if (element.hasAttribute('spaced'))
+                element.classList.add('ui-align-spaced');
+        }
+        UIColumnRow = __decorate([
+            aurelia_framework_1.autoinject(),
+            aurelia_framework_1.customElement('ui-row-column'),
+            aurelia_framework_1.inlineView('<template class="ui-row-column"><slot></slot></template>'), 
+            __metadata('design:paramtypes', [Element])
+        ], UIColumnRow);
+        return UIColumnRow;
+    }());
+    exports.UIColumnRow = UIColumnRow;
+    var UIColumn = (function () {
+        function UIColumn(element) {
+            this.element = element;
+            this.size = '';
+            this.width = '';
+            if (element.hasAttribute('top'))
+                element.classList.add('ui-align-top');
+            if (element.hasAttribute('middle'))
+                element.classList.add('ui-align-middle');
+            if (element.hasAttribute('bottom'))
+                element.classList.add('ui-align-bottom');
+            if (element.hasAttribute('stretch'))
+                element.classList.add('ui-align-stretch');
+            if (element.hasAttribute('auto'))
+                element.classList.add('ui-col-auto');
+            if (element.hasAttribute('fill'))
+                element.classList.add('ui-col-fill');
+            if (element.hasAttribute('full'))
+                element.classList.add('ui-col-full');
+            if (element.hasAttribute('scroll'))
+                element.classList.add('ui-scroll');
+            if (element.hasAttribute('padded'))
+                element.classList.add('ui-pad-all');
+        }
+        UIColumn.prototype.bind = function () {
+            for (var _i = 0, _a = this.size.split(' '); _i < _a.length; _i++) {
+                var size = _a[_i];
+                this.element.classList.add("ui-col-" + size);
+            }
+            if (this.width)
+                this.element['style'].flexBasis = this.width;
+        };
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UIColumn.prototype, "size", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UIColumn.prototype, "width", void 0);
+        UIColumn = __decorate([
+            aurelia_framework_1.autoinject(),
+            aurelia_framework_1.customElement('ui-column'),
+            aurelia_framework_1.inlineView('<template class="ui-column"><slot></slot></template>'), 
+            __metadata('design:paramtypes', [Element])
+        ], UIColumn);
+        return UIColumn;
+    }());
+    exports.UIColumn = UIColumn;
+});
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+define('resources/elements/core/ui-page',["require", "exports", "aurelia-framework", "../../utils/ui-event"], function (require, exports, aurelia_framework_1, ui_event_1) {
+    "use strict";
+    var UIPage = (function () {
+        function UIPage(element) {
+            this.element = element;
+            this.pageClass = '';
+        }
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UIPage.prototype, "pageClass", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UIPage.prototype, "pageTitle", void 0);
+        UIPage = __decorate([
+            aurelia_framework_1.autoinject(),
+            aurelia_framework_1.customElement('ui-page'),
+            aurelia_framework_1.inlineView("\n<template class=\"ui-page\">\n  <div class=\"ui-page-title\" if.bind=\"pageTitle\" innerhtml.bind=\"pageTitle\"></div>\n  <div class=\"ui-page-body ${pageClass}\"><slot></slot></div>\n</template>"), 
+            __metadata('design:paramtypes', [Element])
+        ], UIPage);
+        return UIPage;
+    }());
+    exports.UIPage = UIPage;
+    var UISection = (function () {
+        function UISection(element) {
+            this.element = element;
+            this.__columnLayout = true;
+            this.__columnLayout = !element.hasAttribute('row-layout');
+            if (element.hasAttribute('center'))
+                element.classList.add('ui-align-center');
+            if (element.hasAttribute('middle'))
+                element.classList.add('ui-align-middle');
+        }
+        UISection = __decorate([
+            aurelia_framework_1.autoinject(),
+            aurelia_framework_1.customElement('ui-section'),
+            aurelia_framework_1.inlineView("<template class=\"ui-section ${__columnLayout?'ui-column-layout':'ui-row-layout'}\"><slot></slot></template>"), 
+            __metadata('design:paramtypes', [Element])
+        ], UISection);
+        return UISection;
+    }());
+    exports.UISection = UISection;
+    var UIRouterView = (function () {
+        function UIRouterView(element) {
+            this.element = element;
+        }
+        UIRouterView = __decorate([
+            aurelia_framework_1.autoinject(),
+            aurelia_framework_1.containerless(),
+            aurelia_framework_1.customElement('ui-router-view'),
+            aurelia_framework_1.inlineView("<template><router-view class=\"ui-router-view\"></router-view></template>"), 
+            __metadata('design:paramtypes', [Element])
+        ], UIRouterView);
+        return UIRouterView;
+    }());
+    exports.UIRouterView = UIRouterView;
+    var UIContent = (function () {
+        function UIContent(element) {
+            this.element = element;
+            if (element.hasAttribute('scroll'))
+                element.classList.add('ui-scroll');
+            if (element.hasAttribute('padded'))
+                element.classList.add('ui-pad-all');
+        }
+        UIContent = __decorate([
+            aurelia_framework_1.autoinject(),
+            aurelia_framework_1.customElement('ui-content'),
+            aurelia_framework_1.inlineView("<template class=\"ui-content\"><slot></slot></template>"), 
+            __metadata('design:paramtypes', [Element])
+        ], UIContent);
+        return UIContent;
+    }());
+    exports.UIContent = UIContent;
+    var UISidebar = (function () {
+        function UISidebar(element) {
+            var _this = this;
+            this.element = element;
+            this.__class = '';
+            this.__miniDisplay = false;
+            this.__collapsible = false;
+            this.label = "";
+            this.collapsed = false;
+            this.position = "start";
+            if (element.hasAttribute('scroll'))
+                this.__class += ' ui-scroll';
+            if (element.hasAttribute('padded'))
+                this.__class += ' ui-pad-all';
+            if (this.__miniDisplay = element.hasAttribute('mini-display'))
+                this.element.classList.add('ui-mini-display');
+            this.__collapsible = element.hasAttribute('collapsible');
+            this.__obClick = ui_event_1.UIEvent.subscribe('mouseclick', function () {
+                _this.element.classList.remove('ui-show-overlay');
+            });
+        }
+        UISidebar.prototype.bind = function () {
+            this.collapsed = isTrue(this.collapsed);
+        };
+        UISidebar.prototype.detached = function () {
+            if (this.__obClick)
+                this.__obClick.dispose();
+        };
+        UISidebar.prototype.__toggleCollapse = function ($event) {
+            this.collapsed = !this.collapsed;
+            this.element.classList.remove('ui-show-overlay');
+            $event.cancelBubble = true;
+            return true;
+        };
+        UISidebar.prototype.__showOverlay = function ($event) {
+            if (this.__miniDisplay || $event.target != this.element)
+                return true;
+            if (this.collapsed)
+                this.element.classList.add('ui-show-overlay');
+            else
+                this.element.classList.remove('ui-show-overlay');
+        };
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UISidebar.prototype, "label", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UISidebar.prototype, "collapsed", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UISidebar.prototype, "position", void 0);
+        UISidebar = __decorate([
+            aurelia_framework_1.autoinject(),
+            aurelia_framework_1.customElement('ui-sidebar'),
+            aurelia_framework_1.inlineView("<template class=\"ui-sidebar ui-row-column ui-align-stretch ${collapsed?'ui-collapse':''} ${position}\" click.trigger=\"__showOverlay($event)\">\n  <div class=\"ui-col-auto ui-row ui-align-end ui-sidebar-head ${position=='start'?'':'ui-reverse'}\" if.bind=\"__collapsible || label\">\n  <h5 class=\"ui-col-fill ui-sidebar-title\">${label}</h5>\n  <a click.trigger=\"__toggleCollapse($event)\" class=\"ui-col-auto ui-pad-all\" if.bind=\"__collapsible\"><span class=\"fi-ui ui-sidebar-close\"></span></a></div>\n  <div class=\"ui-col-fill ui-sidebar-content ${__class}\"><slot></slot></div>\n</template>"), 
+            __metadata('design:paramtypes', [Element])
+        ], UISidebar);
+        return UISidebar;
+    }());
+    exports.UISidebar = UISidebar;
+    var UIDivider = (function () {
+        function UIDivider(element) {
+            this.element = element;
+        }
+        UIDivider = __decorate([
+            aurelia_framework_1.autoinject(),
+            aurelia_framework_1.customElement('ui-divider'),
+            aurelia_framework_1.inlineView("<template class=\"ui-divider\"></template>"), 
+            __metadata('design:paramtypes', [Element])
+        ], UIDivider);
+        return UIDivider;
+    }());
+    exports.UIDivider = UIDivider;
+    var UIToolbar = (function () {
+        function UIToolbar(element) {
+            this.element = element;
+            if (element.hasAttribute('start'))
+                element.classList.add('ui-start');
+        }
+        UIToolbar = __decorate([
+            aurelia_framework_1.autoinject(),
+            aurelia_framework_1.customElement('ui-toolbar'),
+            aurelia_framework_1.inlineView("<template class=\"ui-toolbar\"><slot></slot></template>"), 
+            __metadata('design:paramtypes', [Element])
+        ], UIToolbar);
+        return UIToolbar;
+    }());
+    exports.UIToolbar = UIToolbar;
+});
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+define('resources/elements/core/ui-viewport',["require", "exports", "aurelia-framework", "aurelia-router", "../../utils/ui-utils", "../../utils/ui-event", "../../utils/ui-application"], function (require, exports, aurelia_framework_1, aurelia_router_1, ui_utils_1, ui_event_1, ui_application_1) {
+    "use strict";
+    var UIViewport = (function () {
+        function UIViewport(element, appState, container) {
+            this.element = element;
+            this.appState = appState;
+            document.documentElement.classList.add(browserAgent());
+            var __resizeTimer;
+            document.ondragstart = function (e) { return getParentByClass(e.target, '.ui-draggable') != null; };
+            document.onmouseup = function (e) { return ui_event_1.UIEvent.broadcast('mouseclick', e); };
+            window.onresize = function (e) {
+                window.clearTimeout(__resizeTimer);
+                window.setTimeout(function () { return ui_event_1.UIEvent.broadcast('windowresize'); }, 500);
+            };
+            ui_utils_1.UIUtils.auContainer = container;
+        }
+        UIViewport.prototype.attached = function () {
+            ui_utils_1.UIUtils.dialogContainer = this.__dialogContainer;
+            ui_utils_1.UIUtils.overlayContainer = this.__overlayContainer;
+            ui_event_1.UIEvent.broadcast('appready');
+        };
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', aurelia_router_1.Router)
+        ], UIViewport.prototype, "router", void 0);
+        UIViewport = __decorate([
+            aurelia_framework_1.autoinject(),
+            aurelia_framework_1.customElement('ui-viewport'),
+            aurelia_framework_1.inlineView("\n<template class=\"ui-viewport\">\n  <slot name=\"app-header\"></slot>\n  <slot></slot>\n  <slot name=\"app-taskbar\"></slot>\n  <slot name=\"app-footer\"></slot>\n\n  <div class=\"ui-dialog-container\" ref=\"__dialogContainer\"></div>\n  <div class=\"ui-overlay-container\" ref=\"__overlayContainer\"></div>\n\n  <div class=\"ui-loader\" show.bind=\"router.isNavigating || appState.IsHttpInUse\">\n    <div class=\"ui-loader-div\">\n      <span class=\"fi-ui-settings ui-spin\"></span>\n      <span class=\"fi-ui-settings ui-spin-opp\"></span>\n    </div>\n  </div>\n</template>"), 
+            __metadata('design:paramtypes', [Element, ui_application_1.UIApplication, aurelia_framework_1.Container])
+        ], UIViewport);
+        return UIViewport;
+    }());
+    exports.UIViewport = UIViewport;
+    var UIAppHeader = (function () {
+        function UIAppHeader(element) {
+            this.element = element;
+            this.class = '';
+        }
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UIAppHeader.prototype, "class", void 0);
+        UIAppHeader = __decorate([
+            aurelia_framework_1.autoinject(),
+            aurelia_framework_1.containerless(),
+            aurelia_framework_1.customElement('ui-app-header'),
+            aurelia_framework_1.inlineView('<template><div class="ui-app-header ${class}" slot="app-header"><slot></slot></div></template>'), 
+            __metadata('design:paramtypes', [Element])
+        ], UIAppHeader);
+        return UIAppHeader;
+    }());
+    exports.UIAppHeader = UIAppHeader;
+    var UIAppTitle = (function () {
+        function UIAppTitle(element) {
+            this.element = element;
+            this.class = '';
+        }
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UIAppTitle.prototype, "src", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UIAppTitle.prototype, "class", void 0);
+        UIAppTitle = __decorate([
+            aurelia_framework_1.autoinject(),
+            aurelia_framework_1.containerless(),
+            aurelia_framework_1.customElement('ui-app-title'),
+            aurelia_framework_1.inlineView('<template><img class="ui-app-logo" src.bind="src" if.bind="src"/><a href="/#" class="ui-app-title ${class}"><slot></slot></a></template>'), 
+            __metadata('design:paramtypes', [Element])
+        ], UIAppTitle);
+        return UIAppTitle;
+    }());
+    exports.UIAppTitle = UIAppTitle;
+    var UIAppFooter = (function () {
+        function UIAppFooter(element) {
+            this.element = element;
+            this.class = '';
+        }
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UIAppFooter.prototype, "class", void 0);
+        UIAppFooter = __decorate([
+            aurelia_framework_1.autoinject(),
+            aurelia_framework_1.containerless(),
+            aurelia_framework_1.customElement('ui-app-footer'),
+            aurelia_framework_1.inlineView('<template><div class="ui-app-footer ${class}" slot="app-footer"><slot></slot></div></template>'), 
+            __metadata('design:paramtypes', [Element])
+        ], UIAppFooter);
+        return UIAppFooter;
+    }());
+    exports.UIAppFooter = UIAppFooter;
+    var UIAppTaskbar = (function () {
+        function UIAppTaskbar(element) {
+            this.element = element;
+            this.class = '';
+        }
+        UIAppTaskbar.prototype.attached = function () {
+            ui_utils_1.UIUtils.taskbar = this.__taskbar;
+        };
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UIAppTaskbar.prototype, "class", void 0);
+        UIAppTaskbar = __decorate([
+            aurelia_framework_1.autoinject(),
+            aurelia_framework_1.containerless(),
+            aurelia_framework_1.customElement('ui-app-taskbar'),
+            aurelia_framework_1.inlineView('<template><div class="ui-app-taskbar ${class}" slot="app-taskbar" ref="__taskbar"><slot></slot></div></template>'), 
+            __metadata('design:paramtypes', [Element])
+        ], UIAppTaskbar);
+        return UIAppTaskbar;
+    }());
+    exports.UIAppTaskbar = UIAppTaskbar;
 });
 
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -6659,8 +7153,11 @@ define('resources/elements/inputs/ui-list',["require", "exports", "aurelia-frame
             this.busy = disabled;
         };
         UILanguage.prototype.fireSelect = function (model) {
-            if (!model)
-                return;
+            if (!model) {
+                this.__value = this.value = '';
+                ui_event_1.UIEvent.fireEvent('select', this.element, null);
+            }
+            ;
             if (ui_event_1.UIEvent.fireEvent('beforeselect', this.element, model.id) !== false) {
                 this.__showDropdown = false;
                 this.__value = model.name;
@@ -6681,8 +7178,8 @@ define('resources/elements/inputs/ui-list',["require", "exports", "aurelia-frame
             _.remove(this.languages, model.id);
             this.__available = this.__available.concat(_.remove(this.__selected, ['id', model.id]));
             ui_event_1.UIEvent.fireEvent('remove', this.element, model);
-            if (this.__available.length > 0)
-                ui_event_1.UIEvent.fireEvent('select', this.element, this.__available[0]);
+            if (this.__selected.length > 0)
+                ui_event_1.UIEvent.fireEvent('select', this.element, this.__selected[0]);
         };
         __decorate([
             aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }), 
@@ -7198,441 +7695,6 @@ define('resources/elements/inputs/ui-option',["require", "exports", "aurelia-fra
         return UISwitch;
     }());
     exports.UISwitch = UISwitch;
-});
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-define('resources/elements/core/ui-grid',["require", "exports", "aurelia-framework"], function (require, exports, aurelia_framework_1) {
-    "use strict";
-    var UIFiller = (function () {
-        function UIFiller() {
-        }
-        UIFiller = __decorate([
-            aurelia_framework_1.customElement('ui-filler'),
-            aurelia_framework_1.inlineView('<template class="ui-col-fill"></template>'), 
-            __metadata('design:paramtypes', [])
-        ], UIFiller);
-        return UIFiller;
-    }());
-    exports.UIFiller = UIFiller;
-    var UIRow = (function () {
-        function UIRow(element) {
-            this.element = element;
-            if (element.hasAttribute('top'))
-                element.classList.add('ui-align-top');
-            if (element.hasAttribute('middle'))
-                element.classList.add('ui-align-middle');
-            if (element.hasAttribute('bottom'))
-                element.classList.add('ui-align-bottom');
-            if (element.hasAttribute('stretch'))
-                element.classList.add('ui-align-stretch');
-            if (element.hasAttribute('start'))
-                element.classList.add('ui-align-start');
-            if (element.hasAttribute('center'))
-                element.classList.add('ui-align-center');
-            if (element.hasAttribute('end'))
-                element.classList.add('ui-align-end');
-            if (element.hasAttribute('spaced'))
-                element.classList.add('ui-align-spaced');
-        }
-        UIRow = __decorate([
-            aurelia_framework_1.autoinject(),
-            aurelia_framework_1.customElement('ui-row'),
-            aurelia_framework_1.inlineView('<template class="ui-row"><slot></slot></template>'), 
-            __metadata('design:paramtypes', [Element])
-        ], UIRow);
-        return UIRow;
-    }());
-    exports.UIRow = UIRow;
-    var UIColumnRow = (function () {
-        function UIColumnRow(element) {
-            this.element = element;
-            if (element.hasAttribute('top'))
-                element.classList.add('ui-align-top');
-            if (element.hasAttribute('middle'))
-                element.classList.add('ui-align-middle');
-            if (element.hasAttribute('bottom'))
-                element.classList.add('ui-align-bottom');
-            if (element.hasAttribute('stretch'))
-                element.classList.add('ui-align-stretch');
-            if (element.hasAttribute('start'))
-                element.classList.add('ui-align-start');
-            if (element.hasAttribute('center'))
-                element.classList.add('ui-align-center');
-            if (element.hasAttribute('end'))
-                element.classList.add('ui-align-end');
-            if (element.hasAttribute('spaced'))
-                element.classList.add('ui-align-spaced');
-        }
-        UIColumnRow = __decorate([
-            aurelia_framework_1.autoinject(),
-            aurelia_framework_1.customElement('ui-row-column'),
-            aurelia_framework_1.inlineView('<template class="ui-row-column"><slot></slot></template>'), 
-            __metadata('design:paramtypes', [Element])
-        ], UIColumnRow);
-        return UIColumnRow;
-    }());
-    exports.UIColumnRow = UIColumnRow;
-    var UIColumn = (function () {
-        function UIColumn(element) {
-            this.element = element;
-            this.size = '';
-            this.width = '';
-            if (element.hasAttribute('top'))
-                element.classList.add('ui-align-top');
-            if (element.hasAttribute('middle'))
-                element.classList.add('ui-align-middle');
-            if (element.hasAttribute('bottom'))
-                element.classList.add('ui-align-bottom');
-            if (element.hasAttribute('stretch'))
-                element.classList.add('ui-align-stretch');
-            if (element.hasAttribute('auto'))
-                element.classList.add('ui-col-auto');
-            if (element.hasAttribute('fill'))
-                element.classList.add('ui-col-fill');
-            if (element.hasAttribute('full'))
-                element.classList.add('ui-col-full');
-            if (element.hasAttribute('scroll'))
-                element.classList.add('ui-scroll');
-            if (element.hasAttribute('padded'))
-                element.classList.add('ui-pad-all');
-        }
-        UIColumn.prototype.bind = function () {
-            for (var _i = 0, _a = this.size.split(' '); _i < _a.length; _i++) {
-                var size = _a[_i];
-                this.element.classList.add("ui-col-" + size);
-            }
-            if (this.width)
-                this.element['style'].flexBasis = this.width;
-        };
-        __decorate([
-            aurelia_framework_1.bindable(), 
-            __metadata('design:type', Object)
-        ], UIColumn.prototype, "size", void 0);
-        __decorate([
-            aurelia_framework_1.bindable(), 
-            __metadata('design:type', Object)
-        ], UIColumn.prototype, "width", void 0);
-        UIColumn = __decorate([
-            aurelia_framework_1.autoinject(),
-            aurelia_framework_1.customElement('ui-column'),
-            aurelia_framework_1.inlineView('<template class="ui-column"><slot></slot></template>'), 
-            __metadata('design:paramtypes', [Element])
-        ], UIColumn);
-        return UIColumn;
-    }());
-    exports.UIColumn = UIColumn;
-});
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-define('resources/elements/core/ui-page',["require", "exports", "aurelia-framework", "../../utils/ui-event"], function (require, exports, aurelia_framework_1, ui_event_1) {
-    "use strict";
-    var UIPage = (function () {
-        function UIPage(element) {
-            this.element = element;
-            this.pageClass = '';
-        }
-        __decorate([
-            aurelia_framework_1.bindable(), 
-            __metadata('design:type', Object)
-        ], UIPage.prototype, "pageClass", void 0);
-        __decorate([
-            aurelia_framework_1.bindable(), 
-            __metadata('design:type', Object)
-        ], UIPage.prototype, "pageTitle", void 0);
-        UIPage = __decorate([
-            aurelia_framework_1.autoinject(),
-            aurelia_framework_1.customElement('ui-page'),
-            aurelia_framework_1.inlineView("\n<template class=\"ui-page\">\n  <div class=\"ui-page-title\" if.bind=\"pageTitle\" innerhtml.bind=\"pageTitle\"></div>\n  <div class=\"ui-page-body ${pageClass}\"><slot></slot></div>\n</template>"), 
-            __metadata('design:paramtypes', [Element])
-        ], UIPage);
-        return UIPage;
-    }());
-    exports.UIPage = UIPage;
-    var UISection = (function () {
-        function UISection(element) {
-            this.element = element;
-            this.__columnLayout = true;
-            this.__columnLayout = !element.hasAttribute('row-layout');
-            if (element.hasAttribute('center'))
-                element.classList.add('ui-align-center');
-            if (element.hasAttribute('middle'))
-                element.classList.add('ui-align-middle');
-        }
-        UISection = __decorate([
-            aurelia_framework_1.autoinject(),
-            aurelia_framework_1.customElement('ui-section'),
-            aurelia_framework_1.inlineView("<template class=\"ui-section ${__columnLayout?'ui-column-layout':'ui-row-layout'}\"><slot></slot></template>"), 
-            __metadata('design:paramtypes', [Element])
-        ], UISection);
-        return UISection;
-    }());
-    exports.UISection = UISection;
-    var UIRouterView = (function () {
-        function UIRouterView(element) {
-            this.element = element;
-        }
-        UIRouterView = __decorate([
-            aurelia_framework_1.autoinject(),
-            aurelia_framework_1.containerless(),
-            aurelia_framework_1.customElement('ui-router-view'),
-            aurelia_framework_1.inlineView("<template><router-view class=\"ui-router-view\"></router-view></template>"), 
-            __metadata('design:paramtypes', [Element])
-        ], UIRouterView);
-        return UIRouterView;
-    }());
-    exports.UIRouterView = UIRouterView;
-    var UIContent = (function () {
-        function UIContent(element) {
-            this.element = element;
-            if (element.hasAttribute('scroll'))
-                element.classList.add('ui-scroll');
-            if (element.hasAttribute('padded'))
-                element.classList.add('ui-pad-all');
-        }
-        UIContent = __decorate([
-            aurelia_framework_1.autoinject(),
-            aurelia_framework_1.customElement('ui-content'),
-            aurelia_framework_1.inlineView("<template class=\"ui-content\"><slot></slot></template>"), 
-            __metadata('design:paramtypes', [Element])
-        ], UIContent);
-        return UIContent;
-    }());
-    exports.UIContent = UIContent;
-    var UISidebar = (function () {
-        function UISidebar(element) {
-            var _this = this;
-            this.element = element;
-            this.__class = '';
-            this.__miniDisplay = false;
-            this.__collapsible = false;
-            this.label = "";
-            this.collapsed = false;
-            this.position = "start";
-            if (element.hasAttribute('scroll'))
-                this.__class += ' ui-scroll';
-            if (element.hasAttribute('padded'))
-                this.__class += ' ui-pad-all';
-            if (this.__miniDisplay = element.hasAttribute('mini-display'))
-                this.element.classList.add('ui-mini-display');
-            this.__collapsible = element.hasAttribute('collapsible');
-            this.__obClick = ui_event_1.UIEvent.subscribe('mouseclick', function () {
-                _this.element.classList.remove('ui-show-overlay');
-            });
-        }
-        UISidebar.prototype.bind = function () {
-            this.collapsed = isTrue(this.collapsed);
-        };
-        UISidebar.prototype.detached = function () {
-            if (this.__obClick)
-                this.__obClick.dispose();
-        };
-        UISidebar.prototype.__toggleCollapse = function ($event) {
-            this.collapsed = !this.collapsed;
-            this.element.classList.remove('ui-show-overlay');
-            $event.cancelBubble = true;
-            return true;
-        };
-        UISidebar.prototype.__showOverlay = function ($event) {
-            if (this.__miniDisplay || $event.target != this.element)
-                return true;
-            if (this.collapsed)
-                this.element.classList.add('ui-show-overlay');
-            else
-                this.element.classList.remove('ui-show-overlay');
-        };
-        __decorate([
-            aurelia_framework_1.bindable(), 
-            __metadata('design:type', Object)
-        ], UISidebar.prototype, "label", void 0);
-        __decorate([
-            aurelia_framework_1.bindable(), 
-            __metadata('design:type', Object)
-        ], UISidebar.prototype, "collapsed", void 0);
-        __decorate([
-            aurelia_framework_1.bindable(), 
-            __metadata('design:type', Object)
-        ], UISidebar.prototype, "position", void 0);
-        UISidebar = __decorate([
-            aurelia_framework_1.autoinject(),
-            aurelia_framework_1.customElement('ui-sidebar'),
-            aurelia_framework_1.inlineView("<template class=\"ui-sidebar ui-row-column ui-align-stretch ${collapsed?'ui-collapse':''} ${position}\" click.trigger=\"__showOverlay($event)\">\n  <div class=\"ui-col-auto ui-row ui-align-end ui-sidebar-head ${position=='start'?'':'ui-reverse'}\" if.bind=\"__collapsible || label\">\n  <h5 class=\"ui-col-fill ui-sidebar-title\">${label}</h5>\n  <a click.trigger=\"__toggleCollapse($event)\" class=\"ui-col-auto ui-pad-all\" if.bind=\"__collapsible\"><span class=\"fi-ui ui-sidebar-close\"></span></a></div>\n  <div class=\"ui-col-fill ui-sidebar-content ${__class}\"><slot></slot></div>\n</template>"), 
-            __metadata('design:paramtypes', [Element])
-        ], UISidebar);
-        return UISidebar;
-    }());
-    exports.UISidebar = UISidebar;
-    var UIDivider = (function () {
-        function UIDivider(element) {
-            this.element = element;
-        }
-        UIDivider = __decorate([
-            aurelia_framework_1.autoinject(),
-            aurelia_framework_1.customElement('ui-divider'),
-            aurelia_framework_1.inlineView("<template class=\"ui-divider\"></template>"), 
-            __metadata('design:paramtypes', [Element])
-        ], UIDivider);
-        return UIDivider;
-    }());
-    exports.UIDivider = UIDivider;
-    var UIToolbar = (function () {
-        function UIToolbar(element) {
-            this.element = element;
-            if (element.hasAttribute('start'))
-                element.classList.add('ui-start');
-        }
-        UIToolbar = __decorate([
-            aurelia_framework_1.autoinject(),
-            aurelia_framework_1.customElement('ui-toolbar'),
-            aurelia_framework_1.inlineView("<template class=\"ui-toolbar\"><slot></slot></template>"), 
-            __metadata('design:paramtypes', [Element])
-        ], UIToolbar);
-        return UIToolbar;
-    }());
-    exports.UIToolbar = UIToolbar;
-});
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-define('resources/elements/core/ui-viewport',["require", "exports", "aurelia-framework", "aurelia-router", "../../utils/ui-utils", "../../utils/ui-event", "../../utils/ui-application"], function (require, exports, aurelia_framework_1, aurelia_router_1, ui_utils_1, ui_event_1, ui_application_1) {
-    "use strict";
-    var UIViewport = (function () {
-        function UIViewport(element, appState, container) {
-            this.element = element;
-            this.appState = appState;
-            document.documentElement.classList.add(browserAgent());
-            var __resizeTimer;
-            document.ondragstart = function (e) { return getParentByClass(e.target, '.ui-draggable') != null; };
-            document.onmouseup = function (e) { return ui_event_1.UIEvent.broadcast('mouseclick', e); };
-            window.onresize = function (e) {
-                window.clearTimeout(__resizeTimer);
-                window.setTimeout(function () { return ui_event_1.UIEvent.broadcast('windowresize'); }, 500);
-            };
-            ui_utils_1.UIUtils.auContainer = container;
-        }
-        UIViewport.prototype.attached = function () {
-            ui_utils_1.UIUtils.dialogContainer = this.__dialogContainer;
-            ui_utils_1.UIUtils.overlayContainer = this.__overlayContainer;
-            ui_event_1.UIEvent.broadcast('appready');
-        };
-        __decorate([
-            aurelia_framework_1.bindable(), 
-            __metadata('design:type', aurelia_router_1.Router)
-        ], UIViewport.prototype, "router", void 0);
-        UIViewport = __decorate([
-            aurelia_framework_1.autoinject(),
-            aurelia_framework_1.customElement('ui-viewport'),
-            aurelia_framework_1.inlineView("\n<template class=\"ui-viewport\">\n  <slot name=\"app-header\"></slot>\n  <slot></slot>\n  <slot name=\"app-taskbar\"></slot>\n  <slot name=\"app-footer\"></slot>\n\n  <div class=\"ui-dialog-container\" ref=\"__dialogContainer\"></div>\n  <div class=\"ui-overlay-container\" ref=\"__overlayContainer\"></div>\n\n  <div class=\"ui-loader\" show.bind=\"router.isNavigating || appState.IsHttpInUse\">\n    <div class=\"ui-loader-div\">\n      <span class=\"fi-ui-settings ui-spin\"></span>\n      <span class=\"fi-ui-settings ui-spin-opp\"></span>\n    </div>\n  </div>\n</template>"), 
-            __metadata('design:paramtypes', [Element, ui_application_1.UIApplication, aurelia_framework_1.Container])
-        ], UIViewport);
-        return UIViewport;
-    }());
-    exports.UIViewport = UIViewport;
-    var UIAppHeader = (function () {
-        function UIAppHeader(element) {
-            this.element = element;
-            this.class = '';
-        }
-        __decorate([
-            aurelia_framework_1.bindable(), 
-            __metadata('design:type', Object)
-        ], UIAppHeader.prototype, "class", void 0);
-        UIAppHeader = __decorate([
-            aurelia_framework_1.autoinject(),
-            aurelia_framework_1.containerless(),
-            aurelia_framework_1.customElement('ui-app-header'),
-            aurelia_framework_1.inlineView('<template><div class="ui-app-header ${class}" slot="app-header"><slot></slot></div></template>'), 
-            __metadata('design:paramtypes', [Element])
-        ], UIAppHeader);
-        return UIAppHeader;
-    }());
-    exports.UIAppHeader = UIAppHeader;
-    var UIAppTitle = (function () {
-        function UIAppTitle(element) {
-            this.element = element;
-            this.class = '';
-        }
-        __decorate([
-            aurelia_framework_1.bindable(), 
-            __metadata('design:type', Object)
-        ], UIAppTitle.prototype, "src", void 0);
-        __decorate([
-            aurelia_framework_1.bindable(), 
-            __metadata('design:type', Object)
-        ], UIAppTitle.prototype, "class", void 0);
-        UIAppTitle = __decorate([
-            aurelia_framework_1.autoinject(),
-            aurelia_framework_1.containerless(),
-            aurelia_framework_1.customElement('ui-app-title'),
-            aurelia_framework_1.inlineView('<template><img class="ui-app-logo" src.bind="src" if.bind="src"/><a href="/#" class="ui-app-title ${class}"><slot></slot></a></template>'), 
-            __metadata('design:paramtypes', [Element])
-        ], UIAppTitle);
-        return UIAppTitle;
-    }());
-    exports.UIAppTitle = UIAppTitle;
-    var UIAppFooter = (function () {
-        function UIAppFooter(element) {
-            this.element = element;
-            this.class = '';
-        }
-        __decorate([
-            aurelia_framework_1.bindable(), 
-            __metadata('design:type', Object)
-        ], UIAppFooter.prototype, "class", void 0);
-        UIAppFooter = __decorate([
-            aurelia_framework_1.autoinject(),
-            aurelia_framework_1.containerless(),
-            aurelia_framework_1.customElement('ui-app-footer'),
-            aurelia_framework_1.inlineView('<template><div class="ui-app-footer ${class}" slot="app-footer"><slot></slot></div></template>'), 
-            __metadata('design:paramtypes', [Element])
-        ], UIAppFooter);
-        return UIAppFooter;
-    }());
-    exports.UIAppFooter = UIAppFooter;
-    var UIAppTaskbar = (function () {
-        function UIAppTaskbar(element) {
-            this.element = element;
-            this.class = '';
-        }
-        UIAppTaskbar.prototype.attached = function () {
-            ui_utils_1.UIUtils.taskbar = this.__taskbar;
-        };
-        __decorate([
-            aurelia_framework_1.bindable(), 
-            __metadata('design:type', Object)
-        ], UIAppTaskbar.prototype, "class", void 0);
-        UIAppTaskbar = __decorate([
-            aurelia_framework_1.autoinject(),
-            aurelia_framework_1.containerless(),
-            aurelia_framework_1.customElement('ui-app-taskbar'),
-            aurelia_framework_1.inlineView('<template><div class="ui-app-taskbar ${class}" slot="app-taskbar" ref="__taskbar"><slot></slot></div></template>'), 
-            __metadata('design:paramtypes', [Element])
-        ], UIAppTaskbar);
-        return UIAppTaskbar;
-    }());
-    exports.UIAppTaskbar = UIAppTaskbar;
 });
 
 define('kramed/utils',['require','exports','module'],function (require, exports, module) {/**
@@ -10562,7 +10624,7 @@ define('aurelia-validation/implementation/validation-rules',["require", "exports
 });
 
 define('text!app.html', ['module'], function(module) { module.exports = "<!--\n// @author      : Adarsh Pastakia\n// @copyright   : 2016\n// @license     : MIT\n-->\n<template>\n  <ui-viewport router.bind=\"router\">\n    <ui-app-header>\n      <ui-drawer-toggle drawer.bind=\"appDrawer\"></ui-drawer-toggle>\n      <ui-app-title src=\"../images/logo.png\">\n        <h5>${router.title} -\n          <small>Version 2</small>\n        </h5>\n      </ui-app-title>\n      <ui-filler></ui-filler>\n      <small class=\"ui-thin ui-hidden-sm\" padded>Logged in as user@domain.com</small>\n      <ui-drawer-toggle drawer.bind=\"infoDrawer\">\n        <span class=\"fi-ui-overflow-dark\"></span>\n      </ui-drawer-toggle>\n    </ui-app-header>\n\n    <ui-menubar>\n      <ui-menu-group label.bind=\"routes.key\" repeat.for=\"routes of router.navigation | group:'settings.section'\">\n        <ui-menu-item repeat.for=\"route of routes.items\" href.bind=\"route.href\" active.bind=\"route.isActive\" icon.bind=\"route.settings.icon\" disabled.bind=\"route.settings.disabled\">${route.settings.title || route.title}</ui-menu-item>\n      </ui-menu-group>\n    </ui-menubar>\n\n    <ui-router-view></ui-router-view>\n\n    <ui-drawer ref=\"infoDrawer\" position=\"end\" scroll padded>\n      <ui-panel-group>\n        <ui-panel collapsed>\n          <ui-header light>\n            <ui-header-title>Panel</ui-header-title>\n            <ui-header-tool collapse></ui-header-tool>\n          </ui-header>\n          <ui-panel-body padded>\n            <compose view=\"home/lipsum-small.html\"></compose>\n          </ui-panel-body>\n        </ui-panel>\n        <ui-panel collapsed>\n          <ui-header light>\n            <ui-header-title>Panel</ui-header-title>\n            <ui-header-tool collapse></ui-header-tool>\n          </ui-header>\n          <ui-panel-body padded>\n            <compose view=\"home/lipsum-small.html\"></compose>\n          </ui-panel-body>\n        </ui-panel>\n        <ui-panel collapsed>\n          <ui-header light>\n            <ui-header-title>Panel</ui-header-title>\n            <ui-header-tool collapse></ui-header-tool>\n          </ui-header>\n          <ui-panel-body padded>\n            <compose view=\"home/lipsum-small.html\"></compose>\n          </ui-panel-body>\n        </ui-panel>\n      </ui-panel-group>\n    </ui-drawer>\n\n    <ui-drawer ref=\"appDrawer\" position=\"start\" scroll close-on-click>\n      <a href=\"/#\" class=\"ui-block\">\n        <fieldset class=\"menu-banner\">\n          <ui-row middle>\n            <div class=\"img-rounded\"><img src=\"../images/logo.png\" height=\"56\"/></div>\n            <ui-column fill>\n              <h4>${router.title}</h4>\n              <h6>Biz App Framework</h6>\n            </ui-column>\n            <ui-column auto>\n              <h2>\n                <small>v</small>2</h2>\n            </ui-column>\n          </ui-row>\n        </fieldset>\n      </a>\n      <ui-menu class=\"ui-font-big\">\n        <ui-menu-group label.bind=\"routes.key\" repeat.for=\"routes of router.navigation | group:'settings.section'\">\n          <ui-menu-item repeat.for=\"route of routes.items\" href.bind=\"route.href\" active.bind=\"route.isActive\" icon.bind=\"route.settings.icon\" disabled.bind=\"route.settings.disabled\">${route.settings.title || route.title}</ui-menu-item>\n        </ui-menu-group>\n      </ui-menu>\n    </ui-drawer>\n\n    <ui-app-taskbar></ui-app-taskbar>\n\n    <ui-app-footer>\n      <span>Version 2.0.0</span>\n      <span>Sigma Frameworks</span>\n      <span>Copyright &copy; 2016, Adarsh Pastakia</span>\n    </ui-app-footer>\n  </ui-viewport>\n</template>"; });
-define('text!components/datagrid.html', ['module'], function(module) { module.exports = "<!--\n// @author      : Adarsh Pastakia\n// @copyright   : 2016\n// @license     : MIT\n-->\n<template>\n  <style>\n    .dg-container {\n      position: relative;\n      height: 480px;\n      display: flex;\n      border: 1px solid #e5e5e5;\n      flex-direction: column;\n      align-items: stretch;\n      justify-items: stretch;\n    }\n\n  </style>\n  <ui-page page-title=\"Datagrid\">\n    <ui-content padded scroll>\n      <div class=\"ui-container\">\n        <h1>Datagrid</h1>\n        <hr/>\n        <h5 class=\"ui-text-muted\">Flexed Display</h5>\n        <div class=\"dg-container\">\n          <ui-datagrid data.bind=\"data\">\n            <ui-dg-empty>\n              <h4 class=\"ui-text-muted\">No Records Available</h4>\n              <div>\n                <ui-button>Clear Filters</ui-button>\n                <ui-button>Try Again</ui-button>\n              </div>\n            </ui-dg-empty>\n            <ui-dg-column data-id=\"id\" width=\"2rem\" locked>ID</ui-dg-column>\n            <ui-dg-column data-id=\"name\" width=\"10em\" sortable locked resizeable>Name</ui-dg-column>\n            <ui-dg-button data-id=\"name\" width=\"2rem\" locked icon=\"fi-ui-edit\" click.trigger=\"$event.detail.record.switch=true\"></ui-dg-button>\n            <ui-dg-button data-id=\"name\" width=\"2rem\" locked icon=\"fi-ui-delete\" theme=\"danger\" click.trigger=\"$event.detail.record.switch=false\"></ui-dg-button>\n            <ui-dg-link data-id=\"preview\" width=\"6em\" label=\"Preview\" click.trigger=\"app.toast($event.detail.record.id+' '+$event.detail.record.name)\"></ui-dg-link>\n            <ui-dg-column data-id=\"dob\" width=\"6em\" date format=\"DD MMM\" center resizeable>Birthday</ui-dg-column>\n            <ui-dg-column data-id=\"dob\" width=\"6em\" age center resizeable>Age</ui-dg-column>\n            <ui-dg-switch data-id=\"switch\" width=\"5em\" theme=\"primary\" change.trigger=\"$event.detail.record.gender=$event.detail.value?'F':'M'\">Switch</ui-dg-switch>\n            <ui-dg-column data-id=\"gender\" width=\"5em\" center display.call=\"genderDisplay(value, record)\">Gender</ui-dg-column>\n            <ui-dg-column data-id=\"address\" width=\"8em\" resizeable>Address</ui-dg-column>\n            <ui-dg-column data-id=\"city\" width=\"8em\" resizeable>City</ui-dg-column>\n            <ui-dg-column data-id=\"country\" width=\"8em\" display.call=\"countryDisplay(value, record)\" resizeable>Country</ui-dgcolumn>\n          </ui-datagrid>\n        </div>\n        <hr/>\n        <h5 class=\"ui-text-muted\">Auto Height Display</h5>\n        <div class=\"dg-container\" style=\"height:auto\">\n          <ui-datagrid data.bind=\"data2\" auto-height>\n            <ui-dg-empty>\n              <h4 class=\"ui-text-muted\">No Records Available</h4>\n              <div>\n                <ui-button>Clear Filters</ui-button>\n                <ui-button>Try Again</ui-button>\n              </div>\n            </ui-dg-empty>\n            <ui-dg-column data-id=\"id\" width=\"2rem\" locked>ID</ui-dg-column>\n            <ui-dg-column data-id=\"name\" sortable locked>Name</ui-dg-column>\n            <ui-dg-button data-id=\"name\" width=\"2rem\" locked icon=\"fi-ui-edit\" click.trigger=\"$event.detail.record.switch=true\"></ui-dg-button>\n            <ui-dg-button data-id=\"name\" width=\"2rem\" locked icon=\"fi-ui-delete\" theme=\"danger\" click.trigger=\"$event.detail.record.switch=false\"></ui-dg-button>\n            <ui-dg-column data-id=\"dob\" width=\"8em\" date format=\"DD MMM\" center resizeable locked>Birthday</ui-dg-column>\n            <ui-dg-column data-id=\"dob\" width=\"8em\" age center resizeable locked>Age</ui-dg-column>\n            <ui-dg-switch data-id=\"switch\" width=\"5em\" theme=\"primary\" change.trigger=\"$event.detail.record.gender=$event.detail.value?'F':'M'\">Switch</ui-dg-switch>\n            <ui-dg-column data-id=\"gender\" width=\"5em\" center display.call=\"genderDisplay(value, record)\">Gender</ui-dg-column>\n            <ui-dg-column data-id=\"address\">Address</ui-dg-column>\n            <ui-dg-column data-id=\"city\">City</ui-dg-column>\n            <ui-dg-column data-id=\"country\" display.call=\"countryDisplay(value, record)\">Country</ui-dgcolumn>\n          </ui-datagrid>\n        </div>\n      </div>\n    </ui-content>\n  </ui-page>\n</template>"; });
+define('text!components/datagrid.html', ['module'], function(module) { module.exports = "<!--\n// @author      : Adarsh Pastakia\n// @copyright   : 2016\n// @license     : MIT\n-->\n<template>\n  <style>\n    .dg-container {\n      position: relative;\n      height: 480px;\n      display: flex;\n      border: 1px solid #e5e5e5;\n      flex-direction: column;\n      align-items: stretch;\n      justify-items: stretch;\n    }\n\n  </style>\n  <ui-page page-title=\"Datagrid\">\n    <ui-content padded scroll>\n      <div class=\"ui-container\">\n        <h1>Datagrid</h1>\n        <hr/>\n        <h5 class=\"ui-text-muted\">Flexed Display</h5>\n        <div class=\"dg-container\">\n          <ui-breadcrumb change.trigger=\"changeTab($event)\">\n            <ui-crumb repeat.for=\"c of crumbs\" id.bind=\"$index\">${c}</ui-crumb>\n          </ui-breadcrumb>\n          <ui-datagrid data.bind=\"data\">\n            <ui-dg-empty>\n              <h4 class=\"ui-text-muted\">No Records Available</h4>\n              <div>\n                <ui-button>Clear Filters</ui-button>\n                <ui-button>Try Again</ui-button>\n              </div>\n            </ui-dg-empty>\n            <ui-dg-column data-id=\"id\" width=\"3rem\" sortable locked>ID</ui-dg-column>\n            <ui-dg-link data-id=\"name\" width=\"10em\" sortable locked resizeable disabled.call=\"isDisabled()\" click.trigger=\"drillDown($event)\">Name</ui-dg-link>\n            <ui-dg-column data-id=\"dob\" width=\"6em\" date format=\"DD MMM\" center resizeable>Birthday</ui-dg-column>\n            <ui-dg-column data-id=\"dob\" width=\"6em\" age center resizeable>Age</ui-dg-column>\n            <ui-dg-column data-id=\"gender\" width=\"5em\" center display.call=\"genderDisplay(value, record)\">Gender</ui-dg-column>\n            <ui-dg-column data-id=\"country\" width=\"8em\" display.call=\"countryDisplay(value, record)\" resizeable>Country</ui-dgcolumn>\n          </ui-datagrid>\n        </div>\n        <hr/>\n        <h5 class=\"ui-text-muted\">Auto Height Display</h5>\n        <div class=\"dg-container\" style=\"height:auto\">\n          <ui-datagrid data.bind=\"data2\" auto-height>\n            <ui-dg-empty>\n              <h4 class=\"ui-text-muted\">No Records Available</h4>\n              <div>\n                <ui-button>Clear Filters</ui-button>\n                <ui-button>Try Again</ui-button>\n              </div>\n            </ui-dg-empty>\n            <ui-dg-column data-id=\"id\" width=\"2rem\" locked>ID</ui-dg-column>\n            <ui-dg-column data-id=\"name\" sortable locked>Name</ui-dg-column>\n            <ui-dg-button data-id=\"edit\" width=\"2rem\" locked icon=\"fi-ui-edit\" click.trigger=\"$event.detail.record.switch=true\"></ui-dg-button>\n            <ui-dg-button data-id=\"delete\" width=\"2rem\" locked icon=\"fi-ui-delete\" theme=\"danger\" click.trigger=\"$event.detail.record.switch=false\"></ui-dg-button>\n            <ui-dg-column data-id=\"dob\" width=\"8em\" date format=\"DD MMM\" center resizeable locked>Birthday</ui-dg-column>\n            <ui-dg-column data-id=\"dob\" width=\"8em\" age center resizeable locked>Age</ui-dg-column>\n            <ui-dg-switch data-id=\"switch\" width=\"5em\" theme=\"primary\" change.trigger=\"$event.detail.record.gender=$event.detail.value?'F':'M'\">Switch</ui-dg-switch>\n            <ui-dg-column data-id=\"gender\" width=\"5em\" center display.call=\"genderDisplay(value, record)\">Gender</ui-dg-column>\n            <ui-dg-column data-id=\"address\">Address</ui-dg-column>\n            <ui-dg-column data-id=\"city\">City</ui-dg-column>\n            <ui-dg-column data-id=\"country\" display.call=\"countryDisplay(value, record)\">Country</ui-dgcolumn>\n          </ui-datagrid>\n        </div>\n      </div>\n    </ui-content>\n  </ui-page>\n</template>"; });
 define('text!components/dialog.html', ['module'], function(module) { module.exports = "<!--\n// @author      : Adarsh Pastakia\n// @copyright   : 2016\n// @license     : MIT\n-->\n<template>\n  <ui-page page-title=\"Dialogs\">\n    <ui-content scroll padded>\n      <div class=\"ui-container\">\n        <h5 class=\"ui-text-muted\">Dialogs</h5>\n        <ui-fieldset>\n          <ui-row>\n            <ui-column fill>\n              <ui-input-group>\n                <ui-input-label>Title</ui-input-label>\n                <ui-input value.bind=\"dlgModel.title\"></ui-input>\n              </ui-input-group>\n            </ui-column>\n            <ui-column fill>\n              <ui-option-group value.bind=\"dlgModel.icon\">\n                <ui-input-label>Icons</ui-input-label>\n                <ui-radio value=\"\">None</ui-radio>\n                <ui-radio value=\"fi-ui-search\">Search</ui-radio>\n                <ui-radio value=\"fi-ui-edit\">Edit</ui-radio>\n                <ui-radio value=\"fi-ui-settings\">Settings</ui-radio>\n              </ui-option-group>\n              <ui-option-group>\n                <ui-input-label>Options</ui-input-label>\n                <ui-checkbox checked.bind=\"dlgModel.modal\">Modal</ui-checkbox>\n                <ui-checkbox checked.bind=\"dlgModel.drag\">Drag</ui-checkbox>\n                <ui-checkbox checked.bind=\"dlgModel.resize\">Resize</ui-checkbox>\n                <ui-checkbox checked.bind=\"dlgModel.maximize\">Maximize</ui-checkbox>\n              </ui-option-group>\n            </ui-column>\n          </ui-row>\n          <ui-toolbar>\n            <ui-button label=\"Show Dialog\" click.trigger=\"openDialog()\"></ui-button>\n          </ui-toolbar>\n        </ui-fieldset>\n        <hr/>\n        <h5 class=\"ui-text-muted\">Alerts</h5>\n        <ui-fieldset>\n          <ui-row>\n            <ui-column fill>\n              <ui-input-group>\n                <ui-input-label>Message</ui-input-label>\n                <ui-input value.bind=\"alert.message\"></ui-input>\n              </ui-input-group>\n            </ui-column>\n            <ui-column auto>\n              <ui-option-group value.bind=\"alert.type\">\n                <ui-input-label>Icons</ui-input-label>\n                <ui-radio value=\"\">None</ui-radio>\n                <ui-radio value=\"info\">Info</ui-radio>\n                <ui-radio value=\"error\">Error</ui-radio>\n                <ui-radio value=\"exclaim\">Exclaim</ui-radio>\n              </ui-option-group>\n            </ui-column>\n          </ui-row>\n          <ui-row>\n            <ui-column fill>\n              <ui-input-group>\n                <ui-input-label>OK Label</ui-input-label>\n                <ui-input value.bind=\"alert.okLabel\"></ui-input>\n              </ui-input-group>\n            </ui-column>\n            <ui-column fill>\n              <ui-input-group>\n                <ui-input-label>Yes Label</ui-input-label>\n                <ui-input value.bind=\"alert.yesLabel\"></ui-input>\n              </ui-input-group>\n            </ui-column>\n            <ui-column fill>\n              <ui-input-group>\n                <ui-input-label>No Label</ui-input-label>\n                <ui-input value.bind=\"alert.noLabel\"></ui-input>\n              </ui-input-group>\n            </ui-column>\n          </ui-row>\n          <ui-toolbar>\n            <ui-button label=\"Show Alert\" click.trigger=\"openAlert()\"></ui-button>\n            <ui-button label=\"Show Confirm\" click.trigger=\"openConfirm()\"></ui-button>\n          </ui-toolbar>\n        </ui-fieldset>\n        <hr/>\n        <h5 class=\"ui-text-muted\">Toasts</h5>\n        <ui-fieldset>\n          <ui-row>\n            <ui-column fill>\n              <ui-input-group>\n                <ui-input-label>Message</ui-input-label>\n                <ui-input value.bind=\"toast.message\"></ui-input>\n              </ui-input-group>\n              <!-- <ui-option-group>\n                <ui-input-label></ui-input-label>\n                <ui-checkbox checked.bind=\"toast.autoHide\">Auto Hide</ui-checkbox>\n              </ui-option-group> -->\n            </ui-column>\n            <ui-column fill>\n              <ui-option-group value.bind=\"toast.icon\">\n                <ui-input-label>Icons</ui-input-label>\n                <ui-radio value=\"\">None</ui-radio>\n                <ui-radio value=\"fi-ui-info\">Info</ui-radio>\n                <ui-radio value=\"fi-ui-error\">Error</ui-radio>\n                <ui-radio value=\"fi-ui-exclamation\">Exclaim</ui-radio>\n                <ui-radio value=\"fi-ui-notification\">Notification</ui-radio>\n              </ui-option-group>\n              <ui-option-group value.bind=\"toast.theme\">\n                <ui-input-label>Theme</ui-input-label>\n                <ui-radio value=\"normal\">Normal</ui-radio>\n                <ui-radio value=\"info\">Info</ui-radio>\n                <ui-radio value=\"danger\">Danger</ui-radio>\n                <ui-radio value=\"success\">Success</ui-radio>\n                <ui-radio value=\"warning\">Warning</ui-radio>\n              </ui-option-group>\n            </ui-column>\n          </ui-row>\n          <ui-toolbar>\n            <ui-button label=\"Show Toast\" click.trigger=\"openToast()\"></ui-button>\n          </ui-toolbar>\n        </ui-fieldset>\n      </div>\n    </ui-content>\n  </ui-page>\n</template>"; });
 define('text!components/drawer.html', ['module'], function(module) { module.exports = "<!--\n// @author      : Adarsh Pastakia\n// @copyright   : 2016\n// @license     : MIT\n-->\n<template>\n  <ui-page page-title=\"Drawers\">\n    <ui-content scroll padded>\n      <div class=\"ui-container\">\n        <h1>Drawers</h1>\n        <hr/>\n        <h5 class=\"ui-text-muted\">Panel Drawers</h5>\n        <ui-panel>\n          <ui-header>\n            <ui-drawer-toggle drawer.bind=\"_drawerLeft\"></ui-drawer-toggle>\n            <ui-header-title>Panel with Drawers</ui-header-title>\n            <ui-drawer-toggle drawer.bind=\"_drawerRight\">\n              <span class=\"fi-ui-overflow-dark\"></span>\n            </ui-drawer-toggle>\n          </ui-header>\n          <ui-drawer ref=\"_drawerLeft\" scroll padded>\n            <compose view=\"home/lipsum-small.html\"></compose>\n          </ui-drawer>\n          <ui-drawer ref=\"_drawerRight\" position=\"end\" scroll padded>\n            <compose view=\"home/lipsum-small.html\"></compose>\n          </ui-drawer>\n          <ui-panel-body scroll padded max-height=\"400px\">\n            <compose view=\"home/lipsum-big.html\"></compose>\n          </ui-panel-body>\n        </ui-panel>\n\n        <hr/>\n        <h5>Markup</h5>\n        <div class=\"ui-margin-v\">\n          <pre markdown>\n          <xmp>\n          ```html\n          <ui-drawer position=\"start | end\" [scroll] [padded] ref=\"_el\">\n            <!-- any content -->\n          </ui-drawer>\n          <ui-drawer-toggle drawer.bind=\"_el\"></ui-drawer-toggle>\n          ```\n          </xmp>\n          </pre>\n        </div>\n\n        <hr/>\n        <h5>Examples</h5>\n        <div class=\"ui-margin-v\">\n          <pre markdown>\n          <xmp>\n          ```html\n          <ui-panel>\n            <ui-drawer ref=\"_drawerLeft\" scroll padded>\n              Lorem ipsum...\n            </ui-drawer>\n            <ui-drawer ref=\"_drawerRight\" position=\"end\" scroll padded>\n              Lorem ipsum...\n            </ui-drawer>\n            <ui-header>\n              <ui-drawer-toggle drawer.bind=\"_drawerLeft\">\n                <!-- default menu bar glyph -->\n              </ui-drawer-toggle>\n              <ui-header-title>Panel with Drawers</ui-header-title>\n              <ui-drawer-toggle drawer.bind=\"_drawerRight\">\n                <span class=\"fi-ui-overflow-dark\"></span>\n              </ui-drawer-toggle>\n            </ui-header>\n            <ui-panel-body scroll padded max-height=\"400px\">\n              Lorem ipsum...\n            </ui-panel-body>\n          </ui-panel>\n          ```\n          </xmp>\n        </pre>\n        </div>\n      </div>\n    </ui-content>\n  </ui-page>\n</template>"; });
 define('text!components/form-personal.html', ['module'], function(module) { module.exports = "<!--\n// @author      : Adarsh Pastakia\n// @copyright   : 2016\n// @license     : MIT\n-->\n<template>\n  <ui-section column-layout>\n    <ui-content padded scroll></ui-content>\n    <ui-toolbar>\n      <ui-button click.trigger=\"next()\">Next</ui-button>\n    </ui-toolbar>\n  </ui-section>\n</template>"; });
@@ -10589,851 +10651,6 @@ define('text!styles/colors.html', ['module'], function(module) { module.exports 
 define('text!styles/hlight.html', ['module'], function(module) { module.exports = "<!--\n// @author      : Adarsh Pastakia\n// @copyright   : 2016\n// @license     : MIT\n-->\n<template>\n  <ui-page page-title=\"MD Test\">\n    <ui-content scroll padded>\n      <div class=\"ui-margin-v\">\n        <pre markdown>\n        <xmp>\n        ```html\n        <ui-button primary icon.bind=\"glyph class\" disabled=\"bool\" click.trigger=\"fn()\">Label</ui-button>\n        ```\n        \n        ```scss\n        $primary: #899809 !default;\n        @mixin test() {\n          border: 1px solid $primary;\n        }\n        \n        .border {\n          @include test();\n        }\n        ```\n        \n        ```ts\n        import {ClassName} from \"module\";\n        \n        @autoinject()\n        export class MyName extends BaseClass {\n          public _int:Number = 10;\n          private _str:String = \"Hello\";\n          private _map:Map<string, Object> = null;\n          \n          @bindable({mode: two})\n          class:string = '';\n          \n          constructor(public x:App) {\n          }\n          \n          // Comment\n          attached() {\n            x = () => {\n              return test;\n            }\n            \n            this.test();\n            \n            return null;\n          }\n        }\n        ```\n        </xmp>\n      </pre>\n      </div>\n    </ui-content>\n  </ui-page>\n</template>"; });
 define('text!styles/typo.html', ['module'], function(module) { module.exports = "<!--\n// @author      : Adarsh Pastakia\n// @copyright   : 2016\n// @license     : MIT\n-->\n<template>\n  <ui-page page-title=\"Typography\">\n    <ui-content scroll padded class=\"ui-markdown\">\n      <ui-row class=\"ui-margin-v\">\n        <ui-column fill padded>\n          <h5>Headers</h5>\n          <hr/>\n          <h1>Header 1</h1>\n          <h2>Header 2</h2>\n          <h3>Header 3</h3>\n          <h4>Header 4</h4>\n          <h5>Header 5</h5>\n          <h6>Header 6</h6>\n        </ui-column>\n        <ui-column fill padded>\n          <h5>Styles</h5>\n          <hr/>\n          <div class=\"ui-margin-v\">\n            <b>Bold Text</b>\n          </div>\n          <div class=\"ui-margin-v\">\n            <strong>Strong Text</strong>\n          </div>\n          <div class=\"ui-margin-v\">\n            Normal Text\n          </div>\n          <div class=\"ui-margin-v ui-thin\">\n            Thin Text\n          </div>\n          <div class=\"ui-margin-v\">\n            <em>Italic Text</em>\n          </div>\n        </ui-column>\n      </ui-row>\n      <ui-row class=\"ui-margin-v\">\n        <ui-column fill padded>\n          <h5>Text Size</h5>\n          <hr/>\n          <ui-row middle>\n            <ui-column width=\"8em\">\n              <code class=\"ui-font-small ui-block\">ui-font-large</code>\n            </ui-column>\n            <div class=\"ui-column-fill ui-font-large ui-margin-v\">Large Text</div>\n          </ui-row>\n          <ui-row middle>\n            <ui-column width=\"8em\">\n              <code class=\"ui-font-small ui-block\">ui-font-big</code>\n            </ui-column>\n            <div class=\"ui-font-big ui-margin-v\">Big Text</div>\n          </ui-row>\n          <ui-row middle>\n            <ui-column width=\"8em\">\n              <code class=\"ui-font-small ui-block\">ui-font-thin</code>\n            </ui-column>\n            <div class=\"ui-font-thin ui-margin-v\">Thin Text</div>\n          </ui-row>\n          <ui-row middle>\n            <ui-column width=\"8em\">\n              <code class=\"ui-font-small ui-block\">ui-font-small</code>\n            </ui-column>\n            <div class=\"ui-font-small ui-margin-v\">Small Text</div>\n          </ui-row>\n        </ui-column>\n        <ui-column fill padded>\n          <h5>Text Transformation</h5>\n          <hr/>\n          <ui-row middle>\n            <ui-column width=\"8em\">\n              <code class=\"ui-font-small ui-block\">ui-small-caps</code>\n            </ui-column>\n            <div class=\"ui-small-caps ui-margin-v\">Small Caps</div>\n          </ui-row>\n          <ui-row middle>\n            <ui-column width=\"8em\">\n              <code class=\"ui-font-small ui-block\">ui-titlecase</code>\n            </ui-column>\n            <div class=\"ui-titlecase ui-margin-v\">Titlecase</div>\n          </ui-row>\n          <ui-row middle>\n            <ui-column width=\"8em\">\n              <code class=\"ui-font-small ui-block\">ui-uppercase</code>\n            </ui-column>\n            <div class=\"ui-uppercase ui-margin-v\">Uppercase</div>\n          </ui-row>\n          <ui-row middle>\n            <ui-column width=\"8em\">\n              <code class=\"ui-font-small ui-block\">ui-lowercase</code>\n            </ui-column>\n            <div class=\"ui-lowercase ui-margin-v\">Lowercase</div>\n          </ui-row>\n        </ui-column>\n      </ui-row>\n      <ui-row class=\"ui-margin-v\">\n        <ui-column fill padded>\n          <h5>Text Colors</h5>\n          <hr/>\n          <ui-row middle>\n            <ui-column width=\"9em\">\n              <code class=\"ui-font-small ui-block\">ui-text-primary</code>\n            </ui-column>\n            <div class=\"ui-text-primary ui-margin-v\">Primary Text</div>\n          </ui-row>\n          <ui-row middle>\n            <ui-column width=\"9em\">\n              <code class=\"ui-font-small ui-block\">ui-text-secondary</code>\n            </ui-column>\n            <div class=\"ui-text-secondary ui-margin-v\">Secondary Text</div>\n          </ui-row>\n          <ui-row middle>\n            <ui-column width=\"9em\">\n              <code class=\"ui-font-small ui-block\">ui-text-info</code>\n            </ui-column>\n            <div class=\"ui-text-info ui-margin-v\">Info Text</div>\n          </ui-row>\n          <ui-row middle>\n            <ui-column width=\"9em\">\n              <code class=\"ui-font-small ui-block\">ui-text-danger</code>\n            </ui-column>\n            <div class=\"ui-text-danger ui-margin-v\">Danger Text</div>\n          </ui-row>\n          <ui-row middle>\n            <ui-column width=\"9em\">\n              <code class=\"ui-font-small ui-block\">ui-text-success</code>\n            </ui-column>\n            <div class=\"ui-text-success ui-margin-v\">Success Text</div>\n          </ui-row>\n          <ui-row middle>\n            <ui-column width=\"9em\">\n              <code class=\"ui-font-small ui-block\">ui-text-warning</code>\n            </ui-column>\n            <div class=\"ui-text-warning ui-margin-v\">Warning Text</div>\n          </ui-row>\n          <ui-row middle>\n            <ui-column width=\"9em\">\n              <code class=\"ui-font-small ui-block\">ui-text-muted</code>\n            </ui-column>\n            <div class=\"ui-text-muted ui-margin-v\">Muted Text</div>\n          </ui-row>\n          <ui-row middle>\n            <ui-column width=\"9em\">\n              <code class=\"ui-font-small ui-block\"></code>\n            </ui-column>\n            <div class=\"ui-margin-v\">Normal Text</div>\n          </ui-row>\n        </ui-column>\n        <ui-column fill padded>\n          <h5>Background Colors</h5>\n          <hr/>\n          <ui-row middle>\n            <ui-column width=\"9em\">\n              <code class=\"ui-font-small ui-block\">ui-bg-primary</code>\n            </ui-column>\n            <div class=\"ui-bg-primary ui-col-fill ui-margin-v ui-pad-all ui-text-white ui-font-small\">Primary Bg</div>\n          </ui-row>\n          <ui-row middle>\n            <ui-column width=\"9em\">\n              <code class=\"ui-font-small ui-block\">ui-bg-secondary</code>\n            </ui-column>\n            <div class=\"ui-bg-secondary ui-col-fill ui-margin-v ui-pad-all ui-text-white ui-font-small\">Secondary Bg</div>\n          </ui-row>\n          <ui-row middle>\n            <ui-column width=\"9em\">\n              <code class=\"ui-font-small ui-block\">ui-bg-info</code>\n            </ui-column>\n            <div class=\"ui-bg-info ui-col-fill ui-margin-v ui-pad-all ui-text-white ui-font-small\">Info Bg</div>\n          </ui-row>\n          <ui-row middle>\n            <ui-column width=\"9em\">\n              <code class=\"ui-font-small ui-block\">ui-bg-danger</code>\n            </ui-column>\n            <div class=\"ui-bg-danger ui-col-fill ui-margin-v ui-pad-all ui-text-white ui-font-small\">Danger Bg</div>\n          </ui-row>\n          <ui-row middle>\n            <ui-column width=\"9em\">\n              <code class=\"ui-font-small ui-block\">ui-bg-success</code>\n            </ui-column>\n            <div class=\"ui-bg-success ui-col-fill ui-margin-v ui-pad-all ui-text-white ui-font-small\">Success Bg</div>\n          </ui-row>\n          <ui-row middle>\n            <ui-column width=\"9em\">\n              <code class=\"ui-font-small ui-block\">ui-bg-warning</code>\n            </ui-column>\n            <div class=\"ui-bg-warning ui-col-fill ui-margin-v ui-pad-all ui-text-white ui-font-small\">Warning Bg</div>\n          </ui-row>\n          <ui-row middle>\n            <ui-column width=\"9em\">\n              <code class=\"ui-font-small ui-block\">ui-bg-dark</code>\n            </ui-column>\n            <div class=\"ui-bg-dark ui-col-fill ui-margin-v ui-pad-all ui-text-white ui-font-small\">Dark Bg</div>\n          </ui-row>\n        </ui-column>\n      </ui-row>\n    </ui-content>\n  </ui-page>\n</template>"; });
 define('text!styles/view.html', ['module'], function(module) { module.exports = "<!--\n// @author      : Adarsh Pastakia\n// @copyright   : 2016\n// @license     : MIT\n-->\n<template>\n  <ui-section row-layout>\n    <ui-sidebar scroll mini-display collapsed=\"true\">\n      <ui-menu>\n        <ui-menu-item repeat.for=\"route of router.navigation\" href.bind=\"route.href\" active.bind=\"route.isActive\" icon.bind=\"route.settings.icon\" disabled.bind=\"route.settings.disabled\">${route.settings.title || route.title}</ui-menu-item>\n      </ui-menu>\n    </ui-sidebar>\n    <ui-router-view></ui-router-view>\n  </ui-section>\n</template>"; });
-/*!
- * numeral.js
- * version : 1.5.3
- * author : Adam Draper
- * license : MIT
- * http://adamwdraper.github.com/Numeral-js/
- */
-
-(function () {
-
-    /************************************
-        Constants
-    ************************************/
-
-    var numeral,
-        VERSION = '1.5.3',
-        // internal storage for language config files
-        languages = {},
-        currentLanguage = 'en',
-        zeroFormat = null,
-        defaultFormat = '0,0',
-        // check for nodeJS
-        hasModule = (typeof module !== 'undefined' && module.exports);
-
-
-    /************************************
-        Constructors
-    ************************************/
-
-
-    // Numeral prototype object
-    function Numeral (number) {
-        this._value = number;
-    }
-
-    /**
-     * Implementation of toFixed() that treats floats more like decimals
-     *
-     * Fixes binary rounding issues (eg. (0.615).toFixed(2) === '0.61') that present
-     * problems for accounting- and finance-related software.
-     */
-    function toFixed (value, precision, roundingFunction, optionals) {
-        var power = Math.pow(10, precision),
-            optionalsRegExp,
-            output;
-            
-        //roundingFunction = (roundingFunction !== undefined ? roundingFunction : Math.round);
-        // Multiply up by precision, round accurately, then divide and use native toFixed():
-        output = (roundingFunction(value * power) / power).toFixed(precision);
-
-        if (optionals) {
-            optionalsRegExp = new RegExp('0{1,' + optionals + '}$');
-            output = output.replace(optionalsRegExp, '');
-        }
-
-        return output;
-    }
-
-    /************************************
-        Formatting
-    ************************************/
-
-    // determine what type of formatting we need to do
-    function formatNumeral (n, format, roundingFunction) {
-        var output;
-
-        // figure out what kind of format we are dealing with
-        if (format.indexOf('$') > -1) { // currency!!!!!
-            output = formatCurrency(n, format, roundingFunction);
-        } else if (format.indexOf('%') > -1) { // percentage
-            output = formatPercentage(n, format, roundingFunction);
-        } else if (format.indexOf(':') > -1) { // time
-            output = formatTime(n, format);
-        } else { // plain ol' numbers or bytes
-            output = formatNumber(n._value, format, roundingFunction);
-        }
-
-        // return string
-        return output;
-    }
-
-    // revert to number
-    function unformatNumeral (n, string) {
-        var stringOriginal = string,
-            thousandRegExp,
-            millionRegExp,
-            billionRegExp,
-            trillionRegExp,
-            suffixes = ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-            bytesMultiplier = false,
-            power;
-
-        if (string.indexOf(':') > -1) {
-            n._value = unformatTime(string);
-        } else {
-            if (string === zeroFormat) {
-                n._value = 0;
-            } else {
-                if (languages[currentLanguage].delimiters.decimal !== '.') {
-                    string = string.replace(/\./g,'').replace(languages[currentLanguage].delimiters.decimal, '.');
-                }
-
-                // see if abbreviations are there so that we can multiply to the correct number
-                thousandRegExp = new RegExp('[^a-zA-Z]' + languages[currentLanguage].abbreviations.thousand + '(?:\\)|(\\' + languages[currentLanguage].currency.symbol + ')?(?:\\))?)?$');
-                millionRegExp = new RegExp('[^a-zA-Z]' + languages[currentLanguage].abbreviations.million + '(?:\\)|(\\' + languages[currentLanguage].currency.symbol + ')?(?:\\))?)?$');
-                billionRegExp = new RegExp('[^a-zA-Z]' + languages[currentLanguage].abbreviations.billion + '(?:\\)|(\\' + languages[currentLanguage].currency.symbol + ')?(?:\\))?)?$');
-                trillionRegExp = new RegExp('[^a-zA-Z]' + languages[currentLanguage].abbreviations.trillion + '(?:\\)|(\\' + languages[currentLanguage].currency.symbol + ')?(?:\\))?)?$');
-
-                // see if bytes are there so that we can multiply to the correct number
-                for (power = 0; power <= suffixes.length; power++) {
-                    bytesMultiplier = (string.indexOf(suffixes[power]) > -1) ? Math.pow(1024, power + 1) : false;
-
-                    if (bytesMultiplier) {
-                        break;
-                    }
-                }
-
-                // do some math to create our number
-                n._value = ((bytesMultiplier) ? bytesMultiplier : 1) * ((stringOriginal.match(thousandRegExp)) ? Math.pow(10, 3) : 1) * ((stringOriginal.match(millionRegExp)) ? Math.pow(10, 6) : 1) * ((stringOriginal.match(billionRegExp)) ? Math.pow(10, 9) : 1) * ((stringOriginal.match(trillionRegExp)) ? Math.pow(10, 12) : 1) * ((string.indexOf('%') > -1) ? 0.01 : 1) * (((string.split('-').length + Math.min(string.split('(').length-1, string.split(')').length-1)) % 2)? 1: -1) * Number(string.replace(/[^0-9\.]+/g, ''));
-
-                // round if we are talking about bytes
-                n._value = (bytesMultiplier) ? Math.ceil(n._value) : n._value;
-            }
-        }
-        return n._value;
-    }
-
-    function formatCurrency (n, format, roundingFunction) {
-        var symbolIndex = format.indexOf('$'),
-            openParenIndex = format.indexOf('('),
-            minusSignIndex = format.indexOf('-'),
-            space = '',
-            spliceIndex,
-            output;
-
-        // check for space before or after currency
-        if (format.indexOf(' $') > -1) {
-            space = ' ';
-            format = format.replace(' $', '');
-        } else if (format.indexOf('$ ') > -1) {
-            space = ' ';
-            format = format.replace('$ ', '');
-        } else {
-            format = format.replace('$', '');
-        }
-
-        // format the number
-        output = formatNumber(n._value, format, roundingFunction);
-
-        // position the symbol
-        if (symbolIndex <= 1) {
-            if (output.indexOf('(') > -1 || output.indexOf('-') > -1) {
-                output = output.split('');
-                spliceIndex = 1;
-                if (symbolIndex < openParenIndex || symbolIndex < minusSignIndex){
-                    // the symbol appears before the "(" or "-"
-                    spliceIndex = 0;
-                }
-                output.splice(spliceIndex, 0, languages[currentLanguage].currency.symbol + space);
-                output = output.join('');
-            } else {
-                output = languages[currentLanguage].currency.symbol + space + output;
-            }
-        } else {
-            if (output.indexOf(')') > -1) {
-                output = output.split('');
-                output.splice(-1, 0, space + languages[currentLanguage].currency.symbol);
-                output = output.join('');
-            } else {
-                output = output + space + languages[currentLanguage].currency.symbol;
-            }
-        }
-
-        return output;
-    }
-
-    function formatPercentage (n, format, roundingFunction) {
-        var space = '',
-            output,
-            value = n._value * 100;
-
-        // check for space before %
-        if (format.indexOf(' %') > -1) {
-            space = ' ';
-            format = format.replace(' %', '');
-        } else {
-            format = format.replace('%', '');
-        }
-
-        output = formatNumber(value, format, roundingFunction);
-        
-        if (output.indexOf(')') > -1 ) {
-            output = output.split('');
-            output.splice(-1, 0, space + '%');
-            output = output.join('');
-        } else {
-            output = output + space + '%';
-        }
-
-        return output;
-    }
-
-    function formatTime (n) {
-        var hours = Math.floor(n._value/60/60),
-            minutes = Math.floor((n._value - (hours * 60 * 60))/60),
-            seconds = Math.round(n._value - (hours * 60 * 60) - (minutes * 60));
-        return hours + ':' + ((minutes < 10) ? '0' + minutes : minutes) + ':' + ((seconds < 10) ? '0' + seconds : seconds);
-    }
-
-    function unformatTime (string) {
-        var timeArray = string.split(':'),
-            seconds = 0;
-        // turn hours and minutes into seconds and add them all up
-        if (timeArray.length === 3) {
-            // hours
-            seconds = seconds + (Number(timeArray[0]) * 60 * 60);
-            // minutes
-            seconds = seconds + (Number(timeArray[1]) * 60);
-            // seconds
-            seconds = seconds + Number(timeArray[2]);
-        } else if (timeArray.length === 2) {
-            // minutes
-            seconds = seconds + (Number(timeArray[0]) * 60);
-            // seconds
-            seconds = seconds + Number(timeArray[1]);
-        }
-        return Number(seconds);
-    }
-
-    function formatNumber (value, format, roundingFunction) {
-        var negP = false,
-            signed = false,
-            optDec = false,
-            abbr = '',
-            abbrK = false, // force abbreviation to thousands
-            abbrM = false, // force abbreviation to millions
-            abbrB = false, // force abbreviation to billions
-            abbrT = false, // force abbreviation to trillions
-            abbrForce = false, // force abbreviation
-            bytes = '',
-            ord = '',
-            abs = Math.abs(value),
-            suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-            min,
-            max,
-            power,
-            w,
-            precision,
-            thousands,
-            d = '',
-            neg = false;
-
-        // check if number is zero and a custom zero format has been set
-        if (value === 0 && zeroFormat !== null) {
-            return zeroFormat;
-        } else {
-            // see if we should use parentheses for negative number or if we should prefix with a sign
-            // if both are present we default to parentheses
-            if (format.indexOf('(') > -1) {
-                negP = true;
-                format = format.slice(1, -1);
-            } else if (format.indexOf('+') > -1) {
-                signed = true;
-                format = format.replace(/\+/g, '');
-            }
-
-            // see if abbreviation is wanted
-            if (format.indexOf('a') > -1) {
-                // check if abbreviation is specified
-                abbrK = format.indexOf('aK') >= 0;
-                abbrM = format.indexOf('aM') >= 0;
-                abbrB = format.indexOf('aB') >= 0;
-                abbrT = format.indexOf('aT') >= 0;
-                abbrForce = abbrK || abbrM || abbrB || abbrT;
-
-                // check for space before abbreviation
-                if (format.indexOf(' a') > -1) {
-                    abbr = ' ';
-                    format = format.replace(' a', '');
-                } else {
-                    format = format.replace('a', '');
-                }
-
-                if (abs >= Math.pow(10, 12) && !abbrForce || abbrT) {
-                    // trillion
-                    abbr = abbr + languages[currentLanguage].abbreviations.trillion;
-                    value = value / Math.pow(10, 12);
-                } else if (abs < Math.pow(10, 12) && abs >= Math.pow(10, 9) && !abbrForce || abbrB) {
-                    // billion
-                    abbr = abbr + languages[currentLanguage].abbreviations.billion;
-                    value = value / Math.pow(10, 9);
-                } else if (abs < Math.pow(10, 9) && abs >= Math.pow(10, 6) && !abbrForce || abbrM) {
-                    // million
-                    abbr = abbr + languages[currentLanguage].abbreviations.million;
-                    value = value / Math.pow(10, 6);
-                } else if (abs < Math.pow(10, 6) && abs >= Math.pow(10, 3) && !abbrForce || abbrK) {
-                    // thousand
-                    abbr = abbr + languages[currentLanguage].abbreviations.thousand;
-                    value = value / Math.pow(10, 3);
-                }
-            }
-
-            // see if we are formatting bytes
-            if (format.indexOf('b') > -1) {
-                // check for space before
-                if (format.indexOf(' b') > -1) {
-                    bytes = ' ';
-                    format = format.replace(' b', '');
-                } else {
-                    format = format.replace('b', '');
-                }
-
-                for (power = 0; power <= suffixes.length; power++) {
-                    min = Math.pow(1024, power);
-                    max = Math.pow(1024, power+1);
-
-                    if (value >= min && value < max) {
-                        bytes = bytes + suffixes[power];
-                        if (min > 0) {
-                            value = value / min;
-                        }
-                        break;
-                    }
-                }
-            }
-
-            // see if ordinal is wanted
-            if (format.indexOf('o') > -1) {
-                // check for space before
-                if (format.indexOf(' o') > -1) {
-                    ord = ' ';
-                    format = format.replace(' o', '');
-                } else {
-                    format = format.replace('o', '');
-                }
-
-                ord = ord + languages[currentLanguage].ordinal(value);
-            }
-
-            if (format.indexOf('[.]') > -1) {
-                optDec = true;
-                format = format.replace('[.]', '.');
-            }
-
-            w = value.toString().split('.')[0];
-            precision = format.split('.')[1];
-            thousands = format.indexOf(',');
-
-            if (precision) {
-                if (precision.indexOf('[') > -1) {
-                    precision = precision.replace(']', '');
-                    precision = precision.split('[');
-                    d = toFixed(value, (precision[0].length + precision[1].length), roundingFunction, precision[1].length);
-                } else {
-                    d = toFixed(value, precision.length, roundingFunction);
-                }
-
-                w = d.split('.')[0];
-
-                if (d.split('.')[1].length) {
-                    d = languages[currentLanguage].delimiters.decimal + d.split('.')[1];
-                } else {
-                    d = '';
-                }
-
-                if (optDec && Number(d.slice(1)) === 0) {
-                    d = '';
-                }
-            } else {
-                w = toFixed(value, null, roundingFunction);
-            }
-
-            // format number
-            if (w.indexOf('-') > -1) {
-                w = w.slice(1);
-                neg = true;
-            }
-
-            if (thousands > -1) {
-                w = w.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + languages[currentLanguage].delimiters.thousands);
-            }
-
-            if (format.indexOf('.') === 0) {
-                w = '';
-            }
-
-            return ((negP && neg) ? '(' : '') + ((!negP && neg) ? '-' : '') + ((!neg && signed) ? '+' : '') + w + d + ((ord) ? ord : '') + ((abbr) ? abbr : '') + ((bytes) ? bytes : '') + ((negP && neg) ? ')' : '');
-        }
-    }
-
-    /************************************
-        Top Level Functions
-    ************************************/
-
-    numeral = function (input) {
-        if (numeral.isNumeral(input)) {
-            input = input.value();
-        } else if (input === 0 || typeof input === 'undefined') {
-            input = 0;
-        } else if (!Number(input)) {
-            input = numeral.fn.unformat(input);
-        }
-
-        return new Numeral(Number(input));
-    };
-
-    // version number
-    numeral.version = VERSION;
-
-    // compare numeral object
-    numeral.isNumeral = function (obj) {
-        return obj instanceof Numeral;
-    };
-
-    // This function will load languages and then set the global language.  If
-    // no arguments are passed in, it will simply return the current global
-    // language key.
-    numeral.language = function (key, values) {
-        if (!key) {
-            return currentLanguage;
-        }
-
-        if (key && !values) {
-            if(!languages[key]) {
-                throw new Error('Unknown language : ' + key);
-            }
-            currentLanguage = key;
-        }
-
-        if (values || !languages[key]) {
-            loadLanguage(key, values);
-        }
-
-        return numeral;
-    };
-    
-    // This function provides access to the loaded language data.  If
-    // no arguments are passed in, it will simply return the current
-    // global language object.
-    numeral.languageData = function (key) {
-        if (!key) {
-            return languages[currentLanguage];
-        }
-        
-        if (!languages[key]) {
-            throw new Error('Unknown language : ' + key);
-        }
-        
-        return languages[key];
-    };
-
-    numeral.language('en', {
-        delimiters: {
-            thousands: ',',
-            decimal: '.'
-        },
-        abbreviations: {
-            thousand: 'k',
-            million: 'm',
-            billion: 'b',
-            trillion: 't'
-        },
-        ordinal: function (number) {
-            var b = number % 10;
-            return (~~ (number % 100 / 10) === 1) ? 'th' :
-                (b === 1) ? 'st' :
-                (b === 2) ? 'nd' :
-                (b === 3) ? 'rd' : 'th';
-        },
-        currency: {
-            symbol: '$'
-        }
-    });
-
-    numeral.zeroFormat = function (format) {
-        zeroFormat = typeof(format) === 'string' ? format : null;
-    };
-
-    numeral.defaultFormat = function (format) {
-        defaultFormat = typeof(format) === 'string' ? format : '0.0';
-    };
-
-    /************************************
-        Helpers
-    ************************************/
-
-    function loadLanguage(key, values) {
-        languages[key] = values;
-    }
-
-    /************************************
-        Floating-point helpers
-    ************************************/
-
-    // The floating-point helper functions and implementation
-    // borrows heavily from sinful.js: http://guipn.github.io/sinful.js/
-
-    /**
-     * Array.prototype.reduce for browsers that don't support it
-     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce#Compatibility
-     */
-    if ('function' !== typeof Array.prototype.reduce) {
-        Array.prototype.reduce = function (callback, opt_initialValue) {
-            'use strict';
-            
-            if (null === this || 'undefined' === typeof this) {
-                // At the moment all modern browsers, that support strict mode, have
-                // native implementation of Array.prototype.reduce. For instance, IE8
-                // does not support strict mode, so this check is actually useless.
-                throw new TypeError('Array.prototype.reduce called on null or undefined');
-            }
-            
-            if ('function' !== typeof callback) {
-                throw new TypeError(callback + ' is not a function');
-            }
-
-            var index,
-                value,
-                length = this.length >>> 0,
-                isValueSet = false;
-
-            if (1 < arguments.length) {
-                value = opt_initialValue;
-                isValueSet = true;
-            }
-
-            for (index = 0; length > index; ++index) {
-                if (this.hasOwnProperty(index)) {
-                    if (isValueSet) {
-                        value = callback(value, this[index], index, this);
-                    } else {
-                        value = this[index];
-                        isValueSet = true;
-                    }
-                }
-            }
-
-            if (!isValueSet) {
-                throw new TypeError('Reduce of empty array with no initial value');
-            }
-
-            return value;
-        };
-    }
-
-    
-    /**
-     * Computes the multiplier necessary to make x >= 1,
-     * effectively eliminating miscalculations caused by
-     * finite precision.
-     */
-    function multiplier(x) {
-        var parts = x.toString().split('.');
-        if (parts.length < 2) {
-            return 1;
-        }
-        return Math.pow(10, parts[1].length);
-    }
-
-    /**
-     * Given a variable number of arguments, returns the maximum
-     * multiplier that must be used to normalize an operation involving
-     * all of them.
-     */
-    function correctionFactor() {
-        var args = Array.prototype.slice.call(arguments);
-        return args.reduce(function (prev, next) {
-            var mp = multiplier(prev),
-                mn = multiplier(next);
-        return mp > mn ? mp : mn;
-        }, -Infinity);
-    }        
-
-
-    /************************************
-        Numeral Prototype
-    ************************************/
-
-
-    numeral.fn = Numeral.prototype = {
-
-        clone : function () {
-            return numeral(this);
-        },
-
-        format : function (inputString, roundingFunction) {
-            return formatNumeral(this, 
-                  inputString ? inputString : defaultFormat, 
-                  (roundingFunction !== undefined) ? roundingFunction : Math.round
-              );
-        },
-
-        unformat : function (inputString) {
-            if (Object.prototype.toString.call(inputString) === '[object Number]') { 
-                return inputString; 
-            }
-            return unformatNumeral(this, inputString ? inputString : defaultFormat);
-        },
-
-        value : function () {
-            return this._value;
-        },
-
-        valueOf : function () {
-            return this._value;
-        },
-
-        set : function (value) {
-            this._value = Number(value);
-            return this;
-        },
-
-        add : function (value) {
-            var corrFactor = correctionFactor.call(null, this._value, value);
-            function cback(accum, curr, currI, O) {
-                return accum + corrFactor * curr;
-            }
-            this._value = [this._value, value].reduce(cback, 0) / corrFactor;
-            return this;
-        },
-
-        subtract : function (value) {
-            var corrFactor = correctionFactor.call(null, this._value, value);
-            function cback(accum, curr, currI, O) {
-                return accum - corrFactor * curr;
-            }
-            this._value = [value].reduce(cback, this._value * corrFactor) / corrFactor;            
-            return this;
-        },
-
-        multiply : function (value) {
-            function cback(accum, curr, currI, O) {
-                var corrFactor = correctionFactor(accum, curr);
-                return (accum * corrFactor) * (curr * corrFactor) /
-                    (corrFactor * corrFactor);
-            }
-            this._value = [this._value, value].reduce(cback, 1);
-            return this;
-        },
-
-        divide : function (value) {
-            function cback(accum, curr, currI, O) {
-                var corrFactor = correctionFactor(accum, curr);
-                return (accum * corrFactor) / (curr * corrFactor);
-            }
-            this._value = [this._value, value].reduce(cback);            
-            return this;
-        },
-
-        difference : function (value) {
-            return Math.abs(numeral(this._value).subtract(value).value());
-        }
-
-    };
-
-    /************************************
-        Exposing Numeral
-    ************************************/
-
-    // CommonJS module is defined
-    if (hasModule) {
-        module.exports = numeral;
-    }
-
-    /*global ender:false */
-    if (typeof ender === 'undefined') {
-        // here, `this` means `window` in the browser, or `global` on the server
-        // add `numeral` as a global object via a string identifier,
-        // for Closure Compiler 'advanced' mode
-        this['numeral'] = numeral;
-    }
-
-    /*global define:false */
-    if (typeof define === 'function' && define.amd) {
-        define('numeral',[], function () {
-            return numeral;
-        });
-    }
-}).call(this);
-
-define('kramed/kramed',['require','exports','module','./utils','./lex/block','./lex/inline','./parser','./renderer'],function (require, exports, module) {/**
- * kramed - a markdown parser
- * Copyright (c) 2011-2014, Christopher Jeffrey. (MIT Licensed)
- * https://github.com/GitbookIO/kramed
- */
-/**
- * kramed - a kramdown parser, based off chjj's kramed
- * Copyright (c) 2014, Aaron O'Mullan. (MIT Licensed)
- * https://github.com/GitbookIO/kramed
-*/
-
-var _utils = require('./utils');
-var merge = _utils.merge;
-
-var Lexer = require('./lex/block');
-var InlineLexer = require('./lex/inline');
-
-var Parser = require('./parser');
-var Renderer = require('./renderer');
-
-/**
- * Kramed
- */
-
-function kramed(src, opt, callback) {
-  if (callback || typeof opt === 'function') {
-    if (!callback) {
-      callback = opt;
-      opt = null;
-    }
-
-    opt = merge({}, kramed.defaults, opt || {});
-
-    var highlight = opt.highlight
-      , tokens
-      , pending
-      , i = 0;
-
-    try {
-      tokens = Lexer.lex(src, opt)
-    } catch (e) {
-      return callback(e);
-    }
-
-    pending = tokens.length;
-
-    var done = function(err) {
-      if (err) {
-        opt.highlight = highlight;
-        return callback(err);
-      }
-
-      var out;
-
-      try {
-        out = Parser.parse(tokens, opt);
-      } catch (e) {
-        err = e;
-      }
-
-      opt.highlight = highlight;
-
-      return err
-        ? callback(err)
-        : callback(null, out);
-    };
-
-    if (!highlight || highlight.length < 3) {
-      return done();
-    }
-
-    delete opt.highlight;
-
-    if (!pending) return done();
-
-    for (; i < tokens.length; i++) {
-      (function(token) {
-        if (token.type !== 'code') {
-          return --pending || done();
-        }
-        return highlight(token.text, token.lang, function(err, code) {
-          if (err) return done(err);
-          if (code == null || code === token.text) {
-            return --pending || done();
-          }
-          token.text = code;
-          token.escaped = true;
-          --pending || done();
-        });
-      })(tokens[i]);
-    }
-
-    return;
-  }
-  try {
-    if (opt) opt = merge({}, kramed.defaults, opt);
-    return Parser.parse(Lexer.lex(src, opt), opt);
-  } catch (e) {
-    e.message += '\nPlease report this to https://github.com/GitbookIO/kramed.';
-    if ((opt || kramed.defaults).silent) {
-      return '<p>An error occured:</p><pre>'
-        + escape(e.message + '', true)
-        + '</pre>';
-    }
-    throw e;
-  }
-}
-
-/**
- * Options
- */
-
-kramed.options =
-kramed.setOptions = function(opt) {
-  merge(kramed.defaults, opt);
-  return kramed;
-};
-
-kramed.defaults = {
-  // Lexer options (both block and inline lexers)
-  gfm: true,
-  tables: true,
-  breaks: false,
-  pedantic: false,
-  sanitize: false,
-  smartLists: false,
-  mathjax: true,
-
-  // Kramed options
-  silent: false,
-  highlight: null,
-
-  // Renderer options
-  langPrefix: 'lang-',
-  smartypants: false,
-  headerPrefix: '',
-  headerAutoId: true,
-  xhtml: false,
-
-  // Default rendrer passed to Parser
-  renderer: new Renderer,
-};
-
-/**
- * Expose
- */
-
-kramed.Parser = Parser;
-kramed.parser = Parser.parse;
-
-kramed.Renderer = Renderer;
-
-kramed.Lexer = Lexer;
-kramed.lexer = Lexer.lex;
-
-kramed.InlineLexer = InlineLexer;
-kramed.inlineLexer = InlineLexer.output;
-
-kramed.parse = kramed;
-
-module.exports = kramed;
-
-});
-;define('kramed', ['kramed/kramed'], function (main) { return main; });
-
 /**
  * @license
  * lodash <https://lodash.com/>
@@ -28453,6 +27670,686 @@ module.exports = kramed;
   }
 }.call(this));
 
+/*!
+ * numeral.js
+ * version : 1.5.3
+ * author : Adam Draper
+ * license : MIT
+ * http://adamwdraper.github.com/Numeral-js/
+ */
+
+(function () {
+
+    /************************************
+        Constants
+    ************************************/
+
+    var numeral,
+        VERSION = '1.5.3',
+        // internal storage for language config files
+        languages = {},
+        currentLanguage = 'en',
+        zeroFormat = null,
+        defaultFormat = '0,0',
+        // check for nodeJS
+        hasModule = (typeof module !== 'undefined' && module.exports);
+
+
+    /************************************
+        Constructors
+    ************************************/
+
+
+    // Numeral prototype object
+    function Numeral (number) {
+        this._value = number;
+    }
+
+    /**
+     * Implementation of toFixed() that treats floats more like decimals
+     *
+     * Fixes binary rounding issues (eg. (0.615).toFixed(2) === '0.61') that present
+     * problems for accounting- and finance-related software.
+     */
+    function toFixed (value, precision, roundingFunction, optionals) {
+        var power = Math.pow(10, precision),
+            optionalsRegExp,
+            output;
+            
+        //roundingFunction = (roundingFunction !== undefined ? roundingFunction : Math.round);
+        // Multiply up by precision, round accurately, then divide and use native toFixed():
+        output = (roundingFunction(value * power) / power).toFixed(precision);
+
+        if (optionals) {
+            optionalsRegExp = new RegExp('0{1,' + optionals + '}$');
+            output = output.replace(optionalsRegExp, '');
+        }
+
+        return output;
+    }
+
+    /************************************
+        Formatting
+    ************************************/
+
+    // determine what type of formatting we need to do
+    function formatNumeral (n, format, roundingFunction) {
+        var output;
+
+        // figure out what kind of format we are dealing with
+        if (format.indexOf('$') > -1) { // currency!!!!!
+            output = formatCurrency(n, format, roundingFunction);
+        } else if (format.indexOf('%') > -1) { // percentage
+            output = formatPercentage(n, format, roundingFunction);
+        } else if (format.indexOf(':') > -1) { // time
+            output = formatTime(n, format);
+        } else { // plain ol' numbers or bytes
+            output = formatNumber(n._value, format, roundingFunction);
+        }
+
+        // return string
+        return output;
+    }
+
+    // revert to number
+    function unformatNumeral (n, string) {
+        var stringOriginal = string,
+            thousandRegExp,
+            millionRegExp,
+            billionRegExp,
+            trillionRegExp,
+            suffixes = ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+            bytesMultiplier = false,
+            power;
+
+        if (string.indexOf(':') > -1) {
+            n._value = unformatTime(string);
+        } else {
+            if (string === zeroFormat) {
+                n._value = 0;
+            } else {
+                if (languages[currentLanguage].delimiters.decimal !== '.') {
+                    string = string.replace(/\./g,'').replace(languages[currentLanguage].delimiters.decimal, '.');
+                }
+
+                // see if abbreviations are there so that we can multiply to the correct number
+                thousandRegExp = new RegExp('[^a-zA-Z]' + languages[currentLanguage].abbreviations.thousand + '(?:\\)|(\\' + languages[currentLanguage].currency.symbol + ')?(?:\\))?)?$');
+                millionRegExp = new RegExp('[^a-zA-Z]' + languages[currentLanguage].abbreviations.million + '(?:\\)|(\\' + languages[currentLanguage].currency.symbol + ')?(?:\\))?)?$');
+                billionRegExp = new RegExp('[^a-zA-Z]' + languages[currentLanguage].abbreviations.billion + '(?:\\)|(\\' + languages[currentLanguage].currency.symbol + ')?(?:\\))?)?$');
+                trillionRegExp = new RegExp('[^a-zA-Z]' + languages[currentLanguage].abbreviations.trillion + '(?:\\)|(\\' + languages[currentLanguage].currency.symbol + ')?(?:\\))?)?$');
+
+                // see if bytes are there so that we can multiply to the correct number
+                for (power = 0; power <= suffixes.length; power++) {
+                    bytesMultiplier = (string.indexOf(suffixes[power]) > -1) ? Math.pow(1024, power + 1) : false;
+
+                    if (bytesMultiplier) {
+                        break;
+                    }
+                }
+
+                // do some math to create our number
+                n._value = ((bytesMultiplier) ? bytesMultiplier : 1) * ((stringOriginal.match(thousandRegExp)) ? Math.pow(10, 3) : 1) * ((stringOriginal.match(millionRegExp)) ? Math.pow(10, 6) : 1) * ((stringOriginal.match(billionRegExp)) ? Math.pow(10, 9) : 1) * ((stringOriginal.match(trillionRegExp)) ? Math.pow(10, 12) : 1) * ((string.indexOf('%') > -1) ? 0.01 : 1) * (((string.split('-').length + Math.min(string.split('(').length-1, string.split(')').length-1)) % 2)? 1: -1) * Number(string.replace(/[^0-9\.]+/g, ''));
+
+                // round if we are talking about bytes
+                n._value = (bytesMultiplier) ? Math.ceil(n._value) : n._value;
+            }
+        }
+        return n._value;
+    }
+
+    function formatCurrency (n, format, roundingFunction) {
+        var symbolIndex = format.indexOf('$'),
+            openParenIndex = format.indexOf('('),
+            minusSignIndex = format.indexOf('-'),
+            space = '',
+            spliceIndex,
+            output;
+
+        // check for space before or after currency
+        if (format.indexOf(' $') > -1) {
+            space = ' ';
+            format = format.replace(' $', '');
+        } else if (format.indexOf('$ ') > -1) {
+            space = ' ';
+            format = format.replace('$ ', '');
+        } else {
+            format = format.replace('$', '');
+        }
+
+        // format the number
+        output = formatNumber(n._value, format, roundingFunction);
+
+        // position the symbol
+        if (symbolIndex <= 1) {
+            if (output.indexOf('(') > -1 || output.indexOf('-') > -1) {
+                output = output.split('');
+                spliceIndex = 1;
+                if (symbolIndex < openParenIndex || symbolIndex < minusSignIndex){
+                    // the symbol appears before the "(" or "-"
+                    spliceIndex = 0;
+                }
+                output.splice(spliceIndex, 0, languages[currentLanguage].currency.symbol + space);
+                output = output.join('');
+            } else {
+                output = languages[currentLanguage].currency.symbol + space + output;
+            }
+        } else {
+            if (output.indexOf(')') > -1) {
+                output = output.split('');
+                output.splice(-1, 0, space + languages[currentLanguage].currency.symbol);
+                output = output.join('');
+            } else {
+                output = output + space + languages[currentLanguage].currency.symbol;
+            }
+        }
+
+        return output;
+    }
+
+    function formatPercentage (n, format, roundingFunction) {
+        var space = '',
+            output,
+            value = n._value * 100;
+
+        // check for space before %
+        if (format.indexOf(' %') > -1) {
+            space = ' ';
+            format = format.replace(' %', '');
+        } else {
+            format = format.replace('%', '');
+        }
+
+        output = formatNumber(value, format, roundingFunction);
+        
+        if (output.indexOf(')') > -1 ) {
+            output = output.split('');
+            output.splice(-1, 0, space + '%');
+            output = output.join('');
+        } else {
+            output = output + space + '%';
+        }
+
+        return output;
+    }
+
+    function formatTime (n) {
+        var hours = Math.floor(n._value/60/60),
+            minutes = Math.floor((n._value - (hours * 60 * 60))/60),
+            seconds = Math.round(n._value - (hours * 60 * 60) - (minutes * 60));
+        return hours + ':' + ((minutes < 10) ? '0' + minutes : minutes) + ':' + ((seconds < 10) ? '0' + seconds : seconds);
+    }
+
+    function unformatTime (string) {
+        var timeArray = string.split(':'),
+            seconds = 0;
+        // turn hours and minutes into seconds and add them all up
+        if (timeArray.length === 3) {
+            // hours
+            seconds = seconds + (Number(timeArray[0]) * 60 * 60);
+            // minutes
+            seconds = seconds + (Number(timeArray[1]) * 60);
+            // seconds
+            seconds = seconds + Number(timeArray[2]);
+        } else if (timeArray.length === 2) {
+            // minutes
+            seconds = seconds + (Number(timeArray[0]) * 60);
+            // seconds
+            seconds = seconds + Number(timeArray[1]);
+        }
+        return Number(seconds);
+    }
+
+    function formatNumber (value, format, roundingFunction) {
+        var negP = false,
+            signed = false,
+            optDec = false,
+            abbr = '',
+            abbrK = false, // force abbreviation to thousands
+            abbrM = false, // force abbreviation to millions
+            abbrB = false, // force abbreviation to billions
+            abbrT = false, // force abbreviation to trillions
+            abbrForce = false, // force abbreviation
+            bytes = '',
+            ord = '',
+            abs = Math.abs(value),
+            suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+            min,
+            max,
+            power,
+            w,
+            precision,
+            thousands,
+            d = '',
+            neg = false;
+
+        // check if number is zero and a custom zero format has been set
+        if (value === 0 && zeroFormat !== null) {
+            return zeroFormat;
+        } else {
+            // see if we should use parentheses for negative number or if we should prefix with a sign
+            // if both are present we default to parentheses
+            if (format.indexOf('(') > -1) {
+                negP = true;
+                format = format.slice(1, -1);
+            } else if (format.indexOf('+') > -1) {
+                signed = true;
+                format = format.replace(/\+/g, '');
+            }
+
+            // see if abbreviation is wanted
+            if (format.indexOf('a') > -1) {
+                // check if abbreviation is specified
+                abbrK = format.indexOf('aK') >= 0;
+                abbrM = format.indexOf('aM') >= 0;
+                abbrB = format.indexOf('aB') >= 0;
+                abbrT = format.indexOf('aT') >= 0;
+                abbrForce = abbrK || abbrM || abbrB || abbrT;
+
+                // check for space before abbreviation
+                if (format.indexOf(' a') > -1) {
+                    abbr = ' ';
+                    format = format.replace(' a', '');
+                } else {
+                    format = format.replace('a', '');
+                }
+
+                if (abs >= Math.pow(10, 12) && !abbrForce || abbrT) {
+                    // trillion
+                    abbr = abbr + languages[currentLanguage].abbreviations.trillion;
+                    value = value / Math.pow(10, 12);
+                } else if (abs < Math.pow(10, 12) && abs >= Math.pow(10, 9) && !abbrForce || abbrB) {
+                    // billion
+                    abbr = abbr + languages[currentLanguage].abbreviations.billion;
+                    value = value / Math.pow(10, 9);
+                } else if (abs < Math.pow(10, 9) && abs >= Math.pow(10, 6) && !abbrForce || abbrM) {
+                    // million
+                    abbr = abbr + languages[currentLanguage].abbreviations.million;
+                    value = value / Math.pow(10, 6);
+                } else if (abs < Math.pow(10, 6) && abs >= Math.pow(10, 3) && !abbrForce || abbrK) {
+                    // thousand
+                    abbr = abbr + languages[currentLanguage].abbreviations.thousand;
+                    value = value / Math.pow(10, 3);
+                }
+            }
+
+            // see if we are formatting bytes
+            if (format.indexOf('b') > -1) {
+                // check for space before
+                if (format.indexOf(' b') > -1) {
+                    bytes = ' ';
+                    format = format.replace(' b', '');
+                } else {
+                    format = format.replace('b', '');
+                }
+
+                for (power = 0; power <= suffixes.length; power++) {
+                    min = Math.pow(1024, power);
+                    max = Math.pow(1024, power+1);
+
+                    if (value >= min && value < max) {
+                        bytes = bytes + suffixes[power];
+                        if (min > 0) {
+                            value = value / min;
+                        }
+                        break;
+                    }
+                }
+            }
+
+            // see if ordinal is wanted
+            if (format.indexOf('o') > -1) {
+                // check for space before
+                if (format.indexOf(' o') > -1) {
+                    ord = ' ';
+                    format = format.replace(' o', '');
+                } else {
+                    format = format.replace('o', '');
+                }
+
+                ord = ord + languages[currentLanguage].ordinal(value);
+            }
+
+            if (format.indexOf('[.]') > -1) {
+                optDec = true;
+                format = format.replace('[.]', '.');
+            }
+
+            w = value.toString().split('.')[0];
+            precision = format.split('.')[1];
+            thousands = format.indexOf(',');
+
+            if (precision) {
+                if (precision.indexOf('[') > -1) {
+                    precision = precision.replace(']', '');
+                    precision = precision.split('[');
+                    d = toFixed(value, (precision[0].length + precision[1].length), roundingFunction, precision[1].length);
+                } else {
+                    d = toFixed(value, precision.length, roundingFunction);
+                }
+
+                w = d.split('.')[0];
+
+                if (d.split('.')[1].length) {
+                    d = languages[currentLanguage].delimiters.decimal + d.split('.')[1];
+                } else {
+                    d = '';
+                }
+
+                if (optDec && Number(d.slice(1)) === 0) {
+                    d = '';
+                }
+            } else {
+                w = toFixed(value, null, roundingFunction);
+            }
+
+            // format number
+            if (w.indexOf('-') > -1) {
+                w = w.slice(1);
+                neg = true;
+            }
+
+            if (thousands > -1) {
+                w = w.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + languages[currentLanguage].delimiters.thousands);
+            }
+
+            if (format.indexOf('.') === 0) {
+                w = '';
+            }
+
+            return ((negP && neg) ? '(' : '') + ((!negP && neg) ? '-' : '') + ((!neg && signed) ? '+' : '') + w + d + ((ord) ? ord : '') + ((abbr) ? abbr : '') + ((bytes) ? bytes : '') + ((negP && neg) ? ')' : '');
+        }
+    }
+
+    /************************************
+        Top Level Functions
+    ************************************/
+
+    numeral = function (input) {
+        if (numeral.isNumeral(input)) {
+            input = input.value();
+        } else if (input === 0 || typeof input === 'undefined') {
+            input = 0;
+        } else if (!Number(input)) {
+            input = numeral.fn.unformat(input);
+        }
+
+        return new Numeral(Number(input));
+    };
+
+    // version number
+    numeral.version = VERSION;
+
+    // compare numeral object
+    numeral.isNumeral = function (obj) {
+        return obj instanceof Numeral;
+    };
+
+    // This function will load languages and then set the global language.  If
+    // no arguments are passed in, it will simply return the current global
+    // language key.
+    numeral.language = function (key, values) {
+        if (!key) {
+            return currentLanguage;
+        }
+
+        if (key && !values) {
+            if(!languages[key]) {
+                throw new Error('Unknown language : ' + key);
+            }
+            currentLanguage = key;
+        }
+
+        if (values || !languages[key]) {
+            loadLanguage(key, values);
+        }
+
+        return numeral;
+    };
+    
+    // This function provides access to the loaded language data.  If
+    // no arguments are passed in, it will simply return the current
+    // global language object.
+    numeral.languageData = function (key) {
+        if (!key) {
+            return languages[currentLanguage];
+        }
+        
+        if (!languages[key]) {
+            throw new Error('Unknown language : ' + key);
+        }
+        
+        return languages[key];
+    };
+
+    numeral.language('en', {
+        delimiters: {
+            thousands: ',',
+            decimal: '.'
+        },
+        abbreviations: {
+            thousand: 'k',
+            million: 'm',
+            billion: 'b',
+            trillion: 't'
+        },
+        ordinal: function (number) {
+            var b = number % 10;
+            return (~~ (number % 100 / 10) === 1) ? 'th' :
+                (b === 1) ? 'st' :
+                (b === 2) ? 'nd' :
+                (b === 3) ? 'rd' : 'th';
+        },
+        currency: {
+            symbol: '$'
+        }
+    });
+
+    numeral.zeroFormat = function (format) {
+        zeroFormat = typeof(format) === 'string' ? format : null;
+    };
+
+    numeral.defaultFormat = function (format) {
+        defaultFormat = typeof(format) === 'string' ? format : '0.0';
+    };
+
+    /************************************
+        Helpers
+    ************************************/
+
+    function loadLanguage(key, values) {
+        languages[key] = values;
+    }
+
+    /************************************
+        Floating-point helpers
+    ************************************/
+
+    // The floating-point helper functions and implementation
+    // borrows heavily from sinful.js: http://guipn.github.io/sinful.js/
+
+    /**
+     * Array.prototype.reduce for browsers that don't support it
+     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce#Compatibility
+     */
+    if ('function' !== typeof Array.prototype.reduce) {
+        Array.prototype.reduce = function (callback, opt_initialValue) {
+            'use strict';
+            
+            if (null === this || 'undefined' === typeof this) {
+                // At the moment all modern browsers, that support strict mode, have
+                // native implementation of Array.prototype.reduce. For instance, IE8
+                // does not support strict mode, so this check is actually useless.
+                throw new TypeError('Array.prototype.reduce called on null or undefined');
+            }
+            
+            if ('function' !== typeof callback) {
+                throw new TypeError(callback + ' is not a function');
+            }
+
+            var index,
+                value,
+                length = this.length >>> 0,
+                isValueSet = false;
+
+            if (1 < arguments.length) {
+                value = opt_initialValue;
+                isValueSet = true;
+            }
+
+            for (index = 0; length > index; ++index) {
+                if (this.hasOwnProperty(index)) {
+                    if (isValueSet) {
+                        value = callback(value, this[index], index, this);
+                    } else {
+                        value = this[index];
+                        isValueSet = true;
+                    }
+                }
+            }
+
+            if (!isValueSet) {
+                throw new TypeError('Reduce of empty array with no initial value');
+            }
+
+            return value;
+        };
+    }
+
+    
+    /**
+     * Computes the multiplier necessary to make x >= 1,
+     * effectively eliminating miscalculations caused by
+     * finite precision.
+     */
+    function multiplier(x) {
+        var parts = x.toString().split('.');
+        if (parts.length < 2) {
+            return 1;
+        }
+        return Math.pow(10, parts[1].length);
+    }
+
+    /**
+     * Given a variable number of arguments, returns the maximum
+     * multiplier that must be used to normalize an operation involving
+     * all of them.
+     */
+    function correctionFactor() {
+        var args = Array.prototype.slice.call(arguments);
+        return args.reduce(function (prev, next) {
+            var mp = multiplier(prev),
+                mn = multiplier(next);
+        return mp > mn ? mp : mn;
+        }, -Infinity);
+    }        
+
+
+    /************************************
+        Numeral Prototype
+    ************************************/
+
+
+    numeral.fn = Numeral.prototype = {
+
+        clone : function () {
+            return numeral(this);
+        },
+
+        format : function (inputString, roundingFunction) {
+            return formatNumeral(this, 
+                  inputString ? inputString : defaultFormat, 
+                  (roundingFunction !== undefined) ? roundingFunction : Math.round
+              );
+        },
+
+        unformat : function (inputString) {
+            if (Object.prototype.toString.call(inputString) === '[object Number]') { 
+                return inputString; 
+            }
+            return unformatNumeral(this, inputString ? inputString : defaultFormat);
+        },
+
+        value : function () {
+            return this._value;
+        },
+
+        valueOf : function () {
+            return this._value;
+        },
+
+        set : function (value) {
+            this._value = Number(value);
+            return this;
+        },
+
+        add : function (value) {
+            var corrFactor = correctionFactor.call(null, this._value, value);
+            function cback(accum, curr, currI, O) {
+                return accum + corrFactor * curr;
+            }
+            this._value = [this._value, value].reduce(cback, 0) / corrFactor;
+            return this;
+        },
+
+        subtract : function (value) {
+            var corrFactor = correctionFactor.call(null, this._value, value);
+            function cback(accum, curr, currI, O) {
+                return accum - corrFactor * curr;
+            }
+            this._value = [value].reduce(cback, this._value * corrFactor) / corrFactor;            
+            return this;
+        },
+
+        multiply : function (value) {
+            function cback(accum, curr, currI, O) {
+                var corrFactor = correctionFactor(accum, curr);
+                return (accum * corrFactor) * (curr * corrFactor) /
+                    (corrFactor * corrFactor);
+            }
+            this._value = [this._value, value].reduce(cback, 1);
+            return this;
+        },
+
+        divide : function (value) {
+            function cback(accum, curr, currI, O) {
+                var corrFactor = correctionFactor(accum, curr);
+                return (accum * corrFactor) / (curr * corrFactor);
+            }
+            this._value = [this._value, value].reduce(cback);            
+            return this;
+        },
+
+        difference : function (value) {
+            return Math.abs(numeral(this._value).subtract(value).value());
+        }
+
+    };
+
+    /************************************
+        Exposing Numeral
+    ************************************/
+
+    // CommonJS module is defined
+    if (hasModule) {
+        module.exports = numeral;
+    }
+
+    /*global ender:false */
+    if (typeof ender === 'undefined') {
+        // here, `this` means `window` in the browser, or `global` on the server
+        // add `numeral` as a global object via a string identifier,
+        // for Closure Compiler 'advanced' mode
+        this['numeral'] = numeral;
+    }
+
+    /*global define:false */
+    if (typeof define === 'function' && define.amd) {
+        define('numeral',[], function () {
+            return numeral;
+        });
+    }
+}).call(this);
+
 //! moment.js
 //! version : 2.15.2
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -32687,6 +32584,171 @@ module.exports = kramed;
     return _moment;
 
 }));
+define('kramed/kramed',['require','exports','module','./utils','./lex/block','./lex/inline','./parser','./renderer'],function (require, exports, module) {/**
+ * kramed - a markdown parser
+ * Copyright (c) 2011-2014, Christopher Jeffrey. (MIT Licensed)
+ * https://github.com/GitbookIO/kramed
+ */
+/**
+ * kramed - a kramdown parser, based off chjj's kramed
+ * Copyright (c) 2014, Aaron O'Mullan. (MIT Licensed)
+ * https://github.com/GitbookIO/kramed
+*/
+
+var _utils = require('./utils');
+var merge = _utils.merge;
+
+var Lexer = require('./lex/block');
+var InlineLexer = require('./lex/inline');
+
+var Parser = require('./parser');
+var Renderer = require('./renderer');
+
+/**
+ * Kramed
+ */
+
+function kramed(src, opt, callback) {
+  if (callback || typeof opt === 'function') {
+    if (!callback) {
+      callback = opt;
+      opt = null;
+    }
+
+    opt = merge({}, kramed.defaults, opt || {});
+
+    var highlight = opt.highlight
+      , tokens
+      , pending
+      , i = 0;
+
+    try {
+      tokens = Lexer.lex(src, opt)
+    } catch (e) {
+      return callback(e);
+    }
+
+    pending = tokens.length;
+
+    var done = function(err) {
+      if (err) {
+        opt.highlight = highlight;
+        return callback(err);
+      }
+
+      var out;
+
+      try {
+        out = Parser.parse(tokens, opt);
+      } catch (e) {
+        err = e;
+      }
+
+      opt.highlight = highlight;
+
+      return err
+        ? callback(err)
+        : callback(null, out);
+    };
+
+    if (!highlight || highlight.length < 3) {
+      return done();
+    }
+
+    delete opt.highlight;
+
+    if (!pending) return done();
+
+    for (; i < tokens.length; i++) {
+      (function(token) {
+        if (token.type !== 'code') {
+          return --pending || done();
+        }
+        return highlight(token.text, token.lang, function(err, code) {
+          if (err) return done(err);
+          if (code == null || code === token.text) {
+            return --pending || done();
+          }
+          token.text = code;
+          token.escaped = true;
+          --pending || done();
+        });
+      })(tokens[i]);
+    }
+
+    return;
+  }
+  try {
+    if (opt) opt = merge({}, kramed.defaults, opt);
+    return Parser.parse(Lexer.lex(src, opt), opt);
+  } catch (e) {
+    e.message += '\nPlease report this to https://github.com/GitbookIO/kramed.';
+    if ((opt || kramed.defaults).silent) {
+      return '<p>An error occured:</p><pre>'
+        + escape(e.message + '', true)
+        + '</pre>';
+    }
+    throw e;
+  }
+}
+
+/**
+ * Options
+ */
+
+kramed.options =
+kramed.setOptions = function(opt) {
+  merge(kramed.defaults, opt);
+  return kramed;
+};
+
+kramed.defaults = {
+  // Lexer options (both block and inline lexers)
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: false,
+  smartLists: false,
+  mathjax: true,
+
+  // Kramed options
+  silent: false,
+  highlight: null,
+
+  // Renderer options
+  langPrefix: 'lang-',
+  smartypants: false,
+  headerPrefix: '',
+  headerAutoId: true,
+  xhtml: false,
+
+  // Default rendrer passed to Parser
+  renderer: new Renderer,
+};
+
+/**
+ * Expose
+ */
+
+kramed.Parser = Parser;
+kramed.parser = Parser.parse;
+
+kramed.Renderer = Renderer;
+
+kramed.Lexer = Lexer;
+kramed.lexer = Lexer.lex;
+
+kramed.InlineLexer = InlineLexer;
+kramed.inlineLexer = InlineLexer.output;
+
+kramed.parse = kramed;
+
+module.exports = kramed;
+
+});
+;define('kramed', ['kramed/kramed'], function (main) { return main; });
+
 /*! tether 1.3.7 */
 
 (function(root, factory) {
@@ -34495,1345 +34557,6 @@ return Tether;
 
 }));
 ;define('tether', ['tether/tether'], function (main) { return main; });
-
-define('highlight.js/languages/xml',['require','exports','module'],function (require, exports, module) {module.exports = function(hljs) {
-  var XML_IDENT_RE = '[A-Za-z0-9\\._:-]+';
-  var TAG_INTERNALS = {
-    endsWithParent: true,
-    illegal: /</,
-    relevance: 0,
-    contains: [
-      {
-        className: 'attr',
-        begin: XML_IDENT_RE,
-        relevance: 0
-      },
-      {
-        begin: /=\s*/,
-        relevance: 0,
-        contains: [
-          {
-            className: 'string',
-            endsParent: true,
-            variants: [
-              {begin: /"/, end: /"/},
-              {begin: /'/, end: /'/},
-              {begin: /[^\s"'=<>`]+/}
-            ]
-          }
-        ]
-      }
-    ]
-  };
-  return {
-    aliases: ['html', 'xhtml', 'rss', 'atom', 'xjb', 'xsd', 'xsl', 'plist'],
-    case_insensitive: true,
-    contains: [
-      {
-        className: 'meta',
-        begin: '<!DOCTYPE', end: '>',
-        relevance: 10,
-        contains: [{begin: '\\[', end: '\\]'}]
-      },
-      hljs.COMMENT(
-        '<!--',
-        '-->',
-        {
-          relevance: 10
-        }
-      ),
-      {
-        begin: '<\\!\\[CDATA\\[', end: '\\]\\]>',
-        relevance: 10
-      },
-      {
-        begin: /<\?(php)?/, end: /\?>/,
-        subLanguage: 'php',
-        contains: [{begin: '/\\*', end: '\\*/', skip: true}]
-      },
-      {
-        className: 'tag',
-        /*
-        The lookahead pattern (?=...) ensures that 'begin' only matches
-        '<style' as a single word, followed by a whitespace or an
-        ending braket. The '$' is needed for the lexeme to be recognized
-        by hljs.subMode() that tests lexemes outside the stream.
-        */
-        begin: '<style(?=\\s|>|$)', end: '>',
-        keywords: {name: 'style'},
-        contains: [TAG_INTERNALS],
-        starts: {
-          end: '</style>', returnEnd: true,
-          subLanguage: ['css', 'xml']
-        }
-      },
-      {
-        className: 'tag',
-        // See the comment in the <style tag about the lookahead pattern
-        begin: '<script(?=\\s|>|$)', end: '>',
-        keywords: {name: 'script'},
-        contains: [TAG_INTERNALS],
-        starts: {
-          end: '\<\/script\>', returnEnd: true,
-          subLanguage: ['actionscript', 'javascript', 'handlebars', 'xml']
-        }
-      },
-      {
-        className: 'meta',
-        variants: [
-          {begin: /<\?xml/, end: /\?>/, relevance: 10},
-          {begin: /<\?\w+/, end: /\?>/}
-        ]
-      },
-      {
-        className: 'tag',
-        begin: '</?', end: '/?>',
-        contains: [
-          {
-            className: 'name', begin: /[^\/><\s]+/, relevance: 0
-          },
-          TAG_INTERNALS
-        ]
-      }
-    ]
-  };
-};
-});
-
-define('highlight.js/languages/css',['require','exports','module'],function (require, exports, module) {module.exports = function(hljs) {
-  var IDENT_RE = '[a-zA-Z-][a-zA-Z0-9_-]*';
-  var RULE = {
-    begin: /[A-Z\_\.\-]+\s*:/, returnBegin: true, end: ';', endsWithParent: true,
-    contains: [
-      {
-        className: 'attribute',
-        begin: /\S/, end: ':', excludeEnd: true,
-        starts: {
-          endsWithParent: true, excludeEnd: true,
-          contains: [
-            {
-              begin: /[\w-]+\(/, returnBegin: true,
-              contains: [
-                {
-                  className: 'built_in',
-                  begin: /[\w-]+/
-                },
-                {
-                  begin: /\(/, end: /\)/,
-                  contains: [
-                    hljs.APOS_STRING_MODE,
-                    hljs.QUOTE_STRING_MODE
-                  ]
-                }
-              ]
-            },
-            hljs.CSS_NUMBER_MODE,
-            hljs.QUOTE_STRING_MODE,
-            hljs.APOS_STRING_MODE,
-            hljs.C_BLOCK_COMMENT_MODE,
-            {
-              className: 'number', begin: '#[0-9A-Fa-f]+'
-            },
-            {
-              className: 'meta', begin: '!important'
-            }
-          ]
-        }
-      }
-    ]
-  };
-
-  return {
-    case_insensitive: true,
-    illegal: /[=\/|'\$]/,
-    contains: [
-      hljs.C_BLOCK_COMMENT_MODE,
-      {
-        className: 'selector-id', begin: /#[A-Za-z0-9_-]+/
-      },
-      {
-        className: 'selector-class', begin: /\.[A-Za-z0-9_-]+/
-      },
-      {
-        className: 'selector-attr',
-        begin: /\[/, end: /\]/,
-        illegal: '$'
-      },
-      {
-        className: 'selector-pseudo',
-        begin: /:(:)?[a-zA-Z0-9\_\-\+\(\)"'.]+/
-      },
-      {
-        begin: '@(font-face|page)',
-        lexemes: '[a-z-]+',
-        keywords: 'font-face page'
-      },
-      {
-        begin: '@', end: '[{;]', // at_rule eating first "{" is a good thing
-                                 // because it doesn’t let it to be parsed as
-                                 // a rule set but instead drops parser into
-                                 // the default mode which is how it should be.
-        illegal: /:/, // break on Less variables @var: ...
-        contains: [
-          {
-            className: 'keyword',
-            begin: /\w+/
-          },
-          {
-            begin: /\s/, endsWithParent: true, excludeEnd: true,
-            relevance: 0,
-            contains: [
-              hljs.APOS_STRING_MODE, hljs.QUOTE_STRING_MODE,
-              hljs.CSS_NUMBER_MODE
-            ]
-          }
-        ]
-      },
-      {
-        className: 'selector-tag', begin: IDENT_RE,
-        relevance: 0
-      },
-      {
-        begin: '{', end: '}',
-        illegal: /\S/,
-        contains: [
-          hljs.C_BLOCK_COMMENT_MODE,
-          RULE,
-        ]
-      }
-    ]
-  };
-};
-});
-
-define('highlight.js/languages/json',['require','exports','module'],function (require, exports, module) {module.exports = function(hljs) {
-  var LITERALS = {literal: 'true false null'};
-  var TYPES = [
-    hljs.QUOTE_STRING_MODE,
-    hljs.C_NUMBER_MODE
-  ];
-  var VALUE_CONTAINER = {
-    end: ',', endsWithParent: true, excludeEnd: true,
-    contains: TYPES,
-    keywords: LITERALS
-  };
-  var OBJECT = {
-    begin: '{', end: '}',
-    contains: [
-      {
-        className: 'attr',
-        begin: /"/, end: /"/,
-        contains: [hljs.BACKSLASH_ESCAPE],
-        illegal: '\\n',
-      },
-      hljs.inherit(VALUE_CONTAINER, {begin: /:/})
-    ],
-    illegal: '\\S'
-  };
-  var ARRAY = {
-    begin: '\\[', end: '\\]',
-    contains: [hljs.inherit(VALUE_CONTAINER)], // inherit is a workaround for a bug that makes shared modes with endsWithParent compile only the ending of one of the parents
-    illegal: '\\S'
-  };
-  TYPES.splice(TYPES.length, 0, OBJECT, ARRAY);
-  return {
-    contains: TYPES,
-    keywords: LITERALS,
-    illegal: '\\S'
-  };
-};
-});
-
-define('highlight.js/languages/scss',['require','exports','module'],function (require, exports, module) {module.exports = function(hljs) {
-  var IDENT_RE = '[a-zA-Z-][a-zA-Z0-9_-]*';
-  var VARIABLE = {
-    className: 'variable',
-    begin: '(\\$' + IDENT_RE + ')\\b'
-  };
-  var HEXCOLOR = {
-    className: 'number', begin: '#[0-9A-Fa-f]+'
-  };
-  var DEF_INTERNALS = {
-    className: 'attribute',
-    begin: '[A-Z\\_\\.\\-]+', end: ':',
-    excludeEnd: true,
-    illegal: '[^\\s]',
-    starts: {
-      endsWithParent: true, excludeEnd: true,
-      contains: [
-        HEXCOLOR,
-        hljs.CSS_NUMBER_MODE,
-        hljs.QUOTE_STRING_MODE,
-        hljs.APOS_STRING_MODE,
-        hljs.C_BLOCK_COMMENT_MODE,
-        {
-          className: 'meta', begin: '!important'
-        }
-      ]
-    }
-  };
-  return {
-    case_insensitive: true,
-    illegal: '[=/|\']',
-    contains: [
-      hljs.C_LINE_COMMENT_MODE,
-      hljs.C_BLOCK_COMMENT_MODE,
-      {
-        className: 'selector-id', begin: '\\#[A-Za-z0-9_-]+',
-        relevance: 0
-      },
-      {
-        className: 'selector-class', begin: '\\.[A-Za-z0-9_-]+',
-        relevance: 0
-      },
-      {
-        className: 'selector-attr', begin: '\\[', end: '\\]',
-        illegal: '$'
-      },
-      {
-        className: 'selector-tag', // begin: IDENT_RE, end: '[,|\\s]'
-        begin: '\\b(a|abbr|acronym|address|area|article|aside|audio|b|base|big|blockquote|body|br|button|canvas|caption|cite|code|col|colgroup|command|datalist|dd|del|details|dfn|div|dl|dt|em|embed|fieldset|figcaption|figure|footer|form|frame|frameset|(h[1-6])|head|header|hgroup|hr|html|i|iframe|img|input|ins|kbd|keygen|label|legend|li|link|map|mark|meta|meter|nav|noframes|noscript|object|ol|optgroup|option|output|p|param|pre|progress|q|rp|rt|ruby|samp|script|section|select|small|span|strike|strong|style|sub|sup|table|tbody|td|textarea|tfoot|th|thead|time|title|tr|tt|ul|var|video)\\b',
-        relevance: 0
-      },
-      {
-        begin: ':(visited|valid|root|right|required|read-write|read-only|out-range|optional|only-of-type|only-child|nth-of-type|nth-last-of-type|nth-last-child|nth-child|not|link|left|last-of-type|last-child|lang|invalid|indeterminate|in-range|hover|focus|first-of-type|first-line|first-letter|first-child|first|enabled|empty|disabled|default|checked|before|after|active)'
-      },
-      {
-        begin: '::(after|before|choices|first-letter|first-line|repeat-index|repeat-item|selection|value)'
-      },
-      VARIABLE,
-      {
-        className: 'attribute',
-        begin: '\\b(z-index|word-wrap|word-spacing|word-break|width|widows|white-space|visibility|vertical-align|unicode-bidi|transition-timing-function|transition-property|transition-duration|transition-delay|transition|transform-style|transform-origin|transform|top|text-underline-position|text-transform|text-shadow|text-rendering|text-overflow|text-indent|text-decoration-style|text-decoration-line|text-decoration-color|text-decoration|text-align-last|text-align|tab-size|table-layout|right|resize|quotes|position|pointer-events|perspective-origin|perspective|page-break-inside|page-break-before|page-break-after|padding-top|padding-right|padding-left|padding-bottom|padding|overflow-y|overflow-x|overflow-wrap|overflow|outline-width|outline-style|outline-offset|outline-color|outline|orphans|order|opacity|object-position|object-fit|normal|none|nav-up|nav-right|nav-left|nav-index|nav-down|min-width|min-height|max-width|max-height|mask|marks|margin-top|margin-right|margin-left|margin-bottom|margin|list-style-type|list-style-position|list-style-image|list-style|line-height|letter-spacing|left|justify-content|initial|inherit|ime-mode|image-orientation|image-resolution|image-rendering|icon|hyphens|height|font-weight|font-variant-ligatures|font-variant|font-style|font-stretch|font-size-adjust|font-size|font-language-override|font-kerning|font-feature-settings|font-family|font|float|flex-wrap|flex-shrink|flex-grow|flex-flow|flex-direction|flex-basis|flex|filter|empty-cells|display|direction|cursor|counter-reset|counter-increment|content|column-width|column-span|column-rule-width|column-rule-style|column-rule-color|column-rule|column-gap|column-fill|column-count|columns|color|clip-path|clip|clear|caption-side|break-inside|break-before|break-after|box-sizing|box-shadow|box-decoration-break|bottom|border-width|border-top-width|border-top-style|border-top-right-radius|border-top-left-radius|border-top-color|border-top|border-style|border-spacing|border-right-width|border-right-style|border-right-color|border-right|border-radius|border-left-width|border-left-style|border-left-color|border-left|border-image-width|border-image-source|border-image-slice|border-image-repeat|border-image-outset|border-image|border-color|border-collapse|border-bottom-width|border-bottom-style|border-bottom-right-radius|border-bottom-left-radius|border-bottom-color|border-bottom|border|background-size|background-repeat|background-position|background-origin|background-image|background-color|background-clip|background-attachment|background-blend-mode|background|backface-visibility|auto|animation-timing-function|animation-play-state|animation-name|animation-iteration-count|animation-fill-mode|animation-duration|animation-direction|animation-delay|animation|align-self|align-items|align-content)\\b',
-        illegal: '[^\\s]'
-      },
-      {
-        begin: '\\b(whitespace|wait|w-resize|visible|vertical-text|vertical-ideographic|uppercase|upper-roman|upper-alpha|underline|transparent|top|thin|thick|text|text-top|text-bottom|tb-rl|table-header-group|table-footer-group|sw-resize|super|strict|static|square|solid|small-caps|separate|se-resize|scroll|s-resize|rtl|row-resize|ridge|right|repeat|repeat-y|repeat-x|relative|progress|pointer|overline|outside|outset|oblique|nowrap|not-allowed|normal|none|nw-resize|no-repeat|no-drop|newspaper|ne-resize|n-resize|move|middle|medium|ltr|lr-tb|lowercase|lower-roman|lower-alpha|loose|list-item|line|line-through|line-edge|lighter|left|keep-all|justify|italic|inter-word|inter-ideograph|inside|inset|inline|inline-block|inherit|inactive|ideograph-space|ideograph-parenthesis|ideograph-numeric|ideograph-alpha|horizontal|hidden|help|hand|groove|fixed|ellipsis|e-resize|double|dotted|distribute|distribute-space|distribute-letter|distribute-all-lines|disc|disabled|default|decimal|dashed|crosshair|collapse|col-resize|circle|char|center|capitalize|break-word|break-all|bottom|both|bolder|bold|block|bidi-override|below|baseline|auto|always|all-scroll|absolute|table|table-cell)\\b'
-      },
-      {
-        begin: ':', end: ';',
-        contains: [
-          VARIABLE,
-          HEXCOLOR,
-          hljs.CSS_NUMBER_MODE,
-          hljs.QUOTE_STRING_MODE,
-          hljs.APOS_STRING_MODE,
-          {
-            className: 'meta', begin: '!important'
-          }
-        ]
-      },
-      {
-        begin: '@', end: '[{;]',
-        keywords: 'mixin include extend for if else each while charset import debug media page content font-face namespace warn',
-        contains: [
-          VARIABLE,
-          hljs.QUOTE_STRING_MODE,
-          hljs.APOS_STRING_MODE,
-          HEXCOLOR,
-          hljs.CSS_NUMBER_MODE,
-          {
-            begin: '\\s[A-Za-z0-9_.-]+',
-            relevance: 0
-          }
-        ]
-      }
-    ]
-  };
-};
-});
-
-define('highlight.js/languages/javascript',['require','exports','module'],function (require, exports, module) {module.exports = function(hljs) {
-  var IDENT_RE = '[A-Za-z$_][0-9A-Za-z$_]*';
-  var KEYWORDS = {
-    keyword:
-      'in of if for while finally var new function do return void else break catch ' +
-      'instanceof with throw case default try this switch continue typeof delete ' +
-      'let yield const export super debugger as async await static ' +
-      // ECMAScript 6 modules import
-      'import from as'
-    ,
-    literal:
-      'true false null undefined NaN Infinity',
-    built_in:
-      'eval isFinite isNaN parseFloat parseInt decodeURI decodeURIComponent ' +
-      'encodeURI encodeURIComponent escape unescape Object Function Boolean Error ' +
-      'EvalError InternalError RangeError ReferenceError StopIteration SyntaxError ' +
-      'TypeError URIError Number Math Date String RegExp Array Float32Array ' +
-      'Float64Array Int16Array Int32Array Int8Array Uint16Array Uint32Array ' +
-      'Uint8Array Uint8ClampedArray ArrayBuffer DataView JSON Intl arguments require ' +
-      'module console window document Symbol Set Map WeakSet WeakMap Proxy Reflect ' +
-      'Promise'
-  };
-  var EXPRESSIONS;
-  var NUMBER = {
-    className: 'number',
-    variants: [
-      { begin: '\\b(0[bB][01]+)' },
-      { begin: '\\b(0[oO][0-7]+)' },
-      { begin: hljs.C_NUMBER_RE }
-    ],
-    relevance: 0
-  };
-  var SUBST = {
-    className: 'subst',
-    begin: '\\$\\{', end: '\\}',
-    keywords: KEYWORDS,
-    contains: []  // defined later
-  };
-  var TEMPLATE_STRING = {
-    className: 'string',
-    begin: '`', end: '`',
-    contains: [
-      hljs.BACKSLASH_ESCAPE,
-      SUBST
-    ]
-  };
-  SUBST.contains = [
-    hljs.APOS_STRING_MODE,
-    hljs.QUOTE_STRING_MODE,
-    TEMPLATE_STRING,
-    NUMBER,
-    hljs.REGEXP_MODE
-  ]
-  var PARAMS_CONTAINS = SUBST.contains.concat([
-    hljs.C_BLOCK_COMMENT_MODE,
-    hljs.C_LINE_COMMENT_MODE
-  ]);
-
-  return {
-    aliases: ['js', 'jsx'],
-    keywords: KEYWORDS,
-    contains: [
-      {
-        className: 'meta',
-        relevance: 10,
-        begin: /^\s*['"]use (strict|asm)['"]/
-      },
-      {
-        className: 'meta',
-        begin: /^#!/, end: /$/
-      },
-      hljs.APOS_STRING_MODE,
-      hljs.QUOTE_STRING_MODE,
-      TEMPLATE_STRING,
-      hljs.C_LINE_COMMENT_MODE,
-      hljs.C_BLOCK_COMMENT_MODE,
-      NUMBER,
-      { // object attr container
-        begin: /[{,]\s*/, relevance: 0,
-        contains: [
-          {
-            begin: IDENT_RE + '\\s*:', returnBegin: true,
-            relevance: 0,
-            contains: [{className: 'attr', begin: IDENT_RE, relevance: 0}]
-          }
-        ]
-      },
-      { // "value" container
-        begin: '(' + hljs.RE_STARTERS_RE + '|\\b(case|return|throw)\\b)\\s*',
-        keywords: 'return throw case',
-        contains: [
-          hljs.C_LINE_COMMENT_MODE,
-          hljs.C_BLOCK_COMMENT_MODE,
-          hljs.REGEXP_MODE,
-          {
-            className: 'function',
-            begin: '(\\(.*?\\)|' + IDENT_RE + ')\\s*=>', returnBegin: true,
-            end: '\\s*=>',
-            contains: [
-              {
-                className: 'params',
-                variants: [
-                  {
-                    begin: IDENT_RE
-                  },
-                  {
-                    begin: /\(\s*\)/,
-                  },
-                  {
-                    begin: /\(/, end: /\)/,
-                    excludeBegin: true, excludeEnd: true,
-                    keywords: KEYWORDS,
-                    contains: PARAMS_CONTAINS
-                  }
-                ]
-              }
-            ]
-          },
-          { // E4X / JSX
-            begin: /</, end: /(\/\w+|\w+\/)>/,
-            subLanguage: 'xml',
-            contains: [
-              {begin: /<\w+\s*\/>/, skip: true},
-              {
-                begin: /<\w+/, end: /(\/\w+|\w+\/)>/, skip: true,
-                contains: [
-                  {begin: /<\w+\s*\/>/, skip: true},
-                  'self'
-                ]
-              }
-            ]
-          }
-        ],
-        relevance: 0
-      },
-      {
-        className: 'function',
-        beginKeywords: 'function', end: /\{/, excludeEnd: true,
-        contains: [
-          hljs.inherit(hljs.TITLE_MODE, {begin: IDENT_RE}),
-          {
-            className: 'params',
-            begin: /\(/, end: /\)/,
-            excludeBegin: true,
-            excludeEnd: true,
-            contains: PARAMS_CONTAINS
-          }
-        ],
-        illegal: /\[|%/
-      },
-      {
-        begin: /\$[(.]/ // relevance booster for a pattern common to JS libs: `$(something)` and `$.something`
-      },
-      hljs.METHOD_GUARD,
-      { // ES6 class
-        className: 'class',
-        beginKeywords: 'class', end: /[{;=]/, excludeEnd: true,
-        illegal: /[:"\[\]]/,
-        contains: [
-          {beginKeywords: 'extends'},
-          hljs.UNDERSCORE_TITLE_MODE
-        ]
-      },
-      {
-        beginKeywords: 'constructor', end: /\{/, excludeEnd: true
-      }
-    ],
-    illegal: /#(?!!)/
-  };
-};
-});
-
-/*
-Syntax highlighting with language autodetection.
-https://highlightjs.org/
-*/
-
-(function(factory) {
-
-  // Find the global object for export to both the browser and web workers.
-  var globalObject = typeof window === 'object' && window ||
-                     typeof self === 'object' && self;
-
-  // Setup highlight.js for different environments. First is Node.js or
-  // CommonJS.
-  if(typeof exports !== 'undefined') {
-    factory(exports);
-  } else if(globalObject) {
-    // Export hljs globally even when using AMD for cases when this script
-    // is loaded with others that may still expect a global hljs.
-    globalObject.hljs = factory({});
-
-    // Finally register the global hljs with AMD.
-    if(typeof define === 'function' && define.amd) {
-      define('highlight.js/highlight',[], function() {
-        return globalObject.hljs;
-      });
-    }
-  }
-
-}(function(hljs) {
-  // Convenience variables for build-in objects
-  var ArrayProto = [],
-      objectKeys = Object.keys;
-
-  // Global internal variables used within the highlight.js library.
-  var languages = {},
-      aliases   = {};
-
-  // Regular expressions used throughout the highlight.js library.
-  var noHighlightRe    = /^(no-?highlight|plain|text)$/i,
-      languagePrefixRe = /\blang(?:uage)?-([\w-]+)\b/i,
-      fixMarkupRe      = /((^(<[^>]+>|\t|)+|(?:\n)))/gm;
-
-  var spanEndTag = '</span>';
-
-  // Global options used when within external APIs. This is modified when
-  // calling the `hljs.configure` function.
-  var options = {
-    classPrefix: 'hljs-',
-    tabReplace: null,
-    useBR: false,
-    languages: undefined
-  };
-
-  // Object map that is used to escape some common HTML characters.
-  var escapeRegexMap = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;'
-  };
-
-  /* Utility functions */
-
-  function escape(value) {
-    return value.replace(/[&<>]/gm, function(character) {
-      return escapeRegexMap[character];
-    });
-  }
-
-  function tag(node) {
-    return node.nodeName.toLowerCase();
-  }
-
-  function testRe(re, lexeme) {
-    var match = re && re.exec(lexeme);
-    return match && match.index === 0;
-  }
-
-  function isNotHighlighted(language) {
-    return noHighlightRe.test(language);
-  }
-
-  function blockLanguage(block) {
-    var i, match, length, _class;
-    var classes = block.className + ' ';
-
-    classes += block.parentNode ? block.parentNode.className : '';
-
-    // language-* takes precedence over non-prefixed class names.
-    match = languagePrefixRe.exec(classes);
-    if (match) {
-      return getLanguage(match[1]) ? match[1] : 'no-highlight';
-    }
-
-    classes = classes.split(/\s+/);
-
-    for (i = 0, length = classes.length; i < length; i++) {
-      _class = classes[i]
-
-      if (isNotHighlighted(_class) || getLanguage(_class)) {
-        return _class;
-      }
-    }
-  }
-
-  function inherit(parent, obj) {
-    var key;
-    var result = {};
-
-    for (key in parent)
-      result[key] = parent[key];
-    if (obj)
-      for (key in obj)
-        result[key] = obj[key];
-    return result;
-  }
-
-  /* Stream merging */
-
-  function nodeStream(node) {
-    var result = [];
-    (function _nodeStream(node, offset) {
-      for (var child = node.firstChild; child; child = child.nextSibling) {
-        if (child.nodeType === 3)
-          offset += child.nodeValue.length;
-        else if (child.nodeType === 1) {
-          result.push({
-            event: 'start',
-            offset: offset,
-            node: child
-          });
-          offset = _nodeStream(child, offset);
-          // Prevent void elements from having an end tag that would actually
-          // double them in the output. There are more void elements in HTML
-          // but we list only those realistically expected in code display.
-          if (!tag(child).match(/br|hr|img|input/)) {
-            result.push({
-              event: 'stop',
-              offset: offset,
-              node: child
-            });
-          }
-        }
-      }
-      return offset;
-    })(node, 0);
-    return result;
-  }
-
-  function mergeStreams(original, highlighted, value) {
-    var processed = 0;
-    var result = '';
-    var nodeStack = [];
-
-    function selectStream() {
-      if (!original.length || !highlighted.length) {
-        return original.length ? original : highlighted;
-      }
-      if (original[0].offset !== highlighted[0].offset) {
-        return (original[0].offset < highlighted[0].offset) ? original : highlighted;
-      }
-
-      /*
-      To avoid starting the stream just before it should stop the order is
-      ensured that original always starts first and closes last:
-
-      if (event1 == 'start' && event2 == 'start')
-        return original;
-      if (event1 == 'start' && event2 == 'stop')
-        return highlighted;
-      if (event1 == 'stop' && event2 == 'start')
-        return original;
-      if (event1 == 'stop' && event2 == 'stop')
-        return highlighted;
-
-      ... which is collapsed to:
-      */
-      return highlighted[0].event === 'start' ? original : highlighted;
-    }
-
-    function open(node) {
-      function attr_str(a) {return ' ' + a.nodeName + '="' + escape(a.value) + '"';}
-      result += '<' + tag(node) + ArrayProto.map.call(node.attributes, attr_str).join('') + '>';
-    }
-
-    function close(node) {
-      result += '</' + tag(node) + '>';
-    }
-
-    function render(event) {
-      (event.event === 'start' ? open : close)(event.node);
-    }
-
-    while (original.length || highlighted.length) {
-      var stream = selectStream();
-      result += escape(value.substr(processed, stream[0].offset - processed));
-      processed = stream[0].offset;
-      if (stream === original) {
-        /*
-        On any opening or closing tag of the original markup we first close
-        the entire highlighted node stack, then render the original tag along
-        with all the following original tags at the same offset and then
-        reopen all the tags on the highlighted stack.
-        */
-        nodeStack.reverse().forEach(close);
-        do {
-          render(stream.splice(0, 1)[0]);
-          stream = selectStream();
-        } while (stream === original && stream.length && stream[0].offset === processed);
-        nodeStack.reverse().forEach(open);
-      } else {
-        if (stream[0].event === 'start') {
-          nodeStack.push(stream[0].node);
-        } else {
-          nodeStack.pop();
-        }
-        render(stream.splice(0, 1)[0]);
-      }
-    }
-    return result + escape(value.substr(processed));
-  }
-
-  /* Initialization */
-
-  function compileLanguage(language) {
-
-    function reStr(re) {
-        return (re && re.source) || re;
-    }
-
-    function langRe(value, global) {
-      return new RegExp(
-        reStr(value),
-        'm' + (language.case_insensitive ? 'i' : '') + (global ? 'g' : '')
-      );
-    }
-
-    function compileMode(mode, parent) {
-      if (mode.compiled)
-        return;
-      mode.compiled = true;
-
-      mode.keywords = mode.keywords || mode.beginKeywords;
-      if (mode.keywords) {
-        var compiled_keywords = {};
-
-        var flatten = function(className, str) {
-          if (language.case_insensitive) {
-            str = str.toLowerCase();
-          }
-          str.split(' ').forEach(function(kw) {
-            var pair = kw.split('|');
-            compiled_keywords[pair[0]] = [className, pair[1] ? Number(pair[1]) : 1];
-          });
-        };
-
-        if (typeof mode.keywords === 'string') { // string
-          flatten('keyword', mode.keywords);
-        } else {
-          objectKeys(mode.keywords).forEach(function (className) {
-            flatten(className, mode.keywords[className]);
-          });
-        }
-        mode.keywords = compiled_keywords;
-      }
-      mode.lexemesRe = langRe(mode.lexemes || /\w+/, true);
-
-      if (parent) {
-        if (mode.beginKeywords) {
-          mode.begin = '\\b(' + mode.beginKeywords.split(' ').join('|') + ')\\b';
-        }
-        if (!mode.begin)
-          mode.begin = /\B|\b/;
-        mode.beginRe = langRe(mode.begin);
-        if (!mode.end && !mode.endsWithParent)
-          mode.end = /\B|\b/;
-        if (mode.end)
-          mode.endRe = langRe(mode.end);
-        mode.terminator_end = reStr(mode.end) || '';
-        if (mode.endsWithParent && parent.terminator_end)
-          mode.terminator_end += (mode.end ? '|' : '') + parent.terminator_end;
-      }
-      if (mode.illegal)
-        mode.illegalRe = langRe(mode.illegal);
-      if (mode.relevance == null)
-        mode.relevance = 1;
-      if (!mode.contains) {
-        mode.contains = [];
-      }
-      var expanded_contains = [];
-      mode.contains.forEach(function(c) {
-        if (c.variants) {
-          c.variants.forEach(function(v) {expanded_contains.push(inherit(c, v));});
-        } else {
-          expanded_contains.push(c === 'self' ? mode : c);
-        }
-      });
-      mode.contains = expanded_contains;
-      mode.contains.forEach(function(c) {compileMode(c, mode);});
-
-      if (mode.starts) {
-        compileMode(mode.starts, parent);
-      }
-
-      var terminators =
-        mode.contains.map(function(c) {
-          return c.beginKeywords ? '\\.?(' + c.begin + ')\\.?' : c.begin;
-        })
-        .concat([mode.terminator_end, mode.illegal])
-        .map(reStr)
-        .filter(Boolean);
-      mode.terminators = terminators.length ? langRe(terminators.join('|'), true) : {exec: function(/*s*/) {return null;}};
-    }
-
-    compileMode(language);
-  }
-
-  /*
-  Core highlighting function. Accepts a language name, or an alias, and a
-  string with the code to highlight. Returns an object with the following
-  properties:
-
-  - relevance (int)
-  - value (an HTML string with highlighting markup)
-
-  */
-  function highlight(name, value, ignore_illegals, continuation) {
-
-    function subMode(lexeme, mode) {
-      var i, length;
-
-      for (i = 0, length = mode.contains.length; i < length; i++) {
-        if (testRe(mode.contains[i].beginRe, lexeme)) {
-          return mode.contains[i];
-        }
-      }
-    }
-
-    function endOfMode(mode, lexeme) {
-      if (testRe(mode.endRe, lexeme)) {
-        while (mode.endsParent && mode.parent) {
-          mode = mode.parent;
-        }
-        return mode;
-      }
-      if (mode.endsWithParent) {
-        return endOfMode(mode.parent, lexeme);
-      }
-    }
-
-    function isIllegal(lexeme, mode) {
-      return !ignore_illegals && testRe(mode.illegalRe, lexeme);
-    }
-
-    function keywordMatch(mode, match) {
-      var match_str = language.case_insensitive ? match[0].toLowerCase() : match[0];
-      return mode.keywords.hasOwnProperty(match_str) && mode.keywords[match_str];
-    }
-
-    function buildSpan(classname, insideSpan, leaveOpen, noPrefix) {
-      var classPrefix = noPrefix ? '' : options.classPrefix,
-          openSpan    = '<span class="' + classPrefix,
-          closeSpan   = leaveOpen ? '' : spanEndTag
-
-      openSpan += classname + '">';
-
-      return openSpan + insideSpan + closeSpan;
-    }
-
-    function processKeywords() {
-      var keyword_match, last_index, match, result;
-
-      if (!top.keywords)
-        return escape(mode_buffer);
-
-      result = '';
-      last_index = 0;
-      top.lexemesRe.lastIndex = 0;
-      match = top.lexemesRe.exec(mode_buffer);
-
-      while (match) {
-        result += escape(mode_buffer.substr(last_index, match.index - last_index));
-        keyword_match = keywordMatch(top, match);
-        if (keyword_match) {
-          relevance += keyword_match[1];
-          result += buildSpan(keyword_match[0], escape(match[0]));
-        } else {
-          result += escape(match[0]);
-        }
-        last_index = top.lexemesRe.lastIndex;
-        match = top.lexemesRe.exec(mode_buffer);
-      }
-      return result + escape(mode_buffer.substr(last_index));
-    }
-
-    function processSubLanguage() {
-      var explicit = typeof top.subLanguage === 'string';
-      if (explicit && !languages[top.subLanguage]) {
-        return escape(mode_buffer);
-      }
-
-      var result = explicit ?
-                   highlight(top.subLanguage, mode_buffer, true, continuations[top.subLanguage]) :
-                   highlightAuto(mode_buffer, top.subLanguage.length ? top.subLanguage : undefined);
-
-      // Counting embedded language score towards the host language may be disabled
-      // with zeroing the containing mode relevance. Usecase in point is Markdown that
-      // allows XML everywhere and makes every XML snippet to have a much larger Markdown
-      // score.
-      if (top.relevance > 0) {
-        relevance += result.relevance;
-      }
-      if (explicit) {
-        continuations[top.subLanguage] = result.top;
-      }
-      return buildSpan(result.language, result.value, false, true);
-    }
-
-    function processBuffer() {
-      result += (top.subLanguage != null ? processSubLanguage() : processKeywords());
-      mode_buffer = '';
-    }
-
-    function startNewMode(mode) {
-      result += mode.className? buildSpan(mode.className, '', true): '';
-      top = Object.create(mode, {parent: {value: top}});
-    }
-
-    function processLexeme(buffer, lexeme) {
-
-      mode_buffer += buffer;
-
-      if (lexeme == null) {
-        processBuffer();
-        return 0;
-      }
-
-      var new_mode = subMode(lexeme, top);
-      if (new_mode) {
-        if (new_mode.skip) {
-          mode_buffer += lexeme;
-        } else {
-          if (new_mode.excludeBegin) {
-            mode_buffer += lexeme;
-          }
-          processBuffer();
-          if (!new_mode.returnBegin && !new_mode.excludeBegin) {
-            mode_buffer = lexeme;
-          }
-        }
-        startNewMode(new_mode, lexeme);
-        return new_mode.returnBegin ? 0 : lexeme.length;
-      }
-
-      var end_mode = endOfMode(top, lexeme);
-      if (end_mode) {
-        var origin = top;
-        if (origin.skip) {
-          mode_buffer += lexeme;
-        } else {
-          if (!(origin.returnEnd || origin.excludeEnd)) {
-            mode_buffer += lexeme;
-          }
-          processBuffer();
-          if (origin.excludeEnd) {
-            mode_buffer = lexeme;
-          }
-        }
-        do {
-          if (top.className) {
-            result += spanEndTag;
-          }
-          if (!top.skip) {
-            relevance += top.relevance;
-          }
-          top = top.parent;
-        } while (top !== end_mode.parent);
-        if (end_mode.starts) {
-          startNewMode(end_mode.starts, '');
-        }
-        return origin.returnEnd ? 0 : lexeme.length;
-      }
-
-      if (isIllegal(lexeme, top))
-        throw new Error('Illegal lexeme "' + lexeme + '" for mode "' + (top.className || '<unnamed>') + '"');
-
-      /*
-      Parser should not reach this point as all types of lexemes should be caught
-      earlier, but if it does due to some bug make sure it advances at least one
-      character forward to prevent infinite looping.
-      */
-      mode_buffer += lexeme;
-      return lexeme.length || 1;
-    }
-
-    var language = getLanguage(name);
-    if (!language) {
-      throw new Error('Unknown language: "' + name + '"');
-    }
-
-    compileLanguage(language);
-    var top = continuation || language;
-    var continuations = {}; // keep continuations for sub-languages
-    var result = '', current;
-    for(current = top; current !== language; current = current.parent) {
-      if (current.className) {
-        result = buildSpan(current.className, '', true) + result;
-      }
-    }
-    var mode_buffer = '';
-    var relevance = 0;
-    try {
-      var match, count, index = 0;
-      while (true) {
-        top.terminators.lastIndex = index;
-        match = top.terminators.exec(value);
-        if (!match)
-          break;
-        count = processLexeme(value.substr(index, match.index - index), match[0]);
-        index = match.index + count;
-      }
-      processLexeme(value.substr(index));
-      for(current = top; current.parent; current = current.parent) { // close dangling modes
-        if (current.className) {
-          result += spanEndTag;
-        }
-      }
-      return {
-        relevance: relevance,
-        value: result,
-        language: name,
-        top: top
-      };
-    } catch (e) {
-      if (e.message && e.message.indexOf('Illegal') !== -1) {
-        return {
-          relevance: 0,
-          value: escape(value)
-        };
-      } else {
-        throw e;
-      }
-    }
-  }
-
-  /*
-  Highlighting with language detection. Accepts a string with the code to
-  highlight. Returns an object with the following properties:
-
-  - language (detected language)
-  - relevance (int)
-  - value (an HTML string with highlighting markup)
-  - second_best (object with the same structure for second-best heuristically
-    detected language, may be absent)
-
-  */
-  function highlightAuto(text, languageSubset) {
-    languageSubset = languageSubset || options.languages || objectKeys(languages);
-    var result = {
-      relevance: 0,
-      value: escape(text)
-    };
-    var second_best = result;
-    languageSubset.filter(getLanguage).forEach(function(name) {
-      var current = highlight(name, text, false);
-      current.language = name;
-      if (current.relevance > second_best.relevance) {
-        second_best = current;
-      }
-      if (current.relevance > result.relevance) {
-        second_best = result;
-        result = current;
-      }
-    });
-    if (second_best.language) {
-      result.second_best = second_best;
-    }
-    return result;
-  }
-
-  /*
-  Post-processing of the highlighted markup:
-
-  - replace TABs with something more useful
-  - replace real line-breaks with '<br>' for non-pre containers
-
-  */
-  function fixMarkup(value) {
-    return !(options.tabReplace || options.useBR)
-      ? value
-      : value.replace(fixMarkupRe, function(match, p1) {
-          if (options.useBR && match === '\n') {
-            return '<br>';
-          } else if (options.tabReplace) {
-            return p1.replace(/\t/g, options.tabReplace);
-          }
-      });
-  }
-
-  function buildClassName(prevClassName, currentLang, resultLang) {
-    var language = currentLang ? aliases[currentLang] : resultLang,
-        result   = [prevClassName.trim()];
-
-    if (!prevClassName.match(/\bhljs\b/)) {
-      result.push('hljs');
-    }
-
-    if (prevClassName.indexOf(language) === -1) {
-      result.push(language);
-    }
-
-    return result.join(' ').trim();
-  }
-
-  /*
-  Applies highlighting to a DOM node containing code. Accepts a DOM node and
-  two optional parameters for fixMarkup.
-  */
-  function highlightBlock(block) {
-    var node, originalStream, result, resultNode, text;
-    var language = blockLanguage(block);
-
-    if (isNotHighlighted(language))
-        return;
-
-    if (options.useBR) {
-      node = document.createElementNS('http://www.w3.org/1999/xhtml', 'div');
-      node.innerHTML = block.innerHTML.replace(/\n/g, '').replace(/<br[ \/]*>/g, '\n');
-    } else {
-      node = block;
-    }
-    text = node.textContent;
-    result = language ? highlight(language, text, true) : highlightAuto(text);
-
-    originalStream = nodeStream(node);
-    if (originalStream.length) {
-      resultNode = document.createElementNS('http://www.w3.org/1999/xhtml', 'div');
-      resultNode.innerHTML = result.value;
-      result.value = mergeStreams(originalStream, nodeStream(resultNode), text);
-    }
-    result.value = fixMarkup(result.value);
-
-    block.innerHTML = result.value;
-    block.className = buildClassName(block.className, language, result.language);
-    block.result = {
-      language: result.language,
-      re: result.relevance
-    };
-    if (result.second_best) {
-      block.second_best = {
-        language: result.second_best.language,
-        re: result.second_best.relevance
-      };
-    }
-  }
-
-  /*
-  Updates highlight.js global options with values passed in the form of an object.
-  */
-  function configure(user_options) {
-    options = inherit(options, user_options);
-  }
-
-  /*
-  Applies highlighting to all <pre><code>..</code></pre> blocks on a page.
-  */
-  function initHighlighting() {
-    if (initHighlighting.called)
-      return;
-    initHighlighting.called = true;
-
-    var blocks = document.querySelectorAll('pre code');
-    ArrayProto.forEach.call(blocks, highlightBlock);
-  }
-
-  /*
-  Attaches highlighting to the page load event.
-  */
-  function initHighlightingOnLoad() {
-    addEventListener('DOMContentLoaded', initHighlighting, false);
-    addEventListener('load', initHighlighting, false);
-  }
-
-  function registerLanguage(name, language) {
-    var lang = languages[name] = language(hljs);
-    if (lang.aliases) {
-      lang.aliases.forEach(function(alias) {aliases[alias] = name;});
-    }
-  }
-
-  function listLanguages() {
-    return objectKeys(languages);
-  }
-
-  function getLanguage(name) {
-    name = (name || '').toLowerCase();
-    return languages[name] || languages[aliases[name]];
-  }
-
-  /* Interface definition */
-
-  hljs.highlight = highlight;
-  hljs.highlightAuto = highlightAuto;
-  hljs.fixMarkup = fixMarkup;
-  hljs.highlightBlock = highlightBlock;
-  hljs.configure = configure;
-  hljs.initHighlighting = initHighlighting;
-  hljs.initHighlightingOnLoad = initHighlightingOnLoad;
-  hljs.registerLanguage = registerLanguage;
-  hljs.listLanguages = listLanguages;
-  hljs.getLanguage = getLanguage;
-  hljs.inherit = inherit;
-
-  // Common regexps
-  hljs.IDENT_RE = '[a-zA-Z]\\w*';
-  hljs.UNDERSCORE_IDENT_RE = '[a-zA-Z_]\\w*';
-  hljs.NUMBER_RE = '\\b\\d+(\\.\\d+)?';
-  hljs.C_NUMBER_RE = '(-?)(\\b0[xX][a-fA-F0-9]+|(\\b\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)'; // 0x..., 0..., decimal, float
-  hljs.BINARY_NUMBER_RE = '\\b(0b[01]+)'; // 0b...
-  hljs.RE_STARTERS_RE = '!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|-|-=|/=|/|:|;|<<|<<=|<=|<|===|==|=|>>>=|>>=|>=|>>>|>>|>|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~';
-
-  // Common modes
-  hljs.BACKSLASH_ESCAPE = {
-    begin: '\\\\[\\s\\S]', relevance: 0
-  };
-  hljs.APOS_STRING_MODE = {
-    className: 'string',
-    begin: '\'', end: '\'',
-    illegal: '\\n',
-    contains: [hljs.BACKSLASH_ESCAPE]
-  };
-  hljs.QUOTE_STRING_MODE = {
-    className: 'string',
-    begin: '"', end: '"',
-    illegal: '\\n',
-    contains: [hljs.BACKSLASH_ESCAPE]
-  };
-  hljs.PHRASAL_WORDS_MODE = {
-    begin: /\b(a|an|the|are|I'm|isn't|don't|doesn't|won't|but|just|should|pretty|simply|enough|gonna|going|wtf|so|such|will|you|your|like)\b/
-  };
-  hljs.COMMENT = function (begin, end, inherits) {
-    var mode = hljs.inherit(
-      {
-        className: 'comment',
-        begin: begin, end: end,
-        contains: []
-      },
-      inherits || {}
-    );
-    mode.contains.push(hljs.PHRASAL_WORDS_MODE);
-    mode.contains.push({
-      className: 'doctag',
-      begin: '(?:TODO|FIXME|NOTE|BUG|XXX):',
-      relevance: 0
-    });
-    return mode;
-  };
-  hljs.C_LINE_COMMENT_MODE = hljs.COMMENT('//', '$');
-  hljs.C_BLOCK_COMMENT_MODE = hljs.COMMENT('/\\*', '\\*/');
-  hljs.HASH_COMMENT_MODE = hljs.COMMENT('#', '$');
-  hljs.NUMBER_MODE = {
-    className: 'number',
-    begin: hljs.NUMBER_RE,
-    relevance: 0
-  };
-  hljs.C_NUMBER_MODE = {
-    className: 'number',
-    begin: hljs.C_NUMBER_RE,
-    relevance: 0
-  };
-  hljs.BINARY_NUMBER_MODE = {
-    className: 'number',
-    begin: hljs.BINARY_NUMBER_RE,
-    relevance: 0
-  };
-  hljs.CSS_NUMBER_MODE = {
-    className: 'number',
-    begin: hljs.NUMBER_RE + '(' +
-      '%|em|ex|ch|rem'  +
-      '|vw|vh|vmin|vmax' +
-      '|cm|mm|in|pt|pc|px' +
-      '|deg|grad|rad|turn' +
-      '|s|ms' +
-      '|Hz|kHz' +
-      '|dpi|dpcm|dppx' +
-      ')?',
-    relevance: 0
-  };
-  hljs.REGEXP_MODE = {
-    className: 'regexp',
-    begin: /\//, end: /\/[gimuy]*/,
-    illegal: /\n/,
-    contains: [
-      hljs.BACKSLASH_ESCAPE,
-      {
-        begin: /\[/, end: /\]/,
-        relevance: 0,
-        contains: [hljs.BACKSLASH_ESCAPE]
-      }
-    ]
-  };
-  hljs.TITLE_MODE = {
-    className: 'title',
-    begin: hljs.IDENT_RE,
-    relevance: 0
-  };
-  hljs.UNDERSCORE_TITLE_MODE = {
-    className: 'title',
-    begin: hljs.UNDERSCORE_IDENT_RE,
-    relevance: 0
-  };
-  hljs.METHOD_GUARD = {
-    // excludes method names from keyword processing
-    begin: '\\.\\s*' + hljs.UNDERSCORE_IDENT_RE,
-    relevance: 0
-  };
-
-  return hljs;
-}));
-;define('highlight.js', ['highlight.js/highlight'], function (main) { return main; });
 
 define('sigma-libs/index',["require", "exports", './js/utils', './js/phonelib', './js/fileTypes', './js/countries', './js/currencies'], function(require, exports) {
     "use strict";
@@ -39067,5 +37790,1344 @@ var currencies = {
 	"ZWD": "Zimbabwe Dollar"
 }
 define("sigma-libs/js/currencies", [],function(){});
+
+define('highlight.js/languages/xml',['require','exports','module'],function (require, exports, module) {module.exports = function(hljs) {
+  var XML_IDENT_RE = '[A-Za-z0-9\\._:-]+';
+  var TAG_INTERNALS = {
+    endsWithParent: true,
+    illegal: /</,
+    relevance: 0,
+    contains: [
+      {
+        className: 'attr',
+        begin: XML_IDENT_RE,
+        relevance: 0
+      },
+      {
+        begin: /=\s*/,
+        relevance: 0,
+        contains: [
+          {
+            className: 'string',
+            endsParent: true,
+            variants: [
+              {begin: /"/, end: /"/},
+              {begin: /'/, end: /'/},
+              {begin: /[^\s"'=<>`]+/}
+            ]
+          }
+        ]
+      }
+    ]
+  };
+  return {
+    aliases: ['html', 'xhtml', 'rss', 'atom', 'xjb', 'xsd', 'xsl', 'plist'],
+    case_insensitive: true,
+    contains: [
+      {
+        className: 'meta',
+        begin: '<!DOCTYPE', end: '>',
+        relevance: 10,
+        contains: [{begin: '\\[', end: '\\]'}]
+      },
+      hljs.COMMENT(
+        '<!--',
+        '-->',
+        {
+          relevance: 10
+        }
+      ),
+      {
+        begin: '<\\!\\[CDATA\\[', end: '\\]\\]>',
+        relevance: 10
+      },
+      {
+        begin: /<\?(php)?/, end: /\?>/,
+        subLanguage: 'php',
+        contains: [{begin: '/\\*', end: '\\*/', skip: true}]
+      },
+      {
+        className: 'tag',
+        /*
+        The lookahead pattern (?=...) ensures that 'begin' only matches
+        '<style' as a single word, followed by a whitespace or an
+        ending braket. The '$' is needed for the lexeme to be recognized
+        by hljs.subMode() that tests lexemes outside the stream.
+        */
+        begin: '<style(?=\\s|>|$)', end: '>',
+        keywords: {name: 'style'},
+        contains: [TAG_INTERNALS],
+        starts: {
+          end: '</style>', returnEnd: true,
+          subLanguage: ['css', 'xml']
+        }
+      },
+      {
+        className: 'tag',
+        // See the comment in the <style tag about the lookahead pattern
+        begin: '<script(?=\\s|>|$)', end: '>',
+        keywords: {name: 'script'},
+        contains: [TAG_INTERNALS],
+        starts: {
+          end: '\<\/script\>', returnEnd: true,
+          subLanguage: ['actionscript', 'javascript', 'handlebars', 'xml']
+        }
+      },
+      {
+        className: 'meta',
+        variants: [
+          {begin: /<\?xml/, end: /\?>/, relevance: 10},
+          {begin: /<\?\w+/, end: /\?>/}
+        ]
+      },
+      {
+        className: 'tag',
+        begin: '</?', end: '/?>',
+        contains: [
+          {
+            className: 'name', begin: /[^\/><\s]+/, relevance: 0
+          },
+          TAG_INTERNALS
+        ]
+      }
+    ]
+  };
+};
+});
+
+define('highlight.js/languages/css',['require','exports','module'],function (require, exports, module) {module.exports = function(hljs) {
+  var IDENT_RE = '[a-zA-Z-][a-zA-Z0-9_-]*';
+  var RULE = {
+    begin: /[A-Z\_\.\-]+\s*:/, returnBegin: true, end: ';', endsWithParent: true,
+    contains: [
+      {
+        className: 'attribute',
+        begin: /\S/, end: ':', excludeEnd: true,
+        starts: {
+          endsWithParent: true, excludeEnd: true,
+          contains: [
+            {
+              begin: /[\w-]+\(/, returnBegin: true,
+              contains: [
+                {
+                  className: 'built_in',
+                  begin: /[\w-]+/
+                },
+                {
+                  begin: /\(/, end: /\)/,
+                  contains: [
+                    hljs.APOS_STRING_MODE,
+                    hljs.QUOTE_STRING_MODE
+                  ]
+                }
+              ]
+            },
+            hljs.CSS_NUMBER_MODE,
+            hljs.QUOTE_STRING_MODE,
+            hljs.APOS_STRING_MODE,
+            hljs.C_BLOCK_COMMENT_MODE,
+            {
+              className: 'number', begin: '#[0-9A-Fa-f]+'
+            },
+            {
+              className: 'meta', begin: '!important'
+            }
+          ]
+        }
+      }
+    ]
+  };
+
+  return {
+    case_insensitive: true,
+    illegal: /[=\/|'\$]/,
+    contains: [
+      hljs.C_BLOCK_COMMENT_MODE,
+      {
+        className: 'selector-id', begin: /#[A-Za-z0-9_-]+/
+      },
+      {
+        className: 'selector-class', begin: /\.[A-Za-z0-9_-]+/
+      },
+      {
+        className: 'selector-attr',
+        begin: /\[/, end: /\]/,
+        illegal: '$'
+      },
+      {
+        className: 'selector-pseudo',
+        begin: /:(:)?[a-zA-Z0-9\_\-\+\(\)"'.]+/
+      },
+      {
+        begin: '@(font-face|page)',
+        lexemes: '[a-z-]+',
+        keywords: 'font-face page'
+      },
+      {
+        begin: '@', end: '[{;]', // at_rule eating first "{" is a good thing
+                                 // because it doesn’t let it to be parsed as
+                                 // a rule set but instead drops parser into
+                                 // the default mode which is how it should be.
+        illegal: /:/, // break on Less variables @var: ...
+        contains: [
+          {
+            className: 'keyword',
+            begin: /\w+/
+          },
+          {
+            begin: /\s/, endsWithParent: true, excludeEnd: true,
+            relevance: 0,
+            contains: [
+              hljs.APOS_STRING_MODE, hljs.QUOTE_STRING_MODE,
+              hljs.CSS_NUMBER_MODE
+            ]
+          }
+        ]
+      },
+      {
+        className: 'selector-tag', begin: IDENT_RE,
+        relevance: 0
+      },
+      {
+        begin: '{', end: '}',
+        illegal: /\S/,
+        contains: [
+          hljs.C_BLOCK_COMMENT_MODE,
+          RULE,
+        ]
+      }
+    ]
+  };
+};
+});
+
+define('highlight.js/languages/json',['require','exports','module'],function (require, exports, module) {module.exports = function(hljs) {
+  var LITERALS = {literal: 'true false null'};
+  var TYPES = [
+    hljs.QUOTE_STRING_MODE,
+    hljs.C_NUMBER_MODE
+  ];
+  var VALUE_CONTAINER = {
+    end: ',', endsWithParent: true, excludeEnd: true,
+    contains: TYPES,
+    keywords: LITERALS
+  };
+  var OBJECT = {
+    begin: '{', end: '}',
+    contains: [
+      {
+        className: 'attr',
+        begin: /"/, end: /"/,
+        contains: [hljs.BACKSLASH_ESCAPE],
+        illegal: '\\n',
+      },
+      hljs.inherit(VALUE_CONTAINER, {begin: /:/})
+    ],
+    illegal: '\\S'
+  };
+  var ARRAY = {
+    begin: '\\[', end: '\\]',
+    contains: [hljs.inherit(VALUE_CONTAINER)], // inherit is a workaround for a bug that makes shared modes with endsWithParent compile only the ending of one of the parents
+    illegal: '\\S'
+  };
+  TYPES.splice(TYPES.length, 0, OBJECT, ARRAY);
+  return {
+    contains: TYPES,
+    keywords: LITERALS,
+    illegal: '\\S'
+  };
+};
+});
+
+define('highlight.js/languages/scss',['require','exports','module'],function (require, exports, module) {module.exports = function(hljs) {
+  var IDENT_RE = '[a-zA-Z-][a-zA-Z0-9_-]*';
+  var VARIABLE = {
+    className: 'variable',
+    begin: '(\\$' + IDENT_RE + ')\\b'
+  };
+  var HEXCOLOR = {
+    className: 'number', begin: '#[0-9A-Fa-f]+'
+  };
+  var DEF_INTERNALS = {
+    className: 'attribute',
+    begin: '[A-Z\\_\\.\\-]+', end: ':',
+    excludeEnd: true,
+    illegal: '[^\\s]',
+    starts: {
+      endsWithParent: true, excludeEnd: true,
+      contains: [
+        HEXCOLOR,
+        hljs.CSS_NUMBER_MODE,
+        hljs.QUOTE_STRING_MODE,
+        hljs.APOS_STRING_MODE,
+        hljs.C_BLOCK_COMMENT_MODE,
+        {
+          className: 'meta', begin: '!important'
+        }
+      ]
+    }
+  };
+  return {
+    case_insensitive: true,
+    illegal: '[=/|\']',
+    contains: [
+      hljs.C_LINE_COMMENT_MODE,
+      hljs.C_BLOCK_COMMENT_MODE,
+      {
+        className: 'selector-id', begin: '\\#[A-Za-z0-9_-]+',
+        relevance: 0
+      },
+      {
+        className: 'selector-class', begin: '\\.[A-Za-z0-9_-]+',
+        relevance: 0
+      },
+      {
+        className: 'selector-attr', begin: '\\[', end: '\\]',
+        illegal: '$'
+      },
+      {
+        className: 'selector-tag', // begin: IDENT_RE, end: '[,|\\s]'
+        begin: '\\b(a|abbr|acronym|address|area|article|aside|audio|b|base|big|blockquote|body|br|button|canvas|caption|cite|code|col|colgroup|command|datalist|dd|del|details|dfn|div|dl|dt|em|embed|fieldset|figcaption|figure|footer|form|frame|frameset|(h[1-6])|head|header|hgroup|hr|html|i|iframe|img|input|ins|kbd|keygen|label|legend|li|link|map|mark|meta|meter|nav|noframes|noscript|object|ol|optgroup|option|output|p|param|pre|progress|q|rp|rt|ruby|samp|script|section|select|small|span|strike|strong|style|sub|sup|table|tbody|td|textarea|tfoot|th|thead|time|title|tr|tt|ul|var|video)\\b',
+        relevance: 0
+      },
+      {
+        begin: ':(visited|valid|root|right|required|read-write|read-only|out-range|optional|only-of-type|only-child|nth-of-type|nth-last-of-type|nth-last-child|nth-child|not|link|left|last-of-type|last-child|lang|invalid|indeterminate|in-range|hover|focus|first-of-type|first-line|first-letter|first-child|first|enabled|empty|disabled|default|checked|before|after|active)'
+      },
+      {
+        begin: '::(after|before|choices|first-letter|first-line|repeat-index|repeat-item|selection|value)'
+      },
+      VARIABLE,
+      {
+        className: 'attribute',
+        begin: '\\b(z-index|word-wrap|word-spacing|word-break|width|widows|white-space|visibility|vertical-align|unicode-bidi|transition-timing-function|transition-property|transition-duration|transition-delay|transition|transform-style|transform-origin|transform|top|text-underline-position|text-transform|text-shadow|text-rendering|text-overflow|text-indent|text-decoration-style|text-decoration-line|text-decoration-color|text-decoration|text-align-last|text-align|tab-size|table-layout|right|resize|quotes|position|pointer-events|perspective-origin|perspective|page-break-inside|page-break-before|page-break-after|padding-top|padding-right|padding-left|padding-bottom|padding|overflow-y|overflow-x|overflow-wrap|overflow|outline-width|outline-style|outline-offset|outline-color|outline|orphans|order|opacity|object-position|object-fit|normal|none|nav-up|nav-right|nav-left|nav-index|nav-down|min-width|min-height|max-width|max-height|mask|marks|margin-top|margin-right|margin-left|margin-bottom|margin|list-style-type|list-style-position|list-style-image|list-style|line-height|letter-spacing|left|justify-content|initial|inherit|ime-mode|image-orientation|image-resolution|image-rendering|icon|hyphens|height|font-weight|font-variant-ligatures|font-variant|font-style|font-stretch|font-size-adjust|font-size|font-language-override|font-kerning|font-feature-settings|font-family|font|float|flex-wrap|flex-shrink|flex-grow|flex-flow|flex-direction|flex-basis|flex|filter|empty-cells|display|direction|cursor|counter-reset|counter-increment|content|column-width|column-span|column-rule-width|column-rule-style|column-rule-color|column-rule|column-gap|column-fill|column-count|columns|color|clip-path|clip|clear|caption-side|break-inside|break-before|break-after|box-sizing|box-shadow|box-decoration-break|bottom|border-width|border-top-width|border-top-style|border-top-right-radius|border-top-left-radius|border-top-color|border-top|border-style|border-spacing|border-right-width|border-right-style|border-right-color|border-right|border-radius|border-left-width|border-left-style|border-left-color|border-left|border-image-width|border-image-source|border-image-slice|border-image-repeat|border-image-outset|border-image|border-color|border-collapse|border-bottom-width|border-bottom-style|border-bottom-right-radius|border-bottom-left-radius|border-bottom-color|border-bottom|border|background-size|background-repeat|background-position|background-origin|background-image|background-color|background-clip|background-attachment|background-blend-mode|background|backface-visibility|auto|animation-timing-function|animation-play-state|animation-name|animation-iteration-count|animation-fill-mode|animation-duration|animation-direction|animation-delay|animation|align-self|align-items|align-content)\\b',
+        illegal: '[^\\s]'
+      },
+      {
+        begin: '\\b(whitespace|wait|w-resize|visible|vertical-text|vertical-ideographic|uppercase|upper-roman|upper-alpha|underline|transparent|top|thin|thick|text|text-top|text-bottom|tb-rl|table-header-group|table-footer-group|sw-resize|super|strict|static|square|solid|small-caps|separate|se-resize|scroll|s-resize|rtl|row-resize|ridge|right|repeat|repeat-y|repeat-x|relative|progress|pointer|overline|outside|outset|oblique|nowrap|not-allowed|normal|none|nw-resize|no-repeat|no-drop|newspaper|ne-resize|n-resize|move|middle|medium|ltr|lr-tb|lowercase|lower-roman|lower-alpha|loose|list-item|line|line-through|line-edge|lighter|left|keep-all|justify|italic|inter-word|inter-ideograph|inside|inset|inline|inline-block|inherit|inactive|ideograph-space|ideograph-parenthesis|ideograph-numeric|ideograph-alpha|horizontal|hidden|help|hand|groove|fixed|ellipsis|e-resize|double|dotted|distribute|distribute-space|distribute-letter|distribute-all-lines|disc|disabled|default|decimal|dashed|crosshair|collapse|col-resize|circle|char|center|capitalize|break-word|break-all|bottom|both|bolder|bold|block|bidi-override|below|baseline|auto|always|all-scroll|absolute|table|table-cell)\\b'
+      },
+      {
+        begin: ':', end: ';',
+        contains: [
+          VARIABLE,
+          HEXCOLOR,
+          hljs.CSS_NUMBER_MODE,
+          hljs.QUOTE_STRING_MODE,
+          hljs.APOS_STRING_MODE,
+          {
+            className: 'meta', begin: '!important'
+          }
+        ]
+      },
+      {
+        begin: '@', end: '[{;]',
+        keywords: 'mixin include extend for if else each while charset import debug media page content font-face namespace warn',
+        contains: [
+          VARIABLE,
+          hljs.QUOTE_STRING_MODE,
+          hljs.APOS_STRING_MODE,
+          HEXCOLOR,
+          hljs.CSS_NUMBER_MODE,
+          {
+            begin: '\\s[A-Za-z0-9_.-]+',
+            relevance: 0
+          }
+        ]
+      }
+    ]
+  };
+};
+});
+
+define('highlight.js/languages/javascript',['require','exports','module'],function (require, exports, module) {module.exports = function(hljs) {
+  var IDENT_RE = '[A-Za-z$_][0-9A-Za-z$_]*';
+  var KEYWORDS = {
+    keyword:
+      'in of if for while finally var new function do return void else break catch ' +
+      'instanceof with throw case default try this switch continue typeof delete ' +
+      'let yield const export super debugger as async await static ' +
+      // ECMAScript 6 modules import
+      'import from as'
+    ,
+    literal:
+      'true false null undefined NaN Infinity',
+    built_in:
+      'eval isFinite isNaN parseFloat parseInt decodeURI decodeURIComponent ' +
+      'encodeURI encodeURIComponent escape unescape Object Function Boolean Error ' +
+      'EvalError InternalError RangeError ReferenceError StopIteration SyntaxError ' +
+      'TypeError URIError Number Math Date String RegExp Array Float32Array ' +
+      'Float64Array Int16Array Int32Array Int8Array Uint16Array Uint32Array ' +
+      'Uint8Array Uint8ClampedArray ArrayBuffer DataView JSON Intl arguments require ' +
+      'module console window document Symbol Set Map WeakSet WeakMap Proxy Reflect ' +
+      'Promise'
+  };
+  var EXPRESSIONS;
+  var NUMBER = {
+    className: 'number',
+    variants: [
+      { begin: '\\b(0[bB][01]+)' },
+      { begin: '\\b(0[oO][0-7]+)' },
+      { begin: hljs.C_NUMBER_RE }
+    ],
+    relevance: 0
+  };
+  var SUBST = {
+    className: 'subst',
+    begin: '\\$\\{', end: '\\}',
+    keywords: KEYWORDS,
+    contains: []  // defined later
+  };
+  var TEMPLATE_STRING = {
+    className: 'string',
+    begin: '`', end: '`',
+    contains: [
+      hljs.BACKSLASH_ESCAPE,
+      SUBST
+    ]
+  };
+  SUBST.contains = [
+    hljs.APOS_STRING_MODE,
+    hljs.QUOTE_STRING_MODE,
+    TEMPLATE_STRING,
+    NUMBER,
+    hljs.REGEXP_MODE
+  ]
+  var PARAMS_CONTAINS = SUBST.contains.concat([
+    hljs.C_BLOCK_COMMENT_MODE,
+    hljs.C_LINE_COMMENT_MODE
+  ]);
+
+  return {
+    aliases: ['js', 'jsx'],
+    keywords: KEYWORDS,
+    contains: [
+      {
+        className: 'meta',
+        relevance: 10,
+        begin: /^\s*['"]use (strict|asm)['"]/
+      },
+      {
+        className: 'meta',
+        begin: /^#!/, end: /$/
+      },
+      hljs.APOS_STRING_MODE,
+      hljs.QUOTE_STRING_MODE,
+      TEMPLATE_STRING,
+      hljs.C_LINE_COMMENT_MODE,
+      hljs.C_BLOCK_COMMENT_MODE,
+      NUMBER,
+      { // object attr container
+        begin: /[{,]\s*/, relevance: 0,
+        contains: [
+          {
+            begin: IDENT_RE + '\\s*:', returnBegin: true,
+            relevance: 0,
+            contains: [{className: 'attr', begin: IDENT_RE, relevance: 0}]
+          }
+        ]
+      },
+      { // "value" container
+        begin: '(' + hljs.RE_STARTERS_RE + '|\\b(case|return|throw)\\b)\\s*',
+        keywords: 'return throw case',
+        contains: [
+          hljs.C_LINE_COMMENT_MODE,
+          hljs.C_BLOCK_COMMENT_MODE,
+          hljs.REGEXP_MODE,
+          {
+            className: 'function',
+            begin: '(\\(.*?\\)|' + IDENT_RE + ')\\s*=>', returnBegin: true,
+            end: '\\s*=>',
+            contains: [
+              {
+                className: 'params',
+                variants: [
+                  {
+                    begin: IDENT_RE
+                  },
+                  {
+                    begin: /\(\s*\)/,
+                  },
+                  {
+                    begin: /\(/, end: /\)/,
+                    excludeBegin: true, excludeEnd: true,
+                    keywords: KEYWORDS,
+                    contains: PARAMS_CONTAINS
+                  }
+                ]
+              }
+            ]
+          },
+          { // E4X / JSX
+            begin: /</, end: /(\/\w+|\w+\/)>/,
+            subLanguage: 'xml',
+            contains: [
+              {begin: /<\w+\s*\/>/, skip: true},
+              {
+                begin: /<\w+/, end: /(\/\w+|\w+\/)>/, skip: true,
+                contains: [
+                  {begin: /<\w+\s*\/>/, skip: true},
+                  'self'
+                ]
+              }
+            ]
+          }
+        ],
+        relevance: 0
+      },
+      {
+        className: 'function',
+        beginKeywords: 'function', end: /\{/, excludeEnd: true,
+        contains: [
+          hljs.inherit(hljs.TITLE_MODE, {begin: IDENT_RE}),
+          {
+            className: 'params',
+            begin: /\(/, end: /\)/,
+            excludeBegin: true,
+            excludeEnd: true,
+            contains: PARAMS_CONTAINS
+          }
+        ],
+        illegal: /\[|%/
+      },
+      {
+        begin: /\$[(.]/ // relevance booster for a pattern common to JS libs: `$(something)` and `$.something`
+      },
+      hljs.METHOD_GUARD,
+      { // ES6 class
+        className: 'class',
+        beginKeywords: 'class', end: /[{;=]/, excludeEnd: true,
+        illegal: /[:"\[\]]/,
+        contains: [
+          {beginKeywords: 'extends'},
+          hljs.UNDERSCORE_TITLE_MODE
+        ]
+      },
+      {
+        beginKeywords: 'constructor', end: /\{/, excludeEnd: true
+      }
+    ],
+    illegal: /#(?!!)/
+  };
+};
+});
+
+/*
+Syntax highlighting with language autodetection.
+https://highlightjs.org/
+*/
+
+(function(factory) {
+
+  // Find the global object for export to both the browser and web workers.
+  var globalObject = typeof window === 'object' && window ||
+                     typeof self === 'object' && self;
+
+  // Setup highlight.js for different environments. First is Node.js or
+  // CommonJS.
+  if(typeof exports !== 'undefined') {
+    factory(exports);
+  } else if(globalObject) {
+    // Export hljs globally even when using AMD for cases when this script
+    // is loaded with others that may still expect a global hljs.
+    globalObject.hljs = factory({});
+
+    // Finally register the global hljs with AMD.
+    if(typeof define === 'function' && define.amd) {
+      define('highlight.js/highlight',[], function() {
+        return globalObject.hljs;
+      });
+    }
+  }
+
+}(function(hljs) {
+  // Convenience variables for build-in objects
+  var ArrayProto = [],
+      objectKeys = Object.keys;
+
+  // Global internal variables used within the highlight.js library.
+  var languages = {},
+      aliases   = {};
+
+  // Regular expressions used throughout the highlight.js library.
+  var noHighlightRe    = /^(no-?highlight|plain|text)$/i,
+      languagePrefixRe = /\blang(?:uage)?-([\w-]+)\b/i,
+      fixMarkupRe      = /((^(<[^>]+>|\t|)+|(?:\n)))/gm;
+
+  var spanEndTag = '</span>';
+
+  // Global options used when within external APIs. This is modified when
+  // calling the `hljs.configure` function.
+  var options = {
+    classPrefix: 'hljs-',
+    tabReplace: null,
+    useBR: false,
+    languages: undefined
+  };
+
+  // Object map that is used to escape some common HTML characters.
+  var escapeRegexMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;'
+  };
+
+  /* Utility functions */
+
+  function escape(value) {
+    return value.replace(/[&<>]/gm, function(character) {
+      return escapeRegexMap[character];
+    });
+  }
+
+  function tag(node) {
+    return node.nodeName.toLowerCase();
+  }
+
+  function testRe(re, lexeme) {
+    var match = re && re.exec(lexeme);
+    return match && match.index === 0;
+  }
+
+  function isNotHighlighted(language) {
+    return noHighlightRe.test(language);
+  }
+
+  function blockLanguage(block) {
+    var i, match, length, _class;
+    var classes = block.className + ' ';
+
+    classes += block.parentNode ? block.parentNode.className : '';
+
+    // language-* takes precedence over non-prefixed class names.
+    match = languagePrefixRe.exec(classes);
+    if (match) {
+      return getLanguage(match[1]) ? match[1] : 'no-highlight';
+    }
+
+    classes = classes.split(/\s+/);
+
+    for (i = 0, length = classes.length; i < length; i++) {
+      _class = classes[i]
+
+      if (isNotHighlighted(_class) || getLanguage(_class)) {
+        return _class;
+      }
+    }
+  }
+
+  function inherit(parent, obj) {
+    var key;
+    var result = {};
+
+    for (key in parent)
+      result[key] = parent[key];
+    if (obj)
+      for (key in obj)
+        result[key] = obj[key];
+    return result;
+  }
+
+  /* Stream merging */
+
+  function nodeStream(node) {
+    var result = [];
+    (function _nodeStream(node, offset) {
+      for (var child = node.firstChild; child; child = child.nextSibling) {
+        if (child.nodeType === 3)
+          offset += child.nodeValue.length;
+        else if (child.nodeType === 1) {
+          result.push({
+            event: 'start',
+            offset: offset,
+            node: child
+          });
+          offset = _nodeStream(child, offset);
+          // Prevent void elements from having an end tag that would actually
+          // double them in the output. There are more void elements in HTML
+          // but we list only those realistically expected in code display.
+          if (!tag(child).match(/br|hr|img|input/)) {
+            result.push({
+              event: 'stop',
+              offset: offset,
+              node: child
+            });
+          }
+        }
+      }
+      return offset;
+    })(node, 0);
+    return result;
+  }
+
+  function mergeStreams(original, highlighted, value) {
+    var processed = 0;
+    var result = '';
+    var nodeStack = [];
+
+    function selectStream() {
+      if (!original.length || !highlighted.length) {
+        return original.length ? original : highlighted;
+      }
+      if (original[0].offset !== highlighted[0].offset) {
+        return (original[0].offset < highlighted[0].offset) ? original : highlighted;
+      }
+
+      /*
+      To avoid starting the stream just before it should stop the order is
+      ensured that original always starts first and closes last:
+
+      if (event1 == 'start' && event2 == 'start')
+        return original;
+      if (event1 == 'start' && event2 == 'stop')
+        return highlighted;
+      if (event1 == 'stop' && event2 == 'start')
+        return original;
+      if (event1 == 'stop' && event2 == 'stop')
+        return highlighted;
+
+      ... which is collapsed to:
+      */
+      return highlighted[0].event === 'start' ? original : highlighted;
+    }
+
+    function open(node) {
+      function attr_str(a) {return ' ' + a.nodeName + '="' + escape(a.value) + '"';}
+      result += '<' + tag(node) + ArrayProto.map.call(node.attributes, attr_str).join('') + '>';
+    }
+
+    function close(node) {
+      result += '</' + tag(node) + '>';
+    }
+
+    function render(event) {
+      (event.event === 'start' ? open : close)(event.node);
+    }
+
+    while (original.length || highlighted.length) {
+      var stream = selectStream();
+      result += escape(value.substr(processed, stream[0].offset - processed));
+      processed = stream[0].offset;
+      if (stream === original) {
+        /*
+        On any opening or closing tag of the original markup we first close
+        the entire highlighted node stack, then render the original tag along
+        with all the following original tags at the same offset and then
+        reopen all the tags on the highlighted stack.
+        */
+        nodeStack.reverse().forEach(close);
+        do {
+          render(stream.splice(0, 1)[0]);
+          stream = selectStream();
+        } while (stream === original && stream.length && stream[0].offset === processed);
+        nodeStack.reverse().forEach(open);
+      } else {
+        if (stream[0].event === 'start') {
+          nodeStack.push(stream[0].node);
+        } else {
+          nodeStack.pop();
+        }
+        render(stream.splice(0, 1)[0]);
+      }
+    }
+    return result + escape(value.substr(processed));
+  }
+
+  /* Initialization */
+
+  function compileLanguage(language) {
+
+    function reStr(re) {
+        return (re && re.source) || re;
+    }
+
+    function langRe(value, global) {
+      return new RegExp(
+        reStr(value),
+        'm' + (language.case_insensitive ? 'i' : '') + (global ? 'g' : '')
+      );
+    }
+
+    function compileMode(mode, parent) {
+      if (mode.compiled)
+        return;
+      mode.compiled = true;
+
+      mode.keywords = mode.keywords || mode.beginKeywords;
+      if (mode.keywords) {
+        var compiled_keywords = {};
+
+        var flatten = function(className, str) {
+          if (language.case_insensitive) {
+            str = str.toLowerCase();
+          }
+          str.split(' ').forEach(function(kw) {
+            var pair = kw.split('|');
+            compiled_keywords[pair[0]] = [className, pair[1] ? Number(pair[1]) : 1];
+          });
+        };
+
+        if (typeof mode.keywords === 'string') { // string
+          flatten('keyword', mode.keywords);
+        } else {
+          objectKeys(mode.keywords).forEach(function (className) {
+            flatten(className, mode.keywords[className]);
+          });
+        }
+        mode.keywords = compiled_keywords;
+      }
+      mode.lexemesRe = langRe(mode.lexemes || /\w+/, true);
+
+      if (parent) {
+        if (mode.beginKeywords) {
+          mode.begin = '\\b(' + mode.beginKeywords.split(' ').join('|') + ')\\b';
+        }
+        if (!mode.begin)
+          mode.begin = /\B|\b/;
+        mode.beginRe = langRe(mode.begin);
+        if (!mode.end && !mode.endsWithParent)
+          mode.end = /\B|\b/;
+        if (mode.end)
+          mode.endRe = langRe(mode.end);
+        mode.terminator_end = reStr(mode.end) || '';
+        if (mode.endsWithParent && parent.terminator_end)
+          mode.terminator_end += (mode.end ? '|' : '') + parent.terminator_end;
+      }
+      if (mode.illegal)
+        mode.illegalRe = langRe(mode.illegal);
+      if (mode.relevance == null)
+        mode.relevance = 1;
+      if (!mode.contains) {
+        mode.contains = [];
+      }
+      var expanded_contains = [];
+      mode.contains.forEach(function(c) {
+        if (c.variants) {
+          c.variants.forEach(function(v) {expanded_contains.push(inherit(c, v));});
+        } else {
+          expanded_contains.push(c === 'self' ? mode : c);
+        }
+      });
+      mode.contains = expanded_contains;
+      mode.contains.forEach(function(c) {compileMode(c, mode);});
+
+      if (mode.starts) {
+        compileMode(mode.starts, parent);
+      }
+
+      var terminators =
+        mode.contains.map(function(c) {
+          return c.beginKeywords ? '\\.?(' + c.begin + ')\\.?' : c.begin;
+        })
+        .concat([mode.terminator_end, mode.illegal])
+        .map(reStr)
+        .filter(Boolean);
+      mode.terminators = terminators.length ? langRe(terminators.join('|'), true) : {exec: function(/*s*/) {return null;}};
+    }
+
+    compileMode(language);
+  }
+
+  /*
+  Core highlighting function. Accepts a language name, or an alias, and a
+  string with the code to highlight. Returns an object with the following
+  properties:
+
+  - relevance (int)
+  - value (an HTML string with highlighting markup)
+
+  */
+  function highlight(name, value, ignore_illegals, continuation) {
+
+    function subMode(lexeme, mode) {
+      var i, length;
+
+      for (i = 0, length = mode.contains.length; i < length; i++) {
+        if (testRe(mode.contains[i].beginRe, lexeme)) {
+          return mode.contains[i];
+        }
+      }
+    }
+
+    function endOfMode(mode, lexeme) {
+      if (testRe(mode.endRe, lexeme)) {
+        while (mode.endsParent && mode.parent) {
+          mode = mode.parent;
+        }
+        return mode;
+      }
+      if (mode.endsWithParent) {
+        return endOfMode(mode.parent, lexeme);
+      }
+    }
+
+    function isIllegal(lexeme, mode) {
+      return !ignore_illegals && testRe(mode.illegalRe, lexeme);
+    }
+
+    function keywordMatch(mode, match) {
+      var match_str = language.case_insensitive ? match[0].toLowerCase() : match[0];
+      return mode.keywords.hasOwnProperty(match_str) && mode.keywords[match_str];
+    }
+
+    function buildSpan(classname, insideSpan, leaveOpen, noPrefix) {
+      var classPrefix = noPrefix ? '' : options.classPrefix,
+          openSpan    = '<span class="' + classPrefix,
+          closeSpan   = leaveOpen ? '' : spanEndTag
+
+      openSpan += classname + '">';
+
+      return openSpan + insideSpan + closeSpan;
+    }
+
+    function processKeywords() {
+      var keyword_match, last_index, match, result;
+
+      if (!top.keywords)
+        return escape(mode_buffer);
+
+      result = '';
+      last_index = 0;
+      top.lexemesRe.lastIndex = 0;
+      match = top.lexemesRe.exec(mode_buffer);
+
+      while (match) {
+        result += escape(mode_buffer.substr(last_index, match.index - last_index));
+        keyword_match = keywordMatch(top, match);
+        if (keyword_match) {
+          relevance += keyword_match[1];
+          result += buildSpan(keyword_match[0], escape(match[0]));
+        } else {
+          result += escape(match[0]);
+        }
+        last_index = top.lexemesRe.lastIndex;
+        match = top.lexemesRe.exec(mode_buffer);
+      }
+      return result + escape(mode_buffer.substr(last_index));
+    }
+
+    function processSubLanguage() {
+      var explicit = typeof top.subLanguage === 'string';
+      if (explicit && !languages[top.subLanguage]) {
+        return escape(mode_buffer);
+      }
+
+      var result = explicit ?
+                   highlight(top.subLanguage, mode_buffer, true, continuations[top.subLanguage]) :
+                   highlightAuto(mode_buffer, top.subLanguage.length ? top.subLanguage : undefined);
+
+      // Counting embedded language score towards the host language may be disabled
+      // with zeroing the containing mode relevance. Usecase in point is Markdown that
+      // allows XML everywhere and makes every XML snippet to have a much larger Markdown
+      // score.
+      if (top.relevance > 0) {
+        relevance += result.relevance;
+      }
+      if (explicit) {
+        continuations[top.subLanguage] = result.top;
+      }
+      return buildSpan(result.language, result.value, false, true);
+    }
+
+    function processBuffer() {
+      result += (top.subLanguage != null ? processSubLanguage() : processKeywords());
+      mode_buffer = '';
+    }
+
+    function startNewMode(mode) {
+      result += mode.className? buildSpan(mode.className, '', true): '';
+      top = Object.create(mode, {parent: {value: top}});
+    }
+
+    function processLexeme(buffer, lexeme) {
+
+      mode_buffer += buffer;
+
+      if (lexeme == null) {
+        processBuffer();
+        return 0;
+      }
+
+      var new_mode = subMode(lexeme, top);
+      if (new_mode) {
+        if (new_mode.skip) {
+          mode_buffer += lexeme;
+        } else {
+          if (new_mode.excludeBegin) {
+            mode_buffer += lexeme;
+          }
+          processBuffer();
+          if (!new_mode.returnBegin && !new_mode.excludeBegin) {
+            mode_buffer = lexeme;
+          }
+        }
+        startNewMode(new_mode, lexeme);
+        return new_mode.returnBegin ? 0 : lexeme.length;
+      }
+
+      var end_mode = endOfMode(top, lexeme);
+      if (end_mode) {
+        var origin = top;
+        if (origin.skip) {
+          mode_buffer += lexeme;
+        } else {
+          if (!(origin.returnEnd || origin.excludeEnd)) {
+            mode_buffer += lexeme;
+          }
+          processBuffer();
+          if (origin.excludeEnd) {
+            mode_buffer = lexeme;
+          }
+        }
+        do {
+          if (top.className) {
+            result += spanEndTag;
+          }
+          if (!top.skip) {
+            relevance += top.relevance;
+          }
+          top = top.parent;
+        } while (top !== end_mode.parent);
+        if (end_mode.starts) {
+          startNewMode(end_mode.starts, '');
+        }
+        return origin.returnEnd ? 0 : lexeme.length;
+      }
+
+      if (isIllegal(lexeme, top))
+        throw new Error('Illegal lexeme "' + lexeme + '" for mode "' + (top.className || '<unnamed>') + '"');
+
+      /*
+      Parser should not reach this point as all types of lexemes should be caught
+      earlier, but if it does due to some bug make sure it advances at least one
+      character forward to prevent infinite looping.
+      */
+      mode_buffer += lexeme;
+      return lexeme.length || 1;
+    }
+
+    var language = getLanguage(name);
+    if (!language) {
+      throw new Error('Unknown language: "' + name + '"');
+    }
+
+    compileLanguage(language);
+    var top = continuation || language;
+    var continuations = {}; // keep continuations for sub-languages
+    var result = '', current;
+    for(current = top; current !== language; current = current.parent) {
+      if (current.className) {
+        result = buildSpan(current.className, '', true) + result;
+      }
+    }
+    var mode_buffer = '';
+    var relevance = 0;
+    try {
+      var match, count, index = 0;
+      while (true) {
+        top.terminators.lastIndex = index;
+        match = top.terminators.exec(value);
+        if (!match)
+          break;
+        count = processLexeme(value.substr(index, match.index - index), match[0]);
+        index = match.index + count;
+      }
+      processLexeme(value.substr(index));
+      for(current = top; current.parent; current = current.parent) { // close dangling modes
+        if (current.className) {
+          result += spanEndTag;
+        }
+      }
+      return {
+        relevance: relevance,
+        value: result,
+        language: name,
+        top: top
+      };
+    } catch (e) {
+      if (e.message && e.message.indexOf('Illegal') !== -1) {
+        return {
+          relevance: 0,
+          value: escape(value)
+        };
+      } else {
+        throw e;
+      }
+    }
+  }
+
+  /*
+  Highlighting with language detection. Accepts a string with the code to
+  highlight. Returns an object with the following properties:
+
+  - language (detected language)
+  - relevance (int)
+  - value (an HTML string with highlighting markup)
+  - second_best (object with the same structure for second-best heuristically
+    detected language, may be absent)
+
+  */
+  function highlightAuto(text, languageSubset) {
+    languageSubset = languageSubset || options.languages || objectKeys(languages);
+    var result = {
+      relevance: 0,
+      value: escape(text)
+    };
+    var second_best = result;
+    languageSubset.filter(getLanguage).forEach(function(name) {
+      var current = highlight(name, text, false);
+      current.language = name;
+      if (current.relevance > second_best.relevance) {
+        second_best = current;
+      }
+      if (current.relevance > result.relevance) {
+        second_best = result;
+        result = current;
+      }
+    });
+    if (second_best.language) {
+      result.second_best = second_best;
+    }
+    return result;
+  }
+
+  /*
+  Post-processing of the highlighted markup:
+
+  - replace TABs with something more useful
+  - replace real line-breaks with '<br>' for non-pre containers
+
+  */
+  function fixMarkup(value) {
+    return !(options.tabReplace || options.useBR)
+      ? value
+      : value.replace(fixMarkupRe, function(match, p1) {
+          if (options.useBR && match === '\n') {
+            return '<br>';
+          } else if (options.tabReplace) {
+            return p1.replace(/\t/g, options.tabReplace);
+          }
+      });
+  }
+
+  function buildClassName(prevClassName, currentLang, resultLang) {
+    var language = currentLang ? aliases[currentLang] : resultLang,
+        result   = [prevClassName.trim()];
+
+    if (!prevClassName.match(/\bhljs\b/)) {
+      result.push('hljs');
+    }
+
+    if (prevClassName.indexOf(language) === -1) {
+      result.push(language);
+    }
+
+    return result.join(' ').trim();
+  }
+
+  /*
+  Applies highlighting to a DOM node containing code. Accepts a DOM node and
+  two optional parameters for fixMarkup.
+  */
+  function highlightBlock(block) {
+    var node, originalStream, result, resultNode, text;
+    var language = blockLanguage(block);
+
+    if (isNotHighlighted(language))
+        return;
+
+    if (options.useBR) {
+      node = document.createElementNS('http://www.w3.org/1999/xhtml', 'div');
+      node.innerHTML = block.innerHTML.replace(/\n/g, '').replace(/<br[ \/]*>/g, '\n');
+    } else {
+      node = block;
+    }
+    text = node.textContent;
+    result = language ? highlight(language, text, true) : highlightAuto(text);
+
+    originalStream = nodeStream(node);
+    if (originalStream.length) {
+      resultNode = document.createElementNS('http://www.w3.org/1999/xhtml', 'div');
+      resultNode.innerHTML = result.value;
+      result.value = mergeStreams(originalStream, nodeStream(resultNode), text);
+    }
+    result.value = fixMarkup(result.value);
+
+    block.innerHTML = result.value;
+    block.className = buildClassName(block.className, language, result.language);
+    block.result = {
+      language: result.language,
+      re: result.relevance
+    };
+    if (result.second_best) {
+      block.second_best = {
+        language: result.second_best.language,
+        re: result.second_best.relevance
+      };
+    }
+  }
+
+  /*
+  Updates highlight.js global options with values passed in the form of an object.
+  */
+  function configure(user_options) {
+    options = inherit(options, user_options);
+  }
+
+  /*
+  Applies highlighting to all <pre><code>..</code></pre> blocks on a page.
+  */
+  function initHighlighting() {
+    if (initHighlighting.called)
+      return;
+    initHighlighting.called = true;
+
+    var blocks = document.querySelectorAll('pre code');
+    ArrayProto.forEach.call(blocks, highlightBlock);
+  }
+
+  /*
+  Attaches highlighting to the page load event.
+  */
+  function initHighlightingOnLoad() {
+    addEventListener('DOMContentLoaded', initHighlighting, false);
+    addEventListener('load', initHighlighting, false);
+  }
+
+  function registerLanguage(name, language) {
+    var lang = languages[name] = language(hljs);
+    if (lang.aliases) {
+      lang.aliases.forEach(function(alias) {aliases[alias] = name;});
+    }
+  }
+
+  function listLanguages() {
+    return objectKeys(languages);
+  }
+
+  function getLanguage(name) {
+    name = (name || '').toLowerCase();
+    return languages[name] || languages[aliases[name]];
+  }
+
+  /* Interface definition */
+
+  hljs.highlight = highlight;
+  hljs.highlightAuto = highlightAuto;
+  hljs.fixMarkup = fixMarkup;
+  hljs.highlightBlock = highlightBlock;
+  hljs.configure = configure;
+  hljs.initHighlighting = initHighlighting;
+  hljs.initHighlightingOnLoad = initHighlightingOnLoad;
+  hljs.registerLanguage = registerLanguage;
+  hljs.listLanguages = listLanguages;
+  hljs.getLanguage = getLanguage;
+  hljs.inherit = inherit;
+
+  // Common regexps
+  hljs.IDENT_RE = '[a-zA-Z]\\w*';
+  hljs.UNDERSCORE_IDENT_RE = '[a-zA-Z_]\\w*';
+  hljs.NUMBER_RE = '\\b\\d+(\\.\\d+)?';
+  hljs.C_NUMBER_RE = '(-?)(\\b0[xX][a-fA-F0-9]+|(\\b\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)'; // 0x..., 0..., decimal, float
+  hljs.BINARY_NUMBER_RE = '\\b(0b[01]+)'; // 0b...
+  hljs.RE_STARTERS_RE = '!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|-|-=|/=|/|:|;|<<|<<=|<=|<|===|==|=|>>>=|>>=|>=|>>>|>>|>|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~';
+
+  // Common modes
+  hljs.BACKSLASH_ESCAPE = {
+    begin: '\\\\[\\s\\S]', relevance: 0
+  };
+  hljs.APOS_STRING_MODE = {
+    className: 'string',
+    begin: '\'', end: '\'',
+    illegal: '\\n',
+    contains: [hljs.BACKSLASH_ESCAPE]
+  };
+  hljs.QUOTE_STRING_MODE = {
+    className: 'string',
+    begin: '"', end: '"',
+    illegal: '\\n',
+    contains: [hljs.BACKSLASH_ESCAPE]
+  };
+  hljs.PHRASAL_WORDS_MODE = {
+    begin: /\b(a|an|the|are|I'm|isn't|don't|doesn't|won't|but|just|should|pretty|simply|enough|gonna|going|wtf|so|such|will|you|your|like)\b/
+  };
+  hljs.COMMENT = function (begin, end, inherits) {
+    var mode = hljs.inherit(
+      {
+        className: 'comment',
+        begin: begin, end: end,
+        contains: []
+      },
+      inherits || {}
+    );
+    mode.contains.push(hljs.PHRASAL_WORDS_MODE);
+    mode.contains.push({
+      className: 'doctag',
+      begin: '(?:TODO|FIXME|NOTE|BUG|XXX):',
+      relevance: 0
+    });
+    return mode;
+  };
+  hljs.C_LINE_COMMENT_MODE = hljs.COMMENT('//', '$');
+  hljs.C_BLOCK_COMMENT_MODE = hljs.COMMENT('/\\*', '\\*/');
+  hljs.HASH_COMMENT_MODE = hljs.COMMENT('#', '$');
+  hljs.NUMBER_MODE = {
+    className: 'number',
+    begin: hljs.NUMBER_RE,
+    relevance: 0
+  };
+  hljs.C_NUMBER_MODE = {
+    className: 'number',
+    begin: hljs.C_NUMBER_RE,
+    relevance: 0
+  };
+  hljs.BINARY_NUMBER_MODE = {
+    className: 'number',
+    begin: hljs.BINARY_NUMBER_RE,
+    relevance: 0
+  };
+  hljs.CSS_NUMBER_MODE = {
+    className: 'number',
+    begin: hljs.NUMBER_RE + '(' +
+      '%|em|ex|ch|rem'  +
+      '|vw|vh|vmin|vmax' +
+      '|cm|mm|in|pt|pc|px' +
+      '|deg|grad|rad|turn' +
+      '|s|ms' +
+      '|Hz|kHz' +
+      '|dpi|dpcm|dppx' +
+      ')?',
+    relevance: 0
+  };
+  hljs.REGEXP_MODE = {
+    className: 'regexp',
+    begin: /\//, end: /\/[gimuy]*/,
+    illegal: /\n/,
+    contains: [
+      hljs.BACKSLASH_ESCAPE,
+      {
+        begin: /\[/, end: /\]/,
+        relevance: 0,
+        contains: [hljs.BACKSLASH_ESCAPE]
+      }
+    ]
+  };
+  hljs.TITLE_MODE = {
+    className: 'title',
+    begin: hljs.IDENT_RE,
+    relevance: 0
+  };
+  hljs.UNDERSCORE_TITLE_MODE = {
+    className: 'title',
+    begin: hljs.UNDERSCORE_IDENT_RE,
+    relevance: 0
+  };
+  hljs.METHOD_GUARD = {
+    // excludes method names from keyword processing
+    begin: '\\.\\s*' + hljs.UNDERSCORE_IDENT_RE,
+    relevance: 0
+  };
+
+  return hljs;
+}));
+;define('highlight.js', ['highlight.js/highlight'], function (main) { return main; });
 
 //# sourceMappingURL=app-bundle.js.map

@@ -73,7 +73,9 @@ export declare class UIDGLink extends UIDataColumn {
     label: any;
     disabled: any;
     isDisabled(value: any, record: any): any;
-    fireClick(record: any): void;
+    getIcon(value: any, record: any): any;
+    getLabel(value: any, record: any): any;
+    fireClick(value: any, record: any): void;
 }
 export declare class UIDGButton extends UIDataColumn {
     element: Element;
@@ -85,10 +87,13 @@ export declare class UIDGButton extends UIDataColumn {
     icon: any;
     label: any;
     dropdown: any;
-    theme: string;
+    theme: any;
     disabled: any;
     isDisabled(value: any, record: any): any;
-    fireClick(record: any): void;
+    getIcon(value: any, record: any): any;
+    getLabel(value: any, record: any): any;
+    getTheme(value: any, record: any): any;
+    fireClick(value: any, record: any): void;
     fireMenuOpen($event: any, record: any): any;
 }
 export declare class UIDGSwitch extends UIDataColumn {

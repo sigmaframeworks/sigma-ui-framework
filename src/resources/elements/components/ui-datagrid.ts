@@ -39,8 +39,8 @@ import * as Tether from "tether";
     <tr repeat.for="record of data" mouseup.delegate="fireSelect($parent.selected=record)" class="\${$parent.__rowSelect && $parent.selected==record?'ui-selected':''}">
     <td repeat.for="col of __columns" class="\${col.locked==0?'ui-locked':''} \${col.align}" css.bind="{left: col.left+'px'}">
       <div if.bind="col.type=='normal'" innerhtml.bind='col.getValue(record[col.dataId],record)'></div>
-      <div if.bind="col.type=='link'"><a class="ui-link" click.trigger="col.fireClick(record)" disabled.bind="col.isDisabled()"><span class="fi-ui \${col.icon}" if.bind="col.icon"></span> \${col.label}</a></div>
-      <div if.bind="col.type=='button'" class="no-padding"><ui-button click.trigger="col.fireClick(record)" theme.bind="col.theme" small square icon.bind="col.icon" disabled.bind="col.isDisabled()" dropdown.bind="dropdown" menuopen.trigger="col.fireMenuOpen($event, record)">\${col.label}</ui-button></div>
+      <div if.bind="col.type=='link'"><a class="ui-link \${col.isDisabled(record[col.dataId],record)?'ui-disabled':''}" click.trigger="col.fireClick(record[col.dataId],record)"><span class="fi-ui \${col.getIcon(record[col.dataId],record)}" if.bind="col.icon"></span> \${col.getLabel(record[col.dataId],record)}</a></div>
+      <div if.bind="col.type=='button'" class="no-padding"><ui-button click.trigger="col.fireClick(record[col.dataId],record)" theme.bind="col.getTheme(record[col.dataId],record)" small square icon.bind="col.getIcon(record[col.dataId],record)" disabled.bind="col.isDisabled(record[col.dataId],record)" dropdown.bind="dropdown" menuopen.trigger="col.fireMenuOpen($event, record)">\${col.getLabel(record[col.dataId],record)}</ui-button></div>
       <div if.bind="col.type=='switch'" class="no-padding"><ui-switch change.trigger="col.fireChange($event.detail,record)" theme.bind="col.theme" checked.bind="record[col.dataId]" 
         off-label.bind="col.offLabel" off-value.bind="col.offValue" on-label.bind="col.onLabel" on-value.bind="col.onValue" width.bind="col.width" disabled.bind="col.isDisabled(record[col.dataId],record)"></ui-switch></div>
     </td><td class="ui-expander"><div>&nbsp;</div></td></tr>
@@ -102,7 +102,7 @@ export class UIDatagrid {
     if (this.sortColumn != col.dataId) this.sortOrder = 'asc';
     if (this.sortColumn == col.dataId) this.sortOrder = this.sortOrder == 'asc' ? 'desc' : 'asc';
     this.sortColumn = col.dataId;
-    UIEvent.queueTask(() => _.orderBy(this.data, [this.sortColumn, 'ID', 'id'], [this.sortOrder, this.sortOrder, this.sortOrder]));
+    UIEvent.queueTask(() => this.data = _.orderBy(this.data, [this.sortColumn, 'ID', 'id'], [this.sortOrder, this.sortOrder, this.sortOrder]));
   }
 
   __move;
@@ -200,6 +200,9 @@ export class UIDataColumn {
     return this.element.innerHTML;
   }
   getValue(value, record) {
+    return this.processValue(value, record) || '&nbsp;';
+  }
+  processValue(value, record) {
     let retVal = '';
     // let value = record[this.dataId];
     if (isFunction(this.value)) value = this.value(value, record);
@@ -219,7 +222,7 @@ export class UIDataColumn {
         default: retVal = value; break;
       }
     }
-    return retVal || '&nbsp;';
+    return retVal;
   }
 
 }
@@ -250,7 +253,6 @@ export class UIDGLink extends UIDataColumn {
   type = 'link';
   constructor(public element: Element) {
     super(element);
-    this.align = 'ui-text-center';
   }
 
   @bindable() dataId;
@@ -267,8 +269,19 @@ export class UIDGLink extends UIDataColumn {
     return false;
   }
 
-  fireClick(record) {
-    UIEvent.fireEvent('click', this.element, ({ record }));
+  getIcon(value, record) {
+    if (isFunction(this.icon)) return this.icon(({ value, record }));
+    return record[this.icon] || this.icon;
+  }
+
+  getLabel(value, record) {
+    if (isFunction(this.label)) return this.label(({ value, record }));
+    return this.label || this.processValue(value, record);
+  }
+
+  fireClick(value, record) {
+    if (this.isDisabled(value, record)) return;
+    UIEvent.fireEvent('click', this.element, ({ value, record }));
   }
 }
 
@@ -289,7 +302,7 @@ export class UIDGButton extends UIDataColumn {
   @bindable() icon;
   @bindable() label;
   @bindable() dropdown;
-  @bindable() theme = 'default';
+  @bindable() theme: any = 'default';
   @bindable() disabled = null;
 
   isDisabled(value, record) {
@@ -298,8 +311,24 @@ export class UIDGButton extends UIDataColumn {
     return false;
   }
 
-  fireClick(record) {
-    UIEvent.fireEvent('click', this.element, ({ record }));
+  getIcon(value, record) {
+    if (isFunction(this.icon)) return this.icon(({ value, record }));
+    return record[this.icon] || this.icon;
+  }
+
+  getLabel(value, record) {
+    if (isFunction(this.label)) return this.label(({ value, record }));
+    return this.label || this.processValue(value, record);
+  }
+
+  getTheme(value, record) {
+    if (isFunction(this.theme)) return this.theme(({ value, record }));
+    return this.theme;
+  }
+
+  fireClick(value, record) {
+    if (this.isDisabled(value, record)) return;
+    UIEvent.fireEvent('click', this.element, ({ value, record }));
   }
 
   fireMenuOpen($event, record) {

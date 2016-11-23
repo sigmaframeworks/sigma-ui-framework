@@ -11,6 +11,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-http
     "use strict";
     var UIModel = (function () {
         function UIModel() {
+            this.__observers = [];
             this.logger = aurelia_logging_1.getLogger(this.constructor.name);
             Object.defineProperties(this, {
                 'httpClient': {
@@ -63,6 +64,9 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-http
                 rest[_i - 0] = arguments[_i];
             }
             throw new Error('Not implemented [delete]');
+        };
+        UIModel.prototype.addObserver = function (ob) {
+            this.__observers.push(ob);
         };
         UIModel.prototype.dispose = function () {
             this.logger.debug("Model Disposing");

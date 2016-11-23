@@ -609,7 +609,10 @@ export class UILanguage extends ListGeneric {
   }
 
   fireSelect(model?) {
-    if (!model) return;
+    if (!model) {
+      this.__value = this.value = '';
+      UIEvent.fireEvent('select', this.element, null);
+    };
     if (UIEvent.fireEvent('beforeselect', this.element, model.id) !== false) {
       this.__showDropdown = false;
       this.__value = model.name;
@@ -632,7 +635,7 @@ export class UILanguage extends ListGeneric {
     _.remove(this.languages, model.id);
     this.__available = this.__available.concat(_.remove(this.__selected, ['id', model.id]));
     UIEvent.fireEvent('remove', this.element, model);
-    if (this.__available.length > 0) UIEvent.fireEvent('select', this.element, this.__available[0]);
+    if (this.__selected.length > 0) UIEvent.fireEvent('select', this.element, this.__selected[0]);
   }
 }
 

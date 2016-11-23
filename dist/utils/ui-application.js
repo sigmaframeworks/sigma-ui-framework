@@ -27,6 +27,10 @@ define(["require", "exports", "aurelia-framework", "aurelia-router", "aurelia-lo
             this.__logger.info("navigateTo::" + route);
             this.router.navigateToRoute(route, params, options);
         };
+        UIApplication.prototype.routeActive = function (route) {
+            return route.isActive || route.href == location.hash ||
+                location.hash.indexOf(route.config.redirect || 'QWER') > -1;
+        };
         Object.defineProperty(UIApplication.prototype, "AuthUser", {
             get: function () {
                 return this.__authUser;
