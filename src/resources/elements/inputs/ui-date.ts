@@ -292,7 +292,7 @@ export class UIDateView {
   <span class="ui-invalid-errors"><ul><li repeat.for="e of __errors">\${e.message}</li></ul></span>
   <div class="ui-input-div"><input class="ui-input" size="1" value.bind="__value" placeholder.bind="placeholder" 
     focus.trigger="focusing()" blur.trigger="unfocusing()" 
-    click.trigger="showDropdown()" keydown.trigger="showDropdown(true)"
+    click.trigger="showDropdown()" keydown.trigger="keyDown($event)"
     ref="__input" disabled.bind="disabled || busy" readonly.bind="true" type="text"/>
   <span class="ui-clear" if.bind="__clear && __value" click.trigger="clear()">&times;</span></div>
   <ui-date-view class="ui-date-dropdown" date.bind="value" min-date.bind="minDate" max-date.bind="maxDate" time.bind="time"
@@ -375,6 +375,13 @@ export class UIDate {
   __unfocus;
   __focus;
 
+  keyDown(evt) {
+    evt.stopPropagation();
+    let code = evt.keyCode || evt.which;
+    if (evt.ctrlKey || evt.metaKey || evt.altKey || code == 9 || code == 8) return true;
+    if (code == 13) return UIEvent.fireEvent('enterpressed', this.element);
+    this.showDropdown(true);
+  }
   showDropdown(force) {
     this.__showDropdown = force || !this.__showDropdown;
     UIEvent.queueTask(() => this.__tether.position());

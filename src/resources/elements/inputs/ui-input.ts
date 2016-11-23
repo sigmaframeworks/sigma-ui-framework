@@ -151,7 +151,7 @@ export class UIInputDisplay {
 @customElement('ui-input')
 @inlineView(`<template class="ui-input-wrapper \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly || busy?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
   <span class="ui-invalid-errors"><ul><li repeat.for="e of __errors">\${e.message}</li></ul></span>
-  <div class="ui-input-div"><input class="ui-input" size="1" keypress.trigger="keyDown($event)" input.trigger="format($event)" change.trigger="fireChange($event)"
+  <div class="ui-input-div"><input class="ui-input" size="1" keypress.trigger="keyDown($event)" input.trigger="format($event) & debounce" change.trigger="fireChange($event)"
     value.bind="__value" placeholder.bind="placeholder" focus.trigger="fireFocus()" blur.trigger="fireBlur()" dir.bind="dir" 
     type.bind="__type" maxlength.bind="maxlength" ref="__input" disabled.bind="disabled || busy" readonly.bind="readonly"/>
   <span class="ui-in-counter" if.bind="__counter">\${(maxlength-__value.length)}</span>
@@ -260,6 +260,7 @@ export class UIInput {
     else if (this.__format == 'decimal') this.decimal = evt.target.valueAsNumber || '';
     else this.value = evt.target.value;
     UIEvent.queueTask(() => this.__ignoreChange = false);
+    UIEvent.fireEvent('input', this.element);
   }
 
   keyDown(evt) {
@@ -300,7 +301,7 @@ export class UIInput {
 @inlineView(`<template class="ui-input-wrapper ui-textarea \${__focus?'ui-focus':''} \${__counter?'ui-ta-counter':''} \${disabled?'ui-disabled':''} \${readonly || busy?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
   <span class="ui-invalid-errors"><ul><li repeat.for="e of __errors">\${e.message}</li></ul></span>
   <div class="ui-input-div"><textarea class="ui-input" rows.bind="rows" value.bind="value" placeholder.bind="placeholder" disabled.bind="disabled || busy" readonly.bind="readonly"
-    focus.trigger="fireFocus()" blur.trigger="fireBlur()" maxlength.bind="maxlength" ref="__input" change.trigger="fireChange($event)" dir.bind="dir"></textarea>
+    focus.trigger="fireFocus()" blur.trigger="fireBlur()" maxlength.bind="maxlength" ref="__input" input.trigger="fireInput($event) & debounce" change.trigger="fireChange($event)" dir.bind="dir"></textarea>
   <div class="ui-auto-list ui-list-dropdown" css.bind="{width:'200px', 'max-height':'300px', right:'auto', left:__listCss.left, top:__listCss.top}" 
     show.bind="__showList && !readonly" mousewheel.trigger="$event.cancelBubble = true" mousedown.trigger="__clicked($event)" ref="__list">
     <div repeat.for="opt of __autoComplete" class="ui-list-item" data-value="\${opt}">
@@ -354,6 +355,11 @@ export class UITextarea {
   fireChange(evt) {
     evt.stopPropagation();
     UIEvent.fireEvent('change', this.element, this.value);
+  }
+
+  fireInput(evt) {
+    evt.stopPropagation();
+    UIEvent.fireEvent('input', this.element);
   }
 
   __focus;
@@ -643,6 +649,8 @@ export class UIPhone {
     this.disabled = isTrue(this.disabled);
     this.readonly = isTrue(this.readonly);
 
+    this.valueChanged(this.value);
+
     if (this.__national = !isEmpty(this.country)) this.__prefix = '+' + PhoneLib.getDialingCode(this.country); else this.__ctry = PhoneLib.getIso2Code(this.value);
     this.__placeholder = PhoneLib.getExample(this.country || 'us', PhoneLib.TYPE.FIXED_LINE_OR_MOBILE, this.__national);
   }
@@ -687,7 +695,12 @@ export class UIPhone {
   __ignoreChange = false;
   valueChanged(newValue) {
     if (this.__ignoreChange) return;
-    this.value = this.phone = this.__value = newValue;
+    if (isEmpty(newValue)) {
+      this.__value = '';
+      this.phone = null;
+    }
+    else
+      this.phone = PhoneLib.getNumberInfo(this.value = this.__value = newValue, this.country);
   }
 
   countryChanged(newValue) {
