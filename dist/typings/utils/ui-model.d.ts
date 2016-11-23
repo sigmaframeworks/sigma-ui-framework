@@ -10,6 +10,7 @@ export declare class UIModel {
     post(...rest: any[]): void;
     put(...rest: any[]): void;
     delete(...rest: any[]): void;
+    addObserver(ob: any): void;
     dispose(): void;
     deserialize(json: any): void;
     serialize(): {};

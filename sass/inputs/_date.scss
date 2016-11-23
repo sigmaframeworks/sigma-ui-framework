@@ -1,290 +1,181 @@
-// UI Date Input
-// @description :
+// 
+// @description : 
 // @author      : Adarsh Pastakia
-// @copyright   : 2016 Sigma Frameworks
+// @copyright   : 2016
 // @license     : MIT
-.ui-date-control:not(.floating) {
-    display   : block;
-    text-align: center;
-
-    .ui-date-view {
-        display: inline-block;
-        margin : 0 auto;
-    }
-}
-
-.ui-date-input .ui-input {
-    background: $input-bg;
-
-    &[disabled] {
-        background: $input-disabled-bg;
-    }
-}
-
-.ui-date-addon {
-    position: relative;
-
-    span.date {
-        font-size : 8px;
-        position  : absolute;
-        right     : .5em;
-        bottom    : 8px;
-        left      : .5em;
-        text-align: center;
-    }
-}
-
-.ui-date-control.floating {
-    .ui-date-view {
-        position  : absolute;
-        z-index   : 50;
-        margin-top: 5px;
-        @include box-shadow(0 2px 4px 0 $base-shadow-color);
-
-        &:before {
-            position     : absolute;
-            top          : -10px;
-            left         : 10px;
-            content      : ' ';
-            border-right : 10px solid transparent;
-            border-bottom: 10px solid $base-border-color;
-            border-left  : 10px solid transparent;
-        }
-
-        &:after {
-            position     : absolute;
-            top          : -9px;
-            left         : 11px;
-            content      : ' ';
-            border-right : 9px solid transparent;
-            border-bottom: 9px solid $base-bg;
-            border-left  : 9px solid transparent;
-        }
-    }
-}
 
 .ui-date-view {
-    border       : 1px solid $base-border-color;
-    border-radius: $base-border-radius;
-    background   : $base-bg;
+  border       : 1px solid $base-border-color;
+  border-radius: $base-border-radius;
+  overflow     : hidden;
+  display      : inline-block;
+  font-size    : .9em;
+  position     : relative;
+  @include flex-column($display:inline-flex, $align:stretch, $justify:center);
 
-    .ui-date-wrapper > div > div {
-        @include flex-row(stretch, $wrap: false);
-    }
+  .ui-dv-time-wrapper {
+    padding   : .25em .5em;
+    border-top: 1px solid rgba($base-border-color, .5);
 
-    .ui-date-wrapper {
+    > div {
+      @include flex-row($wrap:true, $align:center, $justify:center);
+
+      > div {
+        @include flex-column($align:center, $justify:center);
+      }
+
+      a {
+        position     : relative;
+        padding      : .45em 1em;
+        text-align   : center;
+        color        : $primary;
+        border-radius: $base-border-radius;
+
+        &:hover {
+          color     : $primary-text;
+          background: $primary;
+        }
+
         span {
-            position  : relative;
-            padding   : .45em .2em;
-            text-align: center;
-            @include flex(0 0 auto);
+          pointer-events: none;
         }
 
-        span.week {
-            font-weight: $font-weight-strong;
-            color      : $date-week;
+        &.disabled {
+          color         : rgba($muted, .6) !important;
+          cursor        : not-allowed;
+          pointer-events: none;
         }
-
-        .header {
-            span {
-                font-weight  : 600;
-                width        : 2.5em;
-                height       : auto;
-                margin       : .1em .2em;
-                cursor       : pointer;
-                color        : $date-control-text;
-                border-radius: $base-border-radius;
-
-                &:not(.nohover):not(.disabled):hover {
-                    color     : $date-control-hover-text;
-                    background: $date-control-hover-bg;
-                }
-
-                &:not(.nohover):not(.disabled):active {
-                    background: shade($date-control-hover-bg, 10%);
-                }
-
-                &.fi-ui-calendar.prev:before {
-                    content: $date-prev;
-                }
-
-                &.fi-ui-calendar.next:before {
-                    content: $date-next;
-                }
-            }
-
-            span.disabled {
-                cursor: not-allowed;
-                color : $date-disabled !important;
-            }
-
-            .label {
-                font-variant: small-caps;
-                @include flex(1 1 auto);
-
-                &:not(.nohover):before {
-                    content    : $font-ui-sort-asc;
-                    font-family: Framework;
-                }
-            }
-        }
-
-        .weekdays {
-            background: $date-weekday-bg;
-
-            span {
-                font-weight: $font-weight-strong;
-                width      : 2em;
-                color      : $date-weekday-text;
-                border     : 1px solid shade($date-weekday-bg, 5%);
-            }
-        }
-
-        .footer {
-            font-weight: 600;
-
-            span {
-                font-weight  : 600;
-                margin       : .25em .4em;
-                cursor       : pointer;
-                color        : $date-control-text;
-                border-radius: $base-border-radius;
-                @include flex(1 1 auto);
-
-                &:hover {
-                    color     : $date-control-hover-text;
-                    background: $date-control-hover-bg;
-                }
-
-                &:active {
-                    background: shade($date-control-hover-bg, 10%);
-                }
-            }
-        }
-
-        .dates,
-        .months,
-        .years {
-            span {
-                cursor       : pointer;
-                border-radius: $base-border-radius;
-            }
-
-            span:not(.week):not(.disabled):not(.selected):hover {
-                color     : $date-selected-text;
-                background: rgba($date-selected-bg, .7);
-            }
-
-            span.active {
-                cursor: pointer;
-                color : $date-active;
-            }
-
-            span.muted {
-                cursor: pointer;
-                color : $date-muted;
-            }
-
-            span.selected {
-                font-weight: $font-weight-strong;
-                color      : $date-selected-text;
-                background : $date-selected-bg;
-
-                &.today:after {
-                    border-color: $date-selected-text transparent transparent $date-selected-text;
-                }
-            }
-
-            span.disabled {
-                cursor: not-allowed;
-                color : $date-disabled !important;
-            }
-        }
-
-        .dates {
-            span {
-                width: 2em;
-            }
-
-            span.today:after {
-                content: ' ';
-                border : {
-                    width: .3em;
-                    color: $date-selected-bg transparent transparent $date-selected-bg;
-                    style: solid;
-                }
-                @include size(.3em, .3em);
-                @include position(absolute, $t: 1px, $l : 1px);
-            }
-        }
-
-        .months {
-            span {
-                line-height: 300%;
-                margin     : .1em .2em;
-                @include flex(1 1 auto);
-            }
-        }
-
-        .years {
-            span {
-                line-height: 200%;
-                margin     : .1em .2em;
-                @include flex(1 1 auto);
-            }
-        }
-
+      }
     }
 
-    .ui-time-wrapper {
-        padding   : 1em 0;
-        border-top: 1px solid rgba($base-border-color,.5);
+    .big-text {
+      font-size : 1.5em;
+      padding   : .45em 1rem;
+      text-align: center;
+    }
+  }
 
-        .ui-time {
-            @include flex-row($align:center, $justify: center, $wrap:false);
-
-            > div {
-                @include flex(0 0 auto);
-                @include flex-column();
-
-                 > span,
-                &.ui-sep {
-                    @include flex(0 0 auto);
-                    padding      : .2em;
-                    font-size    : 1.3em;
-                    height       : 1.5em;
-                    width        : 2.5em;
-                    margin       : .25em .5em;
-                    text-align   : center;
-                    border-radius: $base-border-radius;
-                }
-
-                > span:hover {
-                    cursor    : pointer;
-                    color     : $date-selected-text;
-                    background: rgba($date-selected-bg, .7);
-                }
-            }
-        }
+  .ui-dv-date-wrapper {
+    > div {
+      @include flex-row($wrap:false, $align:stretch);
     }
 
-    .ui-date-wrapper,
-    .ui-time-wrapper {
-        position: relative;
+    > div > span {
+      position     : relative;
+      padding      : .45em .2em;
+      text-align   : center;
+      border-radius: $base-border-radius;
+
+      &.hover {
+        cursor: pointer;
+      }
+
+      &.hover:hover {
+        background: rgba($primary,.3);
+      }
+
+      &.today {
+        &:before {
+          content          : ' ';
+          border           : 4px solid transparent;
+          border-top-color : $primary;
+          border-left-color: $primary;
+          @include position(absolute, 1px auto auto 1px);
+        }
+      }
+
+      &.muted {
+        color: $muted;
+      }
+
+      &.selected {
+        background: $primary !important;
+        color     : $primary-text !important;
+
+        &:before {
+          border-top-color : $primary-text;
+          border-left-color: $primary-text;
+        }
+      }
+
+      &.disabled {
+        color         : rgba($muted, .6) !important;
+        cursor        : not-allowed;
+        pointer-events: none;
+      }
+    }
+
+    .dates,
+    .weekdays {
+      span {
+        width: 2em;
+        @include flex(1 1 2em);
+      }
+    }
+
+    .months {
+      span {
+        line-height: 200%;
+        margin     : .1em .2em;
+        @include flex(1 1 5em);
+      }
+    }
+
+    .years {
+      span {
+        line-height: 150%;
+        width      : 3.6em;
+        margin     : .1em .2em;
+        @include flex(1 1 3.6em);
+      }
+    }
+
+    span.week {
+      font-weight: 600;
+      color      : $secondary;
+    }
+
+    .ui-dv-foot,
+    .ui-dv-head {
+      a {
         @include flex(0 0 auto);
+        color        : $primary;
+        padding      : .45em .2em;
+        margin       : .1em .2em;
+        min-width    : 2em;
+        text-align   : center;
+        border-radius: $base-border-radius;
 
-        .alt-view {
-            @include position(absolute, 0, 0, 0, 0);
-            @include flex-column(stretch, space-between);
-
-            .months,
-            .years {
-                @include flex(1 1 auto);
-
-                span {
-                    @include align-self(stretch);
-                }
-            }
+        &:hover {
+          color     : $primary-text;
+          background: $primary;
         }
+
+        &.disabled {
+          color         : rgba($primary, .4) !important;
+          cursor        : not-allowed;
+          pointer-events: none;
+        }
+
+        span {
+          pointer-events: none;
+        }
+      }
+
+      .cancel,
+      .title,
+      .today {
+        @include flex(1 1 1em);
+      }
     }
+
+    .weekdays {
+      background: rgba($secondary, .5);
+    }
+  }
+}
+
+.ui-date-dropdown {
+  background: $base-bg;
+  z-index   : $z-index-floating;
 }

@@ -1,0 +1,219 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <ui-page page-title="Drawers">
+    <ui-content scroll padded>
+      <div class="ui-container">
+        <h1>Panels</h1>
+        <hr/>
+        <h5 class="ui-text-muted">Simple Panel</h5>
+        <ui-panel>
+          <ui-panel-body padded scroll max-height="20em">
+            <compose view="home/lipsum-big.html"></compose>
+          </ui-panel-body>
+        </ui-panel>
+        <hr/>
+        <h5 class="ui-text-muted">Collapsible Panel</h5>
+        <ui-panel>
+          <ui-header dark>
+            <ui-header-title>Panel</ui-header-title>
+            <ui-header-tool collapse></ui-header-tool>
+          </ui-header>
+          <ui-panel-body padded scroll max-height="20em">
+            <compose view="home/lipsum-big.html"></compose>
+          </ui-panel-body>
+        </ui-panel>
+        <hr/>
+        <ui-row class="ui-margin-v">
+          <ui-column auto>
+
+            <h5 class="ui-text-muted">Closeable Panels</h5>
+
+            <ui-row>
+              <ui-column auto>
+                <ui-panel class="ui-margin-all" style="width:320px">
+                  <ui-header light>
+                    <ui-header-icon icon="fi-ui-page"></ui-header-icon>
+                    <ui-header-title>Panel</ui-header-title>
+                    <ui-header-tool close></ui-header-tool>
+                  </ui-header>
+                  <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+                </ui-panel>
+                <ui-panel class="ui-margin-all" style="width:320px">
+                  <ui-header dark>
+                    <ui-header-icon icon="fi-ui-page"></ui-header-icon>
+                    <ui-header-title>Panel</ui-header-title>
+                    <ui-header-tool close></ui-header-tool>
+                  </ui-header>
+                  <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+                </ui-panel>
+                <ui-panel class="ui-margin-all" style="width:320px">
+                  <ui-header primary>
+                    <ui-header-icon icon="fi-ui-page"></ui-header-icon>
+                    <ui-header-title>Panel</ui-header-title>
+                    <ui-header-tool close></ui-header-tool>
+                  </ui-header>
+                  <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+                </ui-panel>
+                <ui-panel class="ui-margin-all" style="width:320px">
+                  <ui-header secondary>
+                    <ui-header-icon icon="fi-ui-page"></ui-header-icon>
+                    <ui-header-title>Panel</ui-header-title>
+                    <ui-header-tool close></ui-header-tool>
+                  </ui-header>
+                  <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+                </ui-panel>
+              </ui-column>
+              <ui-column auto>
+                <ui-panel class="ui-margin-all" style="width:320px">
+                  <ui-header info>
+                    <ui-header-icon icon="fi-ui-page"></ui-header-icon>
+                    <ui-header-title>Panel</ui-header-title>
+                    <ui-header-tool close></ui-header-tool>
+                  </ui-header>
+                  <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+                </ui-panel>
+                <ui-panel class="ui-margin-all" style="width:320px">
+                  <ui-header danger>
+                    <ui-header-icon icon="fi-ui-page"></ui-header-icon>
+                    <ui-header-title>Panel</ui-header-title>
+                    <ui-header-tool close></ui-header-tool>
+                  </ui-header>
+                  <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+                </ui-panel>
+                <ui-panel class="ui-margin-all" style="width:320px">
+                  <ui-header success>
+                    <ui-header-icon icon="fi-ui-page"></ui-header-icon>
+                    <ui-header-title>Panel</ui-header-title>
+                    <ui-header-tool close></ui-header-tool>
+                  </ui-header>
+                  <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+                </ui-panel>
+                <ui-panel class="ui-margin-all" style="width:320px">
+                  <ui-header warning>
+                    <ui-header-icon icon="fi-ui-page"></ui-header-icon>
+                    <ui-header-title>Panel</ui-header-title>
+                    <ui-header-tool close></ui-header-tool>
+                  </ui-header>
+                  <ui-panel-body padded>Lorem ipsum...</ui-panel-body>
+                </ui-panel>
+              </ui-column>
+            </ui-row>
+          </ui-column>
+          <ui-column fill>
+
+            <h5 class="ui-text-muted ui-margin-b">Accordion Panels</h5>
+
+            <ui-panel-group class="ui-margin-v">
+              <ui-panel collapsed>
+                <ui-header light>
+                  <ui-header-title>Panel</ui-header-title>
+                  <ui-header-tool collapse></ui-header-tool>
+                </ui-header>
+                <ui-panel-body padded scroll max-height="8em">
+                  <compose view="home/lipsum-small.html"></compose>
+                </ui-panel-body>
+              </ui-panel>
+              <ui-panel collapsed>
+                <ui-header dark>
+                  <ui-header-title>Panel</ui-header-title>
+                  <ui-header-tool collapse></ui-header-tool>
+                </ui-header>
+                <ui-panel-body padded scroll max-height="8em">
+                  <compose view="home/lipsum-small.html"></compose>
+                </ui-panel-body>
+              </ui-panel>
+              <ui-panel collapsed>
+                <ui-header primary>
+                  <ui-header-title>Panel</ui-header-title>
+                  <ui-header-tool collapse></ui-header-tool>
+                </ui-header>
+                <ui-panel-body padded scroll max-height="8em">
+                  <compose view="home/lipsum-small.html"></compose>
+                </ui-panel-body>
+              </ui-panel>
+              <ui-panel collapsed>
+                <ui-header secondary>
+                  <ui-header-title>Panel</ui-header-title>
+                  <ui-header-tool collapse></ui-header-tool>
+                </ui-header>
+                <ui-panel-body padded scroll max-height="8em">
+                  <compose view="home/lipsum-small.html"></compose>
+                </ui-panel-body>
+              </ui-panel>
+            </ui-panel-group>
+          </ui-column>
+        </ui-row>
+
+        <hr/>
+        <h5>Markup</h5>
+        <div class="ui-margin-v">
+          <pre markdown>
+            <xmp>
+            ```html
+            <ui-panel [collapsed]>
+              <ui-header [theme]>
+                <ui-header-icon icon[bindable]="glyph"></ui-header-icon>
+                <ui-header-title>Title..</ui-header-title>
+                <ui-header-tool [close] [collapse]></ui-header-tool>
+              </ui-header>
+              <ui-panel-body [padded] [scroll] max-height="em | px">
+                <!-- any content -->
+              </ui-panel-body>
+            </ui-panel>
+            ```
+            * Themes
+              - `default`
+              - `dark`
+              - `light`
+              - `primary`
+              - `secondary`
+              - `info`
+              - `danger`
+              - `success`
+              - `warning`
+              
+            #### Accordion
+            ```html
+            <ui-panel-group>
+              <!-- multiple collapsable panels -->
+            </ui-panel-group>
+            ```
+            </xmp>
+            </pre>
+        </div>
+
+        <hr/>
+        <h5>Examples</h5>
+        <div class="ui-margin-v">
+          <pre markdown>
+            <xmp>
+            ```html
+            <ui-panel>
+              <ui-panel-body padded scroll max-height="20em">
+                Lorem ipsum...
+              </ui-panel-body>
+            </ui-panel>
+            
+            <ui-panel>
+              <ui-header warning>
+                <ui-header-icon icon="fi-ui-page"></ui-header-icon>
+                <ui-header-title>Panel</ui-header-title>
+                <ui-header-tool collapse></ui-header-tool>
+                <ui-header-tool close></ui-header-tool>
+              </ui-header>
+              <ui-panel-body padded scroll max-height="20em">
+                Lorem ipsum...
+              </ui-panel-body>
+            </ui-panel>
+            ```
+            </xmp>
+            </pre>
+        </div>
+      </div>
+    </ui-content>
+  </ui-page>
+</template>

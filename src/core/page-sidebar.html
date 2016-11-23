@@ -1,0 +1,105 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <style>
+    .page-container {
+      position: relative;
+      height: 450px;
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      justify-items: stretch;
+      border: 1px solid #e5e5e5;
+    }
+
+  </style>
+  <ui-content padded scroll>
+    <div class="ui-container">
+      <h1>Page with Sidebar</h1>
+      <hr/>
+      <div class="page-container">
+        <ui-page page-title="Page Title">
+          <ui-section row-layout>
+            <ui-content scroll padded>
+              <compose view="home/lipsum-big.html"></compose>
+            </ui-content>
+            <ui-sidebar scroll mini-display collapsible label="Sidebar">
+              <ui-menu>
+                <ui-menu-section>Display</ui-menu-section>
+                <ui-menu-item icon="fi-ui-calendar" active.bind="menu=='cal'" click.trigger="menu='cal'">Calendar</ui-menu-item>
+                <ui-menu-item icon="fi-ui-image" active.bind="menu=='img'" click.trigger="menu='img'">Images</ui-menu-item>
+                <ui-menu-item icon="fi-ui-edit" active.bind="menu=='edt'" click.trigger="menu='edt'">Inputs</ui-menu-item>
+                <ui-menu-section>Charts</ui-menu-section>
+                <ui-menu-item icon="fi-ui-chart-bar" active.bind="menu=='bar'" click.trigger="menu='bar'">Bar</ui-menu-item>
+                <ui-menu-item icon="fi-ui-chart-pie" active.bind="menu=='pie'" click.trigger="menu='pie'">Pie</ui-menu-item>
+              </ui-menu>
+            </ui-sidebar>
+          </ui-section>
+        </ui-page>
+      </div>
+      <br/>
+      <h1>Page with Sidebar</h1>
+      <hr/>
+      <div class="page-container">
+        <ui-page page-title="Page Title">
+          <ui-section row-layout>
+            <ui-sidebar scroll padded collapsible label="Sidebar" position="end">
+              <compose view="home/lipsum-small.html"></compose>
+            </ui-sidebar>
+            <ui-content scroll padded>
+              <compose view="home/lipsum-big.html"></compose>
+            </ui-content>
+          </ui-section>
+        </ui-page>
+      </div>
+
+      <hr/>
+      <h5>Markup</h5>
+      <div class="ui-margin-v">
+        <pre markdown>
+        <xmp>
+        ```html
+        <ui-page page-title[bindable]="string">
+          <ui-section row-layout>
+            <ui-sidebar [scroll] [padded] [collapsible] [mini-display] collapsed[bindable]="bool" label[bindable]="string" position="start | end">
+              ....
+            </ui-sidebar>              
+            <ui-content [scroll] [padded]>
+              ....
+            </ui-content>
+          </ui-section>
+        </ui-page>
+        ```
+        
+        * `mini-display`: Use with menu content, on collapse will display enlarged icons only.
+        * `collapsible`: Collapse sidebar, slide out content when clicking on the collapsed bar.
+        </xmp>
+      </pre>
+      </div>
+
+      <hr/>
+      <h5>Examples</h5>
+      <div class="ui-margin-v">
+        <pre markdown>
+        <xmp>
+        ```html
+        <ui-page page-title="Sample">
+          <ui-section row-layout>
+            <ui-sidebar scroll padded collapsible label="Sidebar">
+              ....
+            </ui-sidebar>
+            <ui-content scroll padded>
+              ....
+            </ui-content>
+          </ui-section>
+        </ui-page>
+        ```
+        </xmp>
+      </pre>
+      </div>
+    </div>
+  </ui-content>
+</template>

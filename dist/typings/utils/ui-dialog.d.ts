@@ -4,9 +4,8 @@ export declare class UIDialogService {
     private container;
     private resources;
     private compositionEngine;
-    private dialogContainer;
-    private taskBar;
     private __active;
+    private __inited;
     private __windows;
     constructor(compiler: ViewCompiler, container: Container, resources: ViewResources, compositionEngine: CompositionEngine);
     show(vm: any, model?: any): Promise<void>;
@@ -50,6 +49,8 @@ export declare class UIDialog {
     drag: boolean;
     resize: boolean;
     maximize: boolean;
+    static dlgService: any;
+    static show(model?: any): void;
     bind(): void;
     close($event?: any): void;
     focus(): void;

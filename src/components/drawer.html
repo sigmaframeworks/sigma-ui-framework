@@ -1,0 +1,80 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <ui-page page-title="Drawers">
+    <ui-content scroll padded>
+      <div class="ui-container">
+        <h1>Drawers</h1>
+        <hr/>
+        <h5 class="ui-text-muted">Panel Drawers</h5>
+        <ui-panel>
+          <ui-header>
+            <ui-drawer-toggle drawer.bind="_drawerLeft"></ui-drawer-toggle>
+            <ui-header-title>Panel with Drawers</ui-header-title>
+            <ui-drawer-toggle drawer.bind="_drawerRight">
+              <span class="fi-ui-overflow-dark"></span>
+            </ui-drawer-toggle>
+          </ui-header>
+          <ui-drawer ref="_drawerLeft" scroll padded>
+            <compose view="home/lipsum-small.html"></compose>
+          </ui-drawer>
+          <ui-drawer ref="_drawerRight" position="end" scroll padded>
+            <compose view="home/lipsum-small.html"></compose>
+          </ui-drawer>
+          <ui-panel-body scroll padded max-height="400px">
+            <compose view="home/lipsum-big.html"></compose>
+          </ui-panel-body>
+        </ui-panel>
+
+        <hr/>
+        <h5>Markup</h5>
+        <div class="ui-margin-v">
+          <pre markdown>
+          <xmp>
+          ```html
+          <ui-drawer position="start | end" [scroll] [padded] ref="_el">
+            <!-- any content -->
+          </ui-drawer>
+          <ui-drawer-toggle drawer.bind="_el"></ui-drawer-toggle>
+          ```
+          </xmp>
+          </pre>
+        </div>
+
+        <hr/>
+        <h5>Examples</h5>
+        <div class="ui-margin-v">
+          <pre markdown>
+          <xmp>
+          ```html
+          <ui-panel>
+            <ui-drawer ref="_drawerLeft" scroll padded>
+              Lorem ipsum...
+            </ui-drawer>
+            <ui-drawer ref="_drawerRight" position="end" scroll padded>
+              Lorem ipsum...
+            </ui-drawer>
+            <ui-header>
+              <ui-drawer-toggle drawer.bind="_drawerLeft">
+                <!-- default menu bar glyph -->
+              </ui-drawer-toggle>
+              <ui-header-title>Panel with Drawers</ui-header-title>
+              <ui-drawer-toggle drawer.bind="_drawerRight">
+                <span class="fi-ui-overflow-dark"></span>
+              </ui-drawer-toggle>
+            </ui-header>
+            <ui-panel-body scroll padded max-height="400px">
+              Lorem ipsum...
+            </ui-panel-body>
+          </ui-panel>
+          ```
+          </xmp>
+        </pre>
+        </div>
+      </div>
+    </ui-content>
+  </ui-page>
+</template>

@@ -7,20 +7,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-utils", "./ui-event", "aurelia-router", "./ui-constants"], function (require, exports, aurelia_framework_1, aurelia_logging_1, ui_utils_1, ui_event_1, aurelia_router_1, ui_constants_1) {
+define(["require", "exports", "aurelia-framework", "aurelia-router", "aurelia-logging", "./ui-constants", "./ui-utils", "./ui-event"], function (require, exports, aurelia_framework_1, aurelia_router_1, aurelia_logging_1, ui_constants_1, ui_utils_1, ui_event_1) {
     "use strict";
     var UIApplication = (function () {
         function UIApplication(router) {
             this.router = router;
-            this.AppConfig = ui_constants_1.UIConstants.App;
-            this.HttpConfig = ui_constants_1.UIConstants.Http;
             this.IsHttpInUse = false;
             this.IsAuthenticated = false;
             this.__sharedState = {};
             this.__logger = aurelia_logging_1.getLogger('UIApplication');
             this.__logger.info('Initialized');
-            Object.assign(this.AppConfig, ui_constants_1.UIConstants.App);
-            Object.assign(this.HttpConfig, ui_constants_1.UIConstants.Http);
         }
         UIApplication.prototype.navigate = function (hash, options) {
             this.__logger.info("navigate::" + hash);
@@ -31,36 +27,10 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-util
             this.__logger.info("navigateTo::" + route);
             this.router.navigateToRoute(route, params, options);
         };
-        Object.defineProperty(UIApplication.prototype, "Username", {
-            get: function () {
-                return this.__username;
-            },
-            set: function (v) {
-                this.__username = v;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(UIApplication.prototype, "UserGroup", {
-            get: function () {
-                return this.__userGroup;
-            },
-            set: function (v) {
-                this.__userGroup = v;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(UIApplication.prototype, "UserGroupLabel", {
-            get: function () {
-                return this.__userGroupLabel;
-            },
-            set: function (v) {
-                this.__userGroupLabel = v;
-            },
-            enumerable: true,
-            configurable: true
-        });
+        UIApplication.prototype.routeActive = function (route) {
+            return route.isActive || route.href == location.hash ||
+                location.hash.indexOf(route.config.redirect || 'QWER') > -1;
+        };
         Object.defineProperty(UIApplication.prototype, "AuthUser", {
             get: function () {
                 return this.__authUser;
@@ -81,11 +51,14 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-util
             enumerable: true,
             configurable: true
         });
-        UIApplication.prototype.login = function (authUser, authToken) {
-            this.AuthUser = this.Username = authUser;
+        UIApplication.prototype.login = function (authUser, authPass, authToken, route) {
+            this.AuthUser = authUser;
             this.AuthToken = authToken;
             this.IsAuthenticated = true;
-            this.navigateTo('');
+            this.persist('AppUsername', authUser);
+            this.persist('AppPassword', authPass);
+            this.navigateTo(route || 'home');
+            ui_event_1.UIEvent.broadcast('login');
         };
         UIApplication.prototype.logout = function () {
             this.AuthUser = null;
@@ -93,6 +66,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-util
             this.persist('AppPassword', null);
             this.IsAuthenticated = false;
             this.navigateTo('login');
+            ui_event_1.UIEvent.broadcast('logout');
         };
         UIApplication.prototype.shared = function (key, value) {
             if (value === void 0) { value = '§'; }
@@ -111,13 +85,13 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-util
             if (value === void 0) { value = '§'; }
             if (window.sessionStorage) {
                 if (value === '§') {
-                    return JSON.parse(window.sessionStorage.getItem(this.AppConfig.Key + ':' + key));
+                    return JSON.parse(window.sessionStorage.getItem(ui_constants_1.UIConstants.App.Key + ':' + key));
                 }
                 else if (value === null) {
-                    window.sessionStorage.removeItem(this.AppConfig.Key + ':' + key);
+                    window.sessionStorage.removeItem(ui_constants_1.UIConstants.App.Key + ':' + key);
                 }
                 else {
-                    window.sessionStorage.setItem(this.AppConfig.Key + ':' + key, JSON.stringify(value));
+                    window.sessionStorage.setItem(ui_constants_1.UIConstants.App.Key + ':' + key, JSON.stringify(value));
                 }
             }
             return null;
@@ -130,13 +104,13 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-util
             if (value === void 0) { value = '§'; }
             if (window.localStorage) {
                 if (value === '§') {
-                    return JSON.parse(window.localStorage.getItem(this.AppConfig.Key + ':' + key));
+                    return JSON.parse(window.localStorage.getItem(ui_constants_1.UIConstants.App.Key + ':' + key));
                 }
                 else if (value === null) {
-                    window.localStorage.removeItem(this.AppConfig.Key + ':' + key);
+                    window.localStorage.removeItem(ui_constants_1.UIConstants.App.Key + ':' + key);
                 }
                 else {
-                    window.localStorage.setItem(this.AppConfig.Key + ':' + key, JSON.stringify(value));
+                    window.localStorage.setItem(ui_constants_1.UIConstants.App.Key + ':' + key, JSON.stringify(value));
                 }
             }
             return null;
@@ -170,31 +144,25 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-util
             this.__logger.error(tag + "::" + msg, rest);
         };
         UIApplication.prototype.toast = function (config) {
-            if (!this.__overlayContainer)
-                this.__overlayContainer = document.body.querySelector('.ui-viewport .ui-overlay-container');
-            ui_utils_1.UIUtils.showToast(this.__overlayContainer, config);
+            ui_utils_1.UIUtils.showToast(config);
         };
         UIApplication.prototype.toastSuccess = function (config) {
-            if (!this.__overlayContainer)
-                this.__overlayContainer = document.body.querySelector('.ui-viewport .ui-overlay-container');
             if (typeof config === 'string')
                 config = { message: config };
             config.theme = 'success';
-            ui_utils_1.UIUtils.showToast(this.__overlayContainer, config);
+            ui_utils_1.UIUtils.showToast(config);
         };
         UIApplication.prototype.toastError = function (config) {
-            if (!this.__overlayContainer)
-                this.__overlayContainer = document.body.querySelector('.ui-viewport .ui-overlay-container');
             if (typeof config === 'string')
                 config = { message: config };
             config.theme = 'danger';
-            ui_utils_1.UIUtils.showToast(this.__overlayContainer, config);
+            ui_utils_1.UIUtils.showToast(config);
         };
         UIApplication.prototype.alert = function (config) {
             if (typeof config === 'string')
                 config = { message: config };
             config.type = config.type || "info";
-            config.button = config.button || "OK";
+            config.button = config.okLabel || "OK";
             return ui_utils_1.UIUtils.alert(config);
         };
         UIApplication.prototype.confirm = function (config) {
@@ -231,18 +199,7 @@ define(["require", "exports", "aurelia-framework", "aurelia-logging", "./ui-util
                     return next.reject(new aurelia_router_1.Redirect(url));
                 }
             }
-            if (!routingContext.config.isLogin && !this.isAllowed(routingContext.config.group)) {
-                this.logger.warn("Access denied [" + routingContext.config.group + "]");
-                this.appState.toast({ message: '⚠︎ Access Denied', theme: 'danger' });
-                return next.reject();
-            }
             return next();
-        };
-        AuthInterceptor.prototype.isAllowed = function (groups) {
-            if (groups && this.appState.UserGroup !== null) {
-                return new RegExp("^(" + groups + ")$").test(this.appState.UserGroup);
-            }
-            return true;
         };
         AuthInterceptor = __decorate([
             aurelia_framework_1.singleton(),

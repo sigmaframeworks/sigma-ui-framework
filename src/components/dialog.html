@@ -1,0 +1,125 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <ui-page page-title="Dialogs">
+    <ui-content scroll padded>
+      <div class="ui-container">
+        <h5 class="ui-text-muted">Dialogs</h5>
+        <ui-fieldset>
+          <ui-row>
+            <ui-column fill>
+              <ui-input-group>
+                <ui-input-label>Title</ui-input-label>
+                <ui-input value.bind="dlgModel.title"></ui-input>
+              </ui-input-group>
+            </ui-column>
+            <ui-column fill>
+              <ui-option-group value.bind="dlgModel.icon">
+                <ui-input-label>Icons</ui-input-label>
+                <ui-radio value="">None</ui-radio>
+                <ui-radio value="fi-ui-search">Search</ui-radio>
+                <ui-radio value="fi-ui-edit">Edit</ui-radio>
+                <ui-radio value="fi-ui-settings">Settings</ui-radio>
+              </ui-option-group>
+              <ui-option-group>
+                <ui-input-label>Options</ui-input-label>
+                <ui-checkbox checked.bind="dlgModel.modal">Modal</ui-checkbox>
+                <ui-checkbox checked.bind="dlgModel.drag">Drag</ui-checkbox>
+                <ui-checkbox checked.bind="dlgModel.resize">Resize</ui-checkbox>
+                <ui-checkbox checked.bind="dlgModel.maximize">Maximize</ui-checkbox>
+              </ui-option-group>
+            </ui-column>
+          </ui-row>
+          <ui-toolbar>
+            <ui-button label="Show Dialog" click.trigger="openDialog()"></ui-button>
+          </ui-toolbar>
+        </ui-fieldset>
+        <hr/>
+        <h5 class="ui-text-muted">Alerts</h5>
+        <ui-fieldset>
+          <ui-row>
+            <ui-column fill>
+              <ui-input-group>
+                <ui-input-label>Message</ui-input-label>
+                <ui-input value.bind="alert.message"></ui-input>
+              </ui-input-group>
+            </ui-column>
+            <ui-column auto>
+              <ui-option-group value.bind="alert.type">
+                <ui-input-label>Icons</ui-input-label>
+                <ui-radio value="">None</ui-radio>
+                <ui-radio value="info">Info</ui-radio>
+                <ui-radio value="error">Error</ui-radio>
+                <ui-radio value="exclaim">Exclaim</ui-radio>
+              </ui-option-group>
+            </ui-column>
+          </ui-row>
+          <ui-row>
+            <ui-column fill>
+              <ui-input-group>
+                <ui-input-label>OK Label</ui-input-label>
+                <ui-input value.bind="alert.okLabel"></ui-input>
+              </ui-input-group>
+            </ui-column>
+            <ui-column fill>
+              <ui-input-group>
+                <ui-input-label>Yes Label</ui-input-label>
+                <ui-input value.bind="alert.yesLabel"></ui-input>
+              </ui-input-group>
+            </ui-column>
+            <ui-column fill>
+              <ui-input-group>
+                <ui-input-label>No Label</ui-input-label>
+                <ui-input value.bind="alert.noLabel"></ui-input>
+              </ui-input-group>
+            </ui-column>
+          </ui-row>
+          <ui-toolbar>
+            <ui-button label="Show Alert" click.trigger="openAlert()"></ui-button>
+            <ui-button label="Show Confirm" click.trigger="openConfirm()"></ui-button>
+          </ui-toolbar>
+        </ui-fieldset>
+        <hr/>
+        <h5 class="ui-text-muted">Toasts</h5>
+        <ui-fieldset>
+          <ui-row>
+            <ui-column fill>
+              <ui-input-group>
+                <ui-input-label>Message</ui-input-label>
+                <ui-input value.bind="toast.message"></ui-input>
+              </ui-input-group>
+              <!-- <ui-option-group>
+                <ui-input-label></ui-input-label>
+                <ui-checkbox checked.bind="toast.autoHide">Auto Hide</ui-checkbox>
+              </ui-option-group> -->
+            </ui-column>
+            <ui-column fill>
+              <ui-option-group value.bind="toast.icon">
+                <ui-input-label>Icons</ui-input-label>
+                <ui-radio value="">None</ui-radio>
+                <ui-radio value="fi-ui-info">Info</ui-radio>
+                <ui-radio value="fi-ui-error">Error</ui-radio>
+                <ui-radio value="fi-ui-exclamation">Exclaim</ui-radio>
+                <ui-radio value="fi-ui-notification">Notification</ui-radio>
+              </ui-option-group>
+              <ui-option-group value.bind="toast.theme">
+                <ui-input-label>Theme</ui-input-label>
+                <ui-radio value="normal">Normal</ui-radio>
+                <ui-radio value="info">Info</ui-radio>
+                <ui-radio value="danger">Danger</ui-radio>
+                <ui-radio value="success">Success</ui-radio>
+                <ui-radio value="warning">Warning</ui-radio>
+              </ui-option-group>
+            </ui-column>
+          </ui-row>
+          <ui-toolbar>
+            <ui-button label="Show Toast" click.trigger="openToast()"></ui-button>
+          </ui-toolbar>
+        </ui-fieldset>
+      </div>
+    </ui-content>
+  </ui-page>
+</template>

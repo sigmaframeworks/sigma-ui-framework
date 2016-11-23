@@ -5,7 +5,7 @@ define(["require", "exports"], function (require, exports) {
         UIConstants.App = {
             Key: 'App',
             Title: 'Sigma UI Framework',
-            Version: '1.00'
+            Version: '2.0.0'
         };
         UIConstants.Http = {
             BaseUrl: './',

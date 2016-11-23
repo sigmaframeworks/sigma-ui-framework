@@ -1,139 +1,142 @@
-// UI Tree Panel
-// @description :
+// 
+// @description : 
 // @author      : Adarsh Pastakia
-// @copyright   : 2016 Sigma Frameworks
+// @copyright   : 2016
 // @license     : MIT
 
 .ui-tree-panel {
-    font-size: .9em;
-    display  : block;
+  font-size: .9em;
+  display  : block;
 
-    a {
-        text-decoration: none;
+  &.has-search {
+    padding-top: 2rem;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .ui-search {
+    z-index      : 50;
+    top          : 0;
+    width        : 100%;
+    border-radius: 0 !important;
+    border-width : 0 0 1px !important;
+    position     : absolute;
+  }
+
+  .ui-tree-level {
+    z-index: 10;
+    @include padding(start, .75em);
+  }
+
+  .ui-tree-level .ui-tree-level {
+    @include padding(start, 1.5em);
+  }
+
+  .ui-tree-item {
+    display: block;
+  }
+
+  .ui-tree-item > .ui-tree-item-link {
+    @include flex-row(center, $wrap: false);
+    margin: .1em 0;
+
+    &.ui-disabled {
+      pointer-events: none;
+      opacity       : .5;
     }
 
-    .ui-search {
-        z-index         : 50;
-        top             : 0;
+    a.ui-expander {
+      font-size    : 1em;
+      line-height  : 1;
 
-        padding         : .3em 0 0;
+      margin       : 0 .1em;
+      padding      : .125em;
 
-        border-bottom   : 1px solid $base-border-color;
-        background-color: $base-bg;
-        @include sticky();
+      color        : $muted;
+      border-radius: .2em;
+      @include flex(0 0 auto);
+
+      & span:before {
+        font-family: Framework;
+        content    : $fi-ui-tree-expand;
+      }
+
+      &.expanded span:before {
+        font-family: Framework;
+        content    : $fi-ui-tree-collapse;
+      }
+
+      &:hover {
+        color: $primary;
+      }
     }
 
-    .ui-tree-level {
-        z-index: 10;
+    a.ui-node-checkbox {
+      font-size: 1em;
+      padding  : .25em;
+      color    : $muted;
+      @include flex(0 0 auto);
 
-        padding: .75em;
+      &:hover {
+        color: $primary;
+      }
+
+      &.off span:before {
+        font-family: Framework;
+        content    : $fi-ui-tree-check-off;
+      }
+
+      &.on span:before {
+        font-family: Framework;
+        content    : $fi-ui-tree-check-on;
+      }
+
+      &.partial span:before {
+        font-family: Framework;
+        content    : $fi-ui-tree-check-partial;
+      }
+
+      &.on {
+        & ~ a.ui-link {}
+      }
     }
 
-    .ui-tree-level .ui-tree-level {
-        padding: 0 .75em 0 1.5em;
-    }
+    a.ui-node-link {
+      padding    : .15rem .25rem;
+      white-space: nowrap;
+      color      : $base-text;
+      @include flex(1 1 1em);
+      @include flex-row($wrap: false);
 
-    .ui-tree-item {
-        display: block;
-    }
+      span.ui-icon {
+        font-weight: normal;
+        margin     : 0 .25em;
+      }
 
-    .ui-tree-item > .ui-tree-item-link {
-        @include flex-row(center, $wrap: false);
+      b {
+        text-decoration: underline;
+        color          : $primary;
+      }
 
-        a.ui-expander {
-            font-size    : 1em;
-            line-height  : 1;
+      &:hover {
+        background-color: rgba($primary, .25);
+      }
 
-            margin       : 0 .1em;
-            padding      : .125em;
+      &.ui-active {
+        color           : $primary-text;
+        background-color: rgba($primary, .75);
 
-            color        : $text-muted;
-            border-radius: .2em;
-            @include flex(0 0 auto);
-
-            & span:before {
-                content: $font-ui-square-expand;
-            }
-
-            &.expanded span:before {
-                content: $font-ui-square-collapse;
-            }
-
-            &:hover {
-                color: $primary;
-            }
+        b {
+          color: $primary-text;
         }
+      }
 
-        a.ui-node-checkbox {
-            font-size  : 1em;
-            font-weight: $font-weight-strong;
-
-            padding    : .25em;
-
-            color      : $base-shadow-color;
-            @include flex(0 0 auto);
-
-            &:hover {
-                color: $primary;
-            }
-
-            &.off span:before {
-                content: $font-ui-tree-check-off;
-            }
-
-            &.on span:before {
-                content: $font-ui-tree-check-on;
-            }
-
-            &.partial span:before {
-                content: $font-ui-tree-check-partial;
-            }
-
-            &.on {
-                & ~ a.ui-link {
-                    font-weight: $font-weight-strong;
-                }
-            }
-        }
-
-        a.ui-link {
-            font-weight: $font-weight-normal;
-
-            min-width  : 13em;
-            padding    : .35rem .25rem;
-
-            white-space: nowrap;
-
-            color      : $base-text;
-            @include flex(1 1 auto);
-            @include flex-row($wrap: false);
-
-            span.ui-icon {
-                font-weight    : normal;
-
-                margin         : 0 .25em;
-
-                background-size: auto 1.2em;
-            }
-
-            b {
-                font-weight    : $font-weight-strong;
-
-                text-decoration: underline;
-
-                color          : $primary;
-            }
-
-            &:hover {
-                background-color: rgba($primary, .25);
-            }
-
-            &.ui-active {
-                font-weight     : $font-weight-strong;
-
-                color           : $primary-text;
-                background-color: rgba($primary, .75);
-            }
-        }
+      &.ui-partial {
+        color          : $primary;
+        text-decoration: underline;
+      }
     }
+  }
 }

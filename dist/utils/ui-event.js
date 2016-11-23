@@ -17,13 +17,6 @@ define(["require", "exports", "./ui-utils", "aurelia-framework", "aurelia-event-
             __ea.publish(event, data);
         }
         UIEvent.broadcast = broadcast;
-        function observe(object, property) {
-            if (!__ob) {
-                __ob = ui_utils_1.UIUtils.lazy(aurelia_framework_1.BindingEngine);
-            }
-            return __ob.propertyObserver(object, property);
-        }
-        UIEvent.observe = observe;
         function subscribe(event, callback) {
             if (!__ea) {
                 __ea = ui_utils_1.UIUtils.lazy(aurelia_event_aggregator_1.EventAggregator);
@@ -31,6 +24,13 @@ define(["require", "exports", "./ui-utils", "aurelia-framework", "aurelia-event-
             return __ea.subscribe(event, callback);
         }
         UIEvent.subscribe = subscribe;
+        function observe(object, property) {
+            if (!__ob) {
+                __ob = ui_utils_1.UIUtils.lazy(aurelia_framework_1.BindingEngine);
+            }
+            return __ob.propertyObserver(object, property);
+        }
+        UIEvent.observe = observe;
         function queueTask(fn) {
             if (!__tq) {
                 __tq = ui_utils_1.UIUtils.lazy(aurelia_framework_1.TaskQueue);

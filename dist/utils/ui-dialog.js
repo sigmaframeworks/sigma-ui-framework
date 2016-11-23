@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "aurelia-metadata", "aurelia-framework"], function (require, exports, aurelia_framework_1, ui_utils_1, ui_event_1, aurelia_metadata_1, aurelia_framework_2) {
+define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "aurelia-metadata", "aurelia-framework", "lodash"], function (require, exports, aurelia_framework_1, ui_utils_1, ui_event_1, aurelia_metadata_1, aurelia_framework_2, _) {
     "use strict";
     var UIDialogService = (function () {
         function UIDialogService(compiler, container, resources, compositionEngine) {
@@ -23,18 +23,17 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
         }
         UIDialogService.prototype.show = function (vm, model) {
             var _this = this;
-            if (!this.dialogContainer) {
-                this.dialogContainer = document.body.querySelector('.ui-viewport .ui-dialog-container');
-                this.dialogContainer.addEventListener('close', function (e) { return _this.__closeDialog(e.detail); });
-                this.dialogContainer.addEventListener('collapse', function (e) { return _this.__collapse(e); });
-                this.dialogContainer.addEventListener('mousedown', function (e) { return _this.moveStart(e); });
-                this.dialogContainer.addEventListener('mousemove', function (e) { return _this.move(e); });
-                this.dialogContainer.addEventListener('mouseup', function () { return _this.moveEnd(); });
-            }
-            if (!this.taskBar) {
-                this.taskBar = document.body.querySelector('.ui-viewport .ui-app-taskbar');
-                if (this.taskBar)
-                    this.taskBar.addEventListener('click', function (e) { return _this.__taskClick(e.target['window']); });
+            if (!this.__inited) {
+                this.__inited = true;
+                if (ui_utils_1.UIUtils.dialogContainer) {
+                    ui_utils_1.UIUtils.dialogContainer.addEventListener('close', function (e) { return _this.__closeDialog(e.detail); });
+                    ui_utils_1.UIUtils.dialogContainer.addEventListener('collapse', function (e) { return _this.__collapse(e); });
+                    ui_utils_1.UIUtils.dialogContainer.addEventListener('mousedown', function (e) { return _this.moveStart(e); });
+                    ui_utils_1.UIUtils.dialogContainer.addEventListener('mousemove', function (e) { return _this.move(e); });
+                    ui_utils_1.UIUtils.dialogContainer.addEventListener('mouseup', function () { return _this.moveEnd(); });
+                }
+                if (ui_utils_1.UIUtils.taskbar)
+                    ui_utils_1.UIUtils.taskbar.addEventListener('click', function (e) { return _this.__taskClick((getParentByTag(e.target, 'button') || {})['window']); });
             }
             var instruction = {
                 viewModel: vm,
@@ -47,7 +46,7 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
                 var viewModel = newInstruction.viewModel;
                 return _this.__invokeLifecycle(viewModel, 'canActivate', model)
                     .then(function (canActivate) {
-                    if (canActivate) {
+                    if (canActivate != false) {
                         return _this.compositionEngine.createController(instruction)
                             .then(function (controller) {
                             controller.automate();
@@ -56,7 +55,7 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
                             childSlot.add(controller.view);
                             childSlot.viewModel = controller.viewModel;
                             childSlot.attached();
-                            var slot = new aurelia_framework_2.ViewSlot(_this.dialogContainer, true);
+                            var slot = new aurelia_framework_2.ViewSlot(ui_utils_1.UIUtils.dialogContainer, true);
                             slot.add(view);
                             slot.attached();
                             _this.__initDialog(controller.viewModel);
@@ -68,17 +67,11 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
         UIDialogService.prototype.__createDialog = function (vm) {
             if (!(vm instanceof UIDialog))
                 throw new Error("ViewModel must extend from UIDialog");
-            var viewFactory = this.compiler.compile('<template><div class="${modal?\'ui-modal\':\'\'} ui-dialog-wrapper" ref="__dialogWrapper">' +
-                '<div class="ui-dialog ${__active?\'ui-active\':\'ui-inactive\'}" ref="__dialog" css.bind="__current">' +
-                '<ui-header primary close="true" close.trigger="close($event)" ' +
-                'expand.trigger="expand($event)" collapse.trigger="collapse($event)" ' +
-                'icon="${icon}" collapse="${!modal}" expand="${maximize}">${title}</ui-header>' +
-                '<span class="ui-resizer fi-ui" if.bind="resize"></span>' +
-                '</div></div></template>', this.resources);
+            var viewFactory = this.compiler.compile("<template><div class=\"${modal?'ui-modal':''} ui-dialog-wrapper\" ref=\"__dialogWrapper\">\n      <div class=\"ui-dialog ${__active?'ui-active':'ui-inactive'}\" ref=\"__dialog\" css.bind=\"__current\">\n      <ui-header primary>\n      \n        <ui-header-icon icon=\"${icon}\" if.bind=\"icon\"></ui-header-icon>\n        <ui-header-title>${title}</ui-header-title>\n        <ui-header-tool minimize click.trigger=\"collapse($event)\" if.bind=\"!modal\"></ui-header-tool>\n        <ui-header-tool maximize click.trigger=\"expand($event)\" if.bind=\"maximize\"></ui-header-tool>\n        <ui-header-tool close click.trigger=\"close($event)\" ></ui-header-tool>\n      \n      </ui-header>\n      <span class=\"ui-resizer fi-ui-dialog-resize\" if.bind=\"resize\"></span>\n      </div></div></template>", this.resources);
             var view = viewFactory.create(this.container);
             if (vm.modal) {
-                vm.__current.top = 0;
-                vm.__current.left = 0;
+                vm.__current.top = '0px';
+                vm.__current.left = '0px';
             }
             view.bind(vm);
             return view;
@@ -113,10 +106,12 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
                 dialog.__taskButton = document.createElement('button');
                 dialog.__taskButton.classList.add('ui-button');
                 dialog.__taskButton.classList.add('ui-active');
+                dialog.__taskButton.classList.add('ui-small');
                 dialog.__taskButton.classList.add('ui-button-default');
-                dialog.__taskButton.innerHTML = "<span class=\"" + dialog.icon + "\"></span>" + dialog.title;
+                dialog.__taskButton.innerHTML = "<span class=\"" + dialog.icon + "\"></span>&nbsp;<span class=\"ui-label\">" + dialog.title + "</span>";
                 dialog.__taskButton.window = dialog;
-                this.taskBar.appendChild(dialog.__taskButton);
+                if (ui_utils_1.UIUtils.taskbar)
+                    ui_utils_1.UIUtils.taskbar.appendChild(dialog.__taskButton);
                 this.__changeActive(dialog);
             }
         };
@@ -129,7 +124,7 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
                 if (canDeactivate) {
                     dialog.__dialog.viewSlot.detached();
                     dialog.__dialogWrapper.remove();
-                    ui_utils_1._.remove(_this.__windows, ['__id', dialog.__id]);
+                    _.remove(_this.__windows, ['__id', dialog.__id]);
                     if (!dialog.modal) {
                         dialog.__taskButton.remove();
                         _this.__setNextActive();
@@ -141,7 +136,7 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
         };
         UIDialogService.prototype.__setNextActive = function () {
             var nextActive;
-            if (!isEmpty(nextActive = ui_utils_1._.findLast(this.__windows, ['__minimized', false]))) {
+            if (!isEmpty(nextActive = _.findLast(this.__windows, ['__minimized', false]))) {
                 this.__changeActive(nextActive);
             }
         };
@@ -180,7 +175,7 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
         };
         UIDialogService.prototype.moveStart = function ($event) {
             this.__dialog = getParentByClass($event.target, 'ui-dialog');
-            if (this.__dialog === null)
+            if (this.__dialog === null || !this.__dialog.viewSlot)
                 return;
             var dialog = this.__dialog.viewSlot.viewModel;
             if (getParentByClass($event.target, 'ui-header-button') !== null) {
@@ -210,14 +205,14 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
                 return;
             }
             this.__dialog.classList.add('ui-dragging');
-            this.dialogContainer.classList.add('ui-dragging');
+            ui_utils_1.UIUtils.dialogContainer.classList.add('ui-dragging');
         };
         UIDialogService.prototype.moveEnd = function () {
             if (!this.__isDragging || this.__dialog == null) {
                 return;
             }
             this.__dialog.classList.remove('ui-dragging');
-            this.dialogContainer.classList.remove('ui-dragging');
+            ui_utils_1.UIUtils.dialogContainer.classList.remove('ui-dragging');
             this.__isDragging = false;
             this.__dialog = null;
         };
@@ -231,8 +226,8 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
             var l = convertToPx(this.__dialog.style.left, this.__dialog);
             var w = convertToPx(this.__dialog.style.width, this.__dialog);
             var h = convertToPx(this.__dialog.style.height, this.__dialog);
-            var pw = this.dialogContainer.offsetWidth;
-            var ph = this.dialogContainer.offsetHeight;
+            var pw = ui_utils_1.UIUtils.dialogContainer.offsetWidth;
+            var ph = ui_utils_1.UIUtils.dialogContainer.offsetHeight;
             if (!this.__isResizing) {
                 if (l + x < 16) {
                     x = 0;
@@ -290,6 +285,11 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
             this.resize = true;
             this.maximize = true;
         }
+        UIDialog.show = function (model) {
+            if (!UIDialog.dlgService)
+                UIDialog.dlgService = ui_utils_1.UIUtils.lazy(UIDialogService);
+            UIDialog.dlgService.show(this, model);
+        };
         UIDialog.prototype.bind = function () {
             this.__current.width = this.width || this.__current.width;
             this.__current.height = this.height || this.__current.height;
@@ -321,7 +321,7 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
             if (typeof config === 'string')
                 config = { message: config };
             config.extraClass = 'ui-page-toast';
-            ui_utils_1.UIUtils.showToast(this.__dialog, config);
+            ui_utils_1.UIUtils.showToast(config, this.__dialog);
         };
         UIDialog.__id = 0;
         UIDialog.__x = 0;

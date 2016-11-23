@@ -1,109 +1,202 @@
-// UI Menu
-// @description :
+// 
+// @description : 
 // @author      : Adarsh Pastakia
-// @copyright   : 2016 Sigma Frameworks
+// @copyright   : 2016
 // @license     : MIT
 
+a.ui-menu-item {
+  padding : .3em .7em;
+  position: relative;
+
+  color   : $menu-link-text;
+  @include transition(all .5s);
+
+  .ui-menu-label {
+    max-width: 20em;
+    display  : inline-block;
+    @include transition(all 0.5s);
+  }
+
+  .ui-menu-icon {
+    margin             : 0 .15em;
+    background-position: left center;
+    background-repeat  : no-repeat;
+    background-size    : 1em 1em;
+    @include transition(all 0.5s);
+  }
+
+  &:hover {
+    color           : $menu-link-hover-text;
+    background-color: $menu-link-hover-bg;
+  }
+
+  &.ui-disabled {
+    color: $menu-link-disabled;
+  }
+
+  &.ui-active {
+    pointer-events: none;
+  }
+}
+
+.ui-menu-section-title {
+  font-size: .8rem;
+  padding  : .2em .5em;
+  color    : $menu-section-title;
+  display  : block;
+  @include ellipsis();
+}
+
+.ui-menubar {
+  z-index         : 5;
+  font-size       : .8em;
+  @include flex(0 0 auto);
+  @include flex-row($align: center, $wrap:false);
+
+  background-color: $menubar-bg;
+  border-bottom   : 1px solid rgba($wg-9,.25);
+
+  .ui-menubar-overflow {
+    cursor : pointer;
+    padding: .5em 1em;
+  }
+
+  .ui-menubar-wrapper {
+    overflow: hidden;
+    @include flex(1 1 auto);
+    @include flex-row($align: stretch, $wrap:false);
+  }
+
+  .ui-menu-section {
+    margin       : .2em;
+    display      : block;
+    overflow     : hidden;
+    flex         : 0 0 auto;
+    border       : 1px solid rgba($base-border-color, .5);
+    border-radius: $base-border-radius;
+  }
+
+  .ui-menu-section-title {
+    text-align: center;
+  }
+
+  a.ui-menu-item {
+    line-height: 2;
+    white-space: nowrap;
+
+    &:hover {
+      @include box-shadow(0 -4px 0 0 $menu-link-active-bg inset);
+    }
+
+    &.ui-active {
+      background: none;
+      @include box-shadow(0 -4px 0 0 $primary inset);
+    }
+  }
+
+  > a.ui-menu-item {
+    border: {
+      left : 1px solid $divider-hilight;
+      right: 1px solid $divider-shadow;
+    }
+
+    &:first-child {
+      border-left: none;
+    }
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+}
+
 .ui-menu {
-    &.ui-floating {
-        position  : absolute;
-        overflow  : auto;
-        border    : 1px solid $base-border-color;
-        z-index   : $z-index-floating;
-        // min-width : 100%;
-        // margin    : 0;
-        // left      : 0;
-        // top       : 100%;
-        max-height: 0;
-        display   : none;
-        background: $base-bg;
-        @include box-shadow(0 2px 4px 0 $base-shadow-color);
-        @include transition(max-height 0.5s);
+  &:not(.ui-floating) {
+    display: block;
+  }
 
-        &.show {
-            display       : block;
-            pointer-events: all;
-            max-height    : 18em;
-        }
+  &.ui-floating {
+    font-size       : .9em;
+    min-width       : 10em;
+    max-width       : 18em;
+    background-color: $menu-dropdown-bg;
+    border          : 1px solid $base-border-color;
+    border-radius   : $base-border-radius;
+    z-index         : $z-index-floating;
+    @include box-shadow(0 0 2px 0 $base-shadow);
 
-        &.reverse {
-            top: -100%;
-        }
-
-        .ui-menu-link {
-            padding    : .5em;
-            white-space: nowrap;
-            font-size  : .9em;
-        }
-
-        .ui-menu-title {
-            padding    : .3em .5em;
-            white-space: nowrap;
-            font-size  : 1em;
-        }
+    .ui-menu-section-title {
+      font-size: .8em;
     }
 
-    .ui-menu-title {
-        font-size    : 1.3em;
-        font-weight  : $font-weight-strong;
-
-        margin-bottom: .5em;
-        padding      : 0 .5em;
-
-        color        : $menu-title-text;
-        border-bottom: 2px solid $menu-title-text;
+    &.tether-element-attached-top {
+      border-top-left-radius : 0;
+      border-top-right-radius: 0;
     }
 
-    .ui-menu-section {
-        font-size: .8em;
-        padding  : .3em .5em;
-        color    : $text-muted;
+    &.tether-element-attached-bottom {
+      border-bottom-left-radius : 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  .ui-menu-section {
+    margin  : .25em 0;
+    display : block;
+    overflow: hidden;
+  }
+
+  .ui-menu-section:not(:first-child):before {
+    content: ' ';
+    display: block;
+    border : {
+      top   : 1px solid $divider-shadow;
+      bottom: 1px solid $divider-hilight;
+    }
+    @include transform(scaleY(.5));
+  }
+
+  .ui-menu-divider {
+    display: block;
+    border : {
+      top   : 1px solid $divider-shadow;
+      bottom: 1px solid $divider-hilight;
+    }
+    @include transform(scaleY(.5));
+  }
+
+  .ui-menu-item {
+    display: block;
+    margin : .5em 0;
+    @include ellipsis();
+
+    &:hover {
+      @include box-shadow(4px 0 0 0 $menu-link-active-bg inset);
     }
 
-    .ui-menu-link {
-        font-size  : 1em;
-        font-weight: $font-weight-normal;
-
-        display    : block;
-
-        margin     : 1px 0;
-        padding    : 1em .5em;
-
-        text-align : start;
-
-        color      : $menu-link-text;
-        background : $menu-link-bg;
-        @include border(start, 4px solid transparent);
-
-        .ui-icon {
-            display: inline-block;
-
-            width  : 1.2em;
-        }
-
-        &[data-disabled='true'] {
-            cursor        : not-allowed;
-            pointer-events: none;
-
-            color         : $wg-5;
-        }
-
-        &:hover {
-            color           : $menu-hover-text;
-            background-color: $menu-hover-bg;
-        }
-
-        &:active {
-            color           : $menu-click-text;
-            background-color: $menu-click-bg;
-        }
-
-        &.ui-active {
-            font-weight     : $font-weight-strong;
-
-            color           : $menu-active-text;
-            border-color    : $menu-active-border;
-            background-color: $menu-active-bg;
-        }
+    &.ui-active {
+      color           : $menu-link-active-text;
+      background-color: $menu-link-active-bg;
+      @include box-shadow(4px 0 0 0 $primary inset);
     }
+  }
+}
+
+.rtl,
+[dir="rtl"] {
+  .ui-menu-item {
+    &:hover {
+      @include box-shadow(-4px 0 0 0 $menu-link-active-bg inset);
+    }
+
+    &.ui-active {
+      @include box-shadow(-4px 0 0 0 $primary inset);
+    }
+  }
+}
+@if $enable-blur {
+  .ua-safari .ui-menu.ui-floating {
+    background-color: rgba($menu-dropdown-bg, .6);
+    @include backdrop-blur(50px);
+  }
 }

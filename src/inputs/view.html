@@ -1,0 +1,206 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <ui-page page-title="Inputs">
+    <ui-content scroll padded>
+      <div class="ui-container">
+        <h1>Inputs</h1>
+        <hr/>
+        <ui-panel>
+          <ui-panel-body>
+            <ui-form submit.trigger="submit()">
+              <ui-row>
+                <ui-column fill padded>
+                  <ui-input-group display>
+                    <ui-input-label required>Display Only</ui-input-label>
+                    <ui-display value="Sigma Frameworks"></ui-display>
+                  </ui-input-group>
+                  <ui-input-group>
+                    <ui-input-label required>Text</ui-input-label>
+                    <ui-input placeholder="Any text..." maxlength="25" value.bind="model.text & validate" clear charcount></ui-input>
+                  </ui-input-group>
+                  <ui-input-group>
+                    <ui-input-label required>Password</ui-input-label>
+                    <ui-input placeholder="Any text..." maxlength="25" value.bind="model.password & validate" password clear charcount></ui-input>
+                  </ui-input-group>
+                  <ui-input-group>
+                    <ui-input-label required>Email</ui-input-label>
+                    <ui-input placeholder="Any email..." maxlength="50" value.bind="model.email & validate" clear email charcount></ui-input>
+                    <ui-input-info center>Value: ${model.email}</ui-input-info>
+                  </ui-input-group>
+                  <ui-input-group>
+                    <ui-input-label required>URL</ui-input-label>
+                    <ui-input placeholder="Any URL..." maxlength="50" value.bind="valUrl" clear url charcount></ui-input>
+                    <ui-input-info center>Value: ${valUrl}</ui-input-info>
+                  </ui-input-group>
+                  <ui-input-group>
+                    <ui-input-label required>Number</ui-input-label>
+                    <ui-input placeholder="Any number..." number.bind="model.number & validate" clear></ui-input>
+                    <ui-input-info center>Value: ${valNumber}</ui-input-info>
+                  </ui-input-group>
+                  <ui-input-group>
+                    <ui-input-label required>Decimal</ui-input-label>
+                    <ui-input placeholder="Any decimal..." decimal.bind="model.decimal & validate" clear></ui-input>
+                    <ui-input-info center>Value: ${valDecimal}</ui-input-info>
+                  </ui-input-group>
+                  <ui-input-group>
+                    <ui-input-label required>File</ui-input-label>
+                    <ui-input placeholder="Any File..." clear file></ui-input>
+                    <ui-input-info center>Value: ${valUrl}</ui-input-info>
+                  </ui-input-group>
+                  <ui-input-group>
+                    <ui-input-label required>Double Input</ui-input-label>
+                    <ui-input-addon icon="fi-ui-days"></ui-input-addon>
+                    <ui-input placeholder="Any text..."></ui-input>
+                    <ui-input-addon class="ui-small-caps">to</ui-input-addon>
+                    <ui-input placeholder="Any text..."></ui-input>
+                    <ui-button success>Go!</ui-button>
+                  </ui-input-group>
+                </ui-column>
+                <ui-column fill padded>
+                  <ui-input-group>
+                    <ui-input-label required align-top>Textarea</ui-input-label>
+                    <ui-input-addon icon="fi-ui-bell"></ui-input-addon>
+                    <ui-textarea placeholder="Any text..." charcount clear auto-complete="Alpha,Beta,Theta,Gamma,Omega"></ui-textarea>
+                    <ui-input-info center info>Auto-Complete (Alpha, Beta, Gamma, Omega, Theta)</ui-input-info>
+                  </ui-input-group>
+                  <ui-fieldset legend="Phone Inputs">
+                    <ui-input-group>
+                      <ui-input-label required>International</ui-input-label>
+                      <ui-phone clear value.bind="model.phone & validate" phone.bind="phoneInt"></ui-phone>
+                      <ui-input-info center>Value: ${model.phone}</ui-input-info>
+                    </ui-input-group>
+                    <ui-input-group>
+                      <ui-input-label required>National</ui-input-label>
+                      <ui-phone clear country="ae" value.bind="valueNat" phone.bind="phoneNat"></ui-phone>
+                      <ui-input-info center>Value: ${valueNat}</ui-input-info>
+                    </ui-input-group>
+                  </ui-fieldset>
+                  <ui-fieldset legend="Dates">
+                    <ui-input-group>
+                      <ui-input-label required>Date</ui-input-label>
+                      <ui-input-addon icon="fi-ui-calendar"></ui-input-addon>
+                      <ui-date value.bind="dt" time="true"></ui-date>
+                      <ui-input-info center>Value: ${dt}</ui-input-info>
+                    </ui-input-group>
+                    <ui-input-group>
+                      <ui-input-label required>Date Range</ui-input-label>
+                      <ui-input-addon icon="fi-ui-calendar"></ui-input-addon>
+                      <ui-date value.bind="model.dateStart & validate"></ui-date>
+                      <ui-input-addon>to</ui-input-addon>
+                      <ui-date value.bind="model.dateEnd & validate" min-date.bind="model.dateStart"></ui-date>
+                      <ui-input-info center>Value: ${model.dateStart} - ${model.dateEnd}</ui-input-info>
+                    </ui-input-group>
+                  </ui-fieldset>
+                </ui-column>
+              </ui-row>
+              <ui-row>
+                <ui-column fill padded>
+                  <ui-fieldset legend="Optional Inputs">
+                    <ui-input-group>
+                      <ui-input-label required>Text</ui-input-label>
+                      <ui-input-addon>
+                        <ui-checkbox checked.bind="in1" checked.trigger="inval1=''"></ui-checkbox>
+                      </ui-input-addon>
+                      <ui-input placeholder="Any text..." maxlength="25" ref="_in1" value.bind="inval1" disabled.bind="!in1" clear charcount></ui-input>
+                    </ui-input-group>
+                    <ui-input-group>
+                      <ui-input-label required>Combo</ui-input-label>
+                      <ui-input-addon>
+                        <ui-checkbox checked.bind="in2" checked.trigger="inval2=''"></ui-checkbox>
+                      </ui-input-addon>
+                      <ui-combo placeholder="Any option..." force-select="false" value.bind="inval2" disabled.bind="!in2" clear></ui-combo>
+                    </ui-input-group>
+                    <ui-input-group>
+                      <ui-input-label required>Date</ui-input-label>
+                      <ui-input-addon>
+                        <ui-checkbox checked.bind="in3" checked.trigger="inval3=''"></ui-checkbox>
+                      </ui-input-addon>
+                      <ui-date placeholder="Any date..." value.bind="inval3" disabled.bind="!in3" clear></ui-date>
+                    </ui-input-group>
+                  </ui-fieldset>
+                </ui-column>
+                <ui-column fill padded>
+                  <ui-fieldset legend="Optional Inputs">
+                    <ui-input-group>
+                      <ui-input-label required>Text</ui-input-label>
+                      <ui-input-addon>
+                        <ui-radio name="rdin" value="1" checked.bind="rdin" checked.trigger="rdval1=''"></ui-radio>
+                      </ui-input-addon>
+                      <ui-input placeholder="Any text..." maxlength="25" disabled.bind="rdin!=1" value.bind="rdval1" clear charcount></ui-input>
+                    </ui-input-group>
+                    <ui-input-group>
+                      <ui-input-label required>Combo</ui-input-label>
+                      <ui-input-addon>
+                        <ui-radio name="rdin" value="2" checked.bind="rdin" checked.trigger="rdval2=''"></ui-radio>
+                      </ui-input-addon>
+                      <ui-combo placeholder="Any option..." force-select="false" disabled.bind="rdin!=2" value.bind="rdval2" clear></ui-combo>
+                    </ui-input-group>
+                    <ui-input-group>
+                      <ui-input-label required>Date</ui-input-label>
+                      <ui-input-addon>
+                        <ui-radio name="rdin" value="3" checked.bind="rdin" checked.trigger="rdval3=''"></ui-radio>
+                      </ui-input-addon>
+                      <ui-date placeholder="Any date..." disabled.bind="rdin!=3" value.bind="rdval3" clear></ui-date>
+                    </ui-input-group>
+                  </ui-fieldset>
+                </ui-column>
+              </ui-row>
+            </ui-form>
+          </ui-panel-body>
+          <ui-toolbar>
+            <ui-button click.trigger="submit()">Validate</ui-button>
+          </ui-toolbar>
+        </ui-panel>
+
+        <hr/>
+        <h5>Markup</h5>
+        <div class="ui-margin-v">
+          <pre markdown>
+            <xmp>
+            ```html
+            <ui-input-group>
+              
+              <ui-input-label [required] [align-top]>Label</ui-input-label>
+              
+              <ui-input-addon icon[bindable]="glyph class"></ui-input-addon>
+              <ui-input-addon>Text</ui-input-addon>
+              
+              <!-- Any one of the following input elements -->
+              
+              <ui-display value[bindable]="string"></ui-display>
+              
+              <ui-input [text | password | email | url | file] [clear] [charcount]
+                disabled[bindable]="bool" readonly[bindable]="bool" 
+                placeholder[bindable]="string" maxlength[bindable]="number"
+                [value[bindable]="string" | number[bindable]="number" | decimal[bindable]="float"]></ui-input>
+                
+              <ui-textarea [clear] [charcount] value[bindable]="string"
+                disabled[bindable]="bool" readonly[bindable]="bool" auto-complete[bindable]="csv | array<string>"
+                placeholder[bindable]="string" maxlength[bindable]="number"></ui-textarea>
+              
+              <!-- -->
+            
+              <!-- button as an addon -->
+              <ui-button>Button</ui-button>
+            
+              <ui-input-info [center] [text theme]>Text</ui-input-info>
+              
+            </ui-input-group>
+            ```
+            
+            * `ui-input`
+              - For text input use `value.bind`
+              - For numeral input `number.bind` or `decimal.bind`
+            
+            </xmp>
+            </pre>
+        </div>
+
+      </div>
+    </ui-content>
+  </ui-page>
+</template>

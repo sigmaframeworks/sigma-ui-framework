@@ -1,191 +1,242 @@
-// UI Button
-// @description :
+// 
+// @description : 
 // @author      : Adarsh Pastakia
-// @copyright   : 2016 Sigma Frameworks
+// @copyright   : 2016
 // @license     : MIT
-@mixin button-style($pre, $bg, $text) {
-    &.ui-button-#{$pre} {
-        color       : $text;
-        border-color: darken($bg, 5%);
-        background  : $bg;
-    }
-}
-
-.ui-button-control {
-    display       : inline-block;
-    position      : relative;
-
-    margin        : .2em;
+@mixin button-style($style, $bg, $text, $hoverBg, $hoverText, $activeBg, $activeText) {
+  .ui-button-group.ui-toggle .ui-button-#{$style}.ui-active {
+    color         : $text;
+    background    : $bg;
+    border-color  : rgba(darken($bg, 15%),.5);
+    cursor        : default;
     pointer-events: none;
+  }
 
-    &.ui-dropdown > .ui-button:after {
-        font-family: 'Framework';
-        font-size  : .7em;
-        content    : $font-ui-arrow-down;
-    }
-}
+  .ui-button.ui-button-#{$style} {
+    color       : $text;
+    background  : $bg;
+    border-color: rgba(darken($bg, 15%),.5);
 
-.ui-button {
-    font-size     : 1.1em;
-    font-weight   : $font-weight-normal;
-
-    display       : inline-block;
-
-    padding       : $base-padding;
-
-    text-align    : center;
-    pointer-events: all;
-
-    border        : 1px solid $base-border-color;
-    border-radius : $base-border-radius;
-
-    @include box-shadow(2px 2px 4px 0 $base-shadow-color);
-
-    @include button-style(default, $button-default-bg, $button-default-text);
-    @include button-style(secondary, $button-secondary-bg, $button-secondary-text);
-    @include button-style(primary, $button-primary-bg, $button-primary-text);
-    @include button-style(info, $button-info-bg, $button-info-text);
-    @include button-style(danger, $button-danger-bg, $button-danger-text);
-    @include button-style(success, $button-success-bg, $button-success-text);
-    @include button-style(warning, $button-warning-bg, $button-warning-text);
-
-    &.ui-button-large {
-        font-size: 1.4em;
+    &.ui-btn-dropdown:after {
+      border-color: rgba($text, .8)transparent;
     }
 
-    &.ui-button-small {
-        font-size: .9em;
-
-        padding  : .2em;
+    &:hover {
+      color       : $hoverText;
+      background  : $hoverBg;
+      border-color: rgba(darken($hoverBg, 15%),.5);
     }
 
-    &.ui-button-square {
-        padding: .25em;
+    &:active {
+      color       : $activeText;
+      background  : $activeBg;
+      border-color: rgba(darken($activeBg, 15%),.5);
     }
+    @if $enable-gradient {
+       @include background-image(linear-gradient(lighten($bg, 10%), darken($bg, 10%)));
 
-    &.ui-button-round {
-        border-radius: 1em;
+      &:hover {
+        @include background-image(linear-gradient(lighten($hoverBg, 10%), darken($hoverBg, 10%)));
+      }
+
+      &:active {
+        @include background-image(linear-gradient(darken($activeBg, 20%), darken($activeBg, 10%)));
+      }
     }
-
-    &.ui-icon-top > span {
-        display   : block;
-
-        width     : 100%;
-        margin    : .2em 0;
-
-        text-align: center;
-    }
-
-    &:not([disabled]):not(.ui-checked):focus,
-    &:not([disabled]):not(.ui-checked):hover {
-        @include box-shadow(0 2px 2px 0 rgba($white, .6) inset, 0 -2px 2px 0 rgba($white, .6) inset, 2px 2px 4px 0 $base-shadow-color);
-    }
-
-    &:not([disabled]):not(.ui-checked):active {
-        @include box-shadow(0 0 2px $base-shadow-color inset);
-    }
-
-    &[disabled] {
-        opacity: .5;
-
-         &,
-        > span {
-            cursor        : not-allowed;
-            pointer-events: none;
-        }
-    }
-
-    span {
-        margin        : 0 .2em;
-
-        vertical-align: baseline;
-    }
-}
-
-.ui-button.no-shadow,
-.ui-button-bar .ui-button {
-    @include box-shadow(0 0 1px 0 $base-shadow-color);
-
-    &:not([disabled]):not(.ui-checked):not(.ui-active):focus,
-    &:not([disabled]):not(.ui-checked):not(.ui-active):hover {
-        z-index: 5;
-        @include box-shadow(0 2px 2px 0 rgba($white, .6) inset, 0 -2px 2px 0 rgba($white, .6) inset, 0 0 3px 0 $base-shadow-color);
-    }
-
-    &:not([disabled]):not(.ui-checked):not(.ui-active):active {
-        @include box-shadow(0 0 2px $base-shadow-color inset);
-    }
+  }
 }
 
 .ui-button-group {
-    margin        : .2em;
+  margin: .2rem;
 
-    pointer-events: none;
-    @include flexbox(( display:inline-flex, flex-direction:row, flex-wrap:nowrap ));
+  > .ui-button {
+    @include flex(0 0 auto);
+    margin       : 0;
+    border-radius: 0;
+  }
 
-    &.ui-vertical {
-        @include flexbox(( display:inline-flex, flex-direction:column, flex-wrap:nowrap, align-items: stretch));
+  &.ui-toggle > .ui-button {
+    color       : $button-default-text;
+    background  : $button-default-bg;
+    border-color: rgba(darken($button-default-bg, 15%),.5);
+  }
 
-        .ui-button-control:not(:first-child) .ui-button {
-            @include border-top-radius(0);
-        }
+  &.ui-disabled > .ui-button {
+    border-color  : darken($button-disabled-bg,10%) !important;
+    box-shadow    : none !important;
+    pointer-events: none !important;
 
-        .ui-button-control:not(:last-child) .ui-button {
-            @include border-bottom-radius(0);
-        }
+    &:after {
+      content      : ' ';
+      border-radius: inherit;
+      background   : rgba($button-disabled-bg, .5);
+      @include position(absolute, 0);
     }
+  }
 
-    &:not(.ui-vertical) {
-        .ui-button-control:not(:first-child) .ui-button {
-            @include border-left-radius(0);
-        }
+  &.ui-horizontal {
+    @include flex-row($display:inline-flex, $align: stretch);
+  }
 
-        .ui-button-control:not(:last-child) .ui-button {
-            @include border-right-radius(0);
-        }
+  &.ui-vertical {
+    @include flex-column($display:inline-flex, $align: stretch);
+
+    > .ui-button {
+      &:first-child {
+        border-top-left-radius : $base-border-radius;
+        border-top-right-radius: $base-border-radius;
+      }
+
+      &:last-child {
+        border-bottom-left-radius : $base-border-radius;
+        border-bottom-right-radius: $base-border-radius;
+      }
     }
-
-    .ui-button-control {
-        margin: 0;
-    }
-
-    .ui-button-control > .ui-button {
-        width: 100%;
-    }
-
-    &.ui-button-group-primary .ui-button.ui-checked {
-        color     : $button-primary-text;
-        background: $button-primary-bg;
-    }
-
-    &.ui-button-group-secondary .ui-button.ui-checked {
-        color     : $button-secondary-text;
-        background: $button-secondary-bg;
-    }
-
-    &.ui-button-group-info .ui-button.ui-checked {
-        color     : $button-info-text;
-        background: $button-info-bg;
-    }
-
-    &.ui-button-group-danger .ui-button.ui-checked {
-        color     : $button-danger-text;
-        background: $button-danger-bg;
-    }
-
-    &.ui-button-group-success .ui-button.ui-checked {
-        color     : $button-success-text;
-        background: $button-success-bg;
-    }
-
-    &.ui-button-group-warning .ui-button.ui-checked {
-        color     : $button-warning-text;
-        background: $button-warning-bg;
-    }
+  }
 }
 
-[dir='rtl'] {
-    .ui-button-group:not(.ui-vertical) {
-        @include flex-direction(row-reverse);
+.ui-button {
+  font-size    : 1em;
+  color        : $cg-9;
+  margin       : .2rem;
+  max-width    : 12em;
+  padding      : .3em 1em;
+  text-shadow  : -1px -1px 0 rgba(0, 0, 0, .1);
+  border-radius: $base-border-radius;
+  border       : 1px solid $base-border-color;
+  position     : relative;
+  cursor       : pointer;
+  display      : inline-block;
+  @include ellipsis();
+  @include box-shadow(1px 1px 2px 0 $base-shadow-dark);
+
+  span,
+  strong {
+    pointer-events: none;
+  }
+
+  &.ui-disabled,
+  &[disabled] {
+    border-color  : darken($button-disabled-bg,10%) !important;
+    box-shadow    : none !important;
+    pointer-events: none !important;
+
+    &:after {
+      content      : ' ';
+      border-radius: inherit;
+      background   : rgba($button-disabled-bg, .5);
+      @include position(absolute, 0);
     }
+  }
+
+  &.ui-square {
+    padding: .3em;
+  }
+
+  &.ui-round {
+    border-radius: 1em;
+  }
+
+  &.ui-big {
+    font-size: 1.3rem;
+  }
+
+  &.ui-small {
+    font-size  : .7rem;
+    font-weight: 300;
+  }
+
+  &.ui-icon-top {
+    .ui-label {
+      display: block;
+    }
+
+    &.ui-round {
+      border-radius: 2em;
+    }
+  }
+
+  &.ui-btn-dropdown:after {
+    content            : ' ';
+    display            : inline-block;
+    border             : .4em solid transparent;
+    border-color       : $base-border-color transparent;
+    border-bottom-width: 0;
+    @include margin(start, .5em);
+    @include position(relative, 50% auto auto);
+    @include transform(translateY(-50%));
+    @include transition(border .5s);
+  }
+
+  &.ui-open:after {
+    border-top-width   : 0;
+    border-bottom-width: .4em;
+  }
+
+  &.ui-open {
+    &.tether-target-attached-top {
+      border-top-left-radius : 0;
+      border-top-right-radius: 0;
+    }
+
+    &.tether-target-attached-bottom {
+      border-bottom-left-radius : 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  .ui-label {}
+
+  .ui-button-icon {
+    background-position: left center;
+    background-repeat  : no-repeat;
+    background-size    : 1em 1em;
+  }
+
+  &.ui-open,
+  &:active {
+    @include box-shadow(1px 1px 2px 0 $base-shadow, 1px 1px 2px 0 rgba($base-shadow-dark,.5) inset);
+  }
+}
+@include button-style(default, $button-default-bg, $button-default-text, $button-default-hover-bg, $button-default-hover-text, $button-default-active-bg, $button-default-active-text);
+@include button-style(dark, $button-dark-bg, $button-dark-text, $button-dark-hover-bg, $button-dark-hover-text, $button-dark-active-bg, $button-dark-active-text);
+@include button-style(primary, $button-primary-bg, $button-primary-text, $button-primary-hover-bg, $button-primary-hover-text, $button-primary-active-bg, $button-primary-active-text);
+@include button-style(secondary, $button-secondary-bg, $button-secondary-text, $button-secondary-hover-bg, $button-secondary-hover-text, $button-secondary-active-bg, $button-secondary-active-text);
+@include button-style(info, $button-info-bg, $button-info-text, $button-info-hover-bg, $button-info-hover-text, $button-info-active-bg, $button-info-active-text);
+@include button-style(danger, $button-danger-bg, $button-danger-text, $button-danger-hover-bg, $button-danger-hover-text, $button-danger-active-bg, $button-danger-active-text);
+@include button-style(success, $button-success-bg, $button-success-text, $button-success-hover-bg, $button-success-hover-text, $button-success-active-bg, $button-success-active-text);
+@include button-style(warning, $button-warning-bg, $button-warning-text, $button-warning-hover-bg, $button-warning-hover-text, $button-warning-active-bg, $button-warning-active-text);
+
+.ltr,
+[dir="ltr"] {
+  .ui-button-group.ui-horizontal {
+    > .ui-button {
+      &:first-child {
+        border-top-left-radius   : $base-border-radius;
+        border-bottom-left-radius: $base-border-radius;
+      }
+
+      &:last-child {
+        border-top-right-radius   : $base-border-radius;
+        border-bottom-right-radius: $base-border-radius;
+      }
+    }
+  }
+}
+
+.rtl,
+[dir="rtl"] {
+  .ui-button-group.ui-horizontal {
+    > .ui-button {
+      &:first-child {
+        border-top-right-radius   : $base-border-radius;
+        border-bottom-right-radius: $base-border-radius;
+      }
+
+      &:last-child {
+        border-top-left-radius   : $base-border-radius;
+        border-bottom-left-radius: $base-border-radius;
+      }
+    }
+  }
 }

@@ -1,100 +1,189 @@
-/**
- *	UI Framework Responsive Grid
- *	@author 	Adarsh Pastakia
- *	@company	HMC
- *  @copyright 	2015-2016, Adarsh Pastakia
- **/
+// 
+// @description : 
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
 @mixin grid-columns($prefix, $size) {
-     @media only screen and (min-width : $size){
-        @for $i from 1 through 12 {
-            > .ui-col-#{$prefix}-#{$i} {
-                @include flex(0 0 (($i/12)*100%));
-            }
-        }
+   @media only screen and (min-width : $size){
+    @for $i from 1 through 12 {
+      > .ui-col-#{$prefix}-#{$i} {
+        @include flex(0 0 (($i/12)*100%));
+      }
     }
+  }
+}
+@media only screen and (max-width : $grid-xs-min) {
+  .ui-hidden-xs {
+    display: none;
+  }
+
+  .ui-container {}
+}
+@media only screen and (max-width : $grid-sm-min) {
+  .ui-hidden-sm {
+    display: none;
+  }
+}
+@media only screen and (max-width : $grid-md-min) {
+  .ui-hidden-md {
+    display: none;
+  }
+}
+@media only screen and (max-width : $grid-lg-min) {
+  .ui-hidden-lg {
+    display: none;
+  }
+}
+@media only screen and (min-width : $grid-sm-min) {
+  .ui-container {
+    margin   : 0 auto;
+    max-width: $grid-sm-min - 16px;
+  }
+}
+@media only screen and (min-width : $grid-md-min) {
+  .ui-container {
+    margin   : 0 auto;
+    max-width: $grid-md-min - 16px;
+  }
+}
+@media only screen and (min-width : $grid-lg-min) {
+  .ui-container {
+    margin   : 0 auto;
+    max-width: $grid-lg-min - 16px;
+  }
+}
+@media only screen and (min-width : $grid-xl-min) {
+  .ui-container {
+    margin   : 0 auto;
+    max-width: $grid-xl-min - 16px;
+  }
 }
 
 .ui-row {
-		position: relative;
-    @include flex-row(flex-start);
-    @include grid-columns(xs, $grid-xs-min);
-    @include grid-columns(sm, $grid-sm-min);
-    @include grid-columns(md, $grid-md-min);
-    @include grid-columns(lg, $grid-lg-min);
-    @include grid-columns(xl, $grid-xl-min);
+  // margin  : 0 -.15rem;
+  position: relative;
+  @include flex-row(flex-start);
+  @include grid-columns(xs, $grid-xs-min);
+  @include grid-columns(sm, $grid-sm-min);
+  @include grid-columns(md, $grid-md-min);
+  @include grid-columns(lg, $grid-lg-min);
+  @include grid-columns(xl, $grid-xl-min);
+
+  > .ui-column {
+    // margin: .15rem;
+  }
+
+  &.ui-reverse {
+    @include flex-direction(row-reverse);
+  }
+
+  &.ui-nowrap {
+    @include flex-wrap(nowrap);
+  }
+
+  &.ui-align-top {
+    @include align-items(flex-start);
+  }
+
+  &.ui-align-middle {
+    @include align-items(center);
+  }
+
+  &.ui-align-bottom {
+    @include align-items(flex-end);
+  }
+
+  &.ui-align-stretch {
+    @include align-items(stretch);
+  }
+
+  &.ui-align-start {
+    @include justify-content(flex-start);
+  }
+
+  &.ui-align-center {
+    @include justify-content(center);
+  }
+
+  &.ui-align-end {
+    @include justify-content(flex-end);
+  }
+
+  &.ui-align-spaced {
+    @include justify-content(space-between);
+  }
 }
 
-.ui-column-row {
-    @include flex-column();
-}
+.ui-row-column {
+  position: relative;
+  @include flex-column();
 
-.ui-column-row,
-.ui-row {
-    &.ui-align-top {
-        @include align-items(flex-start);
-    }
+  &.ui-align-top {
+    @include justify-content(flex-start);
+  }
 
-    &.ui-align-middle {
-        @include align-items(center);
-    }
+  &.ui-align-middle {
+    @include justify-content(center);
+  }
 
-    &.ui-align-bottom {
-        @include align-items(flex-end);
-    }
+  &.ui-align-bottom {
+    @include justify-content(flex-end);
+  }
 
-    &.ui-align-stretch {
-        @include align-items(stretch);
-    }
+  &.ui-align-stretch {
+    @include align-items(stretch);
+  }
 
-    &.ui-align-start {
-        @include justify-content(flex-start);
-    }
+  &.ui-align-start {
+    @include align-items(flex-start);
+  }
 
-    &.ui-align-center {
-        @include justify-content(center);
-    }
+  &.ui-align-center {
+    @include align-items(center);
+  }
 
-    &.ui-align-end {
-        @include justify-content(flex-end);
-    }
+  &.ui-align-end {
+    @include align-items(flex-end);
+  }
 
-    &.ui-align-spaced {
-        @include justify-content(space-around);
-    }
+  &.ui-align-spaced {
+    @include justify-content(space-around);
+  }
 }
 
 .ui-column {
-		position: relative;
-    &:not(.ui-column-row) {
-        display: block;
-    }
-    @include flex(0 0 100%);
+  position: relative;
+  @include flex(0 1 100%);
 
-    &.ui-align-top {
-        @include align-self(flex-start);
-    }
+  &.ui-align-top {
+    @include align-self(flex-start);
+  }
 
-    &.ui-align-middle {
-        @include align-self(center);
-    }
+  &.ui-align-middle {
+    @include align-self(center);
+  }
 
-    &.ui-align-bottom {
-        @include align-self(flex-end);
-    }
+  &.ui-align-bottom {
+    @include align-self(flex-end);
+  }
 
-    &.ui-align-stretch {
-        @include align-self(stretch);
-    }
+  &.ui-align-stretch {
+    @include align-self(stretch);
+  }
+}
+
+.ui-self-center {
+  @include align-self(center);
 }
 
 .ui-col-auto {
-    @include flex(0 0 auto);
+  @include flex-auto();
 }
 
 .ui-col-fill {
-    @include flex(1 1 auto);
+  @include flex-fill();
 }
 
 .ui-col-full {
-    @include flex(1 1 100%);
+  @include flex(1 1 100%);
 }

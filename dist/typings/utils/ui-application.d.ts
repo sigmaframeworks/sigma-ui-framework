@@ -2,33 +2,18 @@ import { Router } from "aurelia-router";
 export declare class UIApplication {
     router: Router;
     private __logger;
-    AppConfig: {
-        Key: string;
-        Title: string;
-        Version: string;
-    };
-    HttpConfig: {
-        BaseUrl: string;
-        Headers: {};
-        AuthorizationHeader: boolean;
-    };
     IsHttpInUse: boolean;
     IsAuthenticated: boolean;
     constructor(router: Router);
     navigate(hash: any, options?: any): void;
     navigateTo(route: any, params?: {}, options?: any): void;
+    routeActive(route: any): any;
     /** App Constants **/
-    private __username;
-    private __userGroup;
-    private __userGroupLabel;
     private __authUser;
     private __authToken;
-    Username: any;
-    UserGroup: any;
-    UserGroupLabel: any;
     AuthUser: any;
     AuthToken: any;
-    login(authUser: any, authToken?: any): void;
+    login(authUser: any, authPass?: any, authToken?: any, route?: any): void;
     logout(): void;
     private __sharedState;
     shared(key: any, value?: any): any;
@@ -42,8 +27,7 @@ export declare class UIApplication {
     warn(tag: any, msg: any, ...rest: any[]): void;
     debug(tag: any, msg: any, ...rest: any[]): void;
     error(tag: any, msg: any, ...rest: any[]): void;
-    /** Toast **/
-    private __overlayContainer;
+    /** Toasts / Alerts **/
     toast(config: any): void;
     toastSuccess(config: any): void;
     toastError(config: any): void;
@@ -55,5 +39,4 @@ export declare class AuthInterceptor {
     private logger;
     constructor(appState: UIApplication);
     run(routingContext: any, next: any): any;
-    isAllowed(groups: any): boolean;
 }

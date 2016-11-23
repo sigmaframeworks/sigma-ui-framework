@@ -1,0 +1,93 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <ui-viewport router.bind="router">
+    <ui-app-header>
+      <ui-drawer-toggle drawer.bind="appDrawer"></ui-drawer-toggle>
+      <ui-app-title src="../images/logo.png">
+        <h5>${router.title} -
+          <small>Version 2</small>
+        </h5>
+      </ui-app-title>
+      <ui-filler></ui-filler>
+      <small class="ui-thin ui-hidden-sm" padded>Logged in as user@domain.com</small>
+      <ui-drawer-toggle drawer.bind="infoDrawer">
+        <span class="fi-ui-overflow-dark"></span>
+      </ui-drawer-toggle>
+    </ui-app-header>
+
+    <ui-menubar>
+      <ui-menu-group label.bind="routes.key" repeat.for="routes of router.navigation | group:'settings.section'">
+        <ui-menu-item repeat.for="route of routes.items" href.bind="route.href" active.bind="route.isActive" icon.bind="route.settings.icon" disabled.bind="route.settings.disabled">${route.settings.title || route.title}</ui-menu-item>
+      </ui-menu-group>
+    </ui-menubar>
+
+    <ui-router-view></ui-router-view>
+
+    <ui-drawer ref="infoDrawer" position="end" scroll padded>
+      <ui-panel-group>
+        <ui-panel collapsed>
+          <ui-header light>
+            <ui-header-title>Panel</ui-header-title>
+            <ui-header-tool collapse></ui-header-tool>
+          </ui-header>
+          <ui-panel-body padded>
+            <compose view="home/lipsum-small.html"></compose>
+          </ui-panel-body>
+        </ui-panel>
+        <ui-panel collapsed>
+          <ui-header light>
+            <ui-header-title>Panel</ui-header-title>
+            <ui-header-tool collapse></ui-header-tool>
+          </ui-header>
+          <ui-panel-body padded>
+            <compose view="home/lipsum-small.html"></compose>
+          </ui-panel-body>
+        </ui-panel>
+        <ui-panel collapsed>
+          <ui-header light>
+            <ui-header-title>Panel</ui-header-title>
+            <ui-header-tool collapse></ui-header-tool>
+          </ui-header>
+          <ui-panel-body padded>
+            <compose view="home/lipsum-small.html"></compose>
+          </ui-panel-body>
+        </ui-panel>
+      </ui-panel-group>
+    </ui-drawer>
+
+    <ui-drawer ref="appDrawer" position="start" scroll close-on-click>
+      <a href="/#" class="ui-block">
+        <fieldset class="menu-banner">
+          <ui-row middle>
+            <div class="img-rounded"><img src="../images/logo.png" height="56"/></div>
+            <ui-column fill>
+              <h4>${router.title}</h4>
+              <h6>Biz App Framework</h6>
+            </ui-column>
+            <ui-column auto>
+              <h2>
+                <small>v</small>2</h2>
+            </ui-column>
+          </ui-row>
+        </fieldset>
+      </a>
+      <ui-menu class="ui-font-big">
+        <ui-menu-group label.bind="routes.key" repeat.for="routes of router.navigation | group:'settings.section'">
+          <ui-menu-item repeat.for="route of routes.items" href.bind="route.href" active.bind="route.isActive" icon.bind="route.settings.icon" disabled.bind="route.settings.disabled">${route.settings.title || route.title}</ui-menu-item>
+        </ui-menu-group>
+      </ui-menu>
+    </ui-drawer>
+
+    <ui-app-taskbar></ui-app-taskbar>
+
+    <ui-app-footer>
+      <span>Version 2.0.0</span>
+      <span>Sigma Frameworks</span>
+      <span>Copyright &copy; 2016, Adarsh Pastakia</span>
+    </ui-app-footer>
+  </ui-viewport>
+</template>

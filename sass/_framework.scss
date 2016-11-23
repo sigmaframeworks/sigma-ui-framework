@@ -1,45 +1,41 @@
-// UI Framework Base
-// @description :
+// 
+// @description : 
 // @author      : Adarsh Pastakia
-// @copyright   : 2016 Sigma Frameworks
+// @copyright   : 2016
 // @license     : MIT
 
-@import 'compass/css3';
+// Compass
+@import "compass/css3";
 @import 'compass/css3/selection';
-@import 'compass/utilities';
-
-@import 'utility/copic';
-@import 'core/glyphs';
-@import 'core/files';
-@import 'core/variables';
-
-@import 'utility/mixins';
-@import 'utility/animations';
-@import 'utility/reset';
-@import 'utility/helpers';
-@import 'utility/typography';
-@import 'utility/rtl';
-@import 'utility/markdown';
-@import 'core/base';
-@import 'core/viewport';
-@import 'core/page';
-@import 'core/grid';
-@import 'components/form';
-@import 'components/menu';
-@import 'components/tree';
-@import 'components/tabs';
-@import 'components/toast';
-@import 'components/panels';
-@import 'components/dialog';
-@import 'components/ribbon';
-@import 'components/datagrid';
-@import 'components/charts';
-@import 'inputs/input';
-@import 'inputs/date';
-@import 'inputs/list';
-@import 'inputs/file';
-@import 'inputs/button';
-@import 'inputs/switch';
-@import 'inputs/option';
-@import 'inputs/editor';
-@import 'utility/amchart-export';
+@import "compass/reset";
+@import "compass/typography";
+// Vars
+@import "variables";
+// Utils
+@import "utils/mixins";
+@import "utils/animations";
+@import "utils/reset";
+@import "utils/markdown";
+@import "utils/typography";
+@import "utils/highlight";
+// Core
+@import "core/grid";
+@import "core/glyphs";
+@import "core/viewport";
+@import "core/page";
+// Components
+@import "components/tabs";
+@import "components/menu";
+@import "components/panel";
+@import "components/drawer";
+@import "components/dialog";
+@import "components/tree";
+@import "components/toast";
+@import "components/datagrid";
+@import "components/breadcrumb";
+// Inputs
+@import "inputs/button";
+@import "inputs/input";
+@import "inputs/option";
+@import "inputs/list";
+@import "inputs/date";

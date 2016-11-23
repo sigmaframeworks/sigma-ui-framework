@@ -1,0 +1,134 @@
+<!--
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+-->
+<template>
+  <style>
+    .page-container {
+      position: relative;
+      height: 450px;
+      display: flex;
+      overflow: hidden;
+      flex-direction: row;
+      align-items: stretch;
+      justify-items: stretch;
+      border: 1px solid #e5e5e5;
+    }
+
+  </style>
+  <ui-content padded scroll>
+    <div class="ui-container">
+      <h1>Page Mixed Layout</h1>
+      <hr/>
+      <div class="page-container">
+        <ui-page page-title="Page Title">
+          <ui-section column-layout>
+            <ui-toolbar>
+              <ui-input-group>
+                <ui-input-label>Search</ui-input-label>
+                <ui-input placeholder="Search..." width.bind="w || '2em'" focus.trigger="w='15em'" blur.trigger="w='2em'"></ui-input>
+                <ui-button success show.bind="w=='15em'">Go!</ui-button>
+              </ui-input-group>
+              <ui-divider></ui-divider>
+              <ui-button icon="fi-ui-bell" dropdown.bind="__menu">Open Me!</ui-button>
+              <ui-divider></ui-divider>
+              <ui-menu ref="__menu">
+                <ui-menu-section>Edit Options</ui-menu-section>
+                <ui-menu-item>Add</ui-menu-item>
+                <ui-menu-item>Edit</ui-menu-item>
+                <ui-menu-item>Delete</ui-menu-item>
+                <ui-menu-divider></ui-menu-divider>
+                <ui-menu-item>Options</ui-menu-item>
+              </ui-menu>
+              <ui-button icon="fi-ui-bell" primary>Click Me</ui-button>
+              <ui-button icon="fi-ui-bell" dark>Click Me</ui-button>
+              <ui-divider></ui-divider>
+              <ui-button-group>
+                <ui-button light square icon="fi-ui-search"></ui-button>
+                <ui-button light square icon="fi-ui-edit"></ui-button>
+                <ui-button light square icon="fi-ui-delete"></ui-button>
+              </ui-button-group>
+              <ui-divider></ui-divider>
+              <ui-drawer-toggle drawer.bind="_drawerRight" class="ui-self-center">
+                <span class="fi-ui-overflow-dark"></span>
+              </ui-drawer-toggle>
+            </ui-toolbar>
+            <ui-drawer ref="_drawerRight" position="end" scroll padded>
+              <compose view="home/lipsum-small.html"></compose>
+            </ui-drawer>
+            <ui-section row-layout>
+              <ui-sidebar scroll mini-display collapsed="true" label="Sidebar">
+                <ui-menu>
+                  <ui-menu-section>Display</ui-menu-section>
+                  <ui-menu-item icon="fi-ui-calendar" active.bind="menu=='cal'" click.trigger="menu='cal'">Calendar</ui-menu-item>
+                  <ui-menu-item icon="fi-ui-image" active.bind="menu=='img'" click.trigger="menu='img'">Images</ui-menu-item>
+                  <ui-menu-item icon="fi-ui-edit" active.bind="menu=='edt'" click.trigger="menu='edt'">Inputs</ui-menu-item>
+                  <ui-menu-section>Charts</ui-menu-section>
+                  <ui-menu-item icon="fi-ui-chart-bar" active.bind="menu=='bar'" click.trigger="menu='bar'">Bar</ui-menu-item>
+                  <ui-menu-item icon="fi-ui-chart-pie" active.bind="menu=='pie'" click.trigger="menu='pie'">Pie</ui-menu-item>
+                </ui-menu>
+              </ui-sidebar>
+              <ui-content scroll padded>
+                <compose view="home/lipsum-big.html"></compose>
+              </ui-content>
+            </ui-section>
+          </ui-section>
+        </ui-page>
+      </div>
+      <br/>
+      <h1>Page Mixed Layout</h1>
+      <hr/>
+      <div class="page-container">
+        <ui-page page-title="Page Title">
+          <ui-section row-layout>
+            <ui-sidebar scroll padded collapsible label="Sidebar">
+              <compose view="home/lipsum-small.html"></compose>
+            </ui-sidebar>
+            <ui-section column-layout>
+              <ui-menubar>
+                <ui-menu-item>Menu</ui-menu-item>
+                <ui-menu-item>Menu</ui-menu-item>
+                <ui-menu-item>Menu</ui-menu-item>
+              </ui-menubar>
+              <ui-content scroll padded>
+                <compose view="home/lipsum-big.html"></compose>
+              </ui-content>
+              <ui-toolbar>
+                <ui-button icon="fi-ui-bell">Click Me</ui-button>
+                <ui-divider></ui-divider>
+                <ui-button icon="fi-ui-bell" dark>Click Me</ui-button>
+              </ui-toolbar>
+            </ui-section>
+          </ui-section>
+        </ui-page>
+      </div>
+
+      <hr/>
+      <h5>Examples</h5>
+      <div class="ui-margin-v">
+        <pre markdown>
+        <xmp>
+        ```html
+        <ui-page page-title="Sample">
+          <ui-section column-layout>
+            <ui-toolbar>
+              ....
+            </ui-toolbar>
+            <ui-section row-layout>
+              <ui-sidebar scroll mini-display collapsed="true" label="Sidebar">
+                ....
+              </ui-sidebar>
+              <ui-content scroll padded>
+                ....
+              </ui-content>
+            </ui-section>
+          </ui-section>
+        </ui-page>
+        ```
+        </xmp>
+      </pre>
+      </div>
+    </div>
+  </ui-content>
+</template>

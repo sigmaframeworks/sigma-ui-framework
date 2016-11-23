@@ -1,0 +1,24 @@
+// 
+// @description : 
+// @author      : Adarsh Pastakia
+// @copyright   : 2016
+// @license     : MIT
+@import url( '//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,800italic,400,500,300,600,800');
+@import url( '//fonts.googleapis.com/css?family=Source+Code+Pro');
+@import url( '//fonts.googleapis.com/css?family=Lato');
+@import "framework";
+
+.img-rounded {
+  border-radius: 50%;
+  padding      : .1em .25em;
+  margin       : -1em 1em;
+}
+
+.menu-banner {
+  margin: .75em .5em;
+}
+
+.content-wrapper {
+  max-width: 800px;
+  margin   : 0 auto;
+}

@@ -1,385 +1,371 @@
-// UI Input
-// @description :
+// 
+// @description : 
 // @author      : Adarsh Pastakia
-// @copyright   : 2016 Sigma Frameworks
+// @copyright   : 2016
 // @license     : MIT
 
-$shadow: $input-inner-shadow;
+.ui-form {
+  .ui-column {
+    flex-basis: 18rem;
+  }
+}
 
-.ui-input {
-    font-size : 1em;
+.ui-fieldset {
+  overflow  : hidden;
+  max-height: 50rem;
+  border    : 1px solid $input-border;
+  margin    : .5rem .25rem;
+  @include transition(max-height .5s);
 
-    min-height: 2em;
-    margin    : 0;
-    padding   : .2em .5em;
-
-    color     : $input-text;
-    border    : 1px solid $input-border;
-    background: $input-bg;
-    @include box-shadow(0 2px 2px 0 $shadow inset);
-
-    &.ui-focus,
-    &:focus {
-        border-color: $input-focus-border;
-        @include box-shadow(0 -3px 0 0 $input-focus-border inset, 0 2px 2px 0 $shadow inset);
-    }
-
-    &[readonly] {
-        background: $input-readonly-bg;
-    }
-
-    &[disabled] {
-        cursor    : not-allowed;
-
-        color     : rgba($input-text, .5);
-        background: $input-disabled-bg;
-    }
+  legend {
+    margin   : 0 .5rem;
+    padding  : 0 .25rem;
+    color    : $muted;
+    font-size: .8rem;
+  }
 }
 
 .ui-input-group {
-    margin: .25em .5em;
-    @include flex-row(flex-start);
+  margin: .5rem .25rem;
+  @include flex-row($align:flex-start, $justify: flex-start);
 
-    .ui-input-invalid {
-        color    : $danger;
-        font-size: 1.2em;
-        margin   : .3em .2em 0;
-        display  : none;
-        z-index  : 5;
+  .ui-input-label {
+    padding   : .25em .75em;
+    font-size : .9rem;
+    text-align: right;
+    text-align: end;
+    color     : $input-label;
+    position  : relative;
+    min-width : 8rem;
+    @include flex(0 0 8rem);
 
-        .ui-error-tooltip {
-            font-size    : .75em;
-            color        : $input-error-tooltip-text;
-            background   : $input-error-tooltip-bg;
-            position     : absolute;
-            display      : none;
-            z-index      : 20;
-            left         : 1.5em;
-            min-width    : 15em;
-            border-radius: $base-border-radius;
-            @include box-shadow(0 0 4px 0 $base-shadow-color);
-
-            p {
-                text-align: start;
-                text-align: left;
-                padding   : .3em .5em;
-            }
-        }
-
-        &:hover .ui-error-tooltip {
-            display: block;
-        }
+    &:after {
+      content       : ' ';
+      font-size     : .7rem;
+      margin-left   : 2px;
+      margin-right  : -7px;
+      color         : $primary;
+      vertical-align: super;
     }
 
-    .ui-label {
-        position  : relative;
-
-        padding   : .35em 0;
-
-        text-align: right;
-        text-align: end;
-
-        color     : $input-label;
-        @include flex(0 0 $input-label-width);
-
-        > span {
-            position: relative;
-
-            display : inline-block;
-            @include padding(end, .8em);
-        }
-        @media only screen and (max-width : $grid-lg-min) {
-            text-align: inherit;
-            @include flex-basis(100%);
-        }
-
-        & > span:after {
-            font-size: .8em;
-
-            position : absolute;
-            top      : .2em;
-            right    : .2em;
-
-            display  : inline-block;
-
-            width    : .8em;
-
-            content  : ' ';
-
-            color    : $primary;
-        }
-
-        &.ui-required > span:after {
-            content: '*';
-        }
-
-        small {
-            font-size: .9em;
-
-            display  : block;
-
-            color    : $text-muted;
-        }
+    &.ui-required:after {
+      content: '*';
     }
 
-    &.ui-label-top .ui-label {
-        text-align: inherit;
-        @include flex-basis(100%);
+    &.ui-align-top {
+      @include flex(1 1 100%);
+      text-align: left;
+      text-align: start;
+      padding   : .25em .5em;
+    }
+  }
+
+  &.ui-display .ui-group-wrapper {
+    border: none;
+
+    .ui-button,
+    .ui-input-addon {
+      border: none;
     }
 
-    .ui-list-controls {
-        @include flex-column(center, center);
-
-        .ui-addon-button {
-            font-size    : .75em;
-            font-weight  : $font-weight-normal;
-            line-height  : 1;
-
-            padding      : .4em;
-            margin       : .2em 0;
-
-            border       : 1px solid $base-border-color;
-            border-radius: $base-border-radius;
-
-            color        : $input-button-text;
-            background   : $input-button-bg;
-
-            &:not([disabled]):focus,
-            &:not([disabled]):hover {
-                @include box-shadow(0 2px 2px 0 rgba($white, .6) inset, 0 -2px 2px 0 rgba($white, .6) inset);
-            }
-
-            &:not([disabled]):active {
-                @include box-shadow(0 2px 2px 0 rgba($black, .4) inset, 0 -2px 2px 0 rgba($black, .4) inset);
-            }
-
-            &[disabled] {
-                opacity: .5;
-            }
-        }
+    .ui-input-addon {
+      background: none;
     }
 
-    .ui-control-wrapper {
-        position: relative;
-        @include flex(1 0 10em);
-
-        > .ui-input-control {
-            min-height: 2em;
-            @include flex-row(stretch, $wrap: false);
-
-            > .ui-input-wrapper {
-                position: relative;
-                @include flex(1 1 auto);
-
-                &.ui-display-pad {
-                    padding: .35em .5em;
-                }
-
-                > .ui-input {
-                    width: 100%;
-                    @include padding(end, 1em);
-                }
-
-                > .ui-clear {
-                    font-size : .5em;
-
-                    z-index   : 2;
-
-                    display   : none;
-
-                    margin-top: -.5em;
-
-                    cursor    : pointer;
-
-                    color     : rgba($input-text, .5);
-                    background: $input-bg;
-                    @include size(1em, 1em);
-                    @include transition(opacity .1s);
-                    @include position(absolute, $t: 50%, $r : .5em);
-
-                    &.show-clear {
-                        display: inline-block;
-                    }
-
-                    &.show-clear:hover {
-                        color: rgba($input-text, .9);
-                    }
-                }
-            }
-
-            > .ui-addon {
-                margin    : 0;
-                padding   : .3em;
-
-                color     : $input-addon-text;
-                border    : 1px solid $input-border;
-                background: $input-addon-bg;
-
-                span {
-                    vertical-align: middle;
-                }
-
-                span.ui-flag,
-                span.ui-icon {
-                    min-width      : 1.2em;
-                    min-height     : 1.2em;
-                    display        : inline-block;
-                    background-size: 1.2em auto;
-                }
-            }
-
-            > .ui-addon-button {
-                font-size  : 1em;
-                font-weight: $font-weight-normal;
-                line-height: 1;
-
-                padding    : 0 .3em;
-
-                color      : $input-button-text;
-                background : $input-button-bg;
-                @include box-shadow(1px 0 1px 0 $base-shadow-color);
-
-                &:not([disabled]):focus,
-                &:not([disabled]):hover {
-                    @include box-shadow(0 2px 2px 0 rgba($white, .6) inset, 0 -2px 2px 0 rgba($white, .6) inset, 1px 0 1px 0 $base-shadow-color);
-                }
-
-                &:not([disabled]):active {
-                    @include box-shadow(0 2px 2px 0 rgba($black, .4) inset, 0 -2px 2px 0 rgba($black, .4) inset, 1px 0 1px 0 $base-shadow-color);
-                }
-
-                span {
-                    vertical-align: top;
-                }
-            }
-
-            .ui-addon:first-child,
-            > .ui-input-wrapper:first-child > .ui-input {
-                @include border-left-radius($base-border-radius);
-            }
-
-            .ui-addon:last-child,
-            > .ui-input-wrapper:last-child > .ui-input {
-                @include border-right-radius($base-border-radius);
-            }
-        }
-
-        > .ui-input-help {
-            font-size : .8em;
-
-            margin-top: -.5em;
-            padding   : .5em .2em .1em;
-
-            text-align: center;
-
-            color     : rgba($input-text, .7);
-            border    : {
-                width: 0 1px 1px;
-
-                color: $input-border;
-
-                style: solid;
-            }
-            background: shade($input-bg, 2%);
-
-            &.ui-input-error {
-                display   : none;
-
-                text-align: inherit;
-
-                color     : $danger;
-
-                &:before {
-                    font-family: Framework;
-
-                    margin     : 0 .25em;
-
-                    content    : $font-ui-exclaim-alt;
-                }
-            }
-
-            &:last-child {
-                @include border-bottom-radius($base-border-radius);
-            }
-        }
-
-        //> .ui-input-control:not(:last-child) .ui-input-wrapper {
-        //  .ui-addon, .ui-input {
-        //	@include border-bottom-radius(0);
-        //  }
-        //}
+    .ui-input-wrapper {
+      box-shadow: none;
     }
 
-    &.ui-invalid {
-        > .ui-control-wrapper > .ui-input-control > .ui-input-wrapper > .ui-input {
-            border-color: $input-invalid-border !important;
-
-            &:focus {
-                @include box-shadow(0 -3px 0 0 $input-invalid-border inset, 0 2px 2px 0 $shadow inset);
-            }
-        }
-
-        > .ui-control-wrapper > .ui-input-control > .ui-addon:not(.ui-addon-button) {
-            color       : contrast($input-invalid-border);
-            border-color: $input-invalid-border;
-            background  : $input-invalid-border;
-        }
-
-        .ui-input-invalid {
-            display: block !important;
-        }
+    .ui-display {
+      font-family: $base-font-family-input;
+      font-size  : .9rem;
+      color      : $input-text;
+      padding    : .35em .5em;
+      line-height: 1.4em;
     }
-
-    &.ui-label-hide label {
-        display: none;
-    }
-
-    &.ui-auto {
-        padding: .25em .4em;
-
-        .ui-control-wrapper {
-            @include flex(1 1 auto);
-        }
-
-        &.ui-label-top .ui-control-wrapper {
-            @include flex-basis(100%);
-        }
-    }
+  }
 }
 
-[dir='rtl'] {
-    .ui-input-group {
-        .ui-label > span:after {
-            right: auto;
-            left : .2em;
-        }
+.ui-group-wrapper {
+  @include flex-row($align:stretch);
+  @include flex(1 1 1rem);
+  min-height   : 30px;
+  min-width    : 2rem;
+  border-radius: $base-border-radius;
+  border       : 1px solid $input-border;
+  // overflow     : hidden;
 
-        .ui-control-wrapper {
-            > .ui-input-control {
-                .ui-addon:first-child,
-                > .ui-input-wrapper:first-child > .ui-input {
-                    @include border-left-radius(0);
-                    @include border-right-radius($base-border-radius);
-                }
+  .ui-button,
+  .ui-input-addon {
+    border      : 1px solid $input-border;
+    border-width: 0 1px;
 
-                .ui-addon:last-child,
-                > .ui-input-wrapper:last-child > .ui-input {
-                    @include border-right-radius(0);
-                    @include border-left-radius($base-border-radius);
-                }
-
-                > .ui-input-wrapper > .ui-clear {
-                    right: auto;
-                    left : .1em;
-                }
-            }
-
-            > .ui-input-control:not(:last-child) {
-                 > .ui-input,
-                > .ui-addon {
-                    @include border-bottom-radius(0);
-                }
-            }
-        }
+    + .ui-button,
+    + .ui-input-addon {
+      border-left: none;
     }
+
+    &:first-child {
+      border-left: none;
+    }
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+
+  .ui-button,
+  .ui-input-addon {
+    @include flex(0 0 auto);
+    padding  : .2em .3em;
+    font-size: 1rem;
+  }
+
+  .ui-input-addon {
+    font-size      : .9rem;
+    line-height    : 1.5em;
+    color          : $input-addon-text;
+    background     : $input-addon-bg no-repeat left center;
+    background-size: 1em 1em;
+
+    [class*=' fi-ui-']:before,
+    [class^='fi-ui-']:before {
+      font-size: 1rem;
+    }
+
+    .ui-flag {
+      min-height: 12px;
+    }
+
+    .ui-option-control {
+      margin: 0;
+    }
+  }
+
+  .ui-button {
+    margin       : 0;
+    border-radius: 0;
+    padding      : .2em .5em;
+  }
+
+  .ui-input-info-bar {
+    @include flex(1 1 100%);
+    font-size : .7rem;
+    padding   : .1em .5em;
+    border-top: 1px solid rgba($input-border, .75);
+  }
+
+  .ui-md-editor .ui-input-wrapper {
+    flex: none;
+
+    textarea {
+      resize: vertical;
+    }
+  }
+}
+
+.ui-md-editor {
+  .ui-toolbar {
+    background: $input-bg;
+    border    : none;
+    margin    : 1px;
+  }
+
+  .ui-toolbar .ui-button-group {
+    flex-wrap: nowrap;
+  }
+
+  .ui-toolbar .ui-button {
+    font-size: .8rem;
+    padding  : .2em .5em;
+  }
+
+  .ui-input-div.ui-watermark {
+    &:before {
+      z-index       : 5;
+      color         : rgba($muted, .1);
+      font-size     : 3rem;
+      font-weight   : 800;
+      letter-spacing: 2rem;
+      pointer-events: none;
+      @include transform(translateX(-50%) translateY(-50%) rotate(-10deg));
+      @include position(absolute, 50% auto auto 50%);
+    }
+
+    &.p:before {
+      content: 'PREVIEW';
+    }
+
+    &.h:before {
+      content: 'HELP';
+    }
+  }
+
+  .ui-input-wrapper textarea {
+    resize: none;
+  }
+
+  .ui-md-preview {
+    overflow  : auto;
+    background: $input-bg;
+    @include position(absolute, 2em 1px 1px);
+  }
+}
+
+.ui-input-wrapper {
+  @include flex(1 1 1em);
+  @include transition(width .3s);
+  @include flex-row($align:stretch, $wrap:false);
+  line-height: 1.5rem;
+  background : $input-bg;
+  border     : 0 solid transparent;
+
+  &.ui-focus {
+    @include box-shadow(0 -4px 0 0 $input-focus inset, 0 0 0 1px $input-focus inset);
+  }
+
+  .ui-input-div {
+    @include flex(1 1 1em);
+    @include flex-row($align:stretch, $wrap:false);
+    position: relative;
+    overflow: hidden;
+
+    &.ui-inwrap-column {
+      @include flex-direction(column);
+    }
+  }
+
+  &.ui-readonly .ui-input-div:after {
+    content      : ' ';
+    border-radius: inherit;
+    background   : rgba($input-readonly-bg, .25);
+    @include position(absolute, 0);
+  }
+
+  &.ui-disabled .ui-input-div:after {
+    content      : ' ';
+    border-radius: inherit;
+    background   : rgba($input-disabled-bg, .75);
+    @include position(absolute, 0);
+  }
+
+  .ui-input {
+    @include flex(1 1 0em);
+    margin     : 0;
+    font-size  : .9rem;
+    outline    : none;
+    border     : none;
+    color      : $input-text;
+    background : none;
+    padding    : .35em .5em;
+    font-family: $base-font-family-input;
+    // @include box-shadow(0 0 2px 0 $base-shadow inset);
+  }
+
+  .ui-invalid-icon {
+    display    : none;
+    padding    : 0 .25em;
+    color      : $white;
+    background : $input-invalid;
+    height     : auto;
+    width      : auto;
+    line-height: 1.5em;
+    font-size  : 1rem;
+
+    &:before {
+      font-family: Framework;
+      content    : $fi-ui-exclamation;
+    }
+
+    & ~ .ui-invalid-errors {
+      display: none;
+    }
+
+    &:hover ~ .ui-invalid-errors {
+      position      : absolute;
+      font-size     : .8em;
+      z-index       : 500;
+      line-height   : 1.2;
+      margin        : 2px 5px;
+      pointer-events: none;
+      padding       : $base-padding;
+      color         : $input-invalid;
+      background    : lighten($input-invalid, 45%);
+      border        : 1px solid $input-invalid;
+
+      &:before {
+        content           : ' ';
+        border            : 6px solid transparent;
+        border-right-color: $input-invalid;
+        width             : 6px;
+        height            : 6px;
+        display           : block;
+        position          : absolute;
+        left              : -12px;
+      }
+    }
+  }
+
+  .ui-clear {
+    cursor     : pointer;
+    padding    : .1em .25em;
+    font-size  : 1rem;
+    line-height: .5;
+    color      : rgba($input-text, .5);
+    @include align-self(center);
+
+    &:hover {
+      color: rgba($input-text, .75);
+    }
+  }
+
+  &.ui-textarea .ui-clear {
+    margin: .3em 0;
+    @include align-self(flex-start);
+  }
+
+  &.ui-ta-counter textarea {
+    margin-bottom: 1rem;
+  }
+
+  &.ui-ta-counter .ui-ta-counter {
+    position   : absolute;
+    left       : 0;
+    bottom     : 0;
+    color      : $muted;
+    font-size  : .7rem;
+    line-height: 1;
+    padding    : .2em .4em .4em;
+  }
+
+  .ui-in-counter {
+    color    : $muted;
+    font-size: .7rem;
+    padding  : .2rem .25rem 0;
+  }
+
+  &.ui-invalid {
+    .ui-invalid-icon {
+      display: inline-block;
+
+      &:hover ~ .ui-invalid-errors {
+        display: block;
+      }
+    }
+    @include box-shadow(0 0 0 1px $input-invalid inset);
+
+    &.ui-focus {
+      @include box-shadow(0 -3px 0 0 $input-invalid inset, 0 0 0 1px $input-invalid inset);
+    }
+
+    &.ui-ta-counter .ui-ta-counter {}
+  }
+}
+
+.rtl,
+[dir="rtl"] {
+  .ui-input-label:after {
+    margin-right: 2px;
+    margin-left : -7px;
+  }
 }
