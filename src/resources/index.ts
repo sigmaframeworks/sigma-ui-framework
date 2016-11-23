@@ -34,6 +34,30 @@ export * from "./utils/ui-dialog";
 export * from "./utils/ui-model";
 export * from "./utils/ui-tree-model";
 
+import "./elements/core/ui-viewport";
+import "./elements/core/ui-page";
+import "./elements/core/ui-grid";
+
+import "./elements/inputs/ui-button";
+import "./elements/inputs/ui-date";
+import "./elements/inputs/ui-input";
+import "./elements/inputs/ui-list";
+import "./elements/inputs/ui-markdown";
+import "./elements/inputs/ui-option";
+
+import "./elements/components/ui-datagrid";
+import "./elements/components/ui-drawer";
+import "./elements/components/ui-menu";
+import "./elements/components/ui-panel";
+import "./elements/components/ui-tab";
+import "./elements/components/ui-tree";
+
+import './attributes/ui-marked';
+import './attributes/ui-badge';
+
+import './value-converters/ui-text';
+import './value-converters/ui-lodash'
+
 export interface UIConfig {
   title(t: string): UIConfig;
   version(t: string): UIConfig;
@@ -116,13 +140,13 @@ export function configure(config: FrameworkConfiguration, configCallback) {
 
   // Validation Rules
   ValidationRules
-    .customRule('phone', (value, obj) => value === null || value === undefined || value == '' || PhoneLib.isValid(value), '\${$displayName } is not a valid phone number.');
+    .customRule('phone', (value, obj) => value === null || value === undefined || value === '' || PhoneLib.isValid(value), '\${$displayName } is not a valid phone number.');
   ValidationRules
-    .customRule('integer', (value, obj, min, max) => value === null || value === undefined || value == '' || Number.isInteger(value) && value >= (min || Number.MIN_VALUE) && value <= (max || Number.MAX_VALUE),
-    '\${$displayName} must be an integer value between \${$config.min || "MIN_VALUE"} and \${$config.max || "MAX_VALUE"}.', (min, max) => ({ min, max }));
+    .customRule('integer', (value, obj, min, max) => value === null || value === undefined || value === '' || (Number.isInteger(value) && value >= (isEmpty(min) ? Number.MIN_VALUE : min) && value <= (isEmpty(max) ? Number.MAX_VALUE : max)),
+    '\${$displayName} must be an integer value between \${$config.min} and \${$config.max}.', (min, max) => ({ min, max }));
   ValidationRules
-    .customRule('decimal', (value, obj, min, max) => value === null || value === undefined || value == '' || Math.floor(value % 1) === 0 && value >= (min || Number.MIN_VALUE) && value <= (max || Number.MAX_VALUE),
-    '\${$displayName} must be a decimal value between \${$config.min || "MIN_VALUE"} and \${$config.max || "MAX_VALUE"}.', (min, max) => ({ min, max }));
+    .customRule('decimal', (value, obj, min, max) => value === null || value === undefined || value === '' || (isNumber(value) && Math.floor(value % 1) === 0 && value >= (isEmpty(min) ? Number.MIN_VALUE : min) && value <= (isEmpty(max) ? Number.MAX_VALUE : max)),
+    '\${$displayName} must be a decimal value between \${$config.min} and \${$config.max}.', (min, max) => ({ min, max }));
   ValidationRules
     .customRule('language', (map, obj, controller, langInput) => {
       if (!(langInput && langInput.addError && langInput.removeError)) throw new Error('Language validation must have reference to ui-language');
