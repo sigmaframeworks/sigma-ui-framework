@@ -117,8 +117,8 @@
 
     tbody {
       tr:last-child {
-         > td > div,
-        > td {
+         > td,
+        > td > div {
           height     : 100%;
           padding    : 0;
           line-height: 0;
@@ -136,11 +136,11 @@
       }
 
       tr:not(:last-child):hover > td > div {
-        background: lighten($secondary,35%);
+        background: $dg-hover-bg;
       }
 
       tr.ui-selected > td > div {
-        background: lighten($secondary,25%);
+        background: $dg-select-bg;
       }
     }
 

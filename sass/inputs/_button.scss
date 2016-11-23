@@ -107,7 +107,6 @@
   position     : relative;
   cursor       : pointer;
   display      : inline-block;
-  @include ellipsis();
   @include box-shadow(1px 1px 2px 0 $base-shadow-dark);
 
   span,
@@ -185,7 +184,9 @@
     }
   }
 
-  .ui-label {}
+  .ui-label {
+    @include ellipsis();
+  }
 
   .ui-button-icon {
     background-position: left center;

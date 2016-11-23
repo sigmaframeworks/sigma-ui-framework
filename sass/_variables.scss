@@ -5,6 +5,7 @@
 // @license     : MIT
 @import "compass/css3";
 @import 'compass/utilities';
+@import "compass/typography";
 @import "colors";
 
 $primary                     : $lapis-lazuli !default;
@@ -178,3 +179,5 @@ $dg-footer-bg                : #ECF6FC !default;
 $dg-footer-text              : $base-text !default;
 $dg-row-odd                  : $white-sp !default;
 $dg-row-even                 : $white !default;
+$dg-hover-bg                 : lighten($secondary,35%) !default;
+$dg-select-bg                : lighten($secondary,25%) !default;
