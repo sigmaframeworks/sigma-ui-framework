@@ -87,7 +87,7 @@ export class UIHeaderTool {
 
 @autoinject()
 @customElement('ui-header-icon')
-@inlineView(`<template class="ui-inline-block"><span class="ui-icon \${icon}"></span>&nbsp;</template>`)
+@inlineView(`<template class="ui-header-icon ui-inline-block"><span class="ui-icon \${icon}"></span>&nbsp;</template>`)
 export class UIHeaderIcon {
   constructor(public element: Element) { }
 
@@ -96,7 +96,7 @@ export class UIHeaderIcon {
 
 @autoinject()
 @customElement('ui-header-title')
-@inlineView(`<template class="ui-inline-block ui-col-fill"><slot></slot></template>`)
+@inlineView(`<template class="ui-header-title ui-inline-block ui-col-fill"><slot></slot></template>`)
 export class UIHeaderTitle {
   constructor(public element: Element) { }
 }
