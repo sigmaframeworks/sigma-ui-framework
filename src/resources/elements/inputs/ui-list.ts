@@ -78,8 +78,8 @@ export class ListGeneric {
 
   valueChanged(newValue) {
     if (!this.__tags) {
-      this.__value = _['findChildren'](this.__listGroups = this.__options, 'items', 'value', newValue).text;
-      if (!this.forceSelect && !this.__value) this.__value = newValue;
+      this.__value = _['findChildren'](this.__listGroups = this.__options, 'items', 'value', newValue || '').text;
+      if (!this.forceSelect && !this.__value) this.__value = newValue || '';
       else if (!this.__value) this.value = '';
     }
     else {
@@ -329,7 +329,7 @@ export class UICombo extends ListGeneric {
   fireSelect(model?) {
     super.fireSelect(model);
     if (model) {
-      this.value = model[this.valueProperty];
+      this.value = model[this.valueProperty] || model;
       UIEvent.fireEvent('select', this.element, model);
     }
     this.__showDropdown = false;
@@ -449,7 +449,7 @@ export class UITag extends ListGeneric {
 
   fireSelect(model?) {
     super.fireSelect(model);
-    this.addValue(model ? model[this.valueProperty] : this.__value);
+    this.addValue(model ? (model[this.valueProperty] || model) : this.__value);
     UIEvent.fireEvent('change', this.element, this.value);
   }
 
@@ -501,7 +501,7 @@ export class UIList extends ListGeneric {
 
   fireSelect(model) {
     super.fireSelect(model);
-    this.value = model[this.valueProperty];
+    this.value = model[this.valueProperty] || model;
     UIEvent.fireEvent('select', this.element, model);
   }
 }
