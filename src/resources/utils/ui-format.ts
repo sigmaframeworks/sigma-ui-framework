@@ -56,7 +56,7 @@ export module UIFormat {
     return ret;
   }
 
-  export function currency(nm: any, sy: string = '$', fm: string = '$ 0,0[.]00'): string {
+  export function currency(nm: any, sy: string = '$', fm: string = '$ 0,0.00'): string {
     return nm === null || isNaN(nm) ? '' :
       numeral(nm)
         .format(fm)
