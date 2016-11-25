@@ -43,7 +43,10 @@ export class UIForm {
 @autoinject()
 @containerless()
 @customElement('ui-fieldset')
-@inlineView(`<template><fieldset class="ui-fieldset \${class}"><legend if.bind="legend">\${legend}</legend><div class="ui-fieldset-wrapper"><slot></slot></div></fieldset></template>`)
+@inlineView(`<template><fieldset class="ui-fieldset \${class} \${enabled?'':'ui-collapse'}">
+  <legend if.bind="legend || __collapsable">
+  <ui-checkbox if.bind="__collapsable" checked.bind="enabled">\${legend}</ui-checkbox><span if.bind="!__collapsable">\${legend}</span></legend>
+  <div class="ui-fieldset-wrapper"><slot></slot></div></fieldset></template>`)
 export class UIFieldset {
   constructor(public element: Element) {
     this.__collapsable = element.hasAttribute('collapsable');
@@ -53,7 +56,8 @@ export class UIFieldset {
 
   @bindable() class = '';
   @bindable() legend = '';
-  @bindable() enabled = true;
+  @bindable({ defaultBindingMode: bindingMode.twoWay })
+  enabled = true;
 }
 
 @autoinject()
@@ -151,7 +155,7 @@ export class UIInputDisplay {
 @customElement('ui-input')
 @inlineView(`<template class="ui-input-wrapper \${__focus?'ui-focus':''} \${disabled?'ui-disabled':''} \${readonly || busy?'ui-readonly':''}"><span class="ui-invalid-icon fi-ui"></span>
   <span class="ui-invalid-errors"><ul><li repeat.for="e of __errors">\${e.message}</li></ul></span>
-  <div class="ui-input-div"><input class="ui-input" size="1" keypress.trigger="keyDown($event)" input.trigger="format($event) & debounce" change.trigger="fireChange($event)"
+  <div class="ui-input-div"><input class="ui-input" size="1" keypress.trigger="keyDown($event)" input.trigger="format($event)" change.trigger="fireChange($event)"
     value.bind="__value" placeholder.bind="placeholder" focus.trigger="fireFocus()" blur.trigger="fireBlur()" dir.bind="dir" 
     type.bind="__type" maxlength.bind="maxlength" ref="__input" disabled.bind="disabled || busy" readonly.bind="readonly"/>
   <span class="ui-in-counter" if.bind="__counter">\${(maxlength-__value.length)}</span>
@@ -255,10 +259,12 @@ export class UIInput {
   format(evt) {
     evt.stopPropagation();
     this.__ignoreChange = true;
+    let start = evt.target.selectionStart;
     if (this.__format == 'email' || this.__format == 'url') this.value = evt.target.value = evt.target.value.toLowerCase();
     else if (this.__format == 'number') this.number = evt.target.valueAsNumber || '';
     else if (this.__format == 'decimal') this.decimal = evt.target.valueAsNumber || '';
     else this.value = evt.target.value;
+    try { evt.target.setSelectionRange(start, start); } catch (e) { }
     UIEvent.queueTask(() => this.__ignoreChange = false);
     UIEvent.fireEvent('input', this.element);
   }
@@ -699,8 +705,10 @@ export class UIPhone {
       this.__value = '';
       this.phone = null;
     }
-    else
-      this.phone = PhoneLib.getNumberInfo(this.value = this.__value = newValue, this.country);
+    else {
+      this.__value = PhoneLib.formatInput(newValue, this.country);
+      this.phone = PhoneLib.getNumberInfo(newValue, this.country);
+    }
   }
 
   countryChanged(newValue) {
@@ -711,11 +719,13 @@ export class UIPhone {
   format(evt) {
     this.__ignoreChange = true;
     let val = evt.target.value;
+    let start = evt.target.selectionStart;
     if (!this.__national && !(/^\+/.test(val))) val = '+' + val;
     if (!this.__national) this.__ctry = PhoneLib.getIso2Code(val);
     evt.target.value = PhoneLib.formatInput(val, this.country);
     this.value = PhoneLib.format(val, this.country, PhoneLib.FORMAT.FULL);
     this.phone = PhoneLib.getNumberInfo(val, this.country);
+    try { evt.target.setSelectionRange(start, start); } catch (e) { }
     UIEvent.queueTask(() => this.__ignoreChange = false);
   }
 
@@ -729,7 +739,7 @@ export class UIPhone {
 
   fireChange(evt) {
     evt.stopPropagation();
-    UIEvent.fireEvent('change', this.element, this.value);
+    UIEvent.fireEvent('change', this.element, { value: this.value, phone: this.phone });
   }
 
   __focus;
