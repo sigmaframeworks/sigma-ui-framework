@@ -17,6 +17,12 @@ export class MarkdownValueConverter {
   }
 }
 
+export class PhoneValueConverter {
+  toView(value: string, country = '') {
+    return PhoneLib.format(value || '', country, PhoneLib.FORMAT.INTERNATIONAL);
+  }
+}
+
 // Dates
 export class DateValueConverter {
   toView(value: string, format?: string) {
