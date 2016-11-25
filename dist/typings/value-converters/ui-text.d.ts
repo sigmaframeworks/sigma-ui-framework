@@ -4,6 +4,9 @@ export declare class JsonValueConverter {
 export declare class MarkdownValueConverter {
     toView(value: string): string;
 }
+export declare class PhoneValueConverter {
+    toView(value: string, country?: string): string;
+}
 export declare class DateValueConverter {
     toView(value: string, format?: string): any;
 }

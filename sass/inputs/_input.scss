@@ -23,6 +23,10 @@
     color    : $muted;
     font-size: .8rem;
   }
+
+  &.ui-collapse {
+    max-height: 1.2rem;
+  }
 }
 
 .ui-input-group {

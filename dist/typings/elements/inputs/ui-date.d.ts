@@ -43,6 +43,7 @@ export declare class UIDate {
     time: boolean;
     minDate: any;
     maxDate: any;
+    format: string;
     placeholder: string;
     disabled: boolean;
     readonly: boolean;

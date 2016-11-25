@@ -72,9 +72,9 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "../.
         ListGeneric.prototype.valueChanged = function (newValue) {
             var _this = this;
             if (!this.__tags) {
-                this.__value = _['findChildren'](this.__listGroups = this.__options, 'items', 'value', newValue).text;
+                this.__value = _['findChildren'](this.__listGroups = this.__options, 'items', 'value', newValue || '').text;
                 if (!this.forceSelect && !this.__value)
-                    this.__value = newValue;
+                    this.__value = newValue || '';
                 else if (!this.__value)
                     this.value = '';
             }
@@ -305,7 +305,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "../.
         UICombo.prototype.fireSelect = function (model) {
             _super.prototype.fireSelect.call(this, model);
             if (model) {
-                this.value = model[this.valueProperty];
+                this.value = model[this.valueProperty] || model;
                 ui_event_1.UIEvent.fireEvent('select', this.element, model);
             }
             this.__showDropdown = false;
@@ -452,7 +452,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "../.
         };
         UITag.prototype.fireSelect = function (model) {
             _super.prototype.fireSelect.call(this, model);
-            this.addValue(model ? model[this.valueProperty] : this.__value);
+            this.addValue(model ? (model[this.valueProperty] || model) : this.__value);
             ui_event_1.UIEvent.fireEvent('change', this.element, this.value);
         };
         UITag.prototype.fireChange = function () {
@@ -532,7 +532,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "../.
         }
         UIList.prototype.fireSelect = function (model) {
             _super.prototype.fireSelect.call(this, model);
-            this.value = model[this.valueProperty];
+            this.value = model[this.valueProperty] || model;
             ui_event_1.UIEvent.fireEvent('select', this.element, model);
         };
         __decorate([

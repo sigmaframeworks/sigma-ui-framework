@@ -53,7 +53,7 @@ define(["require", "exports", "kramed", "moment", "numeral"], function (require,
         UIFormat.number = number;
         function currency(nm, sy, fm) {
             if (sy === void 0) { sy = '$'; }
-            if (fm === void 0) { fm = '$ 0,0[.]00'; }
+            if (fm === void 0) { fm = '$ 0,0.00'; }
             return nm === null || isNaN(nm) ? '' :
                 numeral(nm)
                     .format(fm)

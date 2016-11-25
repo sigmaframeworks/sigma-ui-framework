@@ -8,6 +8,7 @@ export declare class UIDialogService {
     private __inited;
     private __windows;
     constructor(compiler: ViewCompiler, container: Container, resources: ViewResources, compositionEngine: CompositionEngine);
+    makeActive(windowId: any): boolean;
     show(vm: any, model?: any): Promise<void>;
     private __createDialog(vm);
     private __getViewModel(instruction);
@@ -41,6 +42,7 @@ export declare class UIDialog {
     private __minimized;
     private __taskButton;
     __current: any;
+    id: any;
     icon: any;
     title: string;
     width: string;

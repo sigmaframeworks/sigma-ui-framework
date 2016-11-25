@@ -18,6 +18,16 @@ define(["require", "exports", "../utils/ui-format"], function (require, exports,
         return MarkdownValueConverter;
     }());
     exports.MarkdownValueConverter = MarkdownValueConverter;
+    var PhoneValueConverter = (function () {
+        function PhoneValueConverter() {
+        }
+        PhoneValueConverter.prototype.toView = function (value, country) {
+            if (country === void 0) { country = ''; }
+            return PhoneLib.format(value || '', country, PhoneLib.FORMAT.INTERNATIONAL);
+        };
+        return PhoneValueConverter;
+    }());
+    exports.PhoneValueConverter = PhoneValueConverter;
     var DateValueConverter = (function () {
         function DateValueConverter() {
         }

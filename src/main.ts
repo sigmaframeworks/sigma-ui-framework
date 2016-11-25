@@ -132,6 +132,7 @@ hljs.registerLanguage('typescript', function(hljs) {
 export function configure(aurelia: Aurelia) {
   aurelia.use
     .standardConfiguration()
+    .plugin('aurelia-ui-virtualization')
     .plugin('aurelia-validation')
     .feature('resources', config => {
       config

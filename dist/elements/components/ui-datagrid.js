@@ -299,7 +299,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "../.
         UIDGLink.prototype.getLabel = function (value, record) {
             if (isFunction(this.label))
                 return this.label(({ value: value, record: record }));
-            return this.label || this.processValue(value, record);
+            return this.label || this.processValue(value, record) || '';
         };
         UIDGLink.prototype.fireClick = function ($event, value, record) {
             $event.stopPropagation();
@@ -371,7 +371,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "../.
         UIDGButton.prototype.getLabel = function (value, record) {
             if (isFunction(this.label))
                 return this.label(({ value: value, record: record }));
-            return this.label || this.processValue(value, record);
+            return this.label || this.processValue(value, record) || '';
         };
         UIDGButton.prototype.getTheme = function (value, record) {
             if (isFunction(this.theme))

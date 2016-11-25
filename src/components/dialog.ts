@@ -25,6 +25,7 @@ export class CompDialog {
   alert = {
     message: 'This is an alert message',
     type: 'info',
+    okLabel: 'OK',
     yesLabel: 'OK',
     noLabel: 'Cancel'
   }

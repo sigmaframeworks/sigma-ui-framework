@@ -21,6 +21,12 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
             this.__startX = 0;
             this.__startY = 0;
         }
+        UIDialogService.prototype.makeActive = function (windowId) {
+            var win = _.find(this.__windows, ['id', windowId]);
+            if (win)
+                this.__changeActive(win);
+            return !!win;
+        };
         UIDialogService.prototype.show = function (vm, model) {
             var _this = this;
             if (!this.__inited) {
@@ -170,6 +176,7 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
             }
             this.__active = dialog;
             dialog.__active = true;
+            dialog.__minimized = false;
             if (!dialog.modal)
                 dialog.__taskButton.classList.add('ui-active');
         };
@@ -293,6 +300,8 @@ define(["require", "exports", "aurelia-framework", "./ui-utils", "./ui-event", "
         UIDialog.prototype.bind = function () {
             this.__current.width = this.width || this.__current.width;
             this.__current.height = this.height || this.__current.height;
+            if (!this.id)
+                this.id = this.__id;
         };
         UIDialog.prototype.close = function ($event) {
             if ($event)

@@ -265,6 +265,7 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "mome
             this.startDate = '';
             this.endDate = '';
             this.time = false;
+            this.format = '';
             this.placeholder = '';
             this.disabled = false;
             this.readonly = false;
@@ -305,9 +306,10 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "mome
         };
         UIDate.prototype.valueChanged = function (newValue) {
             if (newValue && moment(newValue).isValid())
-                this.__value = moment(newValue).format(this.time ? 'DD MMM YYYY hh:mm A' : 'DD MMM YYYY');
+                this.__value = moment(newValue).format(this.format || (this.time ? 'DD MMM YYYY hh:mm A' : 'DD MMM YYYY'));
             else
                 this.__value = '';
+            ui_event_1.UIEvent.fireEvent('change', this.element, newValue);
         };
         UIDate.prototype.minDateChanged = function (newValue) {
             if (this.value && moment(this.value).isBefore(newValue, 'date'))
@@ -374,6 +376,10 @@ define(["require", "exports", "aurelia-framework", "../../utils/ui-event", "mome
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
         ], UIDate.prototype, "maxDate", void 0);
+        __decorate([
+            aurelia_framework_1.bindable(), 
+            __metadata('design:type', Object)
+        ], UIDate.prototype, "format", void 0);
         __decorate([
             aurelia_framework_1.bindable(), 
             __metadata('design:type', Object)
