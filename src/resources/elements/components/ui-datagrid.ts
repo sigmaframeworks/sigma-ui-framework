@@ -293,7 +293,7 @@ export class UIDGLink extends UIDataColumn {
 
   getLabel(value, record) {
     if (isFunction(this.label)) return this.label(({ value, record }));
-    return this.label || this.processValue(value, record);
+    return this.label || this.processValue(value, record) || '';
   }
 
   fireClick($event, value, record) {
@@ -338,7 +338,7 @@ export class UIDGButton extends UIDataColumn {
 
   getLabel(value, record) {
     if (isFunction(this.label)) return this.label(({ value, record }));
-    return this.label || this.processValue(value, record);
+    return this.label || this.processValue(value, record) || '';
   }
 
   getTheme(value, record) {
