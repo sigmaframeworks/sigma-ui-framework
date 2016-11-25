@@ -337,6 +337,7 @@ export class UIDate {
   @bindable() time = false;
   @bindable() minDate;
   @bindable() maxDate;
+  @bindable() format = '';
   @bindable() placeholder = '';
   @bindable() disabled = false;
   @bindable() readonly = false;
@@ -359,8 +360,9 @@ export class UIDate {
   }
 
   valueChanged(newValue) {
-    if (newValue && moment(newValue).isValid()) this.__value = moment(newValue).format(this.time ? 'DD MMM YYYY hh:mm A' : 'DD MMM YYYY');
+    if (newValue && moment(newValue).isValid()) this.__value = moment(newValue).format(this.format || (this.time ? 'DD MMM YYYY hh:mm A' : 'DD MMM YYYY'));
     else this.__value = '';
+    UIEvent.fireEvent('change', this.element, newValue);
   }
 
   minDateChanged(newValue) {
