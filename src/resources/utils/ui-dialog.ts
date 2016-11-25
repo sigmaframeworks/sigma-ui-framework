@@ -35,6 +35,12 @@ export class UIDialogService {
     private compositionEngine: CompositionEngine) {
   }
 
+  makeActive(windowId) {
+    let win = _.find(this.__windows, ['id', windowId]);
+    if (win) this.__changeActive(win);
+    return !!win;
+  }
+
   show(vm, model?) {
     if (!this.__inited) {
       this.__inited = true;
@@ -212,6 +218,7 @@ export class UIDialogService {
     }
     this.__active = dialog;
     dialog.__active = true;
+    dialog.__minimized = false;
     if (!dialog.modal) dialog.__taskButton.classList.add('ui-active');
   }
 
@@ -338,6 +345,7 @@ export class UIDialog {
     height: '400px', width: '600px'
   };
 
+  public id;
   public icon;
   public title = 'Dialog';
   public width = '';
@@ -356,6 +364,8 @@ export class UIDialog {
   bind() {
     this.__current.width = this.width || this.__current.width;
     this.__current.height = this.height || this.__current.height;
+
+    if (!this.id) this.id = this.__id;
   }
 
   close($event?) {
